@@ -1,0 +1,167 @@
+{
+  "version": "7.0",
+  "principle": "Select a figure-specific visual grammar from the source. Do not force every figure into one corporate-card template.",
+  "profiles": {
+    "A_black_white_academic": {
+      "reference": "User-provided academic framework reference, slide 189 (source deck not redistributed).",
+      "font": "Times New Roman",
+      "font_sizes_pt": {
+        "title": 21,
+        "section_heading": 14.5,
+        "primary_module": 13.5,
+        "secondary_annotation": 12,
+        "source_note": 9.5
+      },
+      "palette": {
+        "background": "#FFFFFF",
+        "stroke": "#111111",
+        "text": "#111111",
+        "fill": "#FFFFFF",
+        "muted": "#666666"
+      },
+      "line": {
+        "main_pt": 1,
+        "panel": "dashed",
+        "arrow": "filled_black"
+      },
+      "geometry": [
+        "dashed_section_frames",
+        "database_cylinders",
+        "thin_rectangular_modules",
+        "directed_connectors",
+        "graph_nodes_edges"
+      ],
+      "use_for": [
+        "research_overview",
+        "knowledge_graph",
+        "algorithm_logic",
+        "multi_stage_methodology"
+      ],
+      "avoid": [
+        "decorative_color_cards",
+        "drop_shadows",
+        "unnecessary_icons",
+        "compressed_text"
+      ]
+    },
+    "B_engineering_system": {
+      "reference": "User-provided engineering references, slides 208 and 213 (source deck not redistributed).",
+      "font": "Microsoft YaHei",
+      "font_sizes_pt": {
+        "title": 22,
+        "primary_module": 15.5,
+        "secondary_description": 13.5,
+        "connector_label": 12.5,
+        "source_note": 9.5
+      },
+      "palette": {
+        "blue": "#C5D9E8",
+        "purple": "#D9CCE3",
+        "mint": "#C5E0CC",
+        "green": "#D5E8C5",
+        "yellow": "#F7E9C8",
+        "pink": "#F4D2D2",
+        "gray": "#E2E2E2",
+        "stroke": "#5C6675",
+        "text": "#2A2A2A",
+        "secondary_text": "#7A7A7A"
+      },
+      "line": {
+        "main_pt": 1.35,
+        "feedback": "dashed",
+        "arrow": "filled_muted"
+      },
+      "geometry": [
+        "rounded_module_boxes",
+        "orthogonal_feedback_loop",
+        "state_transition_boxes",
+        "dashed_safety_path"
+      ],
+      "use_for": [
+        "control_systems",
+        "FDIR",
+        "satellite_architecture",
+        "platform_architecture",
+        "state_machines"
+      ],
+      "avoid": [
+        "high_saturation_palette",
+        "gradient_fills",
+        "heavy_shadows",
+        "ambiguous_feedback_routes"
+      ]
+    },
+    "C_source_matched_journal": {
+      "reference": "FBG-SEANet author-published graphical abstract, DOI 10.1016/j.engappai.2026.115273.",
+      "font": "Match the paper figure; Times New Roman is used in the initial example.",
+      "font_sizes_pt": {
+        "title": 20,
+        "panel_heading": 14.5,
+        "primary_module": 13.5,
+        "secondary_label": 12.5,
+        "source_note": 9.5
+      },
+      "palette": {
+        "background": "#FFFFFF",
+        "stroke": "#333333",
+        "text": "#222222",
+        "muted": "#666666",
+        "blue": "#4E7698",
+        "teal": "#5C8E83",
+        "sand": "#A98245",
+        "lavender": "#81759A"
+      },
+      "line": {
+        "main_pt": 0.95,
+        "panel": "dashed",
+        "arrow": "filled_dark"
+      },
+      "geometry": [
+        "sensor_waveforms",
+        "frequency_band_subgraphs",
+        "graph_topology",
+        "GCN_pooling_blocks",
+        "energy_assist_branch",
+        "summation_operator"
+      ],
+      "use_for": [
+        "GNN",
+        "CNN",
+        "Transformer",
+        "signal_processing",
+        "neural_network_architecture"
+      ],
+      "avoid": [
+        "invented_layers",
+        "invented_filter_counts",
+        "unverified_dimensions",
+        "claiming_pixel_identity_without_overlay_check"
+      ]
+    }
+  },
+  "global_typography_policy": {
+    "title_pt": "20-28",
+    "primary_labels_pt": "14-18 where layout permits",
+    "secondary_labels_pt": "12-14 for dense technical figures",
+    "footnotes_pt": "9-10",
+    "rule": "Do not shrink the whole figure to fit. Split dense mechanisms across slides before reducing primary labels."
+  },
+  "rendering": {
+    "canonical_source": "SVG",
+    "editable_delivery": "native PowerPoint shapes/text/connectors where practical",
+    "same_spec_dual_render": true
+  },
+  "evidence_labels": [
+    "source-visible redraw",
+    "paper/code-grounded reconstruction",
+    "domain adaptation"
+  ],
+  "qa_gates": [
+    "scientific topology",
+    "source fidelity",
+    "typography",
+    "projection legibility",
+    "editability",
+    "citation and evidence status"
+  ]
+}

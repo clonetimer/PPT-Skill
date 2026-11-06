@@ -1,0 +1,94 @@
+{
+  "version": "7.0",
+  "components": [
+    {
+      "id": "dashed_panel",
+      "used_in": [
+        "A",
+        "C"
+      ],
+      "editable": true
+    },
+    {
+      "id": "database_cylinder",
+      "used_in": [
+        "A"
+      ],
+      "editable": true
+    },
+    {
+      "id": "directed_connector",
+      "used_in": [
+        "A",
+        "B",
+        "C"
+      ],
+      "editable": true
+    },
+    {
+      "id": "engineering_module",
+      "used_in": [
+        "B"
+      ],
+      "editable": true
+    },
+    {
+      "id": "feedback_loop",
+      "used_in": [
+        "B"
+      ],
+      "editable": true
+    },
+    {
+      "id": "mode_state",
+      "used_in": [
+        "B"
+      ],
+      "editable": true
+    },
+    {
+      "id": "waveform_trace",
+      "used_in": [
+        "C"
+      ],
+      "editable": true
+    },
+    {
+      "id": "frequency_band_subgraph",
+      "used_in": [
+        "C"
+      ],
+      "editable": true
+    },
+    {
+      "id": "graph_node_edge",
+      "used_in": [
+        "A",
+        "C"
+      ],
+      "editable": true
+    },
+    {
+      "id": "gcn_pooling_block",
+      "used_in": [
+        "C"
+      ],
+      "editable": true
+    },
+    {
+      "id": "energy_assist_branch",
+      "used_in": [
+        "C"
+      ],
+      "editable": true
+    },
+    {
+      "id": "summation_operator",
+      "used_in": [
+        "C"
+      ],
+      "editable": true
+    }
+  ],
+  "source_of_truth": "SVG source plus style profile; ordinary PowerPoint modules should remain native shapes and text where practical."
+}
