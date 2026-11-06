@@ -61,7 +61,7 @@ def render(spec,svg,pptx):
   if t=="text":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];fs=e.get("size",14)*DPI/72;ls=e["text"].split("\n");a=e.get("align","center");anc={"left":"start","center":"middle","right":"end"}[a];tx=x if a=="left" else x+ww/2 if a=="center" else x+ww;lh=fs*1.18;by=y+hh/2-(len(ls)-1)*lh/2+fs*.35
    sp="".join(f'<tspan x="{tx}" dy="{0 if j==0 else lh}">{escape(v)}</tspan>' for j,v in enumerate(ls))
-   out.append(f'<text x="{tx}" y="{by}" text-anchor="{anc}" dominant-baseline="middle" font-family="{escape(e.get("font",df))}" font-size="{fs}" fill="{e.get("color","#28343C")}"'+(' font-weight="700"' if e.get("bold") else '')+(' font-style="italic"' if e.get("italic") else '')+f'>{sp}</text>');addtext(sl,e,df)
+   out.append(f'<text x="{tx}" y="{by}" text-anchor="{anc}" dominant-baseline="middle" font-family="{escape("Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" if e.get("font",df)=="Microsoft YaHei" else e.get("font",df))}" font-size="{fs}" fill="{e.get("color","#28343C")}"'+(' font-weight="700"' if e.get("bold") else '')+(' font-style="italic"' if e.get("italic") else '')+f'>{sp}</text>');addtext(sl,e,df)
   elif t=="rect":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];dash=' stroke-dasharray="8 6"' if e.get("dash") else ''
    out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" rx="{e.get("radius",0)*DPI}" fill="{e.get("fill","#FFFFFF")}" stroke="{e.get("stroke","#43525B")}" stroke-width="{e.get("sw",1)*DPI/72}"{dash}/>')
