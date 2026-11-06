@@ -1,22 +1,25 @@
 {
   "name": "academic-defense-ppt",
-  "version": "7.0.1",
-  "baseline_status": "prototype_only_not_visual_acceptance",
+  "version": "7.1.1",
+  "baseline_status": "refined_prototype_not_stable",
   "files": {
     "skill": "SKILL.md",
     "profiles": [
       "profiles/STYLE_PROFILES_V7.json",
       "profiles/VECTOR_COMPONENT_CATALOG_V7.json"
     ],
+    "figure_specs": [
+      "figure_specs/B01_engineering_fdir.json",
+      "figure_specs/F07_telemetry_embedding.json"
+    ],
     "examples": [
-      "examples/A01_black_white_academic.svg",
-      "examples/A02_reciprocal_rank_evidence_detail.svg",
-      "examples/B01_engineering_fdir.svg",
-      "examples/C01_FBG_SEANet_source_visible_redraw.svg",
-      "examples/D01_v7_workflow_and_style_profiles.svg"
+      "examples/B01_engineering_fdir_v71.svg",
+      "examples/F07_telemetry_embedding_v71.svg"
     ],
     "tools": [
-      "tools/build_svg_examples.py",
+      "tools/build_v71_examples.py",
+      "tools/render_figure_spec.py",
+      "tools/validate_figure_specs.py",
       "tools/audit_pptx.py",
       "tools/validate_svg_examples.py"
     ],
@@ -26,7 +29,11 @@
       "docs/QA_REPORT_V7.md",
       "docs/SOURCE_ATTRIBUTION.md",
       "docs/VECTOR_WORKFLOW.md"
+    ],
+    "generated_outputs": [
+      "dist/B01_engineering_fdir_v71.pptx",
+      "dist/F07_telemetry_embedding_v71.pptx"
     ]
   },
-  "source_policy": "Do not redistribute user-provided source deck in the public repository; store only derivative redraws and style metadata."
+  "source_policy": "Do not redistribute the original user-provided reference deck; store only derivative redraws, style metadata, and generic tooling."
 }

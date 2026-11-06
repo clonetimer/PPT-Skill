@@ -1,8 +1,8 @@
 {
-  "version": "7.0",
+  "version": "7.1.1",
   "components": [
     {
-      "id": "dashed_panel",
+      "id": "dashed_or_solid_panel",
       "used_in": [
         "A",
         "C"
@@ -51,14 +51,14 @@
       "used_in": [
         "C"
       ],
-      "editable": true
+      "editable": "SVG vector; convertible to Office shapes"
     },
     {
       "id": "frequency_band_subgraph",
       "used_in": [
         "C"
       ],
-      "editable": true
+      "editable": "SVG vector; convertible to Office shapes"
     },
     {
       "id": "graph_node_edge",
@@ -66,7 +66,7 @@
         "A",
         "C"
       ],
-      "editable": true
+      "editable": "SVG vector or native nodes/lines"
     },
     {
       "id": "gcn_pooling_block",
@@ -88,7 +88,44 @@
         "C"
       ],
       "editable": true
+    },
+    {
+      "id": "figure_spec",
+      "used_in": [
+        "B",
+        "F07"
+      ],
+      "editable": true
+    },
+    {
+      "id": "grid_line_matrix",
+      "used_in": [
+        "F07"
+      ],
+      "editable": true
+    },
+    {
+      "id": "temporal_grid_stack",
+      "used_in": [
+        "F07"
+      ],
+      "editable": true
+    },
+    {
+      "id": "theme_shadow_reset",
+      "used_in": [
+        "B",
+        "F07"
+      ],
+      "editable": true
+    },
+    {
+      "id": "svg_cjk_font_fallback",
+      "used_in": [
+        "B"
+      ],
+      "editable": true
     }
   ],
-  "source_of_truth": "SVG source plus style profile; ordinary PowerPoint modules should remain native shapes and text where practical."
+  "source_of_truth": "JSON FigureSpec drives SVG and native PowerPoint outputs for B01/F07; other figures retain per-figure SVG/PPTX sources until migrated."
 }

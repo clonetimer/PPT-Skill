@@ -1,27 +1,29 @@
-# SVG-first vector workflow
+# SVG-first and FigureSpec dual-render workflow
 
-## 1. Figure specification
-Record the figure purpose, audience, panel order, hierarchy, modules, directed edges, equations/operators, legends, source evidence, style profile, fonts, palette, line widths, and spacing.
+## Source-specific style
+Choose A/B/C from the actual reference. Do not impose a universal card template.
 
-## 2. Authoring
-- Draw using SVG paths, text, groups, and reusable symbols.
-- Keep labels as text wherever practical.
-- Use explicit font-family, font-size, fill, stroke, stroke-width, and marker definitions.
-- Use vector graph nodes, waveforms, cylinders, and state blocks.
-- Avoid converting all labels to outlines unless a delivery constraint requires it.
+## FigureSpec pilot (B01/F07)
+- Author geometry, text, colors, and connectors in JSON under figure_specs/.
+- Dimensions are inches; text sizes are points.
+- Use explicit line breaks; the SVG renderer does not infer PowerPoint automatic wrapping.
+- Supported primitives: text, rect, line, grid, stack_grid.
+- The same spec renders to SVG and editable native PowerPoint shapes/text/connectors.
 
-## 3. PowerPoint integration
-- Use native PowerPoint shapes for ordinary boxes, labels, connectors, and state transitions.
-- Use SVG for complex graph topology or compound scientific artwork.
-- In supported Office versions, use Convert to Shape / Ungroup when individual SVG parts must be edited.
-- Keep the original SVG file as the editable source of truth.
+Example:
+python tools/render_figure_spec.py figure_specs/F07_telemetry_embedding.json --svg examples/F07_telemetry_embedding_v71.svg --pptx dist/F07_telemetry_embedding_v71.pptx
 
-## 4. Rendering and QA
-- Export the full deck to PDF.
-- Inspect at presentation size and at 100% zoom.
-- Compare source and redraw side by side.
-- Check clipping, overlaps, arrow direction, line crossings, typography, terminology, and source notes.
-- Record unresolved differences.
+## Theme shadow control
+The default PowerPoint theme's first effect style contains a shadow. The renderer patches it to an empty effect list and adds an explicit empty shape effect list. Do not remove this step.
 
-## 5. Delivery
-Include SVG, PPTX, PDF preview, source citation, style profile, and QA report. Do not claim a figure is exact when it is only a structural redraw.
+## Dense grids
+Use grid / stack_grid. PowerPoint output uses native line geometry; SVG output uses a vector pattern. Do not draw 1,600 independent rectangles for a 40×40 grid. If channel coordinates are unknown, do not color cells as if the mapping were known.
+
+## Validation
+python tools/build_v71_examples.py
+python tools/validate_figure_specs.py
+python tools/validate_svg_examples.py
+python tools/audit_pptx.py dist/academic_defense_ppt_v71_refined.pptx --strict
+
+## Rendering boundary
+SVG and PowerPoint are generated from the same FigureSpec, but their text engines may differ. Do not claim pixel identity. Inspect both outputs and document font fallback and line-wrap differences.
