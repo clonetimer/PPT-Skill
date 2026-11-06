@@ -1,0 +1,34 @@
+{
+  "version": "7.3.0",
+  "profile": "C01 source-matched graph figure",
+  "font": "Times New Roman",
+  "palette": {
+    "ink": "#28343C",
+    "stroke": "#43525B",
+    "muted": "#687780",
+    "blue": "#668A9C",
+    "teal": "#6D9A8E",
+    "ochre": "#B88E58",
+    "violet": "#8A7CA5",
+    "node": "#7896A6"
+  },
+  "geometry": [
+    "source dashed panels",
+    "sensor vector silhouettes",
+    "time-series waveforms",
+    "OCF notch filter",
+    "band subgraphs",
+    "total graph",
+    "GCN",
+    "pooling trapezoid",
+    "SR readout",
+    "EA module",
+    "summation node"
+  ],
+  "shadow_policy": "No theme shadows; source-specific offset shapes only where the reference visibly uses depth.",
+  "evidence": [
+    "source-visible structural redraw",
+    "sensor photo to vector silhouette substitution",
+    "schematic graph topology"
+  ]
+}

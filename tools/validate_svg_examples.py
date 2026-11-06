@@ -1,21 +1,13 @@
 #!/usr/bin/env python3
 """Validate standalone SVG examples using only the Python standard library."""
-import sys
-import xml.etree.ElementTree as ET
+import sys, xml.etree.ElementTree as ET
 from pathlib import Path
-
-def main(paths):
-    failed=False
-    for path in paths:
-        root=ET.parse(path).getroot()
-        view_box=root.attrib.get("viewBox")
-        width=root.attrib.get("width")
-        height=root.attrib.get("height")
-        if not view_box or not width or not height:
-            print(f"FAIL {path}: missing width/height/viewBox");failed=True
-        else: print(f"PASS {path}: {width} x {height}, viewBox={view_box}")
-    return 1 if failed else 0
-
-if __name__=="__main__":
-    args=[Path(p) for p in sys.argv[1:]] or sorted(Path("examples").glob("*.svg"))
-    raise SystemExit(main(args))
+NS="{http://www.w3.org/2000/svg}"
+def check(p):
+    root=ET.parse(p).getroot()
+    ok=root.tag==NS+"svg" and all(root.attrib.get(k) for k in ("width","height","viewBox"))
+    ok=ok and root.find(".//"+NS+"image") is None and root.find(".//"+NS+"foreignObject") is None
+    print(("PASS " if ok else "FAIL ")+str(p))
+    return ok
+paths=[Path(x) for x in sys.argv[1:]] or sorted(Path("examples").glob("*.svg"))
+raise SystemExit(0 if all(check(p) for p in paths) else 1)

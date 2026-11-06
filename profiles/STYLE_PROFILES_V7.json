@@ -1,6 +1,6 @@
 {
-  "version": "7.0",
-  "principle": "Select a figure-specific visual grammar from the source. Do not force every figure into one corporate-card template.",
+  "version": "7.5.0-dev",
+  "principle": "Select a figure-specific visual grammar from the source; do not force every figure into one corporate-card template.",
   "profiles": {
     "A_black_white_academic": {
       "reference": "User-provided academic framework reference, slide 189 (source deck not redistributed).",
@@ -21,11 +21,11 @@
       },
       "line": {
         "main_pt": 1,
-        "panel": "dashed",
+        "panel": "thin solid or source-matched dashed",
         "arrow": "filled_black"
       },
       "geometry": [
-        "dashed_section_frames",
+        "section_dividers",
         "database_cylinders",
         "thin_rectangular_modules",
         "directed_connectors",
@@ -47,11 +47,17 @@
     "B_engineering_system": {
       "reference": "User-provided engineering references, slides 208 and 213 (source deck not redistributed).",
       "font": "Microsoft YaHei",
+      "svg_font_fallback": [
+        "Noto Sans CJK SC",
+        "DejaVu Sans",
+        "Microsoft YaHei",
+        "sans-serif"
+      ],
       "font_sizes_pt": {
         "title": 22,
         "primary_module": 15.5,
         "secondary_description": 13.5,
-        "connector_label": 12.5,
+        "connector_label": 10.5,
         "source_note": 9.5
       },
       "palette": {
@@ -67,7 +73,7 @@
         "secondary_text": "#7A7A7A"
       },
       "line": {
-        "main_pt": 1.35,
+        "main_pt": 1.25,
         "feedback": "dashed",
         "arrow": "filled_muted"
       },
@@ -75,7 +81,7 @@
         "rounded_module_boxes",
         "orthogonal_feedback_loop",
         "state_transition_boxes",
-        "dashed_safety_path"
+        "guarded_safety_path"
       ],
       "use_for": [
         "control_systems",
@@ -88,17 +94,18 @@
         "high_saturation_palette",
         "gradient_fills",
         "heavy_shadows",
-        "ambiguous_feedback_routes"
+        "ambiguous_feedback_routes",
+        "long_connector_labels"
       ]
     },
     "C_source_matched_journal": {
       "reference": "FBG-SEANet author-published graphical abstract, DOI 10.1016/j.engappai.2026.115273.",
-      "font": "Match the paper figure; Times New Roman is used in the initial example.",
+      "font": "Match the paper figure; Times New Roman is used in the current redraw.",
       "font_sizes_pt": {
         "title": 20,
         "panel_heading": 14.5,
-        "primary_module": 13.5,
-        "secondary_label": 12.5,
+        "primary_module": 13,
+        "secondary_label": 12,
         "source_note": 9.5
       },
       "palette": {
@@ -113,7 +120,7 @@
       },
       "line": {
         "main_pt": 0.95,
-        "panel": "dashed",
+        "panel": "thin solid",
         "arrow": "filled_dark"
       },
       "geometry": [
@@ -122,6 +129,7 @@
         "graph_topology",
         "GCN_pooling_blocks",
         "energy_assist_branch",
+        "SR_readout",
         "summation_operator"
       ],
       "use_for": [
@@ -144,12 +152,19 @@
     "primary_labels_pt": "14-18 where layout permits",
     "secondary_labels_pt": "12-14 for dense technical figures",
     "footnotes_pt": "9-10",
-    "rule": "Do not shrink the whole figure to fit. Split dense mechanisms across slides before reducing primary labels."
+    "rule": "Do not shrink the whole figure to fit. Split dense mechanisms before reducing primary labels; no universal minimum font size."
   },
   "rendering": {
-    "canonical_source": "SVG",
+    "canonical_source": "JSON FigureSpec for supported figures; SVG source for other vector examples",
     "editable_delivery": "native PowerPoint shapes/text/connectors where practical",
-    "same_spec_dual_render": true
+    "dual_render_implemented_for": [
+      "B01_engineering_fdir",
+      "F07_telemetry_embedding"
+    ],
+    "dual_render_not_yet_implemented_for": [
+      "A01_black_white_academic",
+      "C01_FBG_SEANet"
+    ]
   },
   "evidence_labels": [
     "source-visible redraw",

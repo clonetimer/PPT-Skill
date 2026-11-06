@@ -1,0 +1,56 @@
+{
+  "schema_version": "7.5.0-dev",
+  "deck": {
+    "topic": "FBG-SEANet method explanation",
+    "audience": "research defense committee",
+    "duration_minutes": 8,
+    "target_slide_count": 3,
+    "narrative": ["problem", "method", "evidence_boundary"],
+    "delivery": ["pptx", "pdf", "editable_sources"],
+    "style_ref": "style_c01_defense"
+  },
+  "style": {
+    "id": "style_c01_defense",
+    "source_style_ref": "source_style_c01",
+    "font_family": "Times New Roman",
+    "background": "#FFFFFF",
+    "text_color": "#28343C",
+    "accent_colors": ["#668A9C", "#6D9A8E", "#B88E58", "#8A7CA5"],
+    "density": "moderate",
+    "shadow": "none"
+  },
+  "source_style": {
+    "id": "source_style_c01",
+    "reference": "profiles/C01_SOURCE_PROFILE_V73.json",
+    "anchors": [
+      {"dimension": "layout", "value": "two related panels with reading guide", "confidence": "high", "evidence": "docs/C01_V74_QA.md"},
+      {"dimension": "palette", "value": "restrained blue, teal, ochre, violet", "confidence": "high", "evidence": "profiles/C01_SOURCE_PROFILE_V73.json"},
+      {"dimension": "typography", "value": "Times New Roman", "confidence": "medium", "evidence": "profiles/C01_SOURCE_PROFILE_V73.json"},
+      {"dimension": "connectors", "value": "thin directed lines", "confidence": "high", "evidence": "figure_specs/c01/C01_composite_defense_slide.json"},
+      {"dimension": "density", "value": "reflow narrow panels before shrinking labels", "confidence": "high", "evidence": "docs/C01_V74_QA.md"}
+    ]
+  },
+  "slides": [
+    {
+      "id": "s01", "role": "problem", "claim": "Sensor fusion must account for frequency-specific information.",
+      "evidence": [{"source": "docs/C01_V73_SOURCE.md", "status": "paper_grounded"}],
+      "layout": "research_question", "figure_ref": null,
+      "on_slide": ["Research problem", "Frequency-specific sensor information"],
+      "speaker_notes": "Explain the fault-diagnosis setting and cite the source paper. Do not insert performance claims without data."
+    },
+    {
+      "id": "s02", "role": "method", "claim": "FBG construction feeds a two-branch graph-level diagnosis path.",
+      "evidence": [{"source": "docs/C01_V73_SOURCE.md", "status": "source_visible"}],
+      "layout": "composite_method", "figure_ref": "figure_specs/c01/C01_composite_defense_slide.json",
+      "on_slide": ["Frequency-band graph", "Graph-level diagnosis"],
+      "speaker_notes": "Walk through OCF, band subgraphs, GCN/pooling, and EA/SR. State that sensor glyphs and adjacency are schematic."
+    },
+    {
+      "id": "s03", "role": "evidence_boundary", "claim": "The redraw preserves method topology while leaving numerical adjacency unasserted.",
+      "evidence": [{"source": "docs/C01_V74_QA.md", "status": "verified_artifact"}],
+      "layout": "evidence_summary", "figure_ref": null,
+      "on_slide": ["Source-visible structure", "Schematic graph adjacency"],
+      "speaker_notes": "Identify what was verified and what still requires the original high-resolution figure or quantitative data."
+    }
+  ]
+}

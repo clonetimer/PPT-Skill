@@ -1,0 +1,220 @@
+{
+  "id": "F07_telemetry_embedding",
+  "title": "Telemetry embedding and temporal stacking",
+  "canvas": {
+    "width_in": 13.333,
+    "height_in": 7.5
+  },
+  "style": {
+    "font": "Times New Roman",
+    "text": "#222222",
+    "muted": "#65717C",
+    "line": "#53616B",
+    "grid": "#D7DEE3",
+    "grid_bg": "#FBFCFD",
+    "grid_border": "#98A6AF",
+    "teal": "#6C929B",
+    "teal_light": "#E7EEF0",
+    "white": "#FFFFFF"
+  },
+  "elements": [
+    {
+      "type": "text",
+      "text": "Telemetry embedding and temporal stacking",
+      "x": 0.42,
+      "y": 0.18,
+      "w": 12.5,
+      "h": 0.42,
+      "size": 25,
+      "font": "Times New Roman",
+      "bold": true
+    },
+    {
+      "type": "text",
+      "text": "Telemetry vector",
+      "x": 0.58,
+      "y": 0.83,
+      "w": 2.75,
+      "h": 0.32,
+      "size": 18,
+      "font": "Times New Roman",
+      "bold": true,
+      "align": "left"
+    },
+    {
+      "type": "text",
+      "text": "40 × 40 feature grid",
+      "x": 4.05,
+      "y": 0.83,
+      "w": 3.05,
+      "h": 0.32,
+      "size": 18,
+      "font": "Times New Roman",
+      "bold": true
+    },
+    {
+      "type": "text",
+      "text": "Temporal context",
+      "x": 9,
+      "y": 0.83,
+      "w": 3.3,
+      "h": 0.32,
+      "size": 18,
+      "font": "Times New Roman",
+      "bold": true
+    },
+    {
+      "type": "text",
+      "text": "xₜ ∈ ℝ²²¹",
+      "x": 0.58,
+      "y": 2,
+      "w": 2.75,
+      "h": 0.45,
+      "size": 19,
+      "font": "Cambria Math",
+      "color": "#53616B"
+    },
+    {
+      "type": "text",
+      "text": "N = 221 selected parameters",
+      "x": 0.7,
+      "y": 2.88,
+      "w": 2.55,
+      "h": 0.28,
+      "size": 14.5,
+      "font": "Times New Roman",
+      "color": "#53616B"
+    },
+    {
+      "type": "text",
+      "text": "Subsystem- and\nfunction-informed\nparameter ordering",
+      "x": 0.7,
+      "y": 3.24,
+      "w": 2.55,
+      "h": 0.72,
+      "size": 13.5,
+      "font": "Times New Roman",
+      "color": "#65717C"
+    },
+    {
+      "type": "line",
+      "x1": 3.3,
+      "y1": 3.35,
+      "x2": 3.8,
+      "y2": 3.35,
+      "arrow": true
+    },
+    {
+      "type": "grid",
+      "x": 4.05,
+      "y": 1.65,
+      "w": 2.85,
+      "h": 2.85,
+      "rows": 40,
+      "cols": 40,
+      "fill": "#FBFCFD",
+      "stroke": "#D7DEE3",
+      "border": "#98A6AF",
+      "sw": 0.38
+    },
+    {
+      "type": "text",
+      "text": "221 valid channels\n1,379 zero-padding cells",
+      "x": 3.82,
+      "y": 4.68,
+      "w": 3.35,
+      "h": 0.48,
+      "size": 13,
+      "font": "Times New Roman",
+      "bold": true
+    },
+    {
+      "type": "text",
+      "text": "Occupancy is schematic;\nexact channel coordinates are not shown.",
+      "x": 3.82,
+      "y": 5.18,
+      "w": 3.35,
+      "h": 0.42,
+      "size": 11.5,
+      "font": "Times New Roman",
+      "color": "#65717C"
+    },
+    {
+      "type": "line",
+      "x1": 7.12,
+      "y1": 3.35,
+      "x2": 7.8,
+      "y2": 3.35,
+      "arrow": true
+    },
+    {
+      "type": "stack_grid",
+      "x": 8.95,
+      "y": 2.05,
+      "w": 2.25,
+      "h": 2.25,
+      "rows": 40,
+      "cols": 40,
+      "layers": 5,
+      "offset": 0.16,
+      "fill": "#FBFCFD",
+      "stroke": "#D7DEE3",
+      "border": "#98A6AF",
+      "sw": 0.35
+    },
+    {
+      "type": "text",
+      "text": "L = 5 · stride = 1",
+      "x": 8.7,
+      "y": 4.65,
+      "w": 2.85,
+      "h": 0.3,
+      "size": 16,
+      "font": "Times New Roman",
+      "bold": true
+    },
+    {
+      "type": "text",
+      "text": "Five consecutive grids are stacked\nalong the temporal axis.",
+      "x": 8.7,
+      "y": 5.02,
+      "w": 3.15,
+      "h": 0.48,
+      "size": 13,
+      "font": "Times New Roman",
+      "color": "#65717C"
+    },
+    {
+      "type": "text",
+      "text": "Vₜ ∈ ℝ^(1 × 5 × 40 × 40)",
+      "x": 8.7,
+      "y": 5.62,
+      "w": 3.15,
+      "h": 0.32,
+      "size": 16,
+      "font": "Cambria Math",
+      "bold": true
+    },
+    {
+      "type": "line",
+      "x1": 0.55,
+      "y1": 6.52,
+      "x2": 12.78,
+      "y2": 6.52,
+      "color": "#53616B",
+      "sw": 0.8
+    },
+    {
+      "type": "text",
+      "text": "The 40 × 40 grid is a convolution-friendly feature layout, not a physical satellite topology.",
+      "x": 0.58,
+      "y": 6.67,
+      "w": 12.17,
+      "h": 0.28,
+      "size": 12.5,
+      "font": "Times New Roman",
+      "color": "#65717C",
+      "align": "left"
+    }
+  ]
+}
