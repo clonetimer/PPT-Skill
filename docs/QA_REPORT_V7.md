@@ -1,30 +1,35 @@
-# V7.0 QA Report
+# V7.0 QA Report — Baseline, Not Acceptance
 
 ## Scope
-This repository package contains the Skill, style profiles, vector component catalog, five SVG examples, and validation/audit tools.
+V7.0 contains the Skill, A/B/C style profiles, reusable component metadata, five SVG examples, an SVG builder, a PowerPoint audit script, and a five-slide editable prototype deck delivered separately from the public repository.
 
 ## Reference baselines inspected
-The original user-provided source deck was inspected locally; it is intentionally not redistributed in this public repository.
-- Reference slide 189: 83 recursive drawing objects (29 lines, 26 auto-shapes, 19 text boxes, 4 picture objects, nested groups/freeforms). Times New Roman; 11/13/14 pt hierarchy; black-and-white dashed multi-panel framework.
+The user's original reference deck was inspected locally and is intentionally not copied into this public repository.
+- Reference slide 189: 83 recursive drawing objects (29 lines, 26 auto-shapes, 19 text boxes, 4 picture objects, nested groups/freeforms). Times New Roman; 11/13/14 pt hierarchy; black-and-white multi-panel framework.
 - Reference slide 208: 21 recursive objects. Microsoft YaHei; 20 pt title and 14 pt body; pastel module fills; dark-gray connectors.
 - Reference slide 213: 25 editable objects. Microsoft YaHei; 20 pt title and 14 pt body; four-stage FDIR chain, closed-loop feedback, and NORMAL/RECONFIG/DEGRADED/SAFE state flow.
 
-## Included examples
-- A01: academic framework overview — source-visible structural redraw of the user-provided framework style.
-- A02: reciprocal-rank fusion and evidence-coverage detail — method-detail redraw.
-- B01: online FDIR and mode-management loop — source-visible structural redraw of the user-provided engineering style.
-- C01: FBG-SEANet frequency-band graph construction and graph-level diagnosis — source-visible structural redraw of the author-published graphical abstract. It is not a pixel copy; sensor glyphs are vector stand-ins.
-- D01: style profiles and vector workflow summary.
+## Included prototypes
+- A01: academic framework overview.
+- A02: reciprocal-rank fusion and evidence-coverage detail.
+- B01: online FDIR and mode-management loop.
+- C01: FBG-SEANet structural redraw based on the author-published graphical abstract.
+- D01: style-profile and vector-workflow overview.
 
-## Technical checks
-- SVG examples are standalone XML vector files with editable text and geometry.
-- No raster image is embedded in the SVG examples.
-- The four-slide prototype PowerPoint was rendered to PDF and visually inspected at 16:9 presentation size.
-- Prototype deck audit: 4 slides; 0 raster-picture objects; 0 out-of-bounds objects on generated slides. A02 is an additional detail-slide source.
-- The combined local reference-and-prototype deck contains 8 slides (three original reference pages plus five generated slides). Two connector bounding boxes on the original FDIR reference slide are reported outside the slide by python-pptx due to connector transform extents; visual PDF inspection confirms the rendered connector paths remain within the canvas. This is inherited source geometry, not a generated-slide defect.
+## Programmatic checks
+The local prototype deck contains 5 slides. Its latest audit reports:
+- 0 embedded raster-picture objects in generated prototype slides.
+- 0 generated-shape out-of-bounds objects.
+- Recursive shape counts, explicit font ranges, and object bounds are available from the audit script.
+- SVG examples pass XML parsing and basic width/height/viewBox validation.
 
-## Known limitations
-- A01/B01 are style- and structure-matched redraws, not exact duplicates of the original reference pages.
-- C01 is based on the visible author-published graphical abstract; no pixel-level similarity score is claimed.
-- A02 is a method-detail redraw; exact figure-level source matching requires a specific source figure and caption to be selected.
-- The editable prototype PPTX is distributed separately; the public repository keeps the SVG sources and style metadata.
+These checks do not establish visual quality. Current examples still contain known defects: crowded panel layouts, connector-label proximity, small secondary labels, generic module geometry, and incomplete source-figure matching. See `KNOWN_ISSUES_V7.md`.
+
+## Evidence boundaries
+- A01 and B01 are derivative redraws of user-provided reference styles, not exact duplicates.
+- C01 is a source-visible structural redraw, not a pixel-level copy. Sensor glyphs are vector substitutes; graph geometry remains schematic.
+- A02 is a content-detail diagram, not a verified reproduction of a specific published figure.
+- D01 is an internal workflow page, not a final defense-slide design.
+
+## Acceptance status
+**V7.0 is a baseline upload only. It is not accepted as the final visual quality.** V7.1 must address the known issues and implement a single FigureSpec source for SVG and PowerPoint before the production workflow is considered stable.

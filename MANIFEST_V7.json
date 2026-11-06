@@ -1,6 +1,7 @@
 {
   "name": "academic-defense-ppt",
-  "version": "7.0",
+  "version": "7.0.1",
+  "baseline_status": "prototype_only_not_visual_acceptance",
   "files": {
     "skill": "SKILL.md",
     "profiles": [
@@ -15,11 +16,13 @@
       "examples/D01_v7_workflow_and_style_profiles.svg"
     ],
     "tools": [
+      "tools/build_svg_examples.py",
       "tools/audit_pptx.py",
       "tools/validate_svg_examples.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
+      "docs/KNOWN_ISSUES_V7.md",
       "docs/QA_REPORT_V7.md",
       "docs/SOURCE_ATTRIBUTION.md",
       "docs/VECTOR_WORKFLOW.md"
