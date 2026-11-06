@@ -101,9 +101,19 @@ def render(spec,svg,pptx):
    x,y,z=e["x"],e["y"],e.get("scale",1);v=e.get("variant",0);c=e.get("color","#43525B")
    if v==0:
     out.extend([f'<circle cx="{(x+z*.10)*DPI}" cy="{(y+z*.10)*DPI}" r="{z*.075*DPI}" fill="#E8F0F3" stroke="{c}" stroke-width="2"/>',f'<circle cx="{(x+z*.10)*DPI}" cy="{(y+z*.10)*DPI}" r="{z*.025*DPI}" fill="{c}"/>'])
-   else:out.append(f'<rect x="{(x+z*.02)*DPI}" y="{(y+z*.06)*DPI}" width="{z*.17*DPI}" height="{z*.14*DPI}" rx="2" fill="#E8F0F3" stroke="{c}" stroke-width="2"/>')
+   elif v==1:out.append(f'<rect x="{(x+z*.02)*DPI}" y="{(y+z*.06)*DPI}" width="{z*.17*DPI}" height="{z*.14*DPI}" rx="2" fill="#E8F0F3" stroke="{c}" stroke-width="2"/>')
+   elif v==2:out.append(f'<polygon points="{(x+z*.02)*DPI},{(y+z*.12)*DPI} {(x+z*.12)*DPI},{(y+z*.04)*DPI} {(x+z*.20)*DPI},{(y+z*.15)*DPI} {(x+z*.10)*DPI},{(y+z*.23)*DPI}" fill="#E8F0F3" stroke="{c}" stroke-width="2"/>')
+   else:out.append(f'<rect x="{(x+z*.06)*DPI}" y="{(y+z*.025)*DPI}" width="{z*.09*DPI}" height="{z*.24*DPI}" rx="3" fill="#E8F0F3" stroke="{c}" stroke-width="2"/>')
    out.extend([f'<line x1="{(x+z*.10)*DPI}" y1="{(y+z*.20)*DPI}" x2="{(x+z*.10)*DPI}" y2="{(y+z*.30)*DPI}" stroke="{c}" stroke-width="2"/>',f'<rect x="{(x+z*.015)*DPI}" y="{(y+z*.30)*DPI}" width="{z*.18*DPI}" height="{z*.045*DPI}" fill="#FFFFFF" stroke="{c}" stroke-width="1.5"/>'])
-   s=sl.shapes.add_shape(MSO_SHAPE.OVAL if v==0 else MSO_SHAPE.RECTANGLE,Inches(x+z*.02),Inches(y+z*.06),Inches(z*.17),Inches(z*.14));s.fill.solid();s.fill.fore_color.rgb=rgb("#E8F0F3");s.line.color.rgb=rgb(c);nofx(s)
+   if v==0:
+    s=sl.shapes.add_shape(MSO_SHAPE.OVAL,Inches(x+z*.025),Inches(y+z*.025),Inches(z*.15),Inches(z*.15))
+   elif v==1:
+    s=sl.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,Inches(x+z*.02),Inches(y+z*.06),Inches(z*.17),Inches(z*.14))
+   elif v==2:
+    s=sl.shapes.add_shape(MSO_SHAPE.PARALLELOGRAM,Inches(x+z*.015),Inches(y+z*.04),Inches(z*.19),Inches(z*.19))
+   else:
+    s=sl.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,Inches(x+z*.06),Inches(y+z*.025),Inches(z*.09),Inches(z*.24))
+   s.fill.solid();s.fill.fore_color.rgb=rgb("#E8F0F3");s.line.color.rgb=rgb(c);nofx(s)
    addline(sl,{"x1":x+z*.10,"y1":y+z*.20,"x2":x+z*.10,"y2":y+z*.30,"color":c,"sw":1})
    b=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x+z*.015),Inches(y+z*.30),Inches(z*.18),Inches(z*.045));b.fill.solid();b.fill.fore_color.rgb=rgb("#FFFFFF");b.line.color.rgb=rgb(c);nofx(b)
   elif t=="graph":
