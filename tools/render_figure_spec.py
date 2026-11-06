@@ -80,6 +80,23 @@ def render(spec,svg,pptx):
   elif t=="ellipse":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];out.append(f'<ellipse cx="{x+ww/2}" cy="{y+hh/2}" rx="{ww/2}" ry="{hh/2}" fill="{e["fill"]}" stroke="{e["stroke"]}" stroke-width="{e.get("sw",1)*DPI/72}"/>')
    s=sl.shapes.add_shape(MSO_SHAPE.OVAL,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb(e["stroke"]);s.line.width=Pt(e.get("sw",1));nofx(s)
+  elif t=="grid" or t=="stack_grid":
+   x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];rows,cols=int(e["rows"]),int(e["cols"]);stroke=e.get("stroke","#D7DEE3");border=e.get("border","#98A6AF")
+   if t=="stack_grid":
+    off=e.get("offset",.16)*DPI
+    for layer in range(int(e.get("layers",5))-1,0,-1):out.append(f'<rect x="{x+off*layer}" y="{y-off*layer}" width="{ww}" height="{hh}" fill="#FFFFFF" stroke="{border}" stroke-width="1"/>')
+   pid="grid"+str(len(out));out.append(f'<defs><pattern id="{pid}" width="{ww/cols}" height="{hh/rows}" patternUnits="userSpaceOnUse"><path d="M {ww/cols} 0 H 0 V {hh/rows}" fill="none" stroke="{stroke}" stroke-width="{e.get("sw",.4)*DPI/72}"/></pattern></defs>')
+   out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" fill="{e.get("fill","#FBFCFD")}" stroke="{border}" stroke-width="1"/>')
+   out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" fill="url(#{pid})"/>')
+  elif t=="grid" or t=="stack_grid":
+   x,y,ww,hh=[e[k] for k in ("x","y","w","h")];rows,cols=int(e["rows"]),int(e["cols"])
+   if t=="stack_grid":
+    off=e.get("offset",.16)
+    for layer in range(int(e.get("layers",5))-1,0,-1):
+     b=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x+off*layer),Inches(y-off*layer),Inches(ww),Inches(hh));b.fill.solid();b.fill.fore_color.rgb=rgb("#FFFFFF");b.line.color.rgb=rgb(e.get("border","#98A6AF"));b.line.width=Pt(.8);nofx(b)
+   bg=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x),Inches(y),Inches(ww),Inches(hh));bg.fill.solid();bg.fill.fore_color.rgb=rgb(e.get("fill","#FBFCFD"));bg.line.color.rgb=rgb(e.get("border","#98A6AF"));bg.line.width=Pt(.8);nofx(bg)
+   for c in range(1,cols):addline(sl,{"x1":x+ww*c/cols,"y1":y,"x2":x+ww*c/cols,"y2":y+hh,"color":e.get("stroke","#D7DEE3"),"sw":e.get("sw",.4)})
+   for r in range(1,rows):addline(sl,{"x1":x,"y1":y+hh*r/rows,"x2":x+ww,"y2":y+hh*r/rows,"color":e.get("stroke","#D7DEE3"),"sw":e.get("sw",.4)})
   elif t=="sensor":
    x,y,z=e["x"],e["y"],e.get("scale",1);v=e.get("variant",0);c=e.get("color","#43525B")
    if v==0:
