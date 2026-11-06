@@ -1,7 +1,7 @@
 {
   "name": "academic-defense-ppt",
-  "version": "7.3.0",
-  "baseline_status": "source_aligned_C01_prototype_not_stable",
+  "version": "7.5.0-dev",
+  "baseline_status": "draft_prototype_not_stable",
   "files": {
     "skill": "SKILL.md",
     "profiles": [
@@ -12,34 +12,45 @@
       "figure_specs/B01_engineering_fdir.json",
       "figure_specs/F07_telemetry_embedding.json",
       "figure_specs/c01/C01_FBG_construction.json",
-      "figure_specs/c01/C01_SEANet_graph_level.json"
+      "figure_specs/c01/C01_SEANet_graph_level.json",
+      "figure_specs/c01/C01_composite_defense_slide.json"
     ],
     "examples": [
       "examples/B01_engineering_fdir_v71.svg",
       "examples/F07_telemetry_embedding_v71.svg",
       "examples/C01_FBG_construction_v73.svg",
-      "examples/C01_SEANet_graph_level_v73.svg"
+      "examples/C01_SEANet_graph_level_v73.svg",
+      "examples/C01_composite_defense_slide_v74.svg"
     ],
     "tools": [
       "tools/render_figure_spec.py",
       "tools/build_v71_examples.py",
       "tools/build_c01_v73.py",
+      "tools/build_c01_v74.py",
       "tools/validate_figure_specs.py",
       "tools/validate_c01_v73.py",
+      "tools/validate_c01_v74.py",
+      "tools/validate_deck_spec.py",
+      "tools/validate_manifest.py",
       "tools/audit_pptx.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
       "docs/C01_V73_QA.md",
       "docs/C01_V73_SOURCE.md",
+      "docs/C01_V74_QA.md",
+      "docs/DECK_PLANNING_V75.md",
       "docs/QA_REPORT_V7.md",
       "docs/SOURCE_ATTRIBUTION.md",
       "docs/VECTOR_WORKFLOW.md"
     ],
     "generated_outputs": [
       "dist/C01_FBG_construction_v73.pptx",
-      "dist/C01_SEANet_graph_level_v73.pptx"
-    ]
+      "dist/C01_SEANet_graph_level_v73.pptx",
+      "dist/C01_composite_defense_slide_v74.pptx",
+      "dist/C01_composite_defense_slide_v74_preview.pdf"
+    ],
+    "planning_specs": ["specs/deck_spec_v75.example.json", "specs/deck_spec_v75.schema.json"]
   },
   "source_policy": "Do not redistribute the publisher's original graphical abstract; keep only source links and editable derivative redraws."
 }

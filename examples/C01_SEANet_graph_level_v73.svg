@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>
+<rect width="1600" height="900" fill="#FFFFFF"/>
+<text x="799.8" y="62.03333333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="36.666666666666664" fill="#28343C" font-weight="700"><tspan x="799.8" dy="0">Graph-level fault diagnosis framework</tspan></text>
+<rect x="57.599999999999994" y="110.4" width="1484.3999999999999" height="714.0" rx="0.0" fill="#FFFFFF" stroke="#43525B" stroke-width="1.6666666666666667" stroke-dasharray="8 6"/>
+<rect x="93.60000000000001" y="290.4" width="170.39999999999998" height="204.0" rx="16.8" fill="#E4EAED" stroke="#AEBBC2" stroke-width="1.3333333333333333"/>
+<rect x="105.6" y="278.4" width="170.39999999999998" height="204.0" rx="16.8" fill="#E8F0F3" stroke="#AEBBC2" stroke-width="1.3333333333333333"/>
+<rect x="117.6" y="266.40000000000003" width="170.39999999999998" height="204.0" rx="16.8" fill="#FFFFFF" stroke="#43525B" stroke-width="1.8333333333333333"/>
+<text x="202.8" y="300.075" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="22.5" fill="#28343C" font-weight="700"><tspan x="202.8" dy="0">Input</tspan></text>
+<line x1="150.0" y1="345.6" x2="178.8" y2="340.2" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="178.8" y1="340.2" x2="207.6" y2="345.6" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="207.6" y1="345.6" x2="236.39999999999998" y2="343.44" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="150.0" y1="345.6" x2="161.99999999999997" y2="381.24" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="178.8" y1="340.2" x2="161.99999999999997" y2="381.24" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="178.8" y1="340.2" x2="195.6" y2="375.84000000000003" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="207.6" y1="345.6" x2="195.6" y2="375.84000000000003" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="207.6" y1="345.6" x2="229.2" y2="383.40000000000003" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="236.39999999999998" y1="343.44" x2="229.2" y2="383.40000000000003" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="161.99999999999997" y1="381.24" x2="195.6" y2="375.84000000000003" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="195.6" y1="375.84000000000003" x2="229.2" y2="383.40000000000003" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="161.99999999999997" y1="381.24" x2="181.2" y2="412.56" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="195.6" y1="375.84000000000003" x2="181.2" y2="412.56" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="195.6" y1="375.84000000000003" x2="217.20000000000002" y2="414.72" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="229.2" y1="383.40000000000003" x2="217.20000000000002" y2="414.72" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<line x1="181.2" y1="412.56" x2="217.20000000000002" y2="414.72" stroke="#43525B" stroke-width="1.0833333333333333"/>
+<circle cx="150.0" cy="345.6" r="5.3999999999999995" fill="#7896A6" stroke="#43525B" stroke-width="1.1"/>
+<circle cx="178.8" cy="340.2" r="5.3999999999999995" fill="#7896A6" stroke="#43525B" stroke-width="1.1"/>
+<circle cx="207.6" cy="345.6" r="5.3999999999999995" fill="#7896A6" stroke="#43525B" stroke-width="1.1"/>
+<circle cx="236.39999999999998" cy="343.44" r="5.3999999999999995" fill="#7896A6" stroke="#43525B" stroke-width="1.1"/>
+<circle cx="161.99999999999997" cy="381.24" r="5.3999999999999995" fill="#7896A6" stroke="#43525B" stroke-width="1.1"/>
+<circle cx="195.6" cy="375.84000000000003" r="5.3999999999999995" fill="#7896A6" stroke="#43525B" stroke-width="1.1"/>
+<circle cx="229.2" cy="383.40000000000003" r="5.3999999999999995" fill="#7896A6" stroke="#43525B" stroke-width="1.1"/>
+<circle cx="181.2" cy="412.56" r="5.3999999999999995" fill="#7896A6" stroke="#43525B" stroke-width="1.1"/>
+<circle cx="217.20000000000002" cy="414.72" r="5.3999999999999995" fill="#7896A6" stroke="#43525B" stroke-width="1.1"/>
+<line x1="288.0" y1="417.6" x2="345.59999999999997" y2="417.6" stroke="#43525B" stroke-width="2.4166666666666665" marker-end="url(#ar)"/>
+<rect x="360.0" y="372.0" width="141.6" height="103.2" rx="16.8" fill="#E4EAED" stroke="#E4EAED" stroke-width="0.5"/>
+<rect x="354.0" y="366.0" width="141.6" height="103.2" rx="16.8" fill="#E8F0F3" stroke="#43525B" stroke-width="1.75"/>
+<text x="424.79999999999995" y="421.55" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#28343C" font-weight="700"><tspan x="424.79999999999995" dy="0">GCN</tspan></text>
+<polygon points="554.808,372.0 659.592,372.0 678.0,475.2 536.4,475.2" fill="#E4EAED" stroke="#E4EAED" stroke-width="0.5"/>
+<polygon points="548.808,366.0 653.592,366.0 672.0,469.2 530.4,469.2" fill="#F1F4F5" stroke="#43525B" stroke-width="1.75"/>
+<text x="601.2" y="420.26666666666665" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.333333333333332" fill="#28343C" font-weight="700"><tspan x="601.2" dy="0">pooling</tspan></text>
+<line x1="495.59999999999997" y1="417.6" x2="528.0" y2="417.6" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<rect x="714.0" y="372.0" width="141.6" height="103.2" rx="16.8" fill="#E4EAED" stroke="#E4EAED" stroke-width="0.5"/>
+<rect x="708.0" y="366.0" width="141.6" height="103.2" rx="16.8" fill="#E8F0F3" stroke="#43525B" stroke-width="1.75"/>
+<text x="778.8" y="421.55" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#28343C" font-weight="700"><tspan x="778.8" dy="0">GCN</tspan></text>
+<line x1="673.2" y1="417.6" x2="705.6" y2="417.6" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<polygon points="907.6080000000001,372.0 1012.392,372.0 1030.8,475.2 889.2,475.2" fill="#E4EAED" stroke="#E4EAED" stroke-width="0.5"/>
+<polygon points="901.6080000000001,366.0 1006.392,366.0 1024.8,469.2 883.2,469.2" fill="#F1F4F5" stroke="#43525B" stroke-width="1.75"/>
+<text x="953.9999999999999" y="420.26666666666665" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.333333333333332" fill="#28343C" font-weight="700"><tspan x="953.9999999999999" dy="0">pooling</tspan></text>
+<line x1="850.8" y1="417.6" x2="880.8" y2="417.6" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<rect x="1064.3999999999999" y="372.0" width="141.6" height="103.2" rx="14.399999999999999" fill="#E4EAED" stroke="#E4EAED" stroke-width="0.5"/>
+<rect x="1058.4" y="366.0" width="141.6" height="103.2" rx="14.399999999999999" fill="#89949A" stroke="#43525B" stroke-width="1.6666666666666667"/>
+<text x="1129.2000000000003" y="421.55" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#FFFFFF" font-weight="700"><tspan x="1129.2000000000003" dy="0">SR</tspan></text>
+<line x1="1026.0" y1="417.6" x2="1056.0" y2="417.6" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<ellipse cx="1287.6000000000001" cy="417.59999999999997" rx="37.2" ry="37.2" fill="#FFFFFF" stroke="#43525B" stroke-width="2.0"/>
+<text x="1287.6000000000001" y="426.8833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="31.666666666666668" fill="#28343C" font-weight="700"><tspan x="1287.6000000000001" dy="0">+</tspan></text>
+<line x1="1200.0" y1="417.6" x2="1248.0" y2="417.6" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<line x1="204.0" y1="471.6" x2="204.0" y2="614.4" stroke="#43525B" stroke-width="2.25"/>
+<line x1="204.0" y1="614.4" x2="350.4" y2="614.4" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<rect x="363.59999999999997" y="570.0" width="245.99999999999997" height="103.2" rx="16.8" fill="#E4EAED" stroke="#E4EAED" stroke-width="0.5"/>
+<rect x="357.6" y="564.0" width="245.99999999999997" height="103.2" rx="16.8" fill="#F1F4F5" stroke="#43525B" stroke-width="1.75"/>
+<text x="480.6" y="609.12" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="22.0" fill="#28343C" font-weight="700"><tspan x="480.6" dy="0">Energy-assisted</tspan><tspan x="480.6" dy="25.959999999999997">module</tspan></text>
+<line x1="603.6" y1="614.4" x2="669.6" y2="614.4" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<rect x="685.2" y="570.0" width="170.39999999999998" height="103.2" rx="14.399999999999999" fill="#E4EAED" stroke="#E4EAED" stroke-width="0.5"/>
+<rect x="679.2" y="564.0" width="170.39999999999998" height="103.2" rx="14.399999999999999" fill="#89949A" stroke="#43525B" stroke-width="1.6666666666666667"/>
+<text x="764.4" y="619.5500000000001" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#FFFFFF" font-weight="700"><tspan x="764.4" dy="0">SR</tspan></text>
+<line x1="849.6" y1="614.4" x2="1286.4" y2="614.4" stroke="#43525B" stroke-width="2.25"/>
+<line x1="1286.4" y1="614.4" x2="1286.4" y2="456.0" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<text x="96.0" y="765.1083333333333" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="19.166666666666668" fill="#687780"><tspan x="96.0" dy="0">The EA module embeds energy-related features into each graph node; the SR layer models sensor-wise fault sensitivity.</tspan></text>
+<text x="96.0" y="804.8000000000001" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="16.0" fill="#687780" font-style="italic"><tspan x="96.0" dy="0">Paper terminology: SR = sensitivity-aware readout. No additional classifier block is inserted beyond the source's summation node.</tspan></text>
+</svg>

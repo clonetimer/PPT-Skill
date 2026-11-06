@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clonetimer/PPT-Skill/specs/deck_spec_v75.schema.json",
+  "title": "Academic presentation planning contract",
+  "type": "object",
+  "required": ["schema_version", "deck", "style", "source_style", "slides"],
+  "properties": {
+    "schema_version": {"const": "7.5.0-dev"},
+    "deck": {
+      "type": "object",
+      "required": ["topic", "audience", "duration_minutes", "target_slide_count", "narrative", "delivery", "style_ref"],
+      "properties": {
+        "topic": {"type": "string", "minLength": 1},
+        "audience": {"type": "string", "minLength": 1},
+        "duration_minutes": {"type": "number", "exclusiveMinimum": 0},
+        "target_slide_count": {"type": "integer", "minimum": 1},
+        "narrative": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "delivery": {"type": "array", "items": {"enum": ["pptx", "pdf", "svg", "editable_sources"]}, "minItems": 1, "uniqueItems": true},
+        "style_ref": {"type": "string", "minLength": 1}
+      }, "additionalProperties": false
+    },
+    "style": {
+      "type": "object",
+      "required": ["id", "source_style_ref", "font_family", "background", "text_color", "accent_colors", "density", "shadow"],
+      "properties": {
+        "id": {"type": "string"}, "source_style_ref": {"type": "string"},
+        "font_family": {"type": "string", "minLength": 1},
+        "background": {"$ref": "#/$defs/color"}, "text_color": {"$ref": "#/$defs/color"},
+        "accent_colors": {"type": "array", "items": {"$ref": "#/$defs/color"}, "minItems": 1},
+        "density": {"enum": ["sparse", "moderate", "dense"]},
+        "shadow": {"enum": ["none", "source_evidenced"]}
+      }, "additionalProperties": false
+    },
+    "source_style": {
+      "type": "object", "required": ["id", "reference", "anchors"],
+      "properties": {
+        "id": {"type": "string"}, "reference": {"type": "string"},
+        "anchors": {"type": "array", "minItems": 5, "maxItems": 7, "items": {"$ref": "#/$defs/anchor"}}
+      }, "additionalProperties": false
+    },
+    "slides": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/slide"}}
+  }, "additionalProperties": false,
+  "$defs": {
+    "color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+    "anchor": {
+      "type": "object", "required": ["dimension", "value", "confidence", "evidence"],
+      "properties": {
+        "dimension": {"enum": ["layout", "components", "connectors", "palette", "typography", "iconography", "surface", "density"]},
+        "value": {"type": "string", "minLength": 1},
+        "confidence": {"enum": ["high", "medium", "low"]},
+        "evidence": {"type": "string", "minLength": 1}
+      }, "additionalProperties": false
+    },
+    "slide": {
+      "type": "object", "required": ["id", "role", "claim", "evidence", "layout", "figure_ref", "on_slide", "speaker_notes"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "role": {"enum": ["research_question", "problem", "prior_work", "framework", "method", "experiment", "result", "ablation", "conclusion", "evidence_boundary"]},
+        "claim": {"type": "string", "minLength": 1},
+        "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}},
+        "layout": {"type": "string", "minLength": 1},
+        "figure_ref": {"type": ["string", "null"]},
+        "on_slide": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "speaker_notes": {"type": "string", "minLength": 1}
+      }, "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object", "required": ["source", "status"],
+      "properties": {
+        "source": {"type": "string", "minLength": 1},
+        "status": {"enum": ["source_visible", "paper_grounded", "verified_artifact", "unverified"]}
+      }, "additionalProperties": false
+    }
+  }
+}

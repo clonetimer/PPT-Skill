@@ -1,7 +1,7 @@
 ---
 name: academic-defense-ppt
-version: 7.4.0
-description: Source-matched academic-defense slides with editable vector FigureSpecs and projection-aware QA.
+version: 7.5.0-dev
+description: Research narrative planning and source-matched academic slides with editable vector figures and projection-aware QA.
 ---
 
 # Academic Defense PPT Skill
@@ -25,6 +25,9 @@ Produce technically accurate, readable academic-defense presentations. Select vi
 ## FigureSpec
 Canonical source is JSON under `figure_specs/`. Render SVG and editable native PowerPoint from the same FigureSpec. C01 primitives include text, rect, trapezoid, line, polyline, ellipse, sensor and graph. F07 also uses grid and stack_grid.
 
+## Deck planning (V7.5 draft)
+Before drawing, create a DeckSpec with audience, time budget, narrative order, delivery requirements and ordered SlideSpecs. Each SlideSpec needs one defensible claim, source evidence/status, page role, layout, on-slide text and speaker notes. Keep FigureSpec scientific topology independent of style and page layout. Derive a SourceStyleSpec from 5–7 evidenced visual anchors. Follow `docs/DECK_PLANNING_V75.md` and validate the example contract with `python tools/validate_deck_spec.py`.
+
 ## C01 source-matched pattern
 FBG: sensor rows and waveforms → OCF/notch filter → B1/B2/B3/Bq subgraphs → total graph.
 SEANet: Input → GCN → pooling → GCN → pooling → SR; parallel Input → EA module → SR; both feed the summation node.
@@ -40,4 +43,4 @@ When the user wants the complete method on one slide, use the V7.4 layout:
 ## QA
 Verify topology and terminology against the paper/caption/official code. Render the complete deck to PDF. Check text overlaps, clipping, out-of-bounds objects, SVG validity, raster objects and theme shadows. Do not claim pixel identity without high-resolution source and direct overlay.
 
-V7.4 local QA: 320 native shapes; 31 text boxes; zero text-box intersections; zero out-of-bounds objects; zero raster picture objects; no theme shadow. Windows PowerPoint validation remains open.
+Reproducible V7.4 composite QA: 227 native shapes; 41 text boxes; zero text-box intersections, out-of-bounds objects, raster pictures and theme shadows. Windows PowerPoint 16.0 PDF/PNG export was inspected. These counts describe the reproducible FigureSpec build, not the earlier uncommitted local prototype.

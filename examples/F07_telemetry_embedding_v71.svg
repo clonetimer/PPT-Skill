@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>
+<rect width="1600" height="900" fill="#FFFFFF"/>
+<text x="800.4" y="61.383333333333326" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="41.666666666666664" fill="#28343C" font-weight="700"><tspan x="800.4" dy="0">Telemetry embedding and temporal stacking</tspan></text>
+<text x="69.6" y="129.3" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="30.0" fill="#28343C" font-weight="700"><tspan x="69.6" dy="0">Telemetry vector</tspan></text>
+<text x="669.0" y="129.3" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="30.0" fill="#28343C" font-weight="700"><tspan x="669.0" dy="0">40 × 40 feature grid</tspan></text>
+<text x="1278.0" y="129.3" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="30.0" fill="#28343C" font-weight="700"><tspan x="1278.0" dy="0">Temporal context</tspan></text>
+<text x="234.6" y="278.0833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Cambria Math" font-size="31.666666666666668" fill="#53616B"><tspan x="234.6" dy="0">xₜ ∈ ℝ²²¹</tspan></text>
+<text x="237.0" y="370.8583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="24.166666666666668" fill="#53616B"><tspan x="237.0" dy="0">N = 221 selected parameters</tspan></text>
+<text x="237.0" y="413.325" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="22.5" fill="#65717C"><tspan x="237.0" dy="0">Subsystem- and</tspan><tspan x="237.0" dy="26.549999999999997">function-informed</tspan><tspan x="237.0" dy="26.549999999999997">parameter ordering</tspan></text>
+<line x1="396.0" y1="402.0" x2="456.0" y2="402.0" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
+<defs><pattern id="grid11" width="8.55" height="8.55" patternUnits="userSpaceOnUse"><path d="M 8.55 0 H 0 V 8.55" fill="none" stroke="#D7DEE3" stroke-width="0.6333333333333333"/></pattern></defs>
+<rect x="486.0" y="198.0" width="342.0" height="342.0" fill="#FBFCFD" stroke="#98A6AF" stroke-width="1"/>
+<rect x="486.0" y="198.0" width="342.0" height="342.0" fill="url(#grid11)"/>
+<text x="659.4" y="585.1999999999999" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.666666666666668" fill="#28343C" font-weight="700"><tspan x="659.4" dy="0">221 valid channels</tspan><tspan x="659.4" dy="25.566666666666666">1,379 zero-padding cells</tspan></text>
+<text x="659.4" y="642.2" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="19.166666666666668" fill="#65717C"><tspan x="659.4" dy="0">Occupancy is schematic;</tspan><tspan x="659.4" dy="22.616666666666667">exact channel coordinates are not shown.</tspan></text>
+<line x1="854.4" y1="402.0" x2="936.0" y2="402.0" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
+<rect x="1150.8" y="169.2" width="270.0" height="270.0" fill="#FFFFFF" stroke="#98A6AF" stroke-width="1"/>
+<rect x="1131.6" y="188.39999999999998" width="270.0" height="270.0" fill="#FFFFFF" stroke="#98A6AF" stroke-width="1"/>
+<rect x="1112.4" y="207.59999999999997" width="270.0" height="270.0" fill="#FFFFFF" stroke="#98A6AF" stroke-width="1"/>
+<rect x="1093.2" y="226.79999999999998" width="270.0" height="270.0" fill="#FFFFFF" stroke="#98A6AF" stroke-width="1"/>
+<defs><pattern id="grid21" width="6.75" height="6.75" patternUnits="userSpaceOnUse"><path d="M 6.75 0 H 0 V 6.75" fill="none" stroke="#D7DEE3" stroke-width="0.5833333333333334"/></pattern></defs>
+<rect x="1074.0" y="245.99999999999997" width="270.0" height="270.0" fill="#FBFCFD" stroke="#98A6AF" stroke-width="1"/>
+<rect x="1074.0" y="245.99999999999997" width="270.0" height="270.0" fill="url(#grid21)"/>
+<text x="1215.0" y="585.3333333333334" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="26.666666666666668" fill="#28343C" font-weight="700"><tspan x="1215.0" dy="0">L = 5 · stride = 1</tspan></text>
+<text x="1233.0" y="626.0" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.666666666666668" fill="#65717C"><tspan x="1233.0" dy="0">Five consecutive grids are stacked</tspan><tspan x="1233.0" dy="25.566666666666666">along the temporal axis.</tspan></text>
+<text x="1233.0" y="702.9333333333334" text-anchor="middle" dominant-baseline="middle" font-family="Cambria Math" font-size="26.666666666666668" fill="#28343C" font-weight="700"><tspan x="1233.0" dy="0">Vₜ ∈ ℝ^(1 × 5 × 40 × 40)</tspan></text>
+<line x1="66.0" y1="782.4" x2="1533.6" y2="782.4" stroke="#53616B" stroke-width="1.3333333333333333"/>
+<text x="69.6" y="824.4916666666666" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="20.833333333333332" fill="#65717C"><tspan x="69.6" dy="0">The 40 × 40 grid is a convolution-friendly feature layout, not a physical satellite topology.</tspan></text>
+</svg>

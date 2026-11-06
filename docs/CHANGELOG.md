@@ -1,5 +1,12 @@
 # Changelog
 
+## V7.5.0-dev — Deck planning and V7.4 source closure
+- Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.
+- Committed a reproducible V7.4 composite FigureSpec, SVG, PPTX and PowerPoint-exported PDF.
+- Added C01 semantic path checks and CI build/audit coverage for the composite.
+- Fixed the shared renderer's grid branch so PPTX grid shapes are emitted alongside SVG grid geometry.
+- Kept the branch as a draft prototype pending source overlay and independent review.
+
 ## V7.3.0 — C01 source-matched FigureSpec
 - Located the author-published FBG-SEANet graphical abstract.
 - Rebuilt the two source panels as editable vector slides.

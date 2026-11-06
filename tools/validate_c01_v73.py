@@ -10,7 +10,7 @@ def ov(a,b):
  x=max(0,min(a.left+a.width,b.left+b.width)-max(a.left,b.left));y=max(0,min(a.top+a.height,b.top+b.height)-max(a.top,b.top))
  return x>Inches(.03) and y>Inches(.03)
 def check(p,tmp):
- s=json.loads(p.read_text());w=s["canvas"]["width_in"];h=s["canvas"]["height_in"];allowed={"text","rect","trapezoid","line","polyline","ellipse","sensor","graph"}
+ s=json.loads(p.read_text(encoding="utf-8"));w=s["canvas"]["width_in"];h=s["canvas"]["height_in"];allowed={"text","rect","trapezoid","line","polyline","ellipse","sensor","graph"}
  for i,e in enumerate(s["elements"]):
   assert e["type"] in allowed,(p,i,e["type"])
   if e["type"]=="line":assert 0<=e["x1"]<=w and 0<=e["x2"]<=w and 0<=e["y1"]<=h and 0<=e["y2"]<=h
@@ -31,6 +31,7 @@ def check(p,tmp):
  assert not pics and not oob and not overlaps and not shadow,(p,pics,oob,overlaps,shadow)
  return {"spec":p.name,"shapes":len(sl.shapes),"pictures":pics,"out_of_bounds":oob,"text_overlaps":overlaps,"shadow":shadow}
 def main():
- files=sorted((ROOT/"figure_specs"/"c01").glob("*.json"));assert len(files)==2
+ files=[ROOT/"figure_specs"/"c01"/f"{stem}.json" for stem in ("C01_FBG_construction","C01_SEANet_graph_level")]
+ assert all(p.is_file() for p in files)
  with tempfile.TemporaryDirectory() as t:print(json.dumps([check(p,Path(t)) for p in files],indent=2))
 if __name__=="__main__":main()

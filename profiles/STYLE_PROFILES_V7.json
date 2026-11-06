@@ -1,5 +1,5 @@
 {
-  "version": "7.1.1",
+  "version": "7.5.0-dev",
   "principle": "Select a figure-specific visual grammar from the source; do not force every figure into one corporate-card template.",
   "profiles": {
     "A_black_white_academic": {

@@ -88,7 +88,6 @@ def render(spec,svg,pptx):
    pid="grid"+str(len(out));out.append(f'<defs><pattern id="{pid}" width="{ww/cols}" height="{hh/rows}" patternUnits="userSpaceOnUse"><path d="M {ww/cols} 0 H 0 V {hh/rows}" fill="none" stroke="{stroke}" stroke-width="{e.get("sw",.4)*DPI/72}"/></pattern></defs>')
    out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" fill="{e.get("fill","#FBFCFD")}" stroke="{border}" stroke-width="1"/>')
    out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" fill="url(#{pid})"/>')
-  elif t=="grid" or t=="stack_grid":
    x,y,ww,hh=[e[k] for k in ("x","y","w","h")];rows,cols=int(e["rows"]),int(e["cols"])
    if t=="stack_grid":
     off=e.get("offset",.16)
@@ -126,5 +125,5 @@ def render(spec,svg,pptx):
  out.append("</svg>");Path(svg).parent.mkdir(parents=True,exist_ok=True);Path(svg).write_text("\n".join(out),encoding="utf-8")
  Path(pptx).parent.mkdir(parents=True,exist_ok=True);prs.save(pptx);clean_theme(Path(pptx))
 def main():
- a=argparse.ArgumentParser();a.add_argument("spec",type=Path);a.add_argument("--svg",type=Path,required=True);a.add_argument("--pptx",type=Path,required=True);x=a.parse_args();render(json.loads(x.spec.read_text()),x.svg,x.pptx)
+ a=argparse.ArgumentParser();a.add_argument("spec",type=Path);a.add_argument("--svg",type=Path,required=True);a.add_argument("--pptx",type=Path,required=True);x=a.parse_args();render(json.loads(x.spec.read_text(encoding="utf-8")),x.svg,x.pptx)
 if __name__=="__main__":main()
