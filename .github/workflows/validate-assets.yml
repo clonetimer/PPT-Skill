@@ -45,3 +45,13 @@ jobs:
           python -m py_compile tools/validate_figure_specs.py
           python -m py_compile tools/validate_svg_examples.py
           python -m py_compile tools/build_v71_examples.py
+      - name: Upload generated vector examples
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-v7.1.1-figure-spec-examples
+          path: |
+            examples/B01_engineering_fdir_v71.svg
+            examples/F07_telemetry_embedding_v71.svg
+            dist/B01_engineering_fdir_v71.pptx
+            dist/F07_telemetry_embedding_v71.pptx
+          if-no-files-found: error
