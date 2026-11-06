@@ -1,0 +1,30 @@
+name: Validate vector assets
+
+on:
+  push:
+    branches: [main, "feature/**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate SVG examples
+        run: python tools/validate_svg_examples.py
+      - name: Validate JSON profiles and manifest
+        run: |
+          python -m json.tool profiles/STYLE_PROFILES_V7.json > /dev/null
+          python -m json.tool profiles/VECTOR_COMPONENT_CATALOG_V7.json > /dev/null
+          python -m json.tool MANIFEST_V7.json > /dev/null
+      - name: Compile audit tools
+        run: python -m py_compile tools/audit_pptx.py tools/validate_svg_examples.py
