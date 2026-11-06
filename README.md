@@ -1,18 +1,23 @@
 # Academic Defense PPT Skill
 
-## V7.2 C01 refinement
-The C01 paper-grounded reconstruction is split into two slides to avoid the previous crowded single-panel composition:
-1. Frequency-band graph construction.
-2. Graph-level representation with SEANet.
+## V7.3.0 — C01 source-matched vector reconstruction
+C01 was rebuilt from the author-published FBG-SEANet graphical abstract as two editable 16:9 slides:
+1. FBG construction: sensor signals → OCF/notch filter → frequency-band subgraphs → total graph.
+2. SEANet diagnosis: GCN/pooling main path and EA/SR branch converging at the summation node.
 
-The new build source and figure specifications are included under `tools/` and `figure_specs/`. The editable PPTX and PDF preview are delivered with the V7.2 work package.
+V7.3 removes unsupported frequency-response waveforms and invented downstream classifier/representation boxes from V7.2. The readout is labeled SR according to the article text.
 
-## Design policy
-- Source-specific visual grammar; no universal card template.
-- SVG/vector-first authoring with editable PowerPoint output.
-- Split dense mechanisms into sequential slides.
-- Do not invent topology, sensor-to-node mappings, or fusion operators.
-- Distinguish source-visible redraws from paper-grounded reconstructions.
+## FigureSpec
+Canonical JSON:
+- figure_specs/c01/C01_FBG_construction.json
+- figure_specs/c01/C01_SEANet_graph_level.json
 
-## Evidence boundary
-C01 is a paper-grounded structural reconstruction, not a pixel-level reproduction of the publisher graphical abstract. See docs/C01_V72_QA.md and docs/C01_V72_SOURCE.md.
+Build and validate:
+python tools/build_c01_v73.py
+python tools/validate_c01_v73.py
+
+## Source
+Lee et al., Engineering Applications of Artificial Intelligence 179 (2026), 115273. DOI 10.1016/j.engappai.2026.115273.
+Author page: https://hai.snu.ac.kr/bbs/board.php?bo_table=sub4_1_a&wr_id=251
+
+The original image is not redistributed. Sensor photographs are replaced with vector silhouettes; graph coordinates are schematic. V7.3 is a structural redraw, not pixel-identical.

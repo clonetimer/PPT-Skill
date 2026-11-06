@@ -1,158 +1,103 @@
 #!/usr/bin/env python3
-"""Render a JSON FigureSpec to SVG and editable PowerPoint from the same source."""
 from __future__ import annotations
-import argparse, json, math, zipfile
-import xml.etree.ElementTree as ET
+import argparse,json,math,zipfile,xml.etree.ElementTree as ET
 from pathlib import Path
 from xml.sax.saxutils import escape
-
 from pptx import Presentation
-from pptx.util import Inches, Pt
+from pptx.util import Inches,Pt
 from pptx.dml.color import RGBColor
-from pptx.enum.shapes import MSO_SHAPE, MSO_CONNECTOR
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.enum.shapes import MSO_SHAPE,MSO_CONNECTOR
+from pptx.enum.text import PP_ALIGN,MSO_ANCHOR
 from pptx.enum.dml import MSO_LINE_DASH_STYLE
 from pptx.oxml.xmlchemy import OxmlElement
 from pptx.oxml.ns import qn
-
-DPI=120.0
-A_NS="{http://schemas.openxmlformats.org/drawingml/2006/main}"
-NS={"a":"http://schemas.openxmlformats.org/drawingml/2006/main"}
-
-def color(v):
-    return RGBColor.from_string(v.lstrip("#").upper())
-
-def no_theme_effects(shape):
-    for node in shape._element.iter():
-        style=node.find(qn("p:style"))
-        if style is not None:
-            ref=style.find(qn("a:effectRef"))
-            if ref is not None: ref.set("idx","0")
-        effects=node.find(qn("a:effectLst"))
-        if effects is not None: node.remove(effects)
-    sp_pr=getattr(shape._element,"spPr",None)
-    if sp_pr is not None and sp_pr.find(qn("a:effectLst")) is None:
-        sp_pr.append(OxmlElement("a:effectLst"))
-
-def render_svg(spec,path):
-    w=float(spec["canvas"]["width_in"])*DPI
-    h=float(spec["canvas"]["height_in"])*DPI
-    out=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{w:.0f}" height="{h:.0f}" viewBox="0 0 {w:.0f} {h:.0f}">',
-         '<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#53616B"/></marker></defs>',
-         f'<rect width="{w:.0f}" height="{h:.0f}" fill="#FFFFFF"/>']
-    for e in spec["elements"]:
-        typ=e["type"]
-        if typ=="text":
-            x,y,ww,hh=[float(e[k])*DPI for k in ("x","y","w","h")]
-            size=float(e.get("size",14)); fs=size*DPI/72
-            lines=str(e["text"]).split("\n"); align=e.get("align","center")
-            anchor={"left":"start","center":"middle","right":"end"}[align]
-            tx=x if align=="left" else (x+ww/2 if align=="center" else x+ww)
-            lh=fs*1.18; base=y+hh/2-(len(lines)-1)*lh/2+fs*.35
-            spans="".join(f'<tspan x="{tx:.2f}" dy="{0 if i==0 else lh:.2f}">{escape(line)}</tspan>' for i,line in enumerate(lines))
-            font=e.get("font",spec.get("style",{}).get("font","Arial"))
-            if font=="Microsoft YaHei": font="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif"
-            out.append(f'<text x="{tx:.2f}" y="{base:.2f}" text-anchor="{anchor}" dominant-baseline="middle" font-family="{escape(font)}" font-size="{fs:.2f}px" fill="{e.get("color","#222222")}"'+(' font-weight="700"' if e.get("bold") else '')+'>'+spans+'</text>')
-        elif typ=="rect":
-            x,y,ww,hh=[float(e[k])*DPI for k in ("x","y","w","h")]
-            out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" rx="{float(e.get("radius",0))*DPI}" fill="{e.get("fill","#FFFFFF")}" stroke="{e.get("stroke","#53616B")}" stroke-width="{float(e.get("sw",1))*DPI/72}"/>')
-        elif typ=="line":
-            x1,y1,x2,y2=[float(e[k])*DPI for k in ("x1","y1","x2","y2")]
-            dash=' stroke-dasharray="8 6"' if e.get("dash") else ''
-            arrow=' marker-end="url(#arrow)"' if e.get("arrow") else ''
-            out.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{e.get("color",spec.get("style",{}).get("line","#53616B"))}" stroke-width="{float(e.get("sw",1.1))*DPI/72}"{dash}{arrow}/>')
-        elif typ in ("grid","stack_grid"):
-            x,y,ww,hh=[float(e[k])*DPI for k in ("x","y","w","h")]
-            rows,cols=int(e["rows"]),int(e["cols"])
-            stroke=e.get("stroke","#D7DEE3"); border=e.get("border","#98A6AF")
-            if typ=="stack_grid":
-                off=float(e.get("offset",.16))*DPI
-                for layer in range(int(e.get("layers",5))-1,0,-1):
-                    out.append(f'<rect x="{x+off*layer}" y="{y-off*layer}" width="{ww}" height="{hh}" fill="#FFFFFF" stroke="{border}" stroke-width="1.1"/>')
-            pid=f"grid{len(out)}"
-            out.append(f'<defs><pattern id="{pid}" width="{ww/cols}" height="{hh/rows}" patternUnits="userSpaceOnUse"><path d="M {ww/cols} 0 H 0 V {hh/rows}" fill="none" stroke="{stroke}" stroke-width="{float(e.get("sw",.4))*DPI/72}"/></pattern></defs>')
-            out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" fill="{e.get("fill","#FBFCFD")}" stroke="{border}" stroke-width=".9"/>')
-            out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" fill="url(#{pid})"/>')
-        else: raise ValueError(f"Unsupported primitive: {typ}")
-    out.append("</svg>")
-    path.write_text("\n".join(out),encoding="utf-8")
-
-def add_text(slide,e,default_font):
-    sh=slide.shapes.add_textbox(Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]))
-    tf=sh.text_frame; tf.clear(); tf.word_wrap=True
-    tf.margin_left=Inches(.025); tf.margin_right=Inches(.025); tf.margin_top=Inches(.012); tf.margin_bottom=Inches(.012)
-    tf.vertical_anchor=MSO_ANCHOR.MIDDLE
-    align={"left":PP_ALIGN.LEFT,"center":PP_ALIGN.CENTER,"right":PP_ALIGN.RIGHT}[e.get("align","center")]
-    for i,line in enumerate(str(e["text"]).split("\n")):
-        p=tf.paragraphs[0] if i==0 else tf.add_paragraph()
-        p.alignment=align; p.space_before=Pt(0); p.space_after=Pt(0); p.line_spacing=1.0
-        r=p.add_run(); r.text=line; r.font.name=e.get("font",default_font); r.font.size=Pt(float(e.get("size",14)))
-        r.font.bold=bool(e.get("bold")); r.font.color.rgb=color(e.get("color","#222222"))
-    no_theme_effects(sh)
-
-def add_line(slide,e,default_color):
-    sh=slide.shapes.add_connector(MSO_CONNECTOR.STRAIGHT,Inches(e["x1"]),Inches(e["y1"]),Inches(e["x2"]),Inches(e["y2"]))
-    c=e.get("color",default_color); sh.line.color.rgb=color(c); sh.line.width=Pt(float(e.get("sw",1.1)))
-    if e.get("dash"): sh.line.dash_style=MSO_LINE_DASH_STYLE.DASH
-    if e.get("arrow"):
-        angle=math.degrees(math.atan2(float(e["y2"])-float(e["y1"]),float(e["x2"])-float(e["x1"])))
-        size=.105
-        tri=slide.shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE,Inches(float(e["x2"])-size/2),Inches(float(e["y2"])-size/2),Inches(size),Inches(size))
-        tri.rotation=angle+90; tri.fill.solid(); tri.fill.fore_color.rgb=color(c); tri.line.color.rgb=color(c); no_theme_effects(tri)
-    no_theme_effects(sh)
-
-def render_pptx(slide,spec):
-    default_font=spec.get("style",{}).get("font","Arial")
-    default_line=spec.get("style",{}).get("line","#53616B")
-    for e in spec["elements"]:
-        typ=e["type"]
-        if typ=="text": add_text(slide,e,default_font)
-        elif typ=="rect":
-            shape_type=MSO_SHAPE.ROUNDED_RECTANGLE if float(e.get("radius",0))>0 else MSO_SHAPE.RECTANGLE
-            sh=slide.shapes.add_shape(shape_type,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]))
-            sh.fill.solid(); sh.fill.fore_color.rgb=color(e.get("fill","#FFFFFF"))
-            sh.line.color.rgb=color(e.get("stroke",default_line)); sh.line.width=Pt(float(e.get("sw",1))); no_theme_effects(sh)
-        elif typ=="line": add_line(slide,e,default_line)
-        elif typ=="grid":
-            x,y,ww,hh=[float(e[k]) for k in ("x","y","w","h")]
-            bg=slide.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x),Inches(y),Inches(ww),Inches(hh))
-            bg.fill.solid(); bg.fill.fore_color.rgb=color(e.get("fill","#FBFCFD"))
-            bg.line.color.rgb=color(e.get("border","#98A6AF")); bg.line.width=Pt(.8); no_theme_effects(bg)
-            rows,cols=int(e["rows"]),int(e["cols"])
-            for c in range(1,cols):
-                add_line(slide,{"x1":x+ww*c/cols,"y1":y,"x2":x+ww*c/cols,"y2":y+hh,"color":e.get("stroke","#D7DEE3"),"sw":e.get("sw",.4)},default_line)
-            for r in range(1,rows):
-                add_line(slide,{"x1":x,"y1":y+hh*r/rows,"x2":x+ww,"y2":y+hh*r/rows,"color":e.get("stroke","#D7DEE3"),"sw":e.get("sw",.4)},default_line)
-        elif typ=="stack_grid":
-            x,y,ww,hh=[float(e[k]) for k in ("x","y","w","h")]; off=float(e.get("offset",.16))
-            for layer in range(int(e.get("layers",5))-1,0,-1):
-                back=slide.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x+off*layer),Inches(y-off*layer),Inches(ww),Inches(hh))
-                back.fill.solid(); back.fill.fore_color.rgb=color("#FFFFFF"); back.line.color.rgb=color(e.get("border","#98A6AF")); back.line.width=Pt(.8); no_theme_effects(back)
-            render_pptx(slide,{"style":spec.get("style",{}),"elements":[{"type":"grid","x":x,"y":y,"w":ww,"h":hh,"rows":e["rows"],"cols":e["cols"],"fill":e.get("fill","#FBFCFD"),"stroke":e.get("stroke","#D7DEE3"),"border":e.get("border","#98A6AF"),"sw":e.get("sw",.35)}]})
-        else: raise ValueError(f"Unsupported primitive: {typ}")
-
-def remove_theme_shadow_style(path):
-    tmp=path.with_suffix(".tmp.pptx")
-    with zipfile.ZipFile(path) as zin, zipfile.ZipFile(tmp,"w",zipfile.ZIP_DEFLATED) as zout:
-        for item in zin.infolist():
-            data=zin.read(item.filename)
-            if item.filename=="ppt/theme/theme1.xml":
-                root=ET.fromstring(data); styles=root.find(".//a:effectStyleLst",NS)
-                if styles is not None and len(styles):
-                    first=styles[0]
-                    for child in list(first): first.remove(child)
-                    first.append(ET.Element(A_NS+"effectLst"))
-                data=ET.tostring(root,encoding="utf-8",xml_declaration=True)
-            zout.writestr(item,data)
-    tmp.replace(path)
-
+DPI=120.;A_NS="{http://schemas.openxmlformats.org/drawingml/2006/main}";NS={"a":"http://schemas.openxmlformats.org/drawingml/2006/main"}
+def rgb(v):return RGBColor.from_string(v.lstrip("#").upper())
+def nofx(s):
+ for n in s._element.iter():
+  st=n.find(qn("p:style"))
+  if st is not None:
+   r=st.find(qn("a:effectRef"))
+   if r is not None:r.set("idx","0")
+  e=n.find(qn("a:effectLst"))
+  if e is not None:n.remove(e)
+ sp=getattr(s._element,"spPr",None)
+ if sp is not None and sp.find(qn("a:effectLst")) is None:sp.append(OxmlElement("a:effectLst"))
+def clean_theme(p):
+ t=p.with_suffix(".tmp.pptx")
+ with zipfile.ZipFile(p) as a,zipfile.ZipFile(t,"w",zipfile.ZIP_DEFLATED) as b:
+  for i in a.infolist():
+   d=a.read(i.filename)
+   if i.filename=="ppt/theme/theme1.xml":
+    r=ET.fromstring(d);q=r.find(".//a:effectStyleLst",NS)
+    if q is not None and len(q):
+     for c in list(q[0]):q[0].remove(c)
+     q[0].append(ET.Element(A_NS+"effectLst"))
+    d=ET.tostring(r,encoding="utf-8",xml_declaration=True)
+   b.writestr(i,d)
+ t.replace(p)
+def pts(e):return [(e["x"]+x*e["w"],e["y"]+y*e["h"]) for x,y in e["nodes"]]
+def addtext(sl,e,df):
+ s=sl.shapes.add_textbox(Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]))
+ f=s.text_frame;f.clear();f.word_wrap=True;f.margin_left=Inches(.02);f.margin_right=Inches(.02);f.margin_top=Inches(.008);f.margin_bottom=Inches(.008);f.vertical_anchor=MSO_ANCHOR.MIDDLE
+ al={"left":PP_ALIGN.LEFT,"center":PP_ALIGN.CENTER,"right":PP_ALIGN.RIGHT}[e.get("align","center")]
+ for j,t in enumerate(e["text"].split("\n")):
+  p=f.paragraphs[0] if j==0 else f.add_paragraph();p.alignment=al;p.space_before=Pt(0);p.space_after=Pt(0);p.line_spacing=1
+  r=p.add_run();r.text=t;r.font.name=e.get("font",df);r.font.size=Pt(e.get("size",14));r.font.bold=e.get("bold",False);r.font.italic=e.get("italic",False);r.font.color.rgb=rgb(e.get("color","#28343C"))
+ nofx(s)
+def addline(sl,e):
+ s=sl.shapes.add_connector(MSO_CONNECTOR.STRAIGHT,Inches(e["x1"]),Inches(e["y1"]),Inches(e["x2"]),Inches(e["y2"]));c=rgb(e.get("color","#43525B"));s.line.color.rgb=c;s.line.width=Pt(e.get("sw",1))
+ if e.get("dash"):s.line.dash_style=MSO_LINE_DASH_STYLE.DASH
+ nofx(s)
+ if e.get("arrow"):
+  ang=math.degrees(math.atan2(e["y2"]-e["y1"],e["x2"]-e["x1"]));z=.105
+  q=sl.shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE,Inches(e["x2"]-z/2),Inches(e["y2"]-z/2),Inches(z),Inches(z));q.rotation=ang+90;q.fill.solid();q.fill.fore_color.rgb=c;q.line.color.rgb=c;nofx(q)
+def render(spec,svg,pptx):
+ w=spec["canvas"]["width_in"]*DPI;h=spec["canvas"]["height_in"]*DPI;df=spec.get("style",{}).get("font","Times New Roman")
+ out=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{w:.0f}" height="{h:.0f}" viewBox="0 0 {w:.0f} {h:.0f}">','<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>',f'<rect width="{w:.0f}" height="{h:.0f}" fill="#FFFFFF"/>']
+ prs=Presentation();prs.slide_width=Inches(spec["canvas"]["width_in"]);prs.slide_height=Inches(spec["canvas"]["height_in"]);sl=prs.slides.add_slide(prs.slide_layouts[6]);sl.background.fill.solid();sl.background.fill.fore_color.rgb=rgb("#FFFFFF")
+ for e in spec["elements"]:
+  t=e["type"]
+  if t=="text":
+   x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];fs=e.get("size",14)*DPI/72;ls=e["text"].split("\n");a=e.get("align","center");anc={"left":"start","center":"middle","right":"end"}[a];tx=x if a=="left" else x+ww/2 if a=="center" else x+ww;lh=fs*1.18;by=y+hh/2-(len(ls)-1)*lh/2+fs*.35
+   sp="".join(f'<tspan x="{tx}" dy="{0 if j==0 else lh}">{escape(v)}</tspan>' for j,v in enumerate(ls))
+   out.append(f'<text x="{tx}" y="{by}" text-anchor="{anc}" dominant-baseline="middle" font-family="{escape(e.get("font",df))}" font-size="{fs}" fill="{e.get("color","#28343C")}"'+(' font-weight="700"' if e.get("bold") else '')+(' font-style="italic"' if e.get("italic") else '')+f'>{sp}</text>');addtext(sl,e,df)
+  elif t=="rect":
+   x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];dash=' stroke-dasharray="8 6"' if e.get("dash") else ''
+   out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" rx="{e.get("radius",0)*DPI}" fill="{e.get("fill","#FFFFFF")}" stroke="{e.get("stroke","#43525B")}" stroke-width="{e.get("sw",1)*DPI/72}"{dash}/>')
+   s=sl.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE if e.get("radius",0)>0 else MSO_SHAPE.RECTANGLE,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));s.fill.solid();s.fill.fore_color.rgb=rgb(e.get("fill","#FFFFFF"));s.line.color.rgb=rgb(e.get("stroke","#43525B"));s.line.width=Pt(e.get("sw",1))
+   if e.get("dash"):s.line.dash_style=MSO_LINE_DASH_STYLE.DASH
+   nofx(s)
+  elif t=="trapezoid":
+   x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];out.append(f'<polygon points="{x+ww*.13},{y} {x+ww*.87},{y} {x+ww},{y+hh} {x},{y+hh}" fill="{e["fill"]}" stroke="{e["stroke"]}" stroke-width="{e.get("sw",1)*DPI/72}"/>')
+   s=sl.shapes.add_shape(MSO_SHAPE.TRAPEZOID,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb(e["stroke"]);s.line.width=Pt(e.get("sw",1));nofx(s)
+  elif t=="line":
+   x1,y1,x2,y2=[e[k]*DPI for k in ("x1","y1","x2","y2")];dash=' stroke-dasharray="8 6"' if e.get("dash") else '';ar=' marker-end="url(#ar)"' if e.get("arrow") else ''
+   out.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{e.get("color","#43525B")}" stroke-width="{e.get("sw",1)*DPI/72}"{dash}{ar}/>');addline(sl,e)
+  elif t=="polyline":
+   out.append('<polyline points="'+" ".join(f'{x*DPI},{y*DPI}' for x,y in e["points"])+f'" fill="none" stroke="{e["color"]}" stroke-width="{e.get("sw",1.2)*DPI/72}" stroke-linecap="round" stroke-linejoin="round"/>')
+   for a,b in zip(e["points"][:-1],e["points"][1:]):addline(sl,{"x1":a[0],"y1":a[1],"x2":b[0],"y2":b[1],"color":e["color"],"sw":e.get("sw",1.2)})
+  elif t=="ellipse":
+   x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];out.append(f'<ellipse cx="{x+ww/2}" cy="{y+hh/2}" rx="{ww/2}" ry="{hh/2}" fill="{e["fill"]}" stroke="{e["stroke"]}" stroke-width="{e.get("sw",1)*DPI/72}"/>')
+   s=sl.shapes.add_shape(MSO_SHAPE.OVAL,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb(e["stroke"]);s.line.width=Pt(e.get("sw",1));nofx(s)
+  elif t=="sensor":
+   x,y,z=e["x"],e["y"],e.get("scale",1);v=e.get("variant",0);c=e.get("color","#43525B")
+   if v==0:
+    out.extend([f'<circle cx="{(x+z*.10)*DPI}" cy="{(y+z*.10)*DPI}" r="{z*.075*DPI}" fill="#E8F0F3" stroke="{c}" stroke-width="2"/>',f'<circle cx="{(x+z*.10)*DPI}" cy="{(y+z*.10)*DPI}" r="{z*.025*DPI}" fill="{c}"/>'])
+   else:out.append(f'<rect x="{(x+z*.02)*DPI}" y="{(y+z*.06)*DPI}" width="{z*.17*DPI}" height="{z*.14*DPI}" rx="2" fill="#E8F0F3" stroke="{c}" stroke-width="2"/>')
+   out.extend([f'<line x1="{(x+z*.10)*DPI}" y1="{(y+z*.20)*DPI}" x2="{(x+z*.10)*DPI}" y2="{(y+z*.30)*DPI}" stroke="{c}" stroke-width="2"/>',f'<rect x="{(x+z*.015)*DPI}" y="{(y+z*.30)*DPI}" width="{z*.18*DPI}" height="{z*.045*DPI}" fill="#FFFFFF" stroke="{c}" stroke-width="1.5"/>'])
+   s=sl.shapes.add_shape(MSO_SHAPE.OVAL if v==0 else MSO_SHAPE.RECTANGLE,Inches(x+z*.02),Inches(y+z*.06),Inches(z*.17),Inches(z*.14));s.fill.solid();s.fill.fore_color.rgb=rgb("#E8F0F3");s.line.color.rgb=rgb(c);nofx(s)
+   addline(sl,{"x1":x+z*.10,"y1":y+z*.20,"x2":x+z*.10,"y2":y+z*.30,"color":c,"sw":1})
+   b=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x+z*.015),Inches(y+z*.30),Inches(z*.18),Inches(z*.045));b.fill.solid();b.fill.fore_color.rgb=rgb("#FFFFFF");b.line.color.rgb=rgb(c);nofx(b)
+  elif t=="graph":
+   ps=pts(e)
+   for a,b in e["edges"]:
+    x1,y1=ps[a];x2,y2=ps[b];out.append(f'<line x1="{x1*DPI}" y1="{y1*DPI}" x2="{x2*DPI}" y2="{y2*DPI}" stroke="{e["edge"]}" stroke-width="{e.get("sw",.75)*DPI/72}"/>');addline(sl,{"x1":x1,"y1":y1,"x2":x2,"y2":y2,"color":e["edge"],"sw":e.get("sw",.75)})
+   for x,y in ps:
+    rr=e.get("r",.045);out.append(f'<circle cx="{x*DPI}" cy="{y*DPI}" r="{rr*DPI}" fill="{e["fill"]}" stroke="#43525B" stroke-width="1.1"/>')
+    s=sl.shapes.add_shape(MSO_SHAPE.OVAL,Inches(x-rr),Inches(y-rr),Inches(2*rr),Inches(2*rr));s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb("#43525B");s.line.width=Pt(.55);nofx(s)
+ out.append("</svg>");Path(svg).parent.mkdir(parents=True,exist_ok=True);Path(svg).write_text("\n".join(out),encoding="utf-8")
+ Path(pptx).parent.mkdir(parents=True,exist_ok=True);prs.save(pptx);clean_theme(Path(pptx))
 def main():
-    ap=argparse.ArgumentParser()
-    ap.add_argument("spec",type=Path); ap.add_argument("--svg",type=Path,required=True); ap.add_argument("--pptx",type=Path,required=True)
-    args=ap.parse_args(); spec=json.loads(args.spec.read_text(encoding="utf-8"))
-    render_svg(spec,args.svg)
-    deck=Presentation(); deck.slide_width=Inches(float(spec["canvas"]["width_in"])); deck.slide_height=Inches(float(spec["canvas"]["height_in"]))
-    slide=deck.slides.add_slide(deck.slide_layouts[6]); slide.background.fill.solid(); slide.background.fill.fore_color.rgb=color("#FFFFFF")
-    render_pptx(slide,spec); deck.save(args.pptx); remove_theme_shadow_style(args.pptx)
-
-if __name__=="__main__": main()
+ a=argparse.ArgumentParser();a.add_argument("spec",type=Path);a.add_argument("--svg",type=Path,required=True);a.add_argument("--pptx",type=Path,required=True);x=a.parse_args();render(json.loads(x.spec.read_text()),x.svg,x.pptx)
+if __name__=="__main__":main()

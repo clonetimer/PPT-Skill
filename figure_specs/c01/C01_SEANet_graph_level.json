@@ -1,0 +1,642 @@
+{
+  "id": "C01_SEANet_graph_level",
+  "version": "7.3.0",
+  "canvas": {
+    "width_in": 13.333,
+    "height_in": 7.5
+  },
+  "style": {
+    "font": "Times New Roman",
+    "shadow_policy": "source-specific; no theme shadows"
+  },
+  "source": {
+    "paper": "Lee et al., Engineering Applications of Artificial Intelligence 179 (2026), 115273",
+    "doi": "10.1016/j.engappai.2026.115273",
+    "figure": "Author-published graphical abstract",
+    "evidence": "source-visible structural redraw; graph-level main and EA branches follow published graphical abstract; SR label follows article text"
+  },
+  "elements": [
+    {
+      "type": "text",
+      "text": "Graph-level fault diagnosis framework",
+      "x": 0.45,
+      "y": 0.2,
+      "w": 12.43,
+      "h": 0.42,
+      "size": 22,
+      "font": "Times New Roman",
+      "color": "#28343C",
+      "bold": true,
+      "align": "center",
+      "italic": false
+    },
+    {
+      "type": "rect",
+      "x": 0.48,
+      "y": 0.92,
+      "w": 12.37,
+      "h": 5.95,
+      "fill": "#FFFFFF",
+      "stroke": "#43525B",
+      "sw": 1,
+      "radius": 0,
+      "dash": true
+    },
+    {
+      "type": "rect",
+      "x": 0.78,
+      "y": 2.42,
+      "w": 1.42,
+      "h": 1.7,
+      "fill": "#E4EAED",
+      "stroke": "#AEBBC2",
+      "sw": 0.8,
+      "radius": 0.14,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 0.88,
+      "y": 2.32,
+      "w": 1.42,
+      "h": 1.7,
+      "fill": "#E8F0F3",
+      "stroke": "#AEBBC2",
+      "sw": 0.8,
+      "radius": 0.14,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 0.98,
+      "y": 2.22,
+      "w": 1.42,
+      "h": 1.7,
+      "fill": "#FFFFFF",
+      "stroke": "#43525B",
+      "sw": 1.1,
+      "radius": 0.14,
+      "dash": false
+    },
+    {
+      "type": "text",
+      "text": "Input",
+      "x": 1.1,
+      "y": 2.3,
+      "w": 1.18,
+      "h": 0.27,
+      "size": 13.5,
+      "font": "Times New Roman",
+      "color": "#28343C",
+      "bold": true,
+      "align": "center",
+      "italic": false
+    },
+    {
+      "type": "graph",
+      "x": 1.15,
+      "y": 2.7,
+      "w": 1,
+      "h": 0.9,
+      "nodes": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.34,
+          0.15
+        ],
+        [
+          0.58,
+          0.2
+        ],
+        [
+          0.82,
+          0.18
+        ],
+        [
+          0.2,
+          0.53
+        ],
+        [
+          0.48,
+          0.48
+        ],
+        [
+          0.76,
+          0.55
+        ],
+        [
+          0.36,
+          0.82
+        ],
+        [
+          0.66,
+          0.84
+        ]
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          8
+        ]
+      ],
+      "fill": "#7896A6",
+      "r": 0.045,
+      "edge": "#43525B",
+      "sw": 0.65
+    },
+    {
+      "type": "line",
+      "x1": 2.4,
+      "y1": 3.48,
+      "x2": 2.88,
+      "y2": 3.48,
+      "color": "#43525B",
+      "sw": 1.45,
+      "arrow": true,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 3,
+      "y": 3.1,
+      "w": 1.18,
+      "h": 0.86,
+      "fill": "#E4EAED",
+      "stroke": "#E4EAED",
+      "sw": 0.3,
+      "radius": 0.14,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 2.95,
+      "y": 3.05,
+      "w": 1.18,
+      "h": 0.86,
+      "fill": "#E8F0F3",
+      "stroke": "#43525B",
+      "sw": 1.05,
+      "radius": 0.14,
+      "dash": false
+    },
+    {
+      "type": "text",
+      "text": "GCN",
+      "x": 3.02,
+      "y": 3.23,
+      "w": 1.04,
+      "h": 0.42,
+      "size": 15,
+      "font": "Times New Roman",
+      "color": "#28343C",
+      "bold": true,
+      "align": "center",
+      "italic": false
+    },
+    {
+      "type": "trapezoid",
+      "x": 4.47,
+      "y": 3.1,
+      "w": 1.18,
+      "h": 0.86,
+      "fill": "#E4EAED",
+      "stroke": "#E4EAED",
+      "sw": 0.3
+    },
+    {
+      "type": "trapezoid",
+      "x": 4.42,
+      "y": 3.05,
+      "w": 1.18,
+      "h": 0.86,
+      "fill": "#F1F4F5",
+      "stroke": "#43525B",
+      "sw": 1.05
+    },
+    {
+      "type": "text",
+      "text": "pooling",
+      "x": 4.49,
+      "y": 3.23,
+      "w": 1.04,
+      "h": 0.42,
+      "size": 12.8,
+      "font": "Times New Roman",
+      "color": "#28343C",
+      "bold": true,
+      "align": "center",
+      "italic": false
+    },
+    {
+      "type": "line",
+      "x1": 4.13,
+      "y1": 3.48,
+      "x2": 4.4,
+      "y2": 3.48,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 5.95,
+      "y": 3.1,
+      "w": 1.18,
+      "h": 0.86,
+      "fill": "#E4EAED",
+      "stroke": "#E4EAED",
+      "sw": 0.3,
+      "radius": 0.14,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 5.9,
+      "y": 3.05,
+      "w": 1.18,
+      "h": 0.86,
+      "fill": "#E8F0F3",
+      "stroke": "#43525B",
+      "sw": 1.05,
+      "radius": 0.14,
+      "dash": false
+    },
+    {
+      "type": "text",
+      "text": "GCN",
+      "x": 5.97,
+      "y": 3.23,
+      "w": 1.04,
+      "h": 0.42,
+      "size": 15,
+      "font": "Times New Roman",
+      "color": "#28343C",
+      "bold": true,
+      "align": "center",
+      "italic": false
+    },
+    {
+      "type": "line",
+      "x1": 5.61,
+      "y1": 3.48,
+      "x2": 5.88,
+      "y2": 3.48,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.41,
+      "y": 3.1,
+      "w": 1.18,
+      "h": 0.86,
+      "fill": "#E4EAED",
+      "stroke": "#E4EAED",
+      "sw": 0.3
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.36,
+      "y": 3.05,
+      "w": 1.18,
+      "h": 0.86,
+      "fill": "#F1F4F5",
+      "stroke": "#43525B",
+      "sw": 1.05
+    },
+    {
+      "type": "text",
+      "text": "pooling",
+      "x": 7.43,
+      "y": 3.23,
+      "w": 1.04,
+      "h": 0.42,
+      "size": 12.8,
+      "font": "Times New Roman",
+      "color": "#28343C",
+      "bold": true,
+      "align": "center",
+      "italic": false
+    },
+    {
+      "type": "line",
+      "x1": 7.09,
+      "y1": 3.48,
+      "x2": 7.34,
+      "y2": 3.48,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 8.87,
+      "y": 3.1,
+      "w": 1.18,
+      "h": 0.86,
+      "fill": "#E4EAED",
+      "stroke": "#E4EAED",
+      "sw": 0.3,
+      "radius": 0.12,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 8.82,
+      "y": 3.05,
+      "w": 1.18,
+      "h": 0.86,
+      "fill": "#89949A",
+      "stroke": "#43525B",
+      "sw": 1,
+      "radius": 0.12,
+      "dash": false
+    },
+    {
+      "type": "text",
+      "text": "SR",
+      "x": 8.89,
+      "y": 3.23,
+      "w": 1.04,
+      "h": 0.42,
+      "size": 15,
+      "font": "Times New Roman",
+      "color": "#FFFFFF",
+      "bold": true,
+      "align": "center",
+      "italic": false
+    },
+    {
+      "type": "line",
+      "x1": 8.55,
+      "y1": 3.48,
+      "x2": 8.8,
+      "y2": 3.48,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false
+    },
+    {
+      "type": "ellipse",
+      "x": 10.42,
+      "y": 3.17,
+      "w": 0.62,
+      "h": 0.62,
+      "fill": "#FFFFFF",
+      "stroke": "#43525B",
+      "sw": 1.2
+    },
+    {
+      "type": "text",
+      "text": "+",
+      "x": 10.48,
+      "y": 3.19,
+      "w": 0.5,
+      "h": 0.55,
+      "size": 19,
+      "font": "Times New Roman",
+      "color": "#28343C",
+      "bold": true,
+      "align": "center",
+      "italic": false
+    },
+    {
+      "type": "line",
+      "x1": 10,
+      "y1": 3.48,
+      "x2": 10.4,
+      "y2": 3.48,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false
+    },
+    {
+      "type": "line",
+      "x1": 1.7,
+      "y1": 3.93,
+      "x2": 1.7,
+      "y2": 5.12,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": false,
+      "dash": false
+    },
+    {
+      "type": "line",
+      "x1": 1.7,
+      "y1": 5.12,
+      "x2": 2.92,
+      "y2": 5.12,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 3.03,
+      "y": 4.75,
+      "w": 2.05,
+      "h": 0.86,
+      "fill": "#E4EAED",
+      "stroke": "#E4EAED",
+      "sw": 0.3,
+      "radius": 0.14,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 2.98,
+      "y": 4.7,
+      "w": 2.05,
+      "h": 0.86,
+      "fill": "#F1F4F5",
+      "stroke": "#43525B",
+      "sw": 1.05,
+      "radius": 0.14,
+      "dash": false
+    },
+    {
+      "type": "text",
+      "text": "Energy-assisted\nmodule",
+      "x": 3.08,
+      "y": 4.78,
+      "w": 1.85,
+      "h": 0.68,
+      "size": 13.2,
+      "font": "Times New Roman",
+      "color": "#28343C",
+      "bold": true,
+      "align": "center",
+      "italic": false
+    },
+    {
+      "type": "line",
+      "x1": 5.03,
+      "y1": 5.12,
+      "x2": 5.58,
+      "y2": 5.12,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 5.71,
+      "y": 4.75,
+      "w": 1.42,
+      "h": 0.86,
+      "fill": "#E4EAED",
+      "stroke": "#E4EAED",
+      "sw": 0.3,
+      "radius": 0.12,
+      "dash": false
+    },
+    {
+      "type": "rect",
+      "x": 5.66,
+      "y": 4.7,
+      "w": 1.42,
+      "h": 0.86,
+      "fill": "#89949A",
+      "stroke": "#43525B",
+      "sw": 1,
+      "radius": 0.12,
+      "dash": false
+    },
+    {
+      "type": "text",
+      "text": "SR",
+      "x": 5.75,
+      "y": 4.88,
+      "w": 1.24,
+      "h": 0.42,
+      "size": 15,
+      "font": "Times New Roman",
+      "color": "#FFFFFF",
+      "bold": true,
+      "align": "center",
+      "italic": false
+    },
+    {
+      "type": "line",
+      "x1": 7.08,
+      "y1": 5.12,
+      "x2": 10.72,
+      "y2": 5.12,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": false,
+      "dash": false
+    },
+    {
+      "type": "line",
+      "x1": 10.72,
+      "y1": 5.12,
+      "x2": 10.72,
+      "y2": 3.8,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false
+    },
+    {
+      "type": "text",
+      "text": "The EA module embeds energy-related features into each graph node; the SR layer models sensor-wise fault sensitivity.",
+      "x": 0.8,
+      "y": 6.15,
+      "w": 11.8,
+      "h": 0.34,
+      "size": 11.5,
+      "font": "Times New Roman",
+      "color": "#687780",
+      "bold": false,
+      "align": "left",
+      "italic": false
+    },
+    {
+      "type": "text",
+      "text": "Paper terminology: SR = sensitivity-aware readout. No additional classifier block is inserted beyond the source's summation node.",
+      "x": 0.8,
+      "y": 6.55,
+      "w": 11.8,
+      "h": 0.22,
+      "size": 9.6,
+      "font": "Times New Roman",
+      "color": "#687780",
+      "bold": false,
+      "align": "left",
+      "italic": true
+    }
+  ]
+}

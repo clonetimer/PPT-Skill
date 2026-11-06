@@ -1,11 +1,17 @@
 # Changelog
 
-## V7.2 — C01 decomposition and scientific-boundary cleanup
-- Split C01 into frequency-band graph construction and graph-level representation slides.
-- Separated the EA branch from the GCN/pooling/SR/classification path.
-- Removed an ambiguous EA connector and cramped OCF annotation.
-- Added explicit evidence boundaries for unverified graph topology and EA fusion.
-- Added a two-slide editable PPTX and PDF preview to the work package.
+## V7.1.1 — FigureSpec dual-render pilot and visual defect repair
+- Fixed B01 state-description and connector-label wrapping.
+- Removed the default theme shadow effect style.
+- Corrected C01 OCF terminology to Notch filter and IR to SR readout.
+- Removed stale duplicate C01 method blocks and duplicate summation operator.
+- Replaced heavy C01 dashed panel borders with subtle solid boundaries.
+- Replaced F07's 1,600 cell rectangles with a 40×40 native line grid and five-plane temporal stack.
+- Made F07 occupancy neutral and explicitly schematic.
+- Added JSON FigureSpec and same-spec SVG/native-PowerPoint rendering for B01/F07.
+- Added FigureSpec validator and CI checks for geometry, overlaps, picture objects, and theme shadows.
+- Recorded remaining source-fidelity and cross-platform rendering gaps.
 
-## V7.1.1
-- Added FigureSpec dual-render pilot for B01/F07 and repaired the previous overlap/shadow/grid issues.
+## V7.0 — Source-matched vector workflow
+- Replaced the universal diagram template with A/B/C figure-specific style profiles.
+- Added SVG-first authoring, source attribution, and visual QA documentation.

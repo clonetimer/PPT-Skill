@@ -1,50 +1,38 @@
 ---
 name: academic-defense-ppt
-version: 7.2
-description: Source-specific academic-defense slide production with vector-first figures, split technical narratives, and evidence-aware visual QA.
+version: 7.3.0
+description: Source-matched academic-defense slides with editable vector FigureSpecs and projection-aware QA.
 ---
 
 # Academic Defense PPT Skill
 
-## Mission
-Produce scientifically accurate, projection-readable academic-defense slides. Select the visual grammar from the actual source; do not force all figures into a universal template.
+Produce technically accurate, readable academic-defense slides. Select visual grammar from the actual source; do not force a universal card template.
 
 ## Principles
-1. Scientific topology, terminology, equations, and evidence boundaries outrank decoration.
-2. Prefer SVG/vector artwork and editable text; use raster only for genuine photographs.
-3. Preserve source composition, hierarchy, module proportions, directed edges, operators, and legends.
-4. Do not invent graph coordinates, sensor-to-node mappings, network layers, or fusion operators.
-5. Split dense mechanisms into sequential slides before shrinking labels.
-6. A structural redraw is not an exact reproduction. Require direct source inspection and overlay comparison before claiming high visual fidelity.
+1. Scientific topology, terminology, equations and evidence boundaries take priority.
+2. Prefer editable vector graphics and native PowerPoint text/shapes; use raster images only for genuine photographs.
+3. Preserve source composition, panel order, proportions, arrows, branches, operators and line grammar.
+4. Do not invent layers, edges, node mappings, equations or downstream blocks unsupported by the source.
+5. Split dense mechanisms before shrinking labels.
+6. Shadows are off by default. Reproduce them only when visible in the selected source, using explicit source-specific shapes; never inherit the PowerPoint theme shadow.
+7. Distinguish source-visible redraws, paper/code-grounded reconstructions and domain adaptations.
 
-## Visual profiles
-- A: black-and-white academic framework; Times New Roman, restrained lines, source-matched dividers and evidence paths.
-- B: engineering system flow; Microsoft YaHei, muted pastel modules, dark-gray connectors, feedback and state transitions.
-- C: source-matched journal figure; match the paper's typography, palette, line grammar and panel structure. Keep unverified details schematic and explicitly labeled.
+## Profiles
+- A: black-and-white academic framework, Times New Roman, thin strokes and restrained section boundaries.
+- B: engineering system flow, Microsoft YaHei, muted pastel modules, feedback and state transitions.
+- C: source-matched journal/network figure, paper-specific typography, graph nodes/edges, sensor waveforms, pooling geometry, readout and fusion layout.
 
-## FigureSpec workflow
-1. Inspect the source figure, caption, article text, equations and author code where available.
-2. Create a structured FigureSpec containing panels, modules, edges, operators, labels, geometry, typography, palette and evidence status.
-3. Render SVG and editable PowerPoint from the same specification.
-4. Inspect the exported PDF at presentation scale; verify text intersections, clipping, arrow direction, line crossings and font fallback.
-5. Deliver source specs, SVG, PPTX, PDF and a QA report.
+## FigureSpec
+Canonical source is JSON under figure_specs. Render SVG and editable native PowerPoint from the same FigureSpec. Supported C01 primitives: text, rect, trapezoid, line, polyline, ellipse, sensor, graph. Existing grid and stack_grid primitives remain available for F07.
 
-## Dense diagrams
-- Use native paths/lines, reusable vector symbols and graph primitives.
-- Never expand a 40×40 matrix into 1,600 independent rectangles.
-- Do not color grid cells as if channel mapping were known when the source does not specify coordinates.
-- Separate graph construction, representation learning, readout and classification when a single slide becomes crowded.
+## C01 source-matched pattern
+FBG: sensor rows and waveforms → OCF/notch filter → B1/B2/B3/Bq subgraphs → total graph.
+SEANet: Input → GCN → pooling → GCN → pooling → SR; parallel Input → EA module → SR; both feed the summation node.
+The paper text defines SR as sensitivity-aware readout. Sensor photographs may be replaced with vector silhouettes when vector-first output is required; disclose this. Graph coordinates remain schematic unless a numerical adjacency matrix is available.
 
-## Evidence labels
-- source-visible redraw
-- paper/code-grounded reconstruction
-- domain adaptation
+## QA
+Verify topology and terminology against the paper/caption/official code. Render the complete deck to PDF. Check text overlaps, clipping, out-of-bounds objects, SVG validity, raster objects, and theme shadows. Do not claim pixel identity without high-resolution source and direct overlay.
 
-Never call a paper-grounded structural reconstruction an exact visual reproduction.
-
-## V7.2 C01 example
-C01 is split into two slides:
-1. Frequency-band graph construction: multi-sensor signals, OCF/notch filter, band-pass responses, per-band subgraphs and final FBG.
-2. Graph-level representation: FBG input, GCN/pooling stages, SR readout, graph-level representation and classification; EA branch is shown separately.
-
-The exact graph topology, sensor-to-node mapping and EA fusion operator are not asserted where unavailable. See docs/C01_V72_QA.md and docs/C01_V72_SOURCE.md.
+Build and validate C01 with:
+python tools/build_c01_v73.py
+python tools/validate_c01_v73.py
