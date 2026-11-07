@@ -25,6 +25,7 @@
 - Excluded Q06's five summary markers from the raw-point packing area; geometry validation now rejects a summary marker covering any raw observation.
 - Split the independent review bundle into first-stage source/render inspection and second-stage benchmark/spec reconciliation; the release gate now requires task-level initial-review evidence instead of claiming complete version blindness.
 - Anchored all six independent-review scores with concrete criteria and blocked release when any dimension scores below the declared floor, even if the reviewer marks the task passed.
+- Declared Q04 prediction/actual labels and Q05 feature-set/accuracy measures as derived fields with source columns, units and calculation rules; missing or inconsistent derivations now fail contract validation.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

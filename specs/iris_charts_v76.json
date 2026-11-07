@@ -48,6 +48,10 @@
       "id": "Q04_iris_confusion", "kind": "confusion_matrix",
       "claim": "A simple nearest-neighbor baseline makes some cross-species errors.",
       "x": "predicted_species", "y": "actual_species", "group": "species",
+      "derived_fields": {
+        "predicted_species": {"type": "category", "unit": "category", "source_fields": ["sepal_length_cm", "sepal_width_cm", "petal_length_cm", "petal_width_cm", "species"], "derivation": "For each source row, predict species using leave-one-out Euclidean 1-NN on the four unscaled measurements; source row order resolves distance ties."},
+        "actual_species": {"type": "category", "unit": "category", "source_fields": ["species"], "derivation": "Copy the source species label without changing categories."}
+      },
       "sample_size": 150, "encoding": {"color": "count", "text": "count"},
       "statistics": {"display": "raw_counts", "interval": "none", "method": "1-nearest-neighbor, Euclidean distance on four unscaled measurements, leave-one-out prediction", "splits": "150 leave-one-out folds", "seed": "not_used"},
       "axes": {"x":{"type":"category","field":"predicted_species","unit":"category","categories":["Iris-setosa","Iris-versicolor","Iris-virginica"]},"y":{"type":"category","field":"actual_species","unit":"category","categories":["Iris-setosa","Iris-versicolor","Iris-virginica"]}}, "caption": "Counts are from 150 deterministic leave-one-out predictions. This is a demonstrator baseline, not a published model result."
@@ -56,6 +60,10 @@
       "id": "Q05_iris_ablation", "kind": "ablation",
       "claim": "Removing sepal measurements changes this demonstrator's leave-one-out accuracy.",
       "x": "feature_set", "y": "accuracy_percent", "group": "feature_set",
+      "derived_fields": {
+        "feature_set": {"type": "category", "unit": "category", "source_fields": ["sepal_length_cm", "sepal_width_cm", "petal_length_cm", "petal_width_cm"], "derivation": "Compare all four measurements with the two petal measurements on identical leave-one-out folds."},
+        "accuracy_percent": {"type": "number", "unit": "%", "source_fields": ["sepal_length_cm", "sepal_width_cm", "petal_length_cm", "petal_width_cm", "species"], "derivation": "For each feature set, divide the number of correct leave-one-out 1-NN predictions by 150 source flowers and multiply by 100."}
+      },
       "sample_size": 150, "encoding": {"bar_height": "accuracy_percent", "text": "correct_count"},
       "statistics": {"display": "paired_accuracy", "interval": "none", "method": "1-nearest-neighbor, Euclidean distance on unscaled selected measurements, leave-one-out prediction", "splits": "same 150 leave-one-out folds for both feature sets", "seed": "not_used"},
       "axes": {"x":{"type":"category","field":"feature_set","unit":"category","categories":["All four measurements","Petal measurements only"]},"y":{"type":"linear","field":"accuracy_percent","unit":"%","domain":[0,100],"zero_included":true}}, "caption": "Paired 150-row leave-one-out 1-NN comparison; 4-feature baseline versus petal-only. Accuracy is descriptive; no paper performance claim."

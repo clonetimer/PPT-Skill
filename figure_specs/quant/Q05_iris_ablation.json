@@ -23,6 +23,31 @@
     "x": "feature_set",
     "y": "accuracy_percent",
     "group": "feature_set",
+    "derived_fields": {
+      "feature_set": {
+        "type": "category",
+        "unit": "category",
+        "source_fields": [
+          "sepal_length_cm",
+          "sepal_width_cm",
+          "petal_length_cm",
+          "petal_width_cm"
+        ],
+        "derivation": "Compare all four measurements with the two petal measurements on identical leave-one-out folds."
+      },
+      "accuracy_percent": {
+        "type": "number",
+        "unit": "%",
+        "source_fields": [
+          "sepal_length_cm",
+          "sepal_width_cm",
+          "petal_length_cm",
+          "petal_width_cm",
+          "species"
+        ],
+        "derivation": "For each feature set, divide the number of correct leave-one-out 1-NN predictions by 150 source flowers and multiply by 100."
+      }
+    },
     "sample_size": 150,
     "encoding": {
       "bar_height": "accuracy_percent",

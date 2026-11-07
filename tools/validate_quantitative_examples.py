@@ -69,12 +69,22 @@ def validate_config(config):
         assert field["unit"], "Every numeric or categorical axis needs a declared unit/type"
     for chart in config["charts"]:
         assert chart["claim"] and chart["caption"]
+        derived = chart.get("derived_fields", {})
+        referenced = {chart[key] for key in ("x", "y", "group")}
+        assert set(derived) == referenced - set(meta["columns"]), (chart["id"], "derived field declaration")
+        for name, field in derived.items():
+            assert field["derivation"] and field["source_fields"]
+            assert set(field["source_fields"]) <= set(meta["columns"]), (chart["id"], name, "unknown source field")
+            assert field["type"] in {"number", "category"} and field["unit"]
         assert set(chart["axes"]) == {"x", "y"}
         for direction in ("x", "y"):
             axis = chart["axes"][direction]
             assert axis["field"] == chart[direction]
             if axis["field"] in meta["columns"]:
                 assert axis["unit"] == meta["columns"][axis["field"]]["unit"]
+            else:
+                assert axis["unit"] == derived[axis["field"]]["unit"]
+                assert (axis["type"] == "linear") is (derived[axis["field"]]["type"] == "number")
             if axis["type"] == "linear":
                 low, high = axis["domain"]
                 assert math.isfinite(low) and math.isfinite(high) and low < high

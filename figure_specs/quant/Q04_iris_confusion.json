@@ -23,6 +23,28 @@
     "x": "predicted_species",
     "y": "actual_species",
     "group": "species",
+    "derived_fields": {
+      "predicted_species": {
+        "type": "category",
+        "unit": "category",
+        "source_fields": [
+          "sepal_length_cm",
+          "sepal_width_cm",
+          "petal_length_cm",
+          "petal_width_cm",
+          "species"
+        ],
+        "derivation": "For each source row, predict species using leave-one-out Euclidean 1-NN on the four unscaled measurements; source row order resolves distance ties."
+      },
+      "actual_species": {
+        "type": "category",
+        "unit": "category",
+        "source_fields": [
+          "species"
+        ],
+        "derivation": "Copy the source species label without changing categories."
+      }
+    },
     "sample_size": 150,
     "encoding": {
       "color": "count",

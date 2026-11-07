@@ -53,6 +53,24 @@ class QuantitativeContractTests(unittest.TestCase):
         with self.assertRaises((AssertionError, ValueError)):
             validate_config(changed)
 
+    def test_undeclared_prediction_field_fails(self):
+        changed = copy.deepcopy(self.config)
+        del changed["charts"][3]["derived_fields"]["predicted_species"]
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_wrong_derived_unit_fails(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][4]["derived_fields"]["accuracy_percent"]["unit"] = "cm"
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_derived_field_needs_existing_source_columns(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][4]["derived_fields"]["accuracy_percent"]["source_fields"] = ["unknown"]
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
     def test_missing_error_definition_fails(self):
         changed = copy.deepcopy(self.config)
         changed["charts"][2]["statistics"]["interval"] = ""
