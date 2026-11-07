@@ -1,6 +1,7 @@
 # Changelog
 
 ## V7.6.0-dev — Scientific evidence and data channels
+- Bound each quantitative FigureSpec to a canonical ChartSpec content hash and the independent review template to each raw ChartSpec file hash; stale chart configurations now fail validation and release review.
 - Migrated five existing FigureSpecs to an evidence-linked contract with typed elements and stable IDs.
 - Added directed-route checks and negative mutations for the C01 critical diagnosis topology.
 - Added six reproducible UCI Iris charts with row-level lineage, statistics definitions, SVG/PPTX/PDF outputs and validation, including paired ablation and trend/interval cases.

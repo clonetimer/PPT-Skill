@@ -14,7 +14,8 @@
     "source_url": "https://archive.ics.uci.edu/dataset/53/iris",
     "doi": "10.24432/C56C76",
     "row_count": 150,
-    "chart_spec": "specs/iris_charts_v76.json"
+    "chart_spec": "specs/iris_charts_v76.json",
+    "chart_spec_sha256": "91811b1bab58e03f3f20ea26b5465f8415ba8b7ae73594a3661dfcaabf2151ec"
   },
   "chart_contract": {
     "id": "Q06_iris_trend_interval",

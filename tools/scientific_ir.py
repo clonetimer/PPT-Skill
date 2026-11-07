@@ -8,6 +8,8 @@ import json
 import math
 from pathlib import Path
 
+from chart_contract import canonical_chart_spec_digest
+
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACTS = json.loads((ROOT / "specs/figure_contracts_v76.json").read_text(encoding="utf-8"))
 PRIMITIVES = {"text", "rect", "line", "polyline", "ellipse", "trapezoid", "sensor", "graph", "grid", "stack_grid", "image"}
@@ -55,6 +57,13 @@ def validate_spec(spec: dict) -> None:
         assert record["source_locator"]
         assert record["status"] in {"source_visible_redraw", "paper_grounded", "domain_adaptation", "data_driven"}
         assert record["scope"] and record["reuse"]
+    if contract["archetype"] == "quantitative_grid":
+        lineage = spec["data_lineage"]
+        chart_spec = ROOT / lineage["chart_spec"]
+        assert chart_spec.is_file() and lineage["chart_spec_sha256"] == canonical_chart_spec_digest(chart_spec)
+        assert any(record["source"] == lineage["data_ref"] and
+                   record["source_file_sha256"] == lineage["sha256"]
+                   for record in evidence.values())
     ids = set()
     semantic_ids = set()
     for element in spec["elements"]:

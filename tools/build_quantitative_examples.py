@@ -12,7 +12,7 @@ from pathlib import Path
 from render_figure_spec import render
 from scientific_ir import ROOT, enrich_spec
 from chart_data import load_rows
-from chart_contract import validate_chart_contract
+from chart_contract import canonical_chart_spec_digest, validate_chart_contract
 
 CONFIG = ROOT / "specs/iris_charts_v76.json"
 SPEC_DIR = ROOT / "figure_specs/quant"
@@ -83,7 +83,8 @@ class Figure:
             "style": {"font": "Arial"},
             "data_lineage": {"data_ref": self.meta["file"], "sha256": self.meta["sha256"],
                              "source_url": self.meta["source_url"], "doi": self.meta["doi"],
-                             "row_count": self.meta["row_count"], "chart_spec": self.chart_spec_path},
+                             "row_count": self.meta["row_count"], "chart_spec": self.chart_spec_path,
+                             "chart_spec_sha256": canonical_chart_spec_digest(ROOT / self.chart_spec_path)},
             "chart_contract": chart,
             "computed_values": self.values,
             "elements": self.elements,

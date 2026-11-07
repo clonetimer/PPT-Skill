@@ -14,7 +14,8 @@
     "source_url": "https://archive.ics.uci.edu/dataset/109/wine",
     "doi": "10.24432/C5PC7J",
     "row_count": 178,
-    "chart_spec": "specs/wine_charts_v76.json"
+    "chart_spec": "specs/wine_charts_v76.json",
+    "chart_spec_sha256": "3c406aec54bd6050ea84c1b6579c0ee3fed768f26b224963235c4008e09d94ee"
   },
   "chart_contract": {
     "id": "Q08_wine_strip",

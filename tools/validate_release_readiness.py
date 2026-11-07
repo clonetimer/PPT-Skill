@@ -20,6 +20,17 @@ def require(condition: bool, message: str) -> None:
         raise ValueError(message)
 
 
+def review_input_paths(task: dict) -> list[str]:
+    """Include every chart configuration used by a reviewed FigureSpec."""
+    paths = set(task.get("related_inputs", []))
+    for spec_path in [task["input"], *task.get("related_inputs", [])]:
+        spec = json.loads((ROOT / spec_path).read_text(encoding="utf-8"))
+        chart_spec = spec.get("data_lineage", {}).get("chart_spec")
+        if chart_spec:
+            paths.add(chart_spec)
+    return sorted(paths)
+
+
 def prepare_template() -> dict:
     benchmark_path = ROOT / "specs/research_figure_benchmark_v76.json"
     benchmark = json.loads(benchmark_path.read_text(encoding="utf-8"))
@@ -31,7 +42,7 @@ def prepare_template() -> dict:
             "source_sha256": sha256(ROOT / task["source"]),
             "input_sha256": sha256(ROOT / task["input"]),
             "related_inputs_sha256": {path: sha256(ROOT / path)
-                                      for path in task.get("related_inputs", [])},
+                                      for path in review_input_paths(task)},
             "artifacts_sha256": {path: sha256(ROOT / path) for path in artifact_paths(task["id"])},
             "source_checked": False, "scientific_relationships_checked": False,
             "initial_review_before_expectations": {"completed": False, "score": None, "evidence": ""},
@@ -84,7 +95,7 @@ def validate_review(review: dict) -> None:
         require(result.get("source_sha256") == sha256(source), f"{task_id}: source changed")
         require(result.get("input_sha256") == sha256(spec), f"{task_id}: input changed")
         related = result.get("related_inputs_sha256", {})
-        expected_related = task.get("related_inputs", [])
+        expected_related = review_input_paths(task)
         require(set(related) == set(expected_related), f"{task_id}: related inputs changed")
         for path in expected_related:
             require(related[path] == sha256(ROOT / path), f"{task_id}: {path} changed")

@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path
 
 from scientific_ir import ROOT
-from validate_release_readiness import prepare_template
+from validate_release_readiness import prepare_template, review_input_paths
 from validate_research_benchmark import artifact_paths
 
 
@@ -38,7 +38,7 @@ def bundle_paths() -> tuple[list[Path], list[Path]]:
         blind.add(ROOT / task["source"])
         blind.update(ROOT / path for path in artifact_paths(task["id"]))
         unblind.add(ROOT / task["input"])
-        unblind.update(ROOT / path for path in task.get("related_inputs", []))
+        unblind.update(ROOT / path for path in review_input_paths(task))
     unblind |= blind  # Stage 2 is self-contained for the release validator.
     missing = [str(path) for path in unblind if not path.is_file()]
     if missing:

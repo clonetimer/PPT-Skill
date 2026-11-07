@@ -3,6 +3,15 @@
 from __future__ import annotations
 
 import math
+import hashlib
+import json
+from pathlib import Path
+
+
+def canonical_chart_spec_digest(path: Path) -> str:
+    value = json.loads(path.read_text(encoding="utf-8"))
+    canonical = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def validate_chart_contract(config: dict, rows: list[dict]) -> None:
