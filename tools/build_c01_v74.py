@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from render_figure_spec import render
+from scientific_ir import enrich_spec
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = ROOT / "figure_specs/c01/C01_composite_defense_slide.json"
@@ -26,11 +27,17 @@ def make_spec():
             value_spec["semantic_id"] = semantic_id
         add("text", **value_spec)
 
-    def box(x, y, w, h, fill="#FFFFFF", stroke=line, radius=0):
-        add("rect", x=x, y=y, w=w, h=h, fill=fill, stroke=stroke, sw=.8, radius=radius)
+    def box(x, y, w, h, fill="#FFFFFF", stroke=line, radius=0, semantic_id=None):
+        values = dict(x=x, y=y, w=w, h=h, fill=fill, stroke=stroke, sw=.8, radius=radius)
+        if semantic_id:
+            values["semantic_id"] = semantic_id
+        add("rect", **values)
 
-    def arrow(x1, y1, x2, y2, color="#43525B"):
-        add("line", x1=x1, y1=y1, x2=x2, y2=y2, color=color, sw=1, arrow=True)
+    def arrow(x1, y1, x2, y2, color="#43525B", semantic_link=None):
+        values = dict(x1=x1, y1=y1, x2=x2, y2=y2, color=color, sw=1, arrow=True)
+        if semantic_link:
+            values["semantic_link"] = semantic_link
+        add("line", **values)
 
     txt("FBG-SEANet: frequency-band graph construction and diagnosis", .42, .16, 12.5, .45, 22, True, "left")
     box(.42, .82, 8.67, 3.05, stroke="#CFD8DE")
@@ -39,12 +46,13 @@ def make_spec():
     txt("01  Frequency-band graph", .63, 1.02, 8.2, .30, 14, True, "left")
     txt("Sensor signals", .65, 1.43, 2.15, .25, 11, True, "left")
     txt("OCF / notch filter", 3.18, 1.43, 1.65, .27, 11, True, semantic_id="ocf")
-    txt("Band subgraphs", 5.15, 1.43, 1.58, .27, 11, True)
+    txt("Band subgraphs", 5.15, 1.43, 1.58, .27, 11, True, semantic_id="band_group")
     txt("Total graph", 7.31, 1.43, 1.46, .27, 11, True, semantic_id="total_graph")
 
     colors = ["#668A9C", "#6D9A8E", "#B88E58", "#8A7CA5"]
     labels = ["Sensor 1", "Sensor 2", "Sensor M-1", "Sensor M"]
     bands = ["B₁", "B₂", "B₃", "Bq"]
+    box(5.02, 1.75, 1.66, 1.86, stroke="#D5DEE4", semantic_id="band_group")
     for i, (label, band, color) in enumerate(zip(labels, bands, colors)):
         y = 1.79 + i * .45
         add("sensor", x=.69, y=y, scale=.73, variant=i, color=color)
@@ -54,15 +62,15 @@ def make_spec():
         arrow(2.87, y+.15, 3.18, y+.15)
         txt(band, 5.12, y+.035, .35, .22, 11, True, color=color, semantic_id=f"band_{i+1}")
         graph = dict(graphs[i])
-        graph.update(x=5.51, y=y-.005, w=1.12, h=.31)
+        graph.update(x=5.51, y=y-.005, w=1.12, h=.31, semantic_id=f"band_{i+1}")
         elements.append(graph)
-        arrow(6.67, y+.15, 7.12, 2.72)
-    box(3.19, 1.87, 1.56, 1.67, fill="#F7F9FA", stroke="#AAB5BC", radius=.05)
+        arrow(6.67, y+.15, 7.12, 2.72, semantic_link=f"band_{i+1}__total_graph")
+    box(3.19, 1.87, 1.56, 1.67, fill="#F7F9FA", stroke="#AAB5BC", radius=.05, semantic_id="ocf")
     txt("Notch filter", 3.33, 2.13, 1.27, .28, 11, True)
     txt("Operational\ncomponent removed", 3.31, 2.65, 1.32, .55, 10)
-    arrow(4.75, 2.72, 5.05, 2.72)
+    arrow(4.75, 2.72, 5.05, 2.72, semantic_link="ocf__band_group")
     total = dict(graphs[4])
-    total.update(x=7.32, y=1.92, w=1.43, h=1.53)
+    total.update(x=7.32, y=1.92, w=1.43, h=1.53, semantic_id="total_graph")
     arrow(7.13, 2.72, 7.30, 2.72)
     elements.append(total)
 
@@ -77,21 +85,23 @@ def make_spec():
             semantic_id=["input", "gcn_1", "pooling_1", "gcn_2", "pooling_2", "sr_main"][j])
         if j:
             prev_x, prev_w = stages[j-1][1], stages[j-1][2]
-            arrow(prev_x+prev_w+.025, cy+.255, x-.035, cy+.255)
+            names = ["input", "gcn_1", "pooling_1", "gcn_2", "pooling_2", "sr_main"]
+            arrow(prev_x+prev_w+.025, cy+.255, x-.035, cy+.255,
+                  semantic_link=f"{names[j-1]}__{names[j]}")
     add("ellipse", x=7.24, y=5.20, w=.45, h=.45, fill="#FFFFFF", stroke="#43525B", sw=1)
     txt("+", 7.28, 5.25, .37, .33, 15, True, semantic_id="sum")
-    arrow(6.97, 5.43, 7.21, 5.43)
+    arrow(6.97, 5.43, 7.21, 5.43, semantic_link="sr_main__sum")
     arrow(7.71, 5.43, 8.47, 5.43)
     txt("diagnosis", 7.82, 5.10, 1.04, .24, 10, color=muted)
-    arrow(1.18, 5.70, 1.18, 6.24)
+    arrow(1.18, 5.70, 1.18, 6.24, semantic_link="input__ea")
     box(1.28, 6.03, 2.62, .48, fill="#F7F5F9", stroke="#8A7CA5", radius=.035)
     txt("Energy-assisted module", 1.39, 6.14, 2.41, .26, 10.5, True, semantic_id="ea")
-    arrow(1.21, 6.27, 1.25, 6.27)
+    arrow(1.21, 6.27, 1.25, 6.27, semantic_link="input__ea")
     box(4.18, 6.03, .72, .48, fill="#F7F5F9", stroke="#8A7CA5", radius=.035)
     txt("SR", 4.25, 6.14, .58, .26, 10.5, True, semantic_id="sr_ea")
-    arrow(3.93, 6.27, 4.15, 6.27)
-    arrow(4.94, 6.27, 7.46, 6.27)
-    arrow(7.47, 6.22, 7.47, 5.68)
+    arrow(3.93, 6.27, 4.15, 6.27, semantic_link="ea__sr_ea")
+    arrow(4.94, 6.27, 7.46, 6.27, semantic_link="sr_ea__sum")
+    arrow(7.47, 6.22, 7.47, 5.68, semantic_link="sr_ea__sum")
 
     txt("Reading guide", 9.52, 1.04, 3.06, .34, 15, True, "left")
     for y, n, title, body in [
@@ -111,14 +121,14 @@ def make_spec():
                       ["pooling_1", "gcn_2"], ["gcn_2", "pooling_2"],
                       ["pooling_2", "sr_main"], ["sr_main", "sum"],
                       ["input", "ea"], ["ea", "sr_ea"], ["sr_ea", "sum"]]
-    semantic_edges += [["ocf", f"band_{i}"] for i in range(1, 5)]
+    semantic_edges += [["ocf", "band_group"]]
     semantic_edges += [[f"band_{i}", "total_graph"] for i in range(1, 5)]
-    return {"version": "7.4.0", "id": "C01_composite_defense_slide",
+    return enrich_spec({"version": "7.4.0", "id": "C01_composite_defense_slide",
             "canvas": {"width_in": 13.333, "height_in": 7.5},
             "style": {"font": "Times New Roman"},
             "evidence_status": "source-visible structural redraw with schematic substitutions",
             "source": "DOI:10.1016/j.engappai.2026.115273",
-            "semantic_edges": semantic_edges, "elements": elements}
+            "semantic_edges": semantic_edges, "elements": elements})
 
 
 def main():

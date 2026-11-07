@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clonetimer/PPT-Skill/specs/chart_spec_v76.schema.json",
+  "title": "Data and chart contracts for scientific result figures",
+  "type": "object", "required": ["schema_version", "data", "charts"],
+  "properties": {
+    "schema_version": {"const": "7.6.0-dev"},
+    "data": {
+      "type": "object", "required": ["id", "file", "source_url", "doi", "license", "sha256", "row_count", "row_unit", "columns", "missing_value_policy", "transforms"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "file": {"type": "string", "minLength": 1},
+        "source_url": {"type": "string", "format": "uri"},
+        "doi": {"type": "string", "minLength": 1},
+        "license": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "row_count": {"type": "integer", "minimum": 1},
+        "row_unit": {"type": "string", "minLength": 1},
+        "columns": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/column"}},
+        "missing_value_policy": {"enum": ["fail", "documented_exclusion", "documented_imputation"]},
+        "transforms": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "charts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/chart"}}
+  },
+  "$defs": {
+    "column": {
+      "type": "object", "required": ["type", "unit", "source_position"],
+      "properties": {
+        "type": {"enum": ["number", "category"]},
+        "unit": {"type": "string", "minLength": 1},
+        "source_position": {"type": "integer", "minimum": 0}
+      }
+    },
+    "chart": {
+      "type": "object", "required": ["id", "kind", "claim", "x", "y", "group", "sample_size", "encoding", "statistics", "caption"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["scatter", "strip", "point_ci", "confusion_matrix", "ablation", "trend_interval"]},
+        "claim": {"type": "string", "minLength": 1},
+        "x": {"type": "string", "minLength": 1},
+        "y": {"type": "string", "minLength": 1},
+        "group": {"type": "string", "minLength": 1},
+        "sample_size": {"type": "integer", "minimum": 1},
+        "encoding": {"type": "object", "minProperties": 1},
+        "statistics": {"type": "object", "required": ["display", "interval"]},
+        "caption": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

@@ -28,7 +28,10 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0001",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -40,7 +43,10 @@
       "stroke": "#43525B",
       "sw": 1,
       "radius": 0,
-      "dash": true
+      "dash": true,
+      "id": "el_0002",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -54,7 +60,10 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0003",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -68,7 +77,10 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0004",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -80,7 +92,10 @@
       "stroke": "#43525B",
       "sw": 1.05,
       "radius": 0,
-      "dash": false
+      "dash": false,
+      "id": "el_0005",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -94,7 +109,10 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0006",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -108,7 +126,10 @@
       "color": "#687780",
       "bold": false,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0007",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "polyline",
@@ -159,7 +180,10 @@
         ]
       ],
       "color": "#687780",
-      "sw": 1
+      "sw": 1,
+      "id": "el_0008",
+      "semantic_role": "trace",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -170,7 +194,10 @@
       "color": "#43525B",
       "sw": 1,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0009",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "polyline",
@@ -209,7 +236,10 @@
         ]
       ],
       "color": "#668A9C",
-      "sw": 1.25
+      "sw": 1.25,
+      "id": "el_0010",
+      "semantic_role": "trace",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -223,7 +253,10 @@
       "color": "#687780",
       "bold": false,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0011",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -234,7 +267,10 @@
       "color": "#43525B",
       "sw": 1.4,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0012",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -245,7 +281,10 @@
       "color": "#43525B",
       "sw": 1.4,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0013",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "sensor",
@@ -253,7 +292,10 @@
       "y": 2.02,
       "scale": 0.92,
       "color": "#43525B",
-      "variant": 0
+      "variant": 0,
+      "id": "el_0014",
+      "semantic_role": "schematic_sensor",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -267,7 +309,10 @@
       "color": "#28343C",
       "bold": false,
       "align": "left",
-      "italic": false
+      "italic": false,
+      "id": "el_0015",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "polyline",
@@ -382,7 +427,10 @@
         ]
       ],
       "color": "#668A9C",
-      "sw": 1.2
+      "sw": 1.2,
+      "id": "el_0016",
+      "semantic_role": "trace",
+      "evidence_ref": "source_1"
     },
     {
       "type": "sensor",
@@ -390,7 +438,10 @@
       "y": 2.94,
       "scale": 0.92,
       "color": "#43525B",
-      "variant": 1
+      "variant": 1,
+      "id": "el_0017",
+      "semantic_role": "schematic_sensor",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -404,7 +455,10 @@
       "color": "#28343C",
       "bold": false,
       "align": "left",
-      "italic": false
+      "italic": false,
+      "id": "el_0018",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "polyline",
@@ -519,7 +573,10 @@
         ]
       ],
       "color": "#6D9A8E",
-      "sw": 1.2
+      "sw": 1.2,
+      "id": "el_0019",
+      "semantic_role": "trace",
+      "evidence_ref": "source_1"
     },
     {
       "type": "sensor",
@@ -527,7 +584,10 @@
       "y": 3.86,
       "scale": 0.92,
       "color": "#43525B",
-      "variant": 2
+      "variant": 2,
+      "id": "el_0020",
+      "semantic_role": "schematic_sensor",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -541,7 +601,10 @@
       "color": "#28343C",
       "bold": false,
       "align": "left",
-      "italic": false
+      "italic": false,
+      "id": "el_0021",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "polyline",
@@ -656,7 +719,10 @@
         ]
       ],
       "color": "#B88E58",
-      "sw": 1.2
+      "sw": 1.2,
+      "id": "el_0022",
+      "semantic_role": "trace",
+      "evidence_ref": "source_1"
     },
     {
       "type": "sensor",
@@ -664,7 +730,10 @@
       "y": 4.78,
       "scale": 0.92,
       "color": "#43525B",
-      "variant": 3
+      "variant": 3,
+      "id": "el_0023",
+      "semantic_role": "schematic_sensor",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -678,7 +747,10 @@
       "color": "#28343C",
       "bold": false,
       "align": "left",
-      "italic": false
+      "italic": false,
+      "id": "el_0024",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "polyline",
@@ -793,7 +865,10 @@
         ]
       ],
       "color": "#8A7CA5",
-      "sw": 1.2
+      "sw": 1.2,
+      "id": "el_0025",
+      "semantic_role": "trace",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -807,7 +882,10 @@
       "color": "#28343C",
       "bold": true,
       "align": "left",
-      "italic": false
+      "italic": false,
+      "id": "el_0026",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "graph",
@@ -858,7 +936,10 @@
       "fill": "#7896A6",
       "r": 0.034,
       "edge": "#43525B",
-      "sw": 0.7
+      "sw": 0.7,
+      "id": "el_0027",
+      "semantic_role": "schematic_graph",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -872,7 +953,10 @@
       "color": "#28343C",
       "bold": true,
       "align": "left",
-      "italic": false
+      "italic": false,
+      "id": "el_0028",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "graph",
@@ -923,7 +1007,10 @@
       "fill": "#7896A6",
       "r": 0.034,
       "edge": "#43525B",
-      "sw": 0.7
+      "sw": 0.7,
+      "id": "el_0029",
+      "semantic_role": "schematic_graph",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -937,7 +1024,10 @@
       "color": "#28343C",
       "bold": true,
       "align": "left",
-      "italic": false
+      "italic": false,
+      "id": "el_0030",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "graph",
@@ -988,7 +1078,10 @@
       "fill": "#7896A6",
       "r": 0.034,
       "edge": "#43525B",
-      "sw": 0.7
+      "sw": 0.7,
+      "id": "el_0031",
+      "semantic_role": "schematic_graph",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -1002,7 +1095,10 @@
       "color": "#28343C",
       "bold": true,
       "align": "left",
-      "italic": false
+      "italic": false,
+      "id": "el_0032",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "graph",
@@ -1053,7 +1149,10 @@
       "fill": "#7896A6",
       "r": 0.034,
       "edge": "#43525B",
-      "sw": 0.7
+      "sw": 0.7,
+      "id": "el_0033",
+      "semantic_role": "schematic_graph",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -1064,7 +1163,10 @@
       "color": "#43525B",
       "sw": 0.95,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0034",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -1075,7 +1177,10 @@
       "color": "#43525B",
       "sw": 0.95,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0035",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -1086,7 +1191,10 @@
       "color": "#43525B",
       "sw": 0.95,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0036",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -1097,7 +1205,10 @@
       "color": "#43525B",
       "sw": 0.95,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0037",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "graph",
@@ -1296,7 +1407,10 @@
       "fill": "#7896A6",
       "r": 0.055,
       "edge": "#43525B",
-      "sw": 0.85
+      "sw": 0.85,
+      "id": "el_0038",
+      "semantic_role": "schematic_graph",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -1310,7 +1424,10 @@
       "color": "#687780",
       "bold": false,
       "align": "left",
-      "italic": false
+      "italic": false,
+      "id": "el_0039",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -1324,7 +1441,29 @@
       "color": "#687780",
       "bold": false,
       "align": "left",
-      "italic": true
+      "italic": true,
+      "id": "el_0040",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    }
+  ],
+  "schema_version": "7.6.0-dev",
+  "figure_contract": {
+    "claim": "Sensor signals pass through OCF/notch filtering into band subgraphs and a total graph.",
+    "archetype": "schematic_led_composite",
+    "output_mode": "presentation",
+    "unverified": [
+      "Numerical adjacency matrix",
+      "Pixel-level source-image match"
+    ]
+  },
+  "evidence_records": [
+    {
+      "id": "source_1",
+      "source": "docs/C01_V73_SOURCE.md",
+      "status": "source_visible_redraw",
+      "scope": "Visible method sequence and labels; vector sensors and graph adjacency are schematic.",
+      "reuse": "derivative_redraw_only"
     }
   ]
 }

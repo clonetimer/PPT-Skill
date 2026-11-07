@@ -1,0 +1,19 @@
+{
+  "schema_version": "7.6.0-dev",
+  "profiles": {
+    "presentation": {
+      "target": "16:9 projected defense slide",
+      "canvas_in": [13.333, 7.5],
+      "critical_text_min_pt": 9.5,
+      "source_note_min_pt": 9,
+      "required_outputs": ["svg", "pptx", "pdf"],
+      "human_checks": ["actual projection distance", "label legibility", "image-overlay contrast", "panel reading order"]
+    },
+    "publication": {
+      "target": "journal-specific final figure",
+      "requires_before_build": ["journal_name", "author_guide_url", "final_width_mm", "final_height_mm", "allowed_formats", "minimum_text_pt", "raster_resolution_dpi"],
+      "required_outputs": ["editable_source", "target_format", "caption", "data_image_provenance"],
+      "human_checks": ["final-size print/PDF inspection", "journal-specific technical compliance", "image integrity", "scientific interpretation"]
+    }
+  }
+}

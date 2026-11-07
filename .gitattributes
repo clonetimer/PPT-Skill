@@ -1,0 +1,4 @@
+data/iris_uci.csv text eol=lf whitespace=-blank-at-eof
+*.png binary
+*.pdf binary
+*.pptx binary

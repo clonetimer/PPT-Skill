@@ -1,4 +1,6 @@
-# V7.1.1 QA Report
+# V7.1.1 QA Report — historical snapshot
+
+This report describes the V7.1.1 prototype only. For current checks, run the V7.6 validators listed in `SKILL.md`.
 
 ## Scope
 Four-slide refined prototype:

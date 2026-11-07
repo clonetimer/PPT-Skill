@@ -10,6 +10,7 @@
 <text x="480.6" y="194.21666666666667" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="18.333333333333332" fill="#28343C" font-weight="700"><tspan x="480.6" dy="0">OCF / notch filter</tspan></text>
 <text x="712.8" y="194.21666666666667" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="18.333333333333332" fill="#28343C" font-weight="700"><tspan x="712.8" dy="0">Band subgraphs</tspan></text>
 <text x="964.8" y="194.21666666666667" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="18.333333333333332" fill="#28343C" font-weight="700"><tspan x="964.8" dy="0">Total graph</tspan></text>
+<rect x="602.4" y="210.0" width="199.2" height="223.20000000000002" rx="0.0" fill="#FFFFFF" stroke="#D5DEE4" stroke-width="1.3333333333333333"/>
 <circle cx="91.55999999999999" cy="223.56" r="6.57" fill="#E8F0F3" stroke="#668A9C" stroke-width="2"/>
 <circle cx="91.55999999999999" cy="223.56" r="2.19" fill="#668A9C"/>
 <line x1="91.55999999999999" y1="232.32" x2="91.55999999999999" y2="241.07999999999998" stroke="#668A9C" stroke-width="2"/>

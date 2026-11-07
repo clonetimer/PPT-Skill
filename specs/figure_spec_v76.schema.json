@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clonetimer/PPT-Skill/specs/figure_spec_v76.schema.json",
+  "title": "Scientific FigureSpec evidence contract",
+  "type": "object",
+  "required": ["schema_version", "id", "canvas", "style", "figure_contract", "evidence_records", "elements"],
+  "properties": {
+    "schema_version": {"const": "7.6.0-dev"},
+    "id": {"type": "string", "minLength": 1},
+    "version": {"type": "string"},
+    "title": {"type": "string"},
+    "canvas": {"type": "object", "required": ["width_in", "height_in"], "properties": {"width_in": {"type": "number", "exclusiveMinimum": 0}, "height_in": {"type": "number", "exclusiveMinimum": 0}}},
+    "style": {"type": "object"},
+    "figure_contract": {
+      "type": "object", "required": ["claim", "archetype", "output_mode", "unverified"],
+      "properties": {
+        "claim": {"type": "string", "minLength": 1},
+        "archetype": {"enum": ["quantitative_grid", "schematic_led_composite", "image_quantitative_composite", "image_plate_plus_quant", "asymmetric_mixed_modality"]},
+        "output_mode": {"enum": ["presentation", "publication"]},
+        "unverified": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "evidence_records": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}},
+    "semantic_edges": {"type": "array", "items": {"type": "array", "prefixItems": [{"type": "string"}, {"type": "string"}], "minItems": 2, "maxItems": 2}},
+    "elements": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/element"}}
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object", "required": ["id", "source", "status", "scope", "reuse"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "source": {"type": "string", "minLength": 1},
+        "status": {"enum": ["source_visible_redraw", "paper_grounded", "domain_adaptation", "data_driven"]},
+        "scope": {"type": "string", "minLength": 1},
+        "reuse": {"type": "string", "minLength": 1}
+      }
+    },
+    "element": {
+      "type": "object", "required": ["id", "type", "semantic_role", "evidence_ref"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "type": {"enum": ["text", "rect", "line", "polyline", "ellipse", "trapezoid", "sensor", "graph", "grid", "stack_grid", "image"]},
+        "semantic_role": {"type": "string", "minLength": 1},
+        "evidence_ref": {"type": "string", "minLength": 1},
+        "semantic_id": {"type": "string"},
+        "semantic_link": {"type": "string"}
+      }
+    }
+  }
+}

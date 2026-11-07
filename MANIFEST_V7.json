@@ -1,6 +1,6 @@
 {
   "name": "academic-defense-ppt",
-  "version": "7.5.0-dev",
+  "version": "7.6.0-dev",
   "baseline_status": "draft_prototype_not_stable",
   "files": {
     "skill": "SKILL.md",
@@ -13,14 +13,28 @@
       "figure_specs/F07_telemetry_embedding.json",
       "figure_specs/c01/C01_FBG_construction.json",
       "figure_specs/c01/C01_SEANet_graph_level.json",
-      "figure_specs/c01/C01_composite_defense_slide.json"
+      "figure_specs/c01/C01_composite_defense_slide.json",
+      "figure_specs/quant/Q01_iris_scatter.json",
+      "figure_specs/quant/Q02_iris_strip.json",
+      "figure_specs/quant/Q03_iris_mean_ci.json",
+      "figure_specs/quant/Q04_iris_confusion.json",
+      "figure_specs/quant/Q05_iris_ablation.json",
+      "figure_specs/quant/Q06_iris_trend_interval.json",
+      "figure_specs/image/I01_cell_image_quant.json"
     ],
     "examples": [
       "examples/B01_engineering_fdir_v71.svg",
       "examples/F07_telemetry_embedding_v71.svg",
       "examples/C01_FBG_construction_v73.svg",
       "examples/C01_SEANet_graph_level_v73.svg",
-      "examples/C01_composite_defense_slide_v74.svg"
+      "examples/C01_composite_defense_slide_v74.svg",
+      "examples/Q01_iris_scatter.svg",
+      "examples/Q02_iris_strip.svg",
+      "examples/Q03_iris_mean_ci.svg",
+      "examples/Q04_iris_confusion.svg",
+      "examples/Q05_iris_ablation.svg",
+      "examples/Q06_iris_trend_interval.svg",
+      "examples/I01_cell_image_quant.svg"
     ],
     "tools": [
       "tools/render_figure_spec.py",
@@ -32,7 +46,24 @@
       "tools/validate_c01_v74.py",
       "tools/validate_deck_spec.py",
       "tools/validate_manifest.py",
-      "tools/audit_pptx.py"
+      "tools/audit_pptx.py",
+      "tools/scientific_ir.py",
+      "tools/migrate_figure_specs.py",
+      "tools/validate_scientific_ir.py",
+      "tools/test_scientific_ir.py",
+      "tools/build_quantitative_examples.py",
+      "tools/validate_quantitative_examples.py",
+      "tools/test_quantitative_contract.py",
+      "tools/build_image_quant_example.py",
+      "tools/validate_image_quant_example.py",
+      "tools/export_quantitative_pdf.ps1",
+      "tools/check_scientific_accessibility.py",
+      "tools/record_scientific_render.py",
+      "tools/validate_research_benchmark.py",
+      "tools/validate_output_profiles.py",
+      "tools/test_output_profiles.py",
+      "tools/build_deck_benchmark.py",
+      "tools/validate_deck_benchmark.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -42,15 +73,36 @@
       "docs/DECK_PLANNING_V75.md",
       "docs/QA_REPORT_V7.md",
       "docs/SOURCE_ATTRIBUTION.md",
-      "docs/VECTOR_WORKFLOW.md"
+      "docs/VECTOR_WORKFLOW.md",
+      "docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md",
+      "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md"
     ],
     "generated_outputs": [
       "dist/C01_FBG_construction_v73.pptx",
       "dist/C01_SEANet_graph_level_v73.pptx",
       "dist/C01_composite_defense_slide_v74.pptx",
-      "dist/C01_composite_defense_slide_v74_preview.pdf"
+      "dist/C01_composite_defense_slide_v74_preview.pdf",
+      "dist/Q01_iris_scatter.pptx",
+      "dist/Q02_iris_strip.pptx",
+      "dist/Q03_iris_mean_ci.pptx",
+      "dist/Q04_iris_confusion.pptx",
+      "dist/Q05_iris_ablation.pptx",
+      "dist/Q06_iris_trend_interval.pptx",
+      "dist/I01_cell_image_quant.pptx",
+      "dist/Q01_iris_scatter.pdf",
+      "dist/Q02_iris_strip.pdf",
+      "dist/Q03_iris_mean_ci.pdf",
+      "dist/Q04_iris_confusion.pdf",
+      "dist/Q05_iris_ablation.pdf",
+      "dist/Q06_iris_trend_interval.pdf",
+      "dist/I01_cell_image_quant.pdf",
+      "dist/render_record_v76.json",
+      "dist/DECK01_c01_defense.pptx",
+      "dist/DECK01_c01_defense.pdf"
     ],
-    "planning_specs": ["specs/deck_spec_v75.example.json", "specs/deck_spec_v75.schema.json"]
+    "planning_specs": ["specs/deck_spec_v75.example.json", "specs/deck_spec_v75.schema.json"],
+    "scientific_contracts": ["specs/figure_contracts_v76.json", "specs/figure_spec_v76.schema.json", "specs/c01_expected_topology_v76.json", "specs/iris_charts_v76.json", "specs/chart_spec_v76.schema.json", "specs/research_figure_benchmark_v76.json", "specs/output_profiles_v76.json"],
+    "source_data": ["data/README.md", "data/iris_uci.csv", "data/cell_scikit_image_v026.png"]
   },
   "source_policy": "Do not redistribute the publisher's original graphical abstract; keep only source links and editable derivative redraws."
 }

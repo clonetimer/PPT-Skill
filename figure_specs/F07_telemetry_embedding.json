@@ -27,7 +27,10 @@
       "h": 0.42,
       "size": 25,
       "font": "Times New Roman",
-      "bold": true
+      "bold": true,
+      "id": "el_0001",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -39,7 +42,10 @@
       "size": 18,
       "font": "Times New Roman",
       "bold": true,
-      "align": "left"
+      "align": "left",
+      "id": "el_0002",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -50,7 +56,10 @@
       "h": 0.32,
       "size": 18,
       "font": "Times New Roman",
-      "bold": true
+      "bold": true,
+      "id": "el_0003",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -61,7 +70,10 @@
       "h": 0.32,
       "size": 18,
       "font": "Times New Roman",
-      "bold": true
+      "bold": true,
+      "id": "el_0004",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -72,7 +84,10 @@
       "h": 0.45,
       "size": 19,
       "font": "Cambria Math",
-      "color": "#53616B"
+      "color": "#53616B",
+      "id": "el_0005",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -83,7 +98,10 @@
       "h": 0.28,
       "size": 14.5,
       "font": "Times New Roman",
-      "color": "#53616B"
+      "color": "#53616B",
+      "id": "el_0006",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -94,7 +112,10 @@
       "h": 0.72,
       "size": 13.5,
       "font": "Times New Roman",
-      "color": "#65717C"
+      "color": "#65717C",
+      "id": "el_0007",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -102,7 +123,10 @@
       "y1": 3.35,
       "x2": 3.8,
       "y2": 3.35,
-      "arrow": true
+      "arrow": true,
+      "id": "el_0008",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "grid",
@@ -115,7 +139,10 @@
       "fill": "#FBFCFD",
       "stroke": "#D7DEE3",
       "border": "#98A6AF",
-      "sw": 0.38
+      "sw": 0.38,
+      "id": "el_0009",
+      "semantic_role": "schematic_grid",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -126,7 +153,10 @@
       "h": 0.48,
       "size": 13,
       "font": "Times New Roman",
-      "bold": true
+      "bold": true,
+      "id": "el_0010",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -137,7 +167,10 @@
       "h": 0.42,
       "size": 11.5,
       "font": "Times New Roman",
-      "color": "#65717C"
+      "color": "#65717C",
+      "id": "el_0011",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -145,7 +178,10 @@
       "y1": 3.35,
       "x2": 7.8,
       "y2": 3.35,
-      "arrow": true
+      "arrow": true,
+      "id": "el_0012",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "stack_grid",
@@ -160,7 +196,10 @@
       "fill": "#FBFCFD",
       "stroke": "#D7DEE3",
       "border": "#98A6AF",
-      "sw": 0.35
+      "sw": 0.35,
+      "id": "el_0013",
+      "semantic_role": "schematic_grid",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -171,7 +210,10 @@
       "h": 0.3,
       "size": 16,
       "font": "Times New Roman",
-      "bold": true
+      "bold": true,
+      "id": "el_0014",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -182,7 +224,10 @@
       "h": 0.48,
       "size": 13,
       "font": "Times New Roman",
-      "color": "#65717C"
+      "color": "#65717C",
+      "id": "el_0015",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -193,7 +238,10 @@
       "h": 0.32,
       "size": 16,
       "font": "Cambria Math",
-      "bold": true
+      "bold": true,
+      "id": "el_0016",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -202,7 +250,10 @@
       "x2": 12.78,
       "y2": 6.52,
       "color": "#53616B",
-      "sw": 0.8
+      "sw": 0.8,
+      "id": "el_0017",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -214,7 +265,28 @@
       "size": 12.5,
       "font": "Times New Roman",
       "color": "#65717C",
-      "align": "left"
+      "align": "left",
+      "id": "el_0018",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    }
+  ],
+  "schema_version": "7.6.0-dev",
+  "figure_contract": {
+    "claim": "The grid and temporal stack explain the telemetry embedding representation.",
+    "archetype": "schematic_led_composite",
+    "output_mode": "presentation",
+    "unverified": [
+      "Exact occupancy and channel coordinates are unavailable."
+    ]
+  },
+  "evidence_records": [
+    {
+      "id": "source_1",
+      "source": "docs/KNOWN_ISSUES_V7.md",
+      "status": "domain_adaptation",
+      "scope": "Schematic grid; no channel-to-cell mapping is asserted.",
+      "reuse": "derivative_redraw_only"
     }
   ]
 }

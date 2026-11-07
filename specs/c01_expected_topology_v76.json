@@ -1,0 +1,21 @@
+{
+  "figure_id": "C01_composite_defense_slide",
+  "source": "docs/C01_V73_SOURCE.md",
+  "review_status": "paper_text_and_visible_graphic_checked; high_resolution_overlay_pending",
+  "critical_labels": {
+    "input": "Input", "gcn_1": "GCN", "pooling_1": "pooling",
+    "gcn_2": "GCN", "pooling_2": "pooling", "sr_main": "SR",
+    "ea": "Energy-assisted module", "sr_ea": "SR", "sum": "+",
+    "ocf": "OCF / notch filter", "band_group": "Band subgraphs", "total_graph": "Total graph",
+    "band_1": "B₁", "band_2": "B₂", "band_3": "B₃", "band_4": "Bq"
+  },
+  "critical_edges": [
+    ["input", "gcn_1"], ["gcn_1", "pooling_1"],
+    ["pooling_1", "gcn_2"], ["gcn_2", "pooling_2"],
+    ["pooling_2", "sr_main"], ["sr_main", "sum"],
+    ["input", "ea"], ["ea", "sr_ea"], ["sr_ea", "sum"],
+    ["ocf", "band_group"],
+    ["band_1", "total_graph"], ["band_2", "total_graph"],
+    ["band_3", "total_graph"], ["band_4", "total_graph"]
+  ]
+}

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>
+<rect width="1600" height="900" fill="#FFFFFF"/>
+<text x="62.400000000000006" y="65.63333333333333" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="36.666666666666664" fill="#26343C" font-weight="700"><tspan x="62.400000000000006" dy="0">A paired feature-set comparison</tspan></text>
+<text x="84.0" y="803.8166666666667" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#26343C"><tspan x="84.0" dy="0">Paired 150-row leave-one-out 1-NN comparison; 4-feature baseline versus petal-only. Accuracy is descriptive; no paper performance claim.</tspan></text>
+<text x="84.0" y="861.7416666666666" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="15.833333333333334" fill="#65737C"><tspan x="84.0" dy="0">UCI Iris · 150 flowers · DOI 10.24432/C56C76 · CC BY 4.0</tspan></text>
+<line x1="255.6" y1="703.1999999999999" x2="1311.6" y2="703.1999999999999" stroke="#5F707B" stroke-width="1.6666666666666667"/>
+<line x1="255.6" y1="168.0" x2="255.6" y2="703.1999999999999" stroke="#5F707B" stroke-width="1.6666666666666667"/>
+<line x1="540.0" y1="703.1999999999999" x2="540.0" y2="712.8" stroke="#5F707B" stroke-width="1.6666666666666667"/>
+<text x="540.0" y="739.3249999999999" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="17.5" fill="#26343C"><tspan x="540.0" dy="0">Four features</tspan></text>
+<line x1="1032.0" y1="703.1999999999999" x2="1032.0" y2="712.8" stroke="#5F707B" stroke-width="1.6666666666666667"/>
+<text x="1032.0" y="739.3249999999999" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="17.5" fill="#26343C"><tspan x="1032.0" dy="0">Petal only</tspan></text>
+<line x1="245.99999999999997" y1="703.1999999999999" x2="255.6" y2="703.1999999999999" stroke="#5F707B" stroke-width="1.6666666666666667"/>
+<text x="237.6" y="709.925" text-anchor="end" dominant-baseline="middle" font-family="Arial" font-size="17.5" fill="#26343C"><tspan x="237.6" dy="0">0</tspan></text>
+<line x1="245.99999999999997" y1="596.16" x2="255.6" y2="596.16" stroke="#5F707B" stroke-width="1.6666666666666667"/>
+<text x="237.6" y="602.885" text-anchor="end" dominant-baseline="middle" font-family="Arial" font-size="17.5" fill="#26343C"><tspan x="237.6" dy="0">20</tspan></text>
+<line x1="245.99999999999997" y1="489.11999999999995" x2="255.6" y2="489.11999999999995" stroke="#5F707B" stroke-width="1.6666666666666667"/>
+<text x="237.6" y="495.8449999999999" text-anchor="end" dominant-baseline="middle" font-family="Arial" font-size="17.5" fill="#26343C"><tspan x="237.6" dy="0">40</tspan></text>
+<line x1="245.99999999999997" y1="382.08000000000004" x2="255.6" y2="382.08000000000004" stroke="#5F707B" stroke-width="1.6666666666666667"/>
+<text x="237.6" y="388.805" text-anchor="end" dominant-baseline="middle" font-family="Arial" font-size="17.5" fill="#26343C"><tspan x="237.6" dy="0">60</tspan></text>
+<line x1="245.99999999999997" y1="275.03999999999996" x2="255.6" y2="275.03999999999996" stroke="#5F707B" stroke-width="1.6666666666666667"/>
+<text x="237.6" y="281.765" text-anchor="end" dominant-baseline="middle" font-family="Arial" font-size="17.5" fill="#26343C"><tspan x="237.6" dy="0">80</tspan></text>
+<line x1="245.99999999999997" y1="168.00000000000006" x2="255.6" y2="168.00000000000006" stroke="#5F707B" stroke-width="1.6666666666666667"/>
+<text x="237.6" y="174.72500000000002" text-anchor="end" dominant-baseline="middle" font-family="Arial" font-size="17.5" fill="#26343C"><tspan x="237.6" dy="0">100</tspan></text>
+<text x="783.6" y="791.1999999999999" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="20.0" fill="#26343C" font-weight="700"><tspan x="783.6" dy="0"></tspan></text>
+<text x="42.0" y="123.41666666666667" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#26343C" font-weight="700"><tspan x="42.0" dy="0">Accuracy (%)</tspan></text>
+<rect x="446.40000000000003" y="189.40799999999993" width="186.0" height="513.792" rx="0.0" fill="#376F75" stroke="#FFFFFF" stroke-width="0.8333333333333334"/>
+<text x="539.4" y="163.94133333333326" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="26.666666666666668" fill="#26343C" font-weight="700"><tspan x="539.4" dy="0">96.0%</tspan></text>
+<text x="539.4" y="673.9083333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="19.166666666666668" fill="#FFFFFF"><tspan x="539.4" dy="0">144 / 150 correct</tspan></text>
+<rect x="938.4000000000001" y="192.97599999999986" width="186.0" height="510.2240000000001" rx="0.0" fill="#A45C32" stroke="#FFFFFF" stroke-width="0.8333333333333334"/>
+<text x="1031.4" y="167.5093333333332" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="26.666666666666668" fill="#26343C" font-weight="700"><tspan x="1031.4" dy="0">95.3%</tspan></text>
+<text x="1031.4" y="673.9083333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="19.166666666666668" fill="#FFFFFF"><tspan x="1031.4" dy="0">143 / 150 correct</tspan></text>
+</svg>

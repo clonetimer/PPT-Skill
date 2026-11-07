@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse,json,math,zipfile,xml.etree.ElementTree as ET
+import argparse,base64,json,math,zipfile,xml.etree.ElementTree as ET
 from pathlib import Path
 from xml.sax.saxutils import escape
 from pptx import Presentation
@@ -58,7 +58,13 @@ def render(spec,svg,pptx):
  prs=Presentation();prs.slide_width=Inches(spec["canvas"]["width_in"]);prs.slide_height=Inches(spec["canvas"]["height_in"]);sl=prs.slides.add_slide(prs.slide_layouts[6]);sl.background.fill.solid();sl.background.fill.fore_color.rgb=rgb("#FFFFFF")
  for e in spec["elements"]:
   t=e["type"]
-  if t=="text":
+  if t=="image":
+   image_path=Path(e["path"])
+   if not image_path.is_absolute():image_path=Path(__file__).resolve().parents[1]/image_path
+   data=image_path.read_bytes();mime="image/png" if image_path.suffix.lower()==".png" else "image/jpeg"
+   out.append(f'<image x="{e["x"]*DPI}" y="{e["y"]*DPI}" width="{e["w"]*DPI}" height="{e["h"]*DPI}" href="data:{mime};base64,{base64.b64encode(data).decode()}"/>')
+   sl.shapes.add_picture(str(image_path),Inches(e["x"]),Inches(e["y"]),width=Inches(e["w"]),height=Inches(e["h"]))
+  elif t=="text":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];fs=e.get("size",14)*DPI/72;ls=e["text"].split("\n");a=e.get("align","center");anc={"left":"start","center":"middle","right":"end"}[a];tx=x if a=="left" else x+ww/2 if a=="center" else x+ww;lh=fs*1.18;by=y+hh/2-(len(ls)-1)*lh/2+fs*.35
    sp="".join(f'<tspan x="{tx}" dy="{0 if j==0 else lh}">{escape(v)}</tspan>' for j,v in enumerate(ls))
    out.append(f'<text x="{tx}" y="{by}" text-anchor="{anc}" dominant-baseline="middle" font-family="{escape("Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" if e.get("font",df)=="Microsoft YaHei" else e.get("font",df))}" font-size="{fs}" fill="{e.get("color","#28343C")}"'+(' font-weight="700"' if e.get("bold") else '')+(' font-style="italic"' if e.get("italic") else '')+f'>{sp}</text>');addtext(sl,e,df)

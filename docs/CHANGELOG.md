@@ -1,5 +1,12 @@
 # Changelog
 
+## V7.6.0-dev — Scientific evidence and data channels
+- Migrated five existing FigureSpecs to an evidence-linked contract with typed elements and stable IDs.
+- Added directed-route checks and negative mutations for the C01 critical diagnosis topology.
+- Added six reproducible UCI Iris charts with row-level lineage, statistics definitions, SVG/PPTX/PDF outputs and validation, including paired ablation and trend/interval cases.
+- Added a CC0 quantitative-phase image plus raw-pixel histogram, with source hash, processing log, calibration and scale-bar checks.
+- Added CI build and validation for the new examples. Independent domain and final-size review remains pending.
+
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.
 - Committed a reproducible V7.4 composite FigureSpec, SVG, PPTX and PowerPoint-exported PDF.

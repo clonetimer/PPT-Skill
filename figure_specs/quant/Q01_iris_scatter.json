@@ -1,0 +1,3263 @@
+{
+  "id": "Q01_iris_scatter",
+  "version": "7.6.0-dev",
+  "canvas": {
+    "width_in": 13.333,
+    "height_in": 7.5
+  },
+  "style": {
+    "font": "Arial"
+  },
+  "data_lineage": {
+    "data_ref": "data/iris_uci.csv",
+    "sha256": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+    "source_url": "https://archive.ics.uci.edu/dataset/53/iris",
+    "doi": "10.24432/C56C76",
+    "row_count": 150,
+    "chart_spec": "specs/iris_charts_v76.json"
+  },
+  "chart_contract": {
+    "id": "Q01_iris_scatter",
+    "kind": "scatter",
+    "claim": "The three iris species occupy different regions in petal measurements.",
+    "x": "petal_length_cm",
+    "y": "petal_width_cm",
+    "group": "species",
+    "sample_size": 150,
+    "encoding": {
+      "color": "species",
+      "shape": "species"
+    },
+    "statistics": {
+      "display": "all_raw_points",
+      "interval": "none"
+    },
+    "caption": "Each point is one flower; no inferential comparison is claimed."
+  },
+  "computed_values": [],
+  "elements": [
+    {
+      "type": "text",
+      "text": "Petal dimensions separate iris species",
+      "x": 0.52,
+      "y": 0.19,
+      "w": 12.2,
+      "h": 0.5,
+      "size": 22,
+      "bold": true,
+      "align": "left",
+      "color": "#26343C",
+      "id": "el_0001",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Each point is one flower; no inferential comparison is claimed.",
+      "x": 0.7,
+      "y": 6.46,
+      "w": 11.9,
+      "h": 0.37,
+      "size": 11,
+      "bold": false,
+      "align": "left",
+      "color": "#26343C",
+      "id": "el_0002",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "UCI Iris · 150 flowers · DOI 10.24432/C56C76 · CC BY 4.0",
+      "x": 0.7,
+      "y": 7.02,
+      "w": 11.9,
+      "h": 0.23,
+      "size": 9.5,
+      "bold": false,
+      "align": "left",
+      "color": "#65737C",
+      "id": "el_0003",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.28,
+      "y1": 5.66,
+      "x2": 9.8,
+      "y2": 5.66,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0004",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.28,
+      "y1": 1.3,
+      "x2": 1.28,
+      "y2": 5.66,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0005",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.28,
+      "y1": 5.66,
+      "x2": 1.28,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0006",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "0",
+      "x": 0.8300000000000001,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0007",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 2.4971428571428573,
+      "y1": 5.66,
+      "x2": 2.4971428571428573,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0008",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "1",
+      "x": 2.047142857142857,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0009",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 3.7142857142857144,
+      "y1": 5.66,
+      "x2": 3.7142857142857144,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0010",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "2",
+      "x": 3.2642857142857142,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0011",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 4.9314285714285715,
+      "y1": 5.66,
+      "x2": 4.9314285714285715,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0012",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "3",
+      "x": 4.481428571428571,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0013",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 6.1485714285714295,
+      "y1": 5.66,
+      "x2": 6.1485714285714295,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0014",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "4",
+      "x": 5.698571428571429,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0015",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 7.365714285714287,
+      "y1": 5.66,
+      "x2": 7.365714285714287,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0016",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "5",
+      "x": 6.915714285714287,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0017",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 8.582857142857144,
+      "y1": 5.66,
+      "x2": 8.582857142857144,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0018",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "6",
+      "x": 8.132857142857144,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0019",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 9.8,
+      "y1": 5.66,
+      "x2": 9.8,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0020",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "7",
+      "x": 9.350000000000001,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0021",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.2,
+      "y1": 5.66,
+      "x2": 1.28,
+      "y2": 5.66,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0022",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "0",
+      "x": 0.53,
+      "y": 5.54,
+      "w": 0.6,
+      "h": 0.25,
+      "size": 10.5,
+      "bold": false,
+      "align": "right",
+      "color": "#26343C",
+      "id": "el_0023",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.2,
+      "y1": 4.206666666666667,
+      "x2": 1.28,
+      "y2": 4.206666666666667,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0024",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "1",
+      "x": 0.53,
+      "y": 4.086666666666667,
+      "w": 0.6,
+      "h": 0.25,
+      "size": 10.5,
+      "bold": false,
+      "align": "right",
+      "color": "#26343C",
+      "id": "el_0025",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.2,
+      "y1": 2.7533333333333334,
+      "x2": 1.28,
+      "y2": 2.7533333333333334,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0026",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "2",
+      "x": 0.53,
+      "y": 2.6333333333333333,
+      "w": 0.6,
+      "h": 0.25,
+      "size": 10.5,
+      "bold": false,
+      "align": "right",
+      "color": "#26343C",
+      "id": "el_0027",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.2,
+      "y1": 1.2999999999999998,
+      "x2": 1.28,
+      "y2": 1.2999999999999998,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0028",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "3",
+      "x": 0.53,
+      "y": 1.1799999999999997,
+      "w": 0.6,
+      "h": 0.25,
+      "size": 10.5,
+      "bold": false,
+      "align": "right",
+      "color": "#26343C",
+      "id": "el_0029",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Petal length (cm)",
+      "x": 1.28,
+      "y": 6.19,
+      "w": 8.520000000000001,
+      "h": 0.29,
+      "size": 12,
+      "bold": true,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0030",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Petal width (cm)",
+      "x": 0.35,
+      "y": 0.84,
+      "w": 2.2,
+      "h": 0.27,
+      "size": 11,
+      "bold": true,
+      "align": "left",
+      "color": "#26343C",
+      "id": "el_0031",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 1,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0032",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 2,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0033",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8192857142857144,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 3,
+      "data_values": {
+        "petal_length_cm": 1.3,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0034",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 4,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0035",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 5,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0036",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.3061428571428575,
+      "y": 5.035666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 6,
+      "data_values": {
+        "petal_length_cm": 1.7,
+        "petal_width_cm": 0.4
+      },
+      "id": "el_0037",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.181,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 7,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.3
+      },
+      "id": "el_0038",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 8,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0039",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 9,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0040",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.471666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 10,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.1
+      },
+      "id": "el_0041",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 11,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0042",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1844285714285716,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 12,
+      "data_values": {
+        "petal_length_cm": 1.6,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0043",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.471666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 13,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.1
+      },
+      "id": "el_0044",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.575857142857143,
+      "y": 5.471666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 14,
+      "data_values": {
+        "petal_length_cm": 1.1,
+        "petal_width_cm": 0.1
+      },
+      "id": "el_0045",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.697571428571429,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 15,
+      "data_values": {
+        "petal_length_cm": 1.2,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0046",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.035666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 16,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.4
+      },
+      "id": "el_0047",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8192857142857144,
+      "y": 5.035666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 17,
+      "data_values": {
+        "petal_length_cm": 1.3,
+        "petal_width_cm": 0.4
+      },
+      "id": "el_0048",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.181,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 18,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.3
+      },
+      "id": "el_0049",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.3061428571428575,
+      "y": 5.181,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 19,
+      "data_values": {
+        "petal_length_cm": 1.7,
+        "petal_width_cm": 0.3
+      },
+      "id": "el_0050",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.181,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 20,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.3
+      },
+      "id": "el_0051",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.3061428571428575,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 21,
+      "data_values": {
+        "petal_length_cm": 1.7,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0052",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.035666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 22,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.4
+      },
+      "id": "el_0053",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.454142857142857,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 23,
+      "data_values": {
+        "petal_length_cm": 1.0,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0054",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.3061428571428575,
+      "y": 4.890333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 24,
+      "data_values": {
+        "petal_length_cm": 1.7,
+        "petal_width_cm": 0.5
+      },
+      "id": "el_0055",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.5495714285714284,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 25,
+      "data_values": {
+        "petal_length_cm": 1.9,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0056",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1844285714285716,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 26,
+      "data_values": {
+        "petal_length_cm": 1.6,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0057",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1844285714285716,
+      "y": 5.035666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 27,
+      "data_values": {
+        "petal_length_cm": 1.6,
+        "petal_width_cm": 0.4
+      },
+      "id": "el_0058",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 28,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0059",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 29,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0060",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1844285714285716,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 30,
+      "data_values": {
+        "petal_length_cm": 1.6,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0061",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1844285714285716,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 31,
+      "data_values": {
+        "petal_length_cm": 1.6,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0062",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.035666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 32,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.4
+      },
+      "id": "el_0063",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.471666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 33,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.1
+      },
+      "id": "el_0064",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 34,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0065",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.471666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 35,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.1
+      },
+      "id": "el_0066",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.697571428571429,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 36,
+      "data_values": {
+        "petal_length_cm": 1.2,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0067",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8192857142857144,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 37,
+      "data_values": {
+        "petal_length_cm": 1.3,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0068",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.471666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 38,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.1
+      },
+      "id": "el_0069",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8192857142857144,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 39,
+      "data_values": {
+        "petal_length_cm": 1.3,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0070",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 40,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0071",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8192857142857144,
+      "y": 5.181,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 41,
+      "data_values": {
+        "petal_length_cm": 1.3,
+        "petal_width_cm": 0.3
+      },
+      "id": "el_0072",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8192857142857144,
+      "y": 5.181,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 42,
+      "data_values": {
+        "petal_length_cm": 1.3,
+        "petal_width_cm": 0.3
+      },
+      "id": "el_0073",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8192857142857144,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 43,
+      "data_values": {
+        "petal_length_cm": 1.3,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0074",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1844285714285716,
+      "y": 4.745,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 44,
+      "data_values": {
+        "petal_length_cm": 1.6,
+        "petal_width_cm": 0.6
+      },
+      "id": "el_0075",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.5495714285714284,
+      "y": 5.035666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 45,
+      "data_values": {
+        "petal_length_cm": 1.9,
+        "petal_width_cm": 0.4
+      },
+      "id": "el_0076",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.181,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 46,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.3
+      },
+      "id": "el_0077",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1844285714285716,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 47,
+      "data_values": {
+        "petal_length_cm": 1.6,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0078",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 48,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0079",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0627142857142857,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 49,
+      "data_values": {
+        "petal_length_cm": 1.5,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0080",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.941,
+      "y": 5.326333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 50,
+      "data_values": {
+        "petal_length_cm": 1.4,
+        "petal_width_cm": 0.2
+      },
+      "id": "el_0081",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.95757142857143,
+      "y": 3.5823333333333336,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 51,
+      "data_values": {
+        "petal_length_cm": 4.7,
+        "petal_width_cm": 1.4
+      },
+      "id": "el_0082",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.714142857142859,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 52,
+      "data_values": {
+        "petal_length_cm": 4.5,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0083",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 7.201000000000001,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 53,
+      "data_values": {
+        "petal_length_cm": 4.9,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0084",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.105571428571429,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 54,
+      "data_values": {
+        "petal_length_cm": 4.0,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0085",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.835857142857144,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 55,
+      "data_values": {
+        "petal_length_cm": 4.6,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0086",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.714142857142859,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 56,
+      "data_values": {
+        "petal_length_cm": 4.5,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0087",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.95757142857143,
+      "y": 3.2916666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 57,
+      "data_values": {
+        "petal_length_cm": 4.7,
+        "petal_width_cm": 1.6
+      },
+      "id": "el_0088",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 5.253571428571429,
+      "y": 4.163666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 58,
+      "data_values": {
+        "petal_length_cm": 3.3,
+        "petal_width_cm": 1.0
+      },
+      "id": "el_0089",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.835857142857144,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 59,
+      "data_values": {
+        "petal_length_cm": 4.6,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0090",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 5.983857142857143,
+      "y": 3.5823333333333336,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 60,
+      "data_values": {
+        "petal_length_cm": 3.9,
+        "petal_width_cm": 1.4
+      },
+      "id": "el_0091",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 5.497000000000001,
+      "y": 4.163666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 61,
+      "data_values": {
+        "petal_length_cm": 3.5,
+        "petal_width_cm": 1.0
+      },
+      "id": "el_0092",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.349000000000001,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 62,
+      "data_values": {
+        "petal_length_cm": 4.2,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0093",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.105571428571429,
+      "y": 4.163666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 63,
+      "data_values": {
+        "petal_length_cm": 4.0,
+        "petal_width_cm": 1.0
+      },
+      "id": "el_0094",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.95757142857143,
+      "y": 3.5823333333333336,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 64,
+      "data_values": {
+        "petal_length_cm": 4.7,
+        "petal_width_cm": 1.4
+      },
+      "id": "el_0095",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 5.618714285714287,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 65,
+      "data_values": {
+        "petal_length_cm": 3.6,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0096",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.592428571428573,
+      "y": 3.5823333333333336,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 66,
+      "data_values": {
+        "petal_length_cm": 4.4,
+        "petal_width_cm": 1.4
+      },
+      "id": "el_0097",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.714142857142859,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 67,
+      "data_values": {
+        "petal_length_cm": 4.5,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0098",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.227285714285714,
+      "y": 4.163666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 68,
+      "data_values": {
+        "petal_length_cm": 4.1,
+        "petal_width_cm": 1.0
+      },
+      "id": "el_0099",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.714142857142859,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 69,
+      "data_values": {
+        "petal_length_cm": 4.5,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0100",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 5.983857142857143,
+      "y": 4.0183333333333335,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 70,
+      "data_values": {
+        "petal_length_cm": 3.9,
+        "petal_width_cm": 1.1
+      },
+      "id": "el_0101",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 7.0792857142857155,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 71,
+      "data_values": {
+        "petal_length_cm": 4.8,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0102",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.105571428571429,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 72,
+      "data_values": {
+        "petal_length_cm": 4.0,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0103",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 7.201000000000001,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 73,
+      "data_values": {
+        "petal_length_cm": 4.9,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0104",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.95757142857143,
+      "y": 3.873,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 74,
+      "data_values": {
+        "petal_length_cm": 4.7,
+        "petal_width_cm": 1.2
+      },
+      "id": "el_0105",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.470714285714286,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 75,
+      "data_values": {
+        "petal_length_cm": 4.3,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0106",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.592428571428573,
+      "y": 3.5823333333333336,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 76,
+      "data_values": {
+        "petal_length_cm": 4.4,
+        "petal_width_cm": 1.4
+      },
+      "id": "el_0107",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 7.0792857142857155,
+      "y": 3.5823333333333336,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 77,
+      "data_values": {
+        "petal_length_cm": 4.8,
+        "petal_width_cm": 1.4
+      },
+      "id": "el_0108",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 7.322714285714287,
+      "y": 3.146333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 78,
+      "data_values": {
+        "petal_length_cm": 5.0,
+        "petal_width_cm": 1.7
+      },
+      "id": "el_0109",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.714142857142859,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 79,
+      "data_values": {
+        "petal_length_cm": 4.5,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0110",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 5.497000000000001,
+      "y": 4.163666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 80,
+      "data_values": {
+        "petal_length_cm": 3.5,
+        "petal_width_cm": 1.0
+      },
+      "id": "el_0111",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 5.8621428571428575,
+      "y": 4.0183333333333335,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 81,
+      "data_values": {
+        "petal_length_cm": 3.8,
+        "petal_width_cm": 1.1
+      },
+      "id": "el_0112",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 5.7404285714285725,
+      "y": 4.163666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 82,
+      "data_values": {
+        "petal_length_cm": 3.7,
+        "petal_width_cm": 1.0
+      },
+      "id": "el_0113",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 5.983857142857143,
+      "y": 3.873,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 83,
+      "data_values": {
+        "petal_length_cm": 3.9,
+        "petal_width_cm": 1.2
+      },
+      "id": "el_0114",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 7.444428571428572,
+      "y": 3.2916666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 84,
+      "data_values": {
+        "petal_length_cm": 5.1,
+        "petal_width_cm": 1.6
+      },
+      "id": "el_0115",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.714142857142859,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 85,
+      "data_values": {
+        "petal_length_cm": 4.5,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0116",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.714142857142859,
+      "y": 3.2916666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 86,
+      "data_values": {
+        "petal_length_cm": 4.5,
+        "petal_width_cm": 1.6
+      },
+      "id": "el_0117",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.95757142857143,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 87,
+      "data_values": {
+        "petal_length_cm": 4.7,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0118",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.592428571428573,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 88,
+      "data_values": {
+        "petal_length_cm": 4.4,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0119",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.227285714285714,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 89,
+      "data_values": {
+        "petal_length_cm": 4.1,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0120",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.105571428571429,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 90,
+      "data_values": {
+        "petal_length_cm": 4.0,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0121",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.592428571428573,
+      "y": 3.873,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 91,
+      "data_values": {
+        "petal_length_cm": 4.4,
+        "petal_width_cm": 1.2
+      },
+      "id": "el_0122",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.835857142857144,
+      "y": 3.5823333333333336,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 92,
+      "data_values": {
+        "petal_length_cm": 4.6,
+        "petal_width_cm": 1.4
+      },
+      "id": "el_0123",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.105571428571429,
+      "y": 3.873,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 93,
+      "data_values": {
+        "petal_length_cm": 4.0,
+        "petal_width_cm": 1.2
+      },
+      "id": "el_0124",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 5.253571428571429,
+      "y": 4.163666666666667,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 94,
+      "data_values": {
+        "petal_length_cm": 3.3,
+        "petal_width_cm": 1.0
+      },
+      "id": "el_0125",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.349000000000001,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 95,
+      "data_values": {
+        "petal_length_cm": 4.2,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0126",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.349000000000001,
+      "y": 3.873,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 96,
+      "data_values": {
+        "petal_length_cm": 4.2,
+        "petal_width_cm": 1.2
+      },
+      "id": "el_0127",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.349000000000001,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 97,
+      "data_values": {
+        "petal_length_cm": 4.2,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0128",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.470714285714286,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 98,
+      "data_values": {
+        "petal_length_cm": 4.3,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0129",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 4.888428571428571,
+      "y": 4.0183333333333335,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 99,
+      "data_values": {
+        "petal_length_cm": 3.0,
+        "petal_width_cm": 1.1
+      },
+      "id": "el_0130",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.227285714285714,
+      "y": 3.7276666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 100,
+      "data_values": {
+        "petal_length_cm": 4.1,
+        "petal_width_cm": 1.3
+      },
+      "id": "el_0131",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.539857142857144,
+      "y": 1.9836666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 101,
+      "data_values": {
+        "petal_length_cm": 6.0,
+        "petal_width_cm": 2.5
+      },
+      "id": "el_0132",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.444428571428572,
+      "y": 2.8556666666666666,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 102,
+      "data_values": {
+        "petal_length_cm": 5.1,
+        "petal_width_cm": 1.9
+      },
+      "id": "el_0133",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.41814285714286,
+      "y": 2.5649999999999995,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 103,
+      "data_values": {
+        "petal_length_cm": 5.9,
+        "petal_width_cm": 2.1
+      },
+      "id": "el_0134",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.053,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 104,
+      "data_values": {
+        "petal_length_cm": 5.6,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0135",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.296428571428573,
+      "y": 2.419666666666666,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 105,
+      "data_values": {
+        "petal_length_cm": 5.8,
+        "petal_width_cm": 2.2
+      },
+      "id": "el_0136",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 9.270142857142858,
+      "y": 2.5649999999999995,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 106,
+      "data_values": {
+        "petal_length_cm": 6.6,
+        "petal_width_cm": 2.1
+      },
+      "id": "el_0137",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 6.714142857142859,
+      "y": 3.146333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 107,
+      "data_values": {
+        "petal_length_cm": 4.5,
+        "petal_width_cm": 1.7
+      },
+      "id": "el_0138",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.905000000000001,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 108,
+      "data_values": {
+        "petal_length_cm": 6.3,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0139",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.296428571428573,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 109,
+      "data_values": {
+        "petal_length_cm": 5.8,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0140",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.66157142857143,
+      "y": 1.9836666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 110,
+      "data_values": {
+        "petal_length_cm": 6.1,
+        "petal_width_cm": 2.5
+      },
+      "id": "el_0141",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.444428571428572,
+      "y": 2.7103333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 111,
+      "data_values": {
+        "petal_length_cm": 5.1,
+        "petal_width_cm": 2.0
+      },
+      "id": "el_0142",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.687857142857144,
+      "y": 2.8556666666666666,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 112,
+      "data_values": {
+        "petal_length_cm": 5.3,
+        "petal_width_cm": 1.9
+      },
+      "id": "el_0143",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.931285714285715,
+      "y": 2.5649999999999995,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 113,
+      "data_values": {
+        "petal_length_cm": 5.5,
+        "petal_width_cm": 2.1
+      },
+      "id": "el_0144",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.322714285714287,
+      "y": 2.7103333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 114,
+      "data_values": {
+        "petal_length_cm": 5.0,
+        "petal_width_cm": 2.0
+      },
+      "id": "el_0145",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.444428571428572,
+      "y": 2.129,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 115,
+      "data_values": {
+        "petal_length_cm": 5.1,
+        "petal_width_cm": 2.4
+      },
+      "id": "el_0146",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.687857142857144,
+      "y": 2.2743333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 116,
+      "data_values": {
+        "petal_length_cm": 5.3,
+        "petal_width_cm": 2.3
+      },
+      "id": "el_0147",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.931285714285715,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 117,
+      "data_values": {
+        "petal_length_cm": 5.5,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0148",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 9.391857142857145,
+      "y": 2.419666666666666,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 118,
+      "data_values": {
+        "petal_length_cm": 6.7,
+        "petal_width_cm": 2.2
+      },
+      "id": "el_0149",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 9.635285714285716,
+      "y": 2.2743333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 119,
+      "data_values": {
+        "petal_length_cm": 6.9,
+        "petal_width_cm": 2.3
+      },
+      "id": "el_0150",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.322714285714287,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 120,
+      "data_values": {
+        "petal_length_cm": 5.0,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0151",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.174714285714288,
+      "y": 2.2743333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 121,
+      "data_values": {
+        "petal_length_cm": 5.7,
+        "petal_width_cm": 2.3
+      },
+      "id": "el_0152",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.201000000000001,
+      "y": 2.7103333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 122,
+      "data_values": {
+        "petal_length_cm": 4.9,
+        "petal_width_cm": 2.0
+      },
+      "id": "el_0153",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 9.391857142857145,
+      "y": 2.7103333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 123,
+      "data_values": {
+        "petal_length_cm": 6.7,
+        "petal_width_cm": 2.0
+      },
+      "id": "el_0154",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.201000000000001,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 124,
+      "data_values": {
+        "petal_length_cm": 4.9,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0155",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.174714285714288,
+      "y": 2.5649999999999995,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 125,
+      "data_values": {
+        "petal_length_cm": 5.7,
+        "petal_width_cm": 2.1
+      },
+      "id": "el_0156",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.539857142857144,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 126,
+      "data_values": {
+        "petal_length_cm": 6.0,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0157",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.0792857142857155,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 127,
+      "data_values": {
+        "petal_length_cm": 4.8,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0158",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.201000000000001,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 128,
+      "data_values": {
+        "petal_length_cm": 4.9,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0159",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.053,
+      "y": 2.5649999999999995,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 129,
+      "data_values": {
+        "petal_length_cm": 5.6,
+        "petal_width_cm": 2.1
+      },
+      "id": "el_0160",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.296428571428573,
+      "y": 3.2916666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 130,
+      "data_values": {
+        "petal_length_cm": 5.8,
+        "petal_width_cm": 1.6
+      },
+      "id": "el_0161",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.66157142857143,
+      "y": 2.8556666666666666,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 131,
+      "data_values": {
+        "petal_length_cm": 6.1,
+        "petal_width_cm": 1.9
+      },
+      "id": "el_0162",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 9.026714285714288,
+      "y": 2.7103333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 132,
+      "data_values": {
+        "petal_length_cm": 6.4,
+        "petal_width_cm": 2.0
+      },
+      "id": "el_0163",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.053,
+      "y": 2.419666666666666,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 133,
+      "data_values": {
+        "petal_length_cm": 5.6,
+        "petal_width_cm": 2.2
+      },
+      "id": "el_0164",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.444428571428572,
+      "y": 3.437,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 134,
+      "data_values": {
+        "petal_length_cm": 5.1,
+        "petal_width_cm": 1.5
+      },
+      "id": "el_0165",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.053,
+      "y": 3.5823333333333336,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 135,
+      "data_values": {
+        "petal_length_cm": 5.6,
+        "petal_width_cm": 1.4
+      },
+      "id": "el_0166",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.66157142857143,
+      "y": 2.2743333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 136,
+      "data_values": {
+        "petal_length_cm": 6.1,
+        "petal_width_cm": 2.3
+      },
+      "id": "el_0167",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.053,
+      "y": 2.129,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 137,
+      "data_values": {
+        "petal_length_cm": 5.6,
+        "petal_width_cm": 2.4
+      },
+      "id": "el_0168",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.931285714285715,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 138,
+      "data_values": {
+        "petal_length_cm": 5.5,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0169",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.0792857142857155,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 139,
+      "data_values": {
+        "petal_length_cm": 4.8,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0170",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.80957142857143,
+      "y": 2.5649999999999995,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 140,
+      "data_values": {
+        "petal_length_cm": 5.4,
+        "petal_width_cm": 2.1
+      },
+      "id": "el_0171",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.053,
+      "y": 2.129,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 141,
+      "data_values": {
+        "petal_length_cm": 5.6,
+        "petal_width_cm": 2.4
+      },
+      "id": "el_0172",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.444428571428572,
+      "y": 2.2743333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 142,
+      "data_values": {
+        "petal_length_cm": 5.1,
+        "petal_width_cm": 2.3
+      },
+      "id": "el_0173",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.444428571428572,
+      "y": 2.8556666666666666,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 143,
+      "data_values": {
+        "petal_length_cm": 5.1,
+        "petal_width_cm": 1.9
+      },
+      "id": "el_0174",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.41814285714286,
+      "y": 2.2743333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 144,
+      "data_values": {
+        "petal_length_cm": 5.9,
+        "petal_width_cm": 2.3
+      },
+      "id": "el_0175",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 8.174714285714288,
+      "y": 1.9836666666666665,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 145,
+      "data_values": {
+        "petal_length_cm": 5.7,
+        "petal_width_cm": 2.5
+      },
+      "id": "el_0176",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.566142857142858,
+      "y": 2.2743333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 146,
+      "data_values": {
+        "petal_length_cm": 5.2,
+        "petal_width_cm": 2.3
+      },
+      "id": "el_0177",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.322714285714287,
+      "y": 2.8556666666666666,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 147,
+      "data_values": {
+        "petal_length_cm": 5.0,
+        "petal_width_cm": 1.9
+      },
+      "id": "el_0178",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.566142857142858,
+      "y": 2.7103333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 148,
+      "data_values": {
+        "petal_length_cm": 5.2,
+        "petal_width_cm": 2.0
+      },
+      "id": "el_0179",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.80957142857143,
+      "y": 2.2743333333333333,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 149,
+      "data_values": {
+        "petal_length_cm": 5.4,
+        "petal_width_cm": 2.3
+      },
+      "id": "el_0180",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 7.444428571428572,
+      "y": 3.001,
+      "w": 0.086,
+      "h": 0.086,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 150,
+      "data_values": {
+        "petal_length_cm": 5.1,
+        "petal_width_cm": 1.8
+      },
+      "id": "el_0181",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 10.49,
+      "y": 1.9,
+      "w": 0.15,
+      "h": 0.15,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.5,
+      "id": "el_0182",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "setosa",
+      "x": 10.76,
+      "y": 1.8699999999999999,
+      "w": 1.68,
+      "h": 0.25,
+      "size": 11.5,
+      "bold": false,
+      "align": "left",
+      "color": "#26343C",
+      "id": "el_0183",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 10.49,
+      "y": 2.38,
+      "w": 0.15,
+      "h": 0.15,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.5,
+      "id": "el_0184",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "versicolor",
+      "x": 10.76,
+      "y": 2.35,
+      "w": 1.68,
+      "h": 0.25,
+      "size": 11.5,
+      "bold": false,
+      "align": "left",
+      "color": "#26343C",
+      "id": "el_0185",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.49,
+      "y": 2.86,
+      "w": 0.15,
+      "h": 0.15,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.5,
+      "id": "el_0186",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "virginica",
+      "x": 10.76,
+      "y": 2.83,
+      "w": 1.68,
+      "h": 0.25,
+      "size": 11.5,
+      "bold": false,
+      "align": "left",
+      "color": "#26343C",
+      "id": "el_0187",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    }
+  ],
+  "schema_version": "7.6.0-dev",
+  "figure_contract": {
+    "claim": "The three iris species occupy different regions in petal measurements.",
+    "archetype": "quantitative_grid",
+    "output_mode": "presentation",
+    "unverified": []
+  },
+  "evidence_records": [
+    {
+      "id": "source_1",
+      "source": "data/iris_uci.csv",
+      "status": "data_driven",
+      "scope": "Every point traces to a row in the public UCI Iris dataset.",
+      "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 name: academic-defense-ppt
-version: 7.5.0-dev
+version: 7.6.0-dev
 description: Research narrative planning and source-matched academic slides with editable vector figures and projection-aware QA.
 ---
 
@@ -25,6 +25,17 @@ Produce technically accurate, readable academic-defense presentations. Select vi
 ## FigureSpec
 Canonical source is JSON under `figure_specs/`. Render SVG and editable native PowerPoint from the same FigureSpec. C01 primitives include text, rect, trapezoid, line, polyline, ellipse, sensor and graph. F07 also uses grid and stack_grid.
 
+Before drawing, write a FigureContract with one defensible claim, output mode, evidence status and unverified items. Every FigureSpec element must have a stable ID, semantic role and evidence reference. Validate against `specs/figure_spec_v76.schema.json` and run `python tools/validate_scientific_ir.py`. For C01, the declared critical relations must agree with the visible directed connectors; see `specs/c01_expected_topology_v76.json`.
+
+For quantitative figures, define source file/hash, row unit, variable units, sample size, transformations, chart kind and the meaning of each statistic/interval before rendering. Use `specs/iris_charts_v76.json` for scatter, distribution, point interval, confusion matrix, ablation and trend interval examples; run `python tools/build_quantitative_examples.py` and `python tools/validate_quantitative_examples.py`. Preserve row-level links for raw points and calculation links for summaries. A preview chart is not evidence for an unprovided statistical claim.
+
+For image panels, retain raw image hash and license, calibration, crop/stitch/LUT/intensity history, scale bar calculation, linked quantification and text descriptions. The CC0 cell example is built with `python tools/build_image_quant_example.py` and checked with `python tools/validate_image_quant_example.py`. A raster picture is permitted only for a disclosed source image, never as a flattened substitute for editable axes and annotations.
+
+Use `presentation` for projection QA and `publication` only after checking the target journal's current final-size and file-format rules. Both modes use the same scientific relationships and source data. Record actual PDF renderer and manual final-size inspection separately from automated checks. See `docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md`.
+Run `python tools/validate_output_profiles.py` to enforce the declared presentation size and minimum text floor. The 9.5 pt floor is a preflight threshold, not proof of projected readability. Publication builds require a journal-specific target contract; see `specs/output_profiles_v76.json`.
+
+For release evaluation, run `python tools/validate_research_benchmark.py` and apply all hard failures in `specs/research_figure_benchmark_v76.json`; no average score overrides a critical relation/value error, unclear source status, undisclosed image processing or unreadable content. Automatic checks are a preflight; record independent domain review separately.
+
 ## Deck planning (V7.5 draft)
 Before drawing, create a DeckSpec with audience, time budget, narrative order, delivery requirements and ordered SlideSpecs. Each SlideSpec needs one defensible claim, source evidence/status, page role, layout, on-slide text and speaker notes. Keep FigureSpec scientific topology independent of style and page layout. Derive a SourceStyleSpec from 5–7 evidenced visual anchors. Follow `docs/DECK_PLANNING_V75.md` and validate the example contract with `python tools/validate_deck_spec.py`.
 
@@ -43,4 +54,4 @@ When the user wants the complete method on one slide, use the V7.4 layout:
 ## QA
 Verify topology and terminology against the paper/caption/official code. Render the complete deck to PDF. Check text overlaps, clipping, out-of-bounds objects, SVG validity, raster objects and theme shadows. Do not claim pixel identity without high-resolution source and direct overlay.
 
-Reproducible V7.4 composite QA: 227 native shapes; 41 text boxes; zero text-box intersections, out-of-bounds objects, raster pictures and theme shadows. Windows PowerPoint 16.0 PDF/PNG export was inspected. These counts describe the reproducible FigureSpec build, not the earlier uncommitted local prototype.
+Current C01 composite QA: 228 native shapes; 41 text boxes; zero text-box intersections, out-of-bounds objects, raster pictures and theme shadows. The five critical upper-panel relations and nine lower-panel relations are checked against visible connectors. Windows PowerPoint 16.0 PDF/PNG export was inspected.
