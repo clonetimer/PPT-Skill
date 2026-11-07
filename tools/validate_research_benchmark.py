@@ -43,6 +43,7 @@ def artifact_paths(task_id):
         paths.extend((f"dist/{stem}_preview.pdf", f"dist/{stem}_preview.png"))
     elif task_id == "DECK01":
         paths.append(f"dist/{stem}.pdf")
+        paths.extend(f"dist/{stem}_slide_{page}.png" for page in range(1, 4))
     return paths
 
 

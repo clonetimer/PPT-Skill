@@ -94,6 +94,7 @@
       "docs/C01_V73_SOURCE.md",
       "docs/C01_V74_QA.md",
       "docs/C01_V76_SOURCE_CORRECTION.md",
+      "docs/C01_LITERATURE_COMPARISON_2026-11-07.md",
       "docs/DECK_PLANNING_V75.md",
       "docs/QA_REPORT_V7.md",
       "docs/SOURCE_ATTRIBUTION.md",
@@ -132,7 +133,10 @@
       "dist/render_record_v76.json",
       "dist/export_quantitative_metadata_v76.json",
       "dist/DECK01_c01_defense.pptx",
-      "dist/DECK01_c01_defense.pdf"
+      "dist/DECK01_c01_defense.pdf",
+      "dist/DECK01_c01_defense_slide_1.png",
+      "dist/DECK01_c01_defense_slide_2.png",
+      "dist/DECK01_c01_defense_slide_3.png"
     ],
     "planning_specs": ["specs/deck_spec_v75.example.json", "specs/deck_spec_v75.schema.json"],
     "scientific_contracts": ["specs/figure_contracts_v76.json", "specs/figure_spec_v76.schema.json", "specs/c01_expected_topology_v76.json", "specs/c01_standalone_expected_topology_v76.json", "specs/iris_charts_v76.json", "specs/wine_charts_v76.json", "specs/chart_spec_v76.schema.json", "specs/research_figure_benchmark_v76.json", "specs/output_profiles_v76.json"],
