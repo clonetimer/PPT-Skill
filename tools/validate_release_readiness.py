@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 from scientific_ir import ROOT
-from validate_research_benchmark import OUTPUTS
+from validate_research_benchmark import artifact_paths
 
 
 def sha256(path: Path) -> str:
@@ -30,7 +30,7 @@ def prepare_template() -> dict:
             "required_discipline": task["discipline"], "reviewer_id": "",
             "source_sha256": sha256(ROOT / task["source"]),
             "input_sha256": sha256(ROOT / task["input"]),
-            "output_sha256": sha256(ROOT / OUTPUTS[task["id"]]),
+            "artifacts_sha256": {path: sha256(ROOT / path) for path in artifact_paths(task["id"])},
             "source_checked": False, "scientific_relationships_checked": False,
             "final_size": {"checked": False, "context": "", "evidence": ""},
             "scores": {dimension: {"score": None, "evidence": ""}
@@ -69,12 +69,15 @@ def validate_review(review: dict) -> None:
                 f"{task_id}: reviewer field does not cover {task['discipline']}")
         require(result.get("source_checked") is True, f"{task_id}: source check required")
         require(result.get("scientific_relationships_checked") is True, f"{task_id}: science check required")
-        output = ROOT / OUTPUTS[task_id]
         source = ROOT / task["source"]
         spec = ROOT / task["input"]
         require(result.get("source_sha256") == sha256(source), f"{task_id}: source changed")
         require(result.get("input_sha256") == sha256(spec), f"{task_id}: input changed")
-        require(result.get("output_sha256") == sha256(output), f"{task_id}: output changed")
+        artifacts = result.get("artifacts_sha256", {})
+        expected_artifacts = artifact_paths(task_id)
+        require(set(artifacts) == set(expected_artifacts), f"{task_id}: reviewed artifact list changed")
+        for path in expected_artifacts:
+            require(artifacts[path] == sha256(ROOT / path), f"{task_id}: {path} changed")
         final_size = result.get("final_size", {})
         require(final_size.get("checked") is True and bool(final_size.get("context")), f"{task_id}: final-size check required")
         require(bool(final_size.get("evidence")), f"{task_id}: final-size evidence required")

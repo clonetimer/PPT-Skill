@@ -9,7 +9,7 @@ from pathlib import Path
 
 from scientific_ir import ROOT
 from validate_release_readiness import prepare_template
-from validate_research_benchmark import OUTPUTS
+from validate_research_benchmark import artifact_paths
 
 
 EXTRA = {
@@ -30,15 +30,7 @@ def bundle_paths() -> list[Path]:
     paths = {ROOT / rel for rel in EXTRA}
     for task in benchmark["tasks"]:
         paths.update(ROOT / task[key] for key in ("source", "input"))
-        output = ROOT / OUTPUTS[task["id"]]
-        paths.add(output)
-        stem = output.stem
-        for candidate in (ROOT / f"examples/{stem}.svg", ROOT / f"dist/{stem}.pdf",
-                          ROOT / f"dist/{stem}_preview.pdf", ROOT / f"dist/{stem}.preview.png",
-                          ROOT / f"dist/{stem}.grayscale.png", ROOT / f"dist/{stem}.protanopia.png",
-                          ROOT / f"dist/{stem}.deuteranopia.png"):
-            if candidate.is_file():
-                paths.add(candidate)
+        paths.update(ROOT / path for path in artifact_paths(task["id"]))
     missing = [str(path) for path in paths if not path.is_file()]
     if missing:
         raise FileNotFoundError(f"Review inputs missing: {missing}")

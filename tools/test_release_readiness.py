@@ -38,9 +38,15 @@ class ReleaseGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_review(review)
 
-    def test_changed_output_blocks_stale_review(self):
+    def test_changed_pdf_blocks_stale_review(self):
         review = self.complete_synthetic_review()
-        review["tasks"]["Q03P"]["output_sha256"] = "0" * 64
+        review["tasks"]["Q03P"]["artifacts_sha256"]["dist/Q03_iris_mean_ci_nature.pdf"] = "0" * 64
+        with self.assertRaises(ValueError):
+            validate_review(review)
+
+    def test_missing_preview_blocks_release(self):
+        review = self.complete_synthetic_review()
+        review["tasks"]["I01"]["artifacts_sha256"].pop("dist/I01_cell_image_quant.preview.png")
         with self.assertRaises(ValueError):
             validate_review(review)
 

@@ -18,6 +18,7 @@
 - CI now uploads that unfilled bundle as a separate artifact after all automated figure checks.
 - Render records now hash canonical SVG XML and PPTX member payloads, so CI detects geometry or style drift while ignoring ZIP timestamp/order noise.
 - Stratified benchmark tasks by four disciplines and required each task's independent reviewer to declare matching field expertise.
+- Bound release reviews to every required visual artifact, including PDFs and accessibility previews, rather than only the editable PPTX; missing or changed outputs block release.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

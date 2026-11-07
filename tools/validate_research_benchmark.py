@@ -21,6 +21,23 @@ OUTPUTS = {
 }
 
 
+def artifact_paths(task_id):
+    """Every artifact an independent reviewer must inspect for this task."""
+    output = OUTPUTS[task_id]
+    stem = output.removeprefix("dist/").removesuffix(".pptx")
+    paths = [output]
+    if task_id != "DECK01":
+        paths.append(f"examples/{stem}.svg")
+    if task_id.startswith("Q") or task_id == "I01":
+        paths.extend(f"dist/{stem}.{suffix}" for suffix in
+                     ("pdf", "preview.png", "grayscale.png", "protanopia.png", "deuteranopia.png"))
+    elif task_id == "C01_composite":
+        paths.append(f"dist/{stem}_preview.pdf")
+    elif task_id == "DECK01":
+        paths.append(f"dist/{stem}.pdf")
+    return paths
+
+
 def main():
     benchmark = json.loads((ROOT / "specs/research_figure_benchmark_v76.json").read_text(encoding="utf-8"))
     tasks = benchmark["tasks"]
@@ -41,7 +58,7 @@ def main():
         assert task["expected"] and task["traps"]
         assert task["status"] in {"automated_fixture", "contract_only"}
         if task["status"] == "automated_fixture":
-            assert (ROOT / OUTPUTS[task["id"]]).is_file()
+            assert all((ROOT / path).is_file() for path in artifact_paths(task["id"]))
     ready = sum(task["status"] == "automated_fixture" for task in tasks)
     assert ready == len(tasks) == 14
     print(f"PASS benchmark contract: {len(tasks)} automated fixtures; expert review pending")
