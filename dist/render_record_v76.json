@@ -10,6 +10,7 @@
     "python": "3.12.14",
     "python_pptx": "1.0.2",
     "pillow": "13.0.0",
+    "pypdf": "6.10.0",
     "pdf_exporter": {
       "exporter": "Microsoft PowerPoint",
       "version": "16.0",
@@ -27,7 +28,6 @@
     }
   },
   "platform": "Windows-11-10.0.26200-SP0",
-  "font_substitution": "not_measured",
   "source_assets_sha256": {
     "data/iris_uci.csv": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
     "data/cell_scikit_image_v026.png": "8d23a7fb81f7cc877cd09f330357fc7f595651306e84e17252f6e0a1b3f61515"
@@ -46,6 +46,15 @@
       },
       "qa": {
         "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
         "manual_final_size": "pending_independent_review"
       }
     },
@@ -62,6 +71,15 @@
       },
       "qa": {
         "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
         "manual_final_size": "pending_independent_review"
       }
     },
@@ -78,6 +96,15 @@
       },
       "qa": {
         "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
         "manual_final_size": "pending_independent_review"
       }
     },
@@ -94,6 +121,15 @@
       },
       "qa": {
         "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
         "manual_final_size": "pending_independent_review"
       }
     },
@@ -110,6 +146,15 @@
       },
       "qa": {
         "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
         "manual_final_size": "pending_independent_review"
       }
     },
@@ -126,6 +171,15 @@
       },
       "qa": {
         "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
         "manual_final_size": "pending_independent_review"
       }
     },
@@ -142,6 +196,15 @@
       },
       "qa": {
         "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
         "manual_final_size": "pending_independent_review"
       }
     },
@@ -158,6 +221,15 @@
       },
       "qa": {
         "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
         "manual_final_size": "pending_independent_review"
       }
     }

@@ -7,6 +7,7 @@
 - Added a CC0 quantitative-phase image plus raw-pixel histogram, with source hash, processing log, calibration and scale-bar checks.
 - Added CI build and validation for the new examples. Independent domain and final-size review remains pending.
 - Added a Nature two-column publication-size Q03 demonstrator with the same rows/statistics as the presentation panel, final-size PDF geometry and embedded-font checks; CI now verifies committed PowerPoint export records and SVG/PPTX/PDF labels without forging a Linux exporter claim.
+- Recorded observed PDF font names and embedding for all eight Windows-exported research figures, including Type 0 composite fonts, and checked them against the requested font family.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from record_scientific_render import ROOT, IDS, canonical_spec_digest, digest
+from record_scientific_render import ROOT, IDS, canonical_spec_digest, digest, pdf_font_audit
 
 
 def main():
@@ -22,12 +22,15 @@ def main():
         assert figure_id in IDS
         spec = ROOT / figure["figure_spec"]
         assert canonical_spec_digest(spec) == figure["input_canonical_sha256"], figure_id
+        expected_font = json.loads(spec.read_text(encoding="utf-8"))["style"]["font"]
+        font_audit = pdf_font_audit(ROOT / f"dist/{figure_id}.pdf", expected_font)
+        assert font_audit == figure["qa"]["pdf_fonts"], figure_id
+        assert font_audit["embedded"] and not font_audit["substitution_detected"], figure_id
         for kind in ("pdf", "preview.png"):
             assert digest(ROOT / f"dist/{figure_id}.{kind}") == figure["outputs_sha256"][kind], (figure_id, kind)
         assert figure["qa"]["automated"] == "pass"
         assert figure["qa"]["manual_final_size"] == "pending_independent_review"
-    assert record["font_substitution"] == "not_measured"
-    print(f"PASS committed render record: {len(IDS)} Windows-exported figures; manual review pending")
+    print(f"PASS committed render record: {len(IDS)} Windows-exported figures with embedded expected fonts; manual review pending")
 
 
 if __name__ == "__main__":
