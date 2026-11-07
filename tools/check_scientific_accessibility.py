@@ -12,6 +12,11 @@ from scientific_ir import ROOT
 
 IDS = ["Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature",
        "Q04_iris_confusion", "Q05_iris_ablation", "Q06_iris_trend_interval", "I01_cell_image_quant"]
+SCHEMATIC_SPECS = ["figure_specs/B01_engineering_fdir.json",
+                   "figure_specs/F07_telemetry_embedding.json",
+                   "figure_specs/c01/C01_FBG_construction.json",
+                   "figure_specs/c01/C01_SEANet_graph_level.json",
+                   "figure_specs/c01/C01_composite_defense_slide.json"]
 # Full-severity Machado matrices (2009), applied in linear sRGB for screening only.
 # https://doi.org/10.1109/TVCG.2009.113
 # https://colour.readthedocs.io/en/latest/generated/colour.matrix_cvd_Machado2009.html
@@ -71,6 +76,22 @@ def check_mark_contrast(figure_id, spec):
             assert contrast(color, "#FFFFFF") >= 3, (figure_id, element["id"], color)
 
 
+def check_arrow_contrast(figure_id, spec):
+    arrows = [element for element in spec["elements"] if element.get("arrow")]
+    assert arrows, figure_id
+    backgrounds = [element for element in spec["elements"]
+                   if element["type"] == "rect" and element.get("fill")]
+    for element in arrows:
+        color = element.get("color", "#43525B")  # Renderer default for native connectors.
+        for fraction in (.25, .5, .75):
+            x = element["x1"] + fraction*(element["x2"]-element["x1"])
+            y = element["y1"] + fraction*(element["y2"]-element["y1"])
+            adjacent = next((panel["fill"] for panel in reversed(backgrounds)
+                             if panel["x"] <= x <= panel["x"]+panel["w"]
+                             and panel["y"] <= y <= panel["y"]+panel["h"]), "#FFFFFF")
+            assert contrast(color, adjacent) >= 3, (figure_id, element["id"], color, adjacent)
+
+
 def main():
     for figure_id in IDS:
         folder = "image" if figure_id.startswith("I") else "quant"
@@ -108,6 +129,10 @@ def main():
         for name, matrix in MACHADO_FULL.items():
             cvd_preview(Image.open(preview), matrix).save(ROOT / f"dist/{figure_id}.{name}.png")
         print(f"PASS {figure_id}: text/mark contrast and redundant encoding; grayscale/CVD previews generated")
+    for relpath in SCHEMATIC_SPECS:
+        spec = json.loads((ROOT / relpath).read_text(encoding="utf-8"))
+        check_arrow_contrast(spec["id"], spec)
+        print(f"PASS {spec['id']}: critical connector contrast")
     print("Manual checks pending: projection/print readability; CVD previews are approximations")
 
 

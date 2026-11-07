@@ -32,6 +32,8 @@
 - Validated Q01's visible legend against source-group labels, colors and native symbol shapes, and checked visible category/numeric ticks on all six Iris charts and Q03P against their coordinates; label swaps now fail negative tests instead of silently misidentifying observations.
 - Expanded the second-stage independent-review packet to include the source data, chart specifications, builders and validators, so reproducibility can be checked from the extracted archive.
 - Added a 3:1 project preflight for essential chart marks and lines on white plots; darkened Q06 raw observations from 2.18:1 to 3.51:1 against the background, with a low-contrast mutation test.
+- Extended the 3:1 preflight to the visible arrows in the five schematic FigureSpecs, with a low-contrast C01 connector mutation test.
+- Added a requirement-by-requirement V7.6 completion audit that distinguishes machine-verified clauses from historical comparison, cross-dataset generalization and independent final-size review still needing evidence.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

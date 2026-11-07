@@ -9,7 +9,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from build_quantitative_examples import CONFIG, ROOT, load_data
-from check_scientific_accessibility import check_mark_contrast, check_text_contrast
+from check_scientific_accessibility import check_arrow_contrast, check_mark_contrast, check_text_contrast
 from validate_image_quant_example import validate as validate_image
 from validate_quantitative_examples import validate_outputs
 from validate_publication_example import main as validate_publication
@@ -156,6 +156,13 @@ class ScientificValueMutationTests(unittest.TestCase):
         next(item for item in changed["elements"] if "data_row" in item)["fill"] = "#9CB4BA"
         with self.assertRaises(AssertionError):
             check_mark_contrast("Q06_iris_trend_interval", changed)
+
+    def test_low_contrast_critical_arrow_fails(self):
+        path = ROOT / "figure_specs/c01/C01_composite_defense_slide.json"
+        changed = json.loads(path.read_text(encoding="utf-8"))
+        next(item for item in changed["elements"] if item.get("semantic_link"))["color"] = "#D7DEE3"
+        with self.assertRaises(AssertionError):
+            check_arrow_contrast("C01_composite_defense_slide", changed)
 
 
 if __name__ == "__main__":
