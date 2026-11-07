@@ -79,6 +79,14 @@ jobs:
           python tools/audit_pptx.py dist/DECK01_c01_defense.pptx --strict
       - name: Compile tools
         run: python -m py_compile tools/*.py
+      - name: Prepare independent review bundle
+        run: python tools/prepare_scientific_review_bundle.py --output dist/scientific_review_bundle_v76.zip
+      - name: Upload unfilled review bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-v7.6-independent-review-bundle
+          path: dist/scientific_review_bundle_v76.zip
+          if-no-files-found: error
       - name: Upload generated vector assets
         uses: actions/upload-artifact@v4
         with:

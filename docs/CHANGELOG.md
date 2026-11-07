@@ -15,6 +15,7 @@
 - Audited displayed bootstrap whisker endpoints against computed intervals for presentation and publication figures; moved-endpoint mutations now fail.
 - Verified that I01's drawn scale bar, histogram bar geometry and printed threshold summary match the raw image and declared calibration; scale-bar and histogram mutations now fail.
 - Added a portable, unfilled 14-task review bundle generator for independent source and final-size inspection.
+- CI now uploads that unfilled bundle as a separate artifact after all automated figure checks.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.
