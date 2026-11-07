@@ -62,7 +62,7 @@ def main():
         s02.shapes._spTree.insert_element_before(deepcopy(shape.element), 'p:extLst')
     make_page(s03, 3, "evidence boundary", "What the redraw establishes",
               contract["slides"][2]["claim"], contract["slides"][2]["on_slide"],
-              "Sensor glyphs and graph adjacency are schematic · high-resolution overlay pending")
+              "Sensor glyphs and exact graph adjacency are schematic · source topology checked")
     for slide, slide_spec in zip(prs.slides, contract["slides"]):
         slide.notes_slide.notes_text_frame.text = slide_spec["speaker_notes"]
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)

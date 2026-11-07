@@ -39,11 +39,11 @@ Current deliverables (legacy V7.4 filenames retained):
 
 The V7.3/V7.4 filenames and FigureSpec `version` fields identify the layout lineage; the active scientific evidence contract is `schema_version: 7.6.0-dev` and includes the C01 source correction below.
 
-Rebuild with `python tools/build_c01_v74.py` and validate with `python tools/validate_c01_v74.py`. The current development build has 234 native PowerPoint shapes and 42 text boxes. Automated checks found zero text-box intersections, out-of-bounds objects, picture objects and inherited theme shadows. `tools/export_c01_preview.ps1` exports the PDF and PNG with Windows PowerPoint 16.0. The V7.6 topology correction is documented in [C01 source correction](docs/C01_V76_SOURCE_CORRECTION.md). A [direct literature comparison](docs/C01_LITERATURE_COMPARISON_2026-11-07.md) identifies remaining omissions in the FBG explanation and records correction of a stale deck PNG; independent domain/final-size review remains pending.
+Rebuild with `python tools/build_c01_v74.py` and validate with `python tools/validate_c01_v74.py`. The current development build has 241 native PowerPoint shapes and 46 text boxes. Automated checks found zero text-box intersections, out-of-bounds objects, picture objects and inherited theme shadows. `tools/export_c01_preview.ps1` exports the composite PDF/PNG and all three deck PNGs with Windows PowerPoint 16.0. The [C01 source correction](docs/C01_V76_SOURCE_CORRECTION.md) and [direct literature comparison](docs/C01_LITERATURE_COMPARISON_2026-11-07.md) record the source-visible routes, repaired FBG explanation and remaining evidence boundary; independent domain/final-size review remains pending.
 
 ## C01 — Two-slide detail version
 The two-panel C01 method is also available as two separate source-aligned slides:
-1. FBG construction: sensor signals → OCF/notch filter → B1/B2/B3/Bq subgraphs → total graph.
+1. FBG construction: sensor signals → OCF/notch filter → band-pass filtering → B1/B2/B3/Bq subgraphs → connected total graph.
 2. SEANet diagnosis: Input → GCN → pooling → GCN → pooling → SR → summation → Dense → fault class. EA feeds the first GCN; the first pooling also branches to a second SR that reaches the summation.
 
 Build and validate the two-slide detail version:

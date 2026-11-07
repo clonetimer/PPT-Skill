@@ -18,7 +18,7 @@
   "elements": [
     {
       "type": "text",
-      "text": "Graph construction (time-frequency graph)",
+      "text": "Graph construction (frequency-band graph)",
       "x": 0.45,
       "y": 0.2,
       "w": 12.43,
@@ -1443,6 +1443,23 @@
       "align": "left",
       "italic": true,
       "id": "el_0040",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Fault cues clearer",
+      "x": 4.58,
+      "y": 5.13,
+      "w": 1.35,
+      "h": 0.18,
+      "size": 9.5,
+      "font": "Times New Roman",
+      "color": "#43525B",
+      "bold": false,
+      "align": "center",
+      "italic": false,
+      "id": "el_0041",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     }

@@ -52,31 +52,45 @@ def make_spec():
     txt("OCF / notch filter", 3.18, 1.43, 1.65, .27, 11, True, semantic_id="ocf")
     txt("Band subgraphs", 5.15, 1.43, 1.58, .27, 11, True, semantic_id="band_group")
     txt("Total graph", 7.31, 1.43, 1.46, .27, 11, True, semantic_id="total_graph")
+    txt("band-pass filters", 5.15, 1.72, 1.58, .18, 9.5, color=muted)
+    txt("connected bands", 7.31, 1.72, 1.46, .18, 9.5, color=muted)
 
     colors = ["#668A9C", "#6D9A8E", "#B88E58", "#8A7CA5"]
     labels = ["Sensor 1", "Sensor 2", "Sensor M-1", "Sensor M"]
     bands = ["B₁", "B₂", "B₃", "Bq"]
-    box(5.02, 1.75, 1.66, 1.86, stroke="#D5DEE4", semantic_id="band_group")
+    box(5.02, 1.94, 1.66, 1.79, stroke="#D5DEE4", semantic_id="band_group")
+    box(7.30, 1.94, 1.50, 1.79, stroke="#D5DEE4", semantic_id="total_graph")
     for i, (label, band, color) in enumerate(zip(labels, bands, colors)):
-        y = 1.79 + i * .45
-        add("sensor", x=.69, y=y, scale=.73, variant=i, color=color)
-        txt(label, 1.08, y+.035, 1.02, .22, 10.5, align="left")
-        wave = [(2.02+j*.092, y+.16+(.065 if j%4 == 1 else -.05 if j%4 == 3 else 0)) for j in range(9)]
+        signal_y = 1.79 + i * .45
+        band_y = 1.99 + i * .42
+        add("sensor", x=.69, y=signal_y, scale=.73, variant=i, color=color)
+        txt(label, 1.08, signal_y+.035, 1.02, .22, 10.5, align="left")
+        wave = [(2.02+j*.092, signal_y+.16+(.065 if j%4 == 1 else -.05 if j%4 == 3 else 0)) for j in range(9)]
         add("polyline", points=wave, color=color, sw=1.2)
-        arrow(2.87, y+.15, 3.18, y+.15)
-        txt(band, 5.12, y+.035, .35, .22, 11, True, color=color, semantic_id=f"band_{i+1}")
+        arrow(2.87, signal_y+.15, 3.18, signal_y+.15)
+        txt(band, 5.12, band_y+.035, .35, .22, 11, True, color=color, semantic_id=f"band_{i+1}")
         graph = dict(graphs[i])
-        graph.update(x=5.51, y=y-.005, w=1.12, h=.31, semantic_id=f"band_{i+1}")
+        graph.update(x=5.51, y=band_y-.005, w=1.12, h=.31, semantic_id=f"band_{i+1}")
         elements.append(graph)
-        arrow(6.67, y+.15, 7.12, 2.72, semantic_link=f"band_{i+1}__total_graph")
+        arrow(6.67, band_y+.15, 7.39, band_y+.15, semantic_link=f"band_{i+1}__total_graph")
+        layer = dict(graphs[i])
+        layer.update(x=7.43, y=band_y-.005, w=1.23, h=.31, semantic_id="total_graph")
+        elements.append(layer)
     box(3.19, 1.87, 1.56, 1.67, fill="#F7F9FA", stroke="#AAB5BC", radius=.05, semantic_id="ocf")
     txt("Notch filter", 3.33, 2.13, 1.27, .28, 11, True)
     txt("Operational\ncomponent removed", 3.31, 2.65, 1.32, .55, 10)
+    txt("Fault cues clearer", 3.28, 3.25, 1.38, .20, 9.5, color="#43525B")
     arrow(4.75, 2.72, 5.05, 2.72, semantic_link="ocf__band_group")
-    total = dict(graphs[4])
-    total.update(x=7.32, y=1.92, w=1.43, h=1.53, semantic_id="total_graph")
-    arrow(7.13, 2.72, 7.30, 2.72)
-    elements.append(total)
+    for i in range(3):
+        top = 2.29 + i * .42
+        for x in (7.75, 8.12, 8.46):
+            add("line", x1=x, y1=top, x2=x+.04, y2=top+.10,
+                color="#43525B", sw=1.1, dash=True)
+    txt("Inter-band links schematic", 7.17, 3.58, 1.78, .20, 9.5, color=muted)
+    segment(8.05, 3.73, 8.05, 3.94, "total_graph__input")
+    segment(8.05, 3.94, .55, 3.94, "total_graph__input")
+    segment(.55, 3.94, .55, 5.43, "total_graph__input")
+    arrow(.55, 5.43, .68, 5.43, semantic_link="total_graph__input")
 
     txt("02  Graph-level diagnosis", .63, 4.19, 8.2, .30, 14, True, "left")
     # Separate geometry for this narrow panel keeps the scientific sequence readable.
@@ -132,7 +146,7 @@ def make_spec():
                       ["pooling_2", "sr_main"], ["sr_main", "sum"],
                       ["input", "ea"], ["ea", "gcn_1"],
                       ["pooling_1", "sr_ea"], ["sr_ea", "sum"], ["sum", "dense"]]
-    semantic_edges += [["ocf", "band_group"]]
+    semantic_edges += [["ocf", "band_group"], ["total_graph", "input"]]
     semantic_edges += [[f"band_{i}", "total_graph"] for i in range(1, 5)]
     return enrich_spec({"version": "7.4.0", "id": "C01_composite_defense_slide",
             "canvas": {"width_in": 13.333, "height_in": 7.5},

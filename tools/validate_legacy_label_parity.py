@@ -14,13 +14,17 @@ from validate_render_semantics import LEGACY, NS, ROOT, normalize
 
 BASE = "7ea999d677a30db1bfcb9497a4d0c3d89403f350"  # Last pre-V7.6 commit.
 APPROVED_C01_CORRECTIONS = {
+    "C01_FBG_construction": (
+        ["Graph construction (time-frequency graph)"],
+        ["Graph construction (frequency-band graph)", "Fault cues clearer"]),
     "C01_SEANet_graph_level": (
         ["Paper terminology: SR = sensitivity-aware readout. No additional classifier block is inserted beyond the source's summation node."],
         ["Publisher graphical abstract: EA feeds the first GCN; the first pooling branches to a second SR; both SR outputs merge before Dense classification.",
          "Dense", "fault class"]),
     "C01_composite_defense_slide": (
         ["diagnosis", "Fuse GCN/pooling and energy-assisted SR paths."],
-        ["Dense", "class", "EA feeds first GCN; pooled features branch to two SR paths."]),
+        ["Dense", "class", "EA feeds first GCN; pooled features branch to two SR paths.",
+         "band-pass filters", "connected bands", "Fault cues clearer", "Inter-band links schematic"]),
 }
 
 
