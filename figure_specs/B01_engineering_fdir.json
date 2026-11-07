@@ -672,7 +672,7 @@
     {
       "id": "source_1",
       "source": "docs/SOURCE_ATTRIBUTION.md",
-      "source_file_sha256": "3a15826397d3df91373d0075811330605ff5027a8338d5bb9ab92b2d9d7ff47e",
+      "source_file_sha256": "11a711d94ee94d59e287166c03a6e6e44fda118f5ca15f566951a074fe98ed95",
       "source_locator": "User-provided visual references, especially slide 213; original deck is not redistributed",
       "status": "domain_adaptation",
       "scope": "Conceptual engineering flow; not an exact published-system topology.",

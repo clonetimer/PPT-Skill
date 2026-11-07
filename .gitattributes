@@ -1,4 +1,7 @@
 data/iris_uci.csv text eol=lf whitespace=-blank-at-eof
+docs/SOURCE_ATTRIBUTION.md text eol=lf
+docs/KNOWN_ISSUES_V7.md text eol=lf
+docs/C01_V73_SOURCE.md text eol=lf
 *.png binary
 *.pdf binary
 *.pptx binary
