@@ -134,6 +134,55 @@ def separated_scatter_positions(rows, chart):
     return positions
 
 
+def separated_strip_positions(rows, chart, centers, yfield, low, high, y0, y1):
+    """Beeswarm categorical groups horizontally without changing measured y values."""
+    minimum = chart["statistics"]["jitter"]["minimum_center_gap_in"]
+    maximum = chart["statistics"]["jitter"]["max_display_offset_in"]
+    placed = defaultdict(list)
+    positions = {}
+    for row in rows:
+        y = scaled(row[yfield], low, high, y1, y0)
+        group = placed[row["species"]]
+        offset = None
+        for step in range(int(maximum/.005)+1):
+            candidates = (0,) if step == 0 else (step*.005, -step*.005)
+            for candidate in candidates:
+                if all(math.hypot(candidate-x, y-py) >= minimum-1e-9 for x, py in group):
+                    offset = candidate
+                    break
+            if offset is not None:
+                break
+        assert offset is not None, (row["source_row"], "beeswarm packing exceeded bound")
+        group.append((offset, y))
+        positions[row["source_row"]] = (centers[row["species"]]+offset, y)
+    return positions
+
+
+def separated_trend_positions(rows, chart, x0, x1, y0, y1):
+    minimum = chart["statistics"]["jitter"]["minimum_center_gap_in"]
+    maximum = chart["statistics"]["jitter"]["max_display_offset_in"]
+    placed = []
+    positions = {}
+    for row in rows:
+        true_x = scaled(row[chart["x"]], *chart["axes"]["x"]["domain"], x0, x1)
+        true_y = scaled(row[chart["y"]], *chart["axes"]["y"]["domain"], y1, y0)
+        candidate = None
+        for step in range(int(maximum/.005)+1):
+            radius = step*.005
+            angles = (0,) if step == 0 else (2*math.pi*(j+.5*(step%2))/24 for j in range(24))
+            for angle in angles:
+                x, y = true_x+radius*math.cos(angle), true_y+radius*math.sin(angle)
+                if all(math.hypot(x-px, y-py) >= minimum-1e-9 for px, py in placed):
+                    candidate = (x, y)
+                    break
+            if candidate:
+                break
+        assert candidate is not None, (row["source_row"], "trend packing exceeded bound")
+        positions[row["source_row"]] = candidate
+        placed.append(candidate)
+    return positions
+
+
 def scatter(chart, meta, rows):
     fig = Figure(chart, meta); fig.setup()
     x0, x1, y0, y1 = 1.28, 9.80, 1.30, 5.66
@@ -164,12 +213,12 @@ def strip(chart, meta, rows, yfield, with_ci=False):
              [(centers[name], name.removeprefix("Iris-")) for name in NAMES],
              [(scaled(v, low, high, y1, y0), str(v)) for v in range(low, high+1)])
     grouped = defaultdict(list)
+    positions = separated_strip_positions(rows, chart, centers, yfield, low, high, y0, y1)
     for row in rows:
         grouped[row["species"]].append(row)
-        jitter = ((row["source_row"]*37) % 101 - 50) / 50 * .32
-        x = centers[row["species"]] + jitter
-        y = scaled(row[yfield], low, high, y1, y0)
-        fig.point(x, y, COLORS[row["species"]], row, {yfield: row[yfield]}, r=.035)
+        x, y = positions[row["source_row"]]
+        fig.point(x, y, COLORS[row["species"]], row, {yfield: row[yfield]},
+                  r=.020 if with_ci else .035)
     if with_ci:
         for name in NAMES:
             vals = [r[yfield] for r in grouped[name]]
@@ -178,7 +227,7 @@ def strip(chart, meta, rows, yfield, with_ci=False):
             boot = sorted(statistics.mean(rng.choices(vals, k=len(vals)))
                           for _ in range(chart["statistics"]["resamples"]))
             lower, upper = boot[49], boot[1949]  # 2.5th and 97.5th percentiles of 2,000.
-            x = centers[name]
+            x = centers[name] + .75  # Summary lane stays clear of raw observations.
             a, b, m = (scaled(v, low, high, y1, y0) for v in (lower, upper, mean))
             fig.line(x, a, x, b, color="#1C303A", sw=1.8)
             fig.line(x-.13, a, x+.13, a, color="#1C303A", sw=1.8)
@@ -265,9 +314,10 @@ def trend_interval(chart, meta, rows):
     fig.axes(x0, y0, x1, y1, "Sepal length (cm)", "Petal length (cm)",
              [(scaled(v, 4, 6, x0, x1), f"{v:.1f}") for v in (4, 4.5, 5, 5.5, 6)],
              [(scaled(v, 0, 2, y1, y0), f"{v:.1f}") for v in (0, .5, 1, 1.5, 2)])
+    positions = separated_trend_positions(selected, chart, x0, x1, y0, y1)
     for row in selected:
-        fig.point(scaled(row[chart["x"]], 4, 6, x0, x1),
-                  scaled(row[chart["y"]], 0, 2, y1, y0), "#9CB4BA", row,
+        x, y = positions[row["source_row"]]
+        fig.point(x, y, "#9CB4BA", row,
                   {chart["x"]: row[chart["x"]], chart["y"]: row[chart["y"]]}, r=.035)
     locations = []
     for index in range(5):

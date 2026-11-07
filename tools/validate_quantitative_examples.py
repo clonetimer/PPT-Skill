@@ -41,8 +41,7 @@ def check_point_geometry(chart, point, row):
         categories = chart["axes"]["x"]["categories"]
         centers = {name: 1.30 + (i + .5) * (11.90 - 1.30) / len(categories)
                    for i, name in enumerate(categories)}
-        jitter = ((row["source_row"] * 37) % 101 - 50) / 50 * .32
-        x = centers[row["species"]] + jitter
+        x = centers[row["species"]]
         y = scale_axis(row[chart["y"]], chart["axes"]["y"], 5.66, 1.28)
     elif kind == "trend_interval":
         x = scale_axis(row[chart["x"]], chart["axes"]["x"], 1.55, 11.40)
@@ -51,8 +50,13 @@ def check_point_geometry(chart, point, row):
         return
     actual_x = point["x"] + point["w"] / 2
     actual_y = point["y"] + point["h"] / 2
-    assert math.isclose(actual_x, x, abs_tol=1e-6), (chart["id"], row["source_row"], "x")
-    assert math.isclose(actual_y, y, abs_tol=1e-6), (chart["id"], row["source_row"], "y")
+    maximum = chart["statistics"]["jitter"]["max_display_offset_in"]
+    if kind in {"strip", "point_ci"}:
+        assert abs(actual_x-x) <= maximum+1e-9, (chart["id"], row["source_row"], "x")
+        assert math.isclose(actual_y, y, abs_tol=1e-6), (chart["id"], row["source_row"], "y")
+    else:
+        assert math.hypot(actual_x-x, actual_y-y) <= maximum+1e-9, (
+            chart["id"], row["source_row"], "offset")
 
 
 def validate_config(config):
@@ -91,6 +95,13 @@ def validate_config(config):
             assert jitter["purpose"] == "display_only_separate_coincident_coordinates"
             assert .05 < jitter["minimum_center_gap_in"] <= jitter["max_display_offset_in"] <= .15
             assert "display-only offsets" in chart["caption"].lower()
+        if chart["kind"] in {"strip", "point_ci", "trend_interval"}:
+            jitter = chart["statistics"]["jitter"]
+            expected = ("display_only_separate_close_coordinates" if chart["kind"] == "trend_interval"
+                        else "display_only_horizontal_beeswarm")
+            assert jitter["purpose"] == expected
+            assert 0 < jitter["minimum_center_gap_in"] <= jitter["max_display_offset_in"] <= .55
+            assert "display-only" in chart["caption"].lower()
         if chart["kind"] == "point_ci":
             assert chart["statistics"]["interval"] == "bootstrap_percentile_95"
             assert chart["statistics"]["resamples"] >= 1000
@@ -135,6 +146,12 @@ def validate_outputs(config, rows):
                 assert point["type"] == {"Iris-setosa": "ellipse", "Iris-versicolor": "rect",
                                          "Iris-virginica": "trapezoid"}[row["species"]]
                 check_point_geometry(chart, point, row)
+            minimum = chart["statistics"]["jitter"]["minimum_center_gap_in"]
+            centers = [(point["x"]+point["w"]/2, point["y"]+point["h"]/2) for point in points]
+            assert all(point["w"] < minimum for point in points), (stem, "marks overlap at declared gap")
+            assert all(math.dist(first, second) >= minimum-1e-9
+                       for i, first in enumerate(centers) for second in centers[i+1:]), (
+                           stem, "raw points overlap")
             if chart["kind"] == "scatter":
                 counts = Counter((row[chart["x"]], row[chart["y"]]) for row in chart_lookup.values())
                 centers = []
@@ -150,9 +167,6 @@ def validate_outputs(config, rows):
                     moved += distance > 1e-9
                     centers.append(actual)
                 assert moved == sum(count-1 for count in counts.values())
-                minimum = chart["statistics"]["jitter"]["minimum_center_gap_in"]
-                assert all(math.dist(first, second) >= minimum-1e-9
-                           for i, first in enumerate(centers) for second in centers[i+1:])
         elif chart["kind"] == "confusion_matrix":
             cells = [e for e in spec["elements"] if "source_rows" in e]
             assert len(cells) == 9
@@ -206,16 +220,20 @@ def validate_outputs(config, rows):
                        and e.get("fill") == "#1C303A"]
             assert len(markers) == 3
             for index, (marker, item) in enumerate(zip(markers, spec["computed_values"])):
-                expected_x = 1.30 + (index + .5) * (11.90 - 1.30) / 3
+                expected_x = 1.30 + (index + .5) * (11.90 - 1.30) / 3 + .75
                 expected_y = scale_axis(item["mean"], chart["axes"]["y"], 5.66, 1.28)
                 assert math.isclose(marker["x"] + marker["w"] / 2, expected_x, abs_tol=1e-6)
                 assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0001)
+                assert all(math.dist((marker["x"]+marker["w"]/2, marker["y"]+marker["h"]/2),
+                                     (point["x"]+point["w"]/2, point["y"]+point["h"]/2))
+                           > (marker["w"]+point["w"])/2
+                           for point in points), (chart["id"], "summary covers raw observation")
             whiskers = [e for e in spec["elements"] if e["type"] == "line"
                         and e.get("color") == "#1C303A" and e.get("sw") == 1.8
                         and math.isclose(e["x1"], e["x2"], abs_tol=1e-6)]
             assert len(whiskers) == 3
             for index, (whisker, item) in enumerate(zip(whiskers, spec["computed_values"])):
-                expected_x = 1.30 + (index + .5) * (11.90 - 1.30) / 3
+                expected_x = 1.30 + (index + .5) * (11.90 - 1.30) / 3 + .75
                 expected_ys = sorted(scale_axis(value, chart["axes"]["y"], 5.66, 1.28)
                                      for value in item["ci95"])
                 assert math.isclose(whisker["x1"], expected_x, abs_tol=1e-6)

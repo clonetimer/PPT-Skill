@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from build_quantitative_examples import CONFIG, COLORS, NAMES, load_data
+from build_quantitative_examples import CONFIG, COLORS, NAMES, load_data, separated_strip_positions
 from render_figure_spec import render
 from scientific_ir import ROOT, enrich_spec
 
@@ -51,15 +51,14 @@ def build():
         text(name.removeprefix("Iris-"), x-.68, y1+.12, 1.36, .18, 6.2)
     text("Species", 2.98, 3.68, 1.40, .18, 6.5, True)
     shapes = {"Iris-setosa": "ellipse", "Iris-versicolor": "rect", "Iris-virginica": "trapezoid"}
+    positions = separated_strip_positions(rows, chart, centers, "petal_length_cm", 0, 8, y0, y1)
     for row in rows:
-        jitter = ((row["source_row"]*37)%101-50)/50*.20
-        x = centers[row["species"]]+jitter
-        y = scaled(row["petal_length_cm"], 0, 8, y1, y0)
+        x, y = positions[row["source_row"]]
         add(shapes[row["species"]], x=x-.020, y=y-.020, w=.040, h=.040,
             fill=COLORS[row["species"]], stroke="#FFFFFF", sw=.25,
             data_row=row["source_row"], data_values={"petal_length_cm": row["petal_length_cm"]})
     for item in source["computed_values"]:
-        x = centers[item["species"]]
+        x = centers[item["species"]] + .70  # Summary lane stays clear of raw observations.
         low = scaled(item["ci95"][0], 0, 8, y1, y0)
         high = scaled(item["ci95"][1], 0, 8, y1, y0)
         mean = scaled(item["mean"], 0, 8, y1, y0)

@@ -38,7 +38,12 @@
       "bins": "five equal-count ranked sepal-length groups, tie-break by source row, 10 flowers each",
       "resamples": 2000,
       "seed": 76,
-      "resampling_unit": "flower within bin"
+      "resampling_unit": "flower within bin",
+      "jitter": {
+        "purpose": "display_only_separate_close_coordinates",
+        "minimum_center_gap_in": 0.075,
+        "max_display_offset_in": 0.08
+      }
     },
     "axes": {
       "x": {
@@ -63,7 +68,7 @@
         "zero_included": true
       }
     },
-    "caption": "Fifty setosa flowers are shown. Connected points are means of five ordered groups of ten; whiskers are within-bin 95% percentile bootstrap intervals. The line is a descriptive guide, not a fitted model."
+    "caption": "50 setosa flowers. Line connects five 10-flower bin means; whiskers are within-bin 95% bootstrap intervals. Small display-only offsets separate overlapping raw points; no model fit."
   },
   "computed_values": [
     {
@@ -195,7 +200,7 @@
     },
     {
       "type": "text",
-      "text": "Fifty setosa flowers are shown. Connected points are means of five ordered groups of ten; whiskers are within-bin 95% percentile bootstrap intervals. The line is a descriptive guide, not a fitted model.",
+      "text": "50 setosa flowers. Line connects five 10-flower bin means; whiskers are within-bin 95% bootstrap intervals. Small display-only offsets separate overlapping raw points; no model fit.",
       "x": 0.7,
       "y": 6.46,
       "w": 11.9,
@@ -603,8 +608,8 @@
     },
     {
       "type": "ellipse",
-      "x": 3.4850000000000017,
-      "y": 2.8234999999999997,
+      "x": 3.5593583646030376,
+      "y": 2.8332894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -693,8 +698,8 @@
     },
     {
       "type": "ellipse",
-      "x": 4.469999999999998,
-      "y": 2.6079999999999997,
+      "x": 4.544358364603034,
+      "y": 2.6177894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -801,8 +806,8 @@
     },
     {
       "type": "ellipse",
-      "x": 5.454999999999999,
-      "y": 2.1769999999999996,
+      "x": 5.529358364603035,
+      "y": 2.1867894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -819,8 +824,8 @@
     },
     {
       "type": "ellipse",
-      "x": 5.454999999999999,
-      "y": 2.6079999999999997,
+      "x": 5.529358364603035,
+      "y": 2.6177894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -873,8 +878,8 @@
     },
     {
       "type": "ellipse",
-      "x": 5.947500000000002,
-      "y": 2.3924999999999996,
+      "x": 6.0218583646030375,
+      "y": 2.4022894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -891,8 +896,8 @@
     },
     {
       "type": "ellipse",
-      "x": 5.947500000000002,
-      "y": 2.3924999999999996,
+      "x": 5.976201257427383,
+      "y": 2.4617909649383463,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -963,8 +968,8 @@
     },
     {
       "type": "ellipse",
-      "x": 6.4399999999999995,
-      "y": 2.1769999999999996,
+      "x": 6.514358364603035,
+      "y": 2.1867894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -1017,8 +1022,8 @@
     },
     {
       "type": "ellipse",
-      "x": 6.4399999999999995,
-      "y": 2.1769999999999996,
+      "x": 6.468701257427381,
+      "y": 2.2462909649383462,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -1035,8 +1040,8 @@
     },
     {
       "type": "ellipse",
-      "x": 6.4399999999999995,
-      "y": 2.6079999999999997,
+      "x": 6.514358364603035,
+      "y": 2.6177894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -1071,8 +1076,8 @@
     },
     {
       "type": "ellipse",
-      "x": 6.932499999999997,
-      "y": 2.6079999999999997,
+      "x": 7.006858364603033,
+      "y": 2.6177894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -1107,8 +1112,8 @@
     },
     {
       "type": "ellipse",
-      "x": 6.932499999999997,
-      "y": 2.3924999999999996,
+      "x": 7.006858364603033,
+      "y": 2.4022894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -1143,8 +1148,8 @@
     },
     {
       "type": "ellipse",
-      "x": 6.932499999999997,
-      "y": 2.3924999999999996,
+      "x": 6.961201257427379,
+      "y": 2.4617909649383463,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -1233,8 +1238,8 @@
     },
     {
       "type": "ellipse",
-      "x": 7.425000000000001,
-      "y": 2.3924999999999996,
+      "x": 7.499358364603037,
+      "y": 2.4022894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -1323,8 +1328,8 @@
     },
     {
       "type": "ellipse",
-      "x": 8.410000000000002,
-      "y": 1.9614999999999998,
+      "x": 8.484358364603038,
+      "y": 1.9712894644165038,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",
@@ -1341,8 +1346,8 @@
     },
     {
       "type": "ellipse",
-      "x": 8.410000000000002,
-      "y": 2.3924999999999996,
+      "x": 8.484358364603038,
+      "y": 2.4022894644165036,
       "w": 0.07,
       "h": 0.07,
       "fill": "#9CB4BA",

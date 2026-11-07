@@ -35,26 +35,37 @@ def main():
                for e in points)
     centers = {name: 1.88 + index * 1.86 for index, name in enumerate(
         ("Iris-setosa", "Iris-versicolor", "Iris-virginica"))}
+    minimum = spec["chart_contract"]["statistics"]["jitter"]["minimum_center_gap_in"]
+    maximum = spec["chart_contract"]["statistics"]["jitter"]["max_display_offset_in"]
+    visible_centers = []
     for point in points:
         row = source_rows[point["data_row"]]
-        jitter = ((row["source_row"] * 37) % 101 - 50) / 50 * .20
-        expected_x = centers[row["species"]] + jitter
+        expected_x = centers[row["species"]]
         expected_y = 3.23 - row["petal_length_cm"] / 8 * (3.23 - .32)
-        assert math.isclose(point["x"] + point["w"] / 2, expected_x, abs_tol=1e-6)
-        assert math.isclose(point["y"] + point["h"] / 2, expected_y, abs_tol=1e-6)
+        actual_x = point["x"] + point["w"] / 2
+        actual_y = point["y"] + point["h"] / 2
+        assert abs(actual_x-expected_x) <= maximum+1e-9
+        assert math.isclose(actual_y, expected_y, abs_tol=1e-6)
+        assert point["w"] < minimum
+        visible_centers.append((actual_x, actual_y))
+    assert all(math.dist(first, second) >= minimum-1e-9
+               for i, first in enumerate(visible_centers) for second in visible_centers[i+1:])
     markers = [e for e in spec["elements"] if e["type"] == "ellipse"
                and math.isclose(e.get("w", 0), .104, abs_tol=1e-6)
                and e.get("fill") == "#1C303A"]
     assert len(markers) == 3
     for marker, item in zip(markers, spec["computed_values"]):
-        assert math.isclose(marker["x"] + marker["w"] / 2, centers[item["species"]], abs_tol=1e-6)
+        assert math.isclose(marker["x"] + marker["w"] / 2, centers[item["species"]]+.70, abs_tol=1e-6)
+        assert all(math.dist((marker["x"]+marker["w"]/2, marker["y"]+marker["h"]/2),
+                             point_center) > (marker["w"]+.040)/2
+                   for point_center in visible_centers)
         expected_y = 3.23 - item["mean"] / 8 * (3.23 - .32)
         assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0001)
     whiskers = [e for e in spec["elements"] if e["type"] == "line" and e.get("sw") == .9
                 and math.isclose(e["x1"], e["x2"], abs_tol=1e-6)]
     assert len(whiskers) == 3
     for whisker, item in zip(whiskers, spec["computed_values"]):
-        assert math.isclose(whisker["x1"], centers[item["species"]], abs_tol=1e-6)
+        assert math.isclose(whisker["x1"], centers[item["species"]]+.70, abs_tol=1e-6)
         expected_ys = sorted(3.23 - value / 8 * (3.23 - .32) for value in item["ci95"])
         assert all(math.isclose(actual, expected, abs_tol=.0001)
                    for actual, expected in zip(sorted((whisker["y1"], whisker["y2"])), expected_ys))
@@ -74,7 +85,7 @@ def main():
     assert all(font["/FontDescriptor"].get_object().get("/FontFile2") for font in fonts)
     assert not page["/Resources"].get("/XObject"), "Vector plot must not be flattened into a PDF image"
     caption = (ROOT / "docs/Q03_NATURE_PUBLICATION_CAPTION.md").read_text(encoding="utf-8")
-    assert "2,000" in caption and "50 per species" in caption and "jitter" in caption
+    assert "2,000" in caption and "50 per species" in caption and "beeswarm" in caption
     print(f"PASS {STEM}: same 150 rows/statistics, {WIDTH_MM} × {HEIGHT_MM} mm PPTX/PDF")
 
 

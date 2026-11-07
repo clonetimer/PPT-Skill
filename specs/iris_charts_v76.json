@@ -33,16 +33,16 @@
       "claim": "Sepal length distributions overlap across species.",
       "x": "species", "y": "sepal_length_cm", "group": "species",
       "sample_size": 150, "encoding": {"color": "species", "shape": "species"},
-      "statistics": {"display": "all_raw_points", "interval": "none", "jitter": "deterministic display-only horizontal offset"},
-      "axes": {"x":{"type":"category","field":"species","unit":"category","categories":["Iris-setosa","Iris-versicolor","Iris-virginica"]},"y":{"type":"linear","field":"sepal_length_cm","unit":"cm","domain":[3,9],"zero_included":false,"domain_reason":"Zoomed to show the observed distribution; axis starts at 3 cm."}}, "caption": "All 50 observations per species are shown; horizontal jitter has no numeric meaning."
+      "statistics": {"display": "all_raw_points", "interval": "none", "jitter": {"purpose": "display_only_horizontal_beeswarm", "minimum_center_gap_in": 0.075, "max_display_offset_in": 0.35}},
+      "axes": {"x":{"type":"category","field":"species","unit":"category","categories":["Iris-setosa","Iris-versicolor","Iris-virginica"]},"y":{"type":"linear","field":"sepal_length_cm","unit":"cm","domain":[3,9],"zero_included":false,"domain_reason":"Zoomed to show the observed distribution; axis starts at 3 cm."}}, "caption": "All 50 flowers per species are shown; display-only horizontal offsets separate equal measurements."
     },
     {
       "id": "Q03_iris_mean_ci", "kind": "point_ci",
       "claim": "Species differ in sample mean petal length.",
       "x": "species", "y": "petal_length_cm", "group": "species",
       "sample_size": 150, "encoding": {"color": "species", "shape": "species"},
-      "statistics": {"display": "mean_with_raw_points", "interval": "bootstrap_percentile_95", "resamples": 2000, "seed": 76, "resampling_unit": "flower within species"},
-      "axes": {"x":{"type":"category","field":"species","unit":"category","categories":["Iris-setosa","Iris-versicolor","Iris-virginica"]},"y":{"type":"linear","field":"petal_length_cm","unit":"cm","domain":[0,8],"zero_included":true}}, "caption": "Large points are sample means; whiskers are 95% percentile bootstrap intervals from 2,000 within-species resamples. Small points show every flower."
+      "statistics": {"display": "mean_with_raw_points", "interval": "bootstrap_percentile_95", "resamples": 2000, "seed": 76, "resampling_unit": "flower within species", "jitter": {"purpose": "display_only_horizontal_beeswarm", "minimum_center_gap_in": 0.05, "max_display_offset_in": 0.55}},
+      "axes": {"x":{"type":"category","field":"species","unit":"category","categories":["Iris-setosa","Iris-versicolor","Iris-virginica"]},"y":{"type":"linear","field":"petal_length_cm","unit":"cm","domain":[0,8],"zero_included":true}}, "caption": "Small dots show all flowers with display-only horizontal offsets. Large mean dots and 95% percentile bootstrap intervals appear to the right of each group (2,000 within-species resamples)."
     },
     {
       "id": "Q04_iris_confusion", "kind": "confusion_matrix",
@@ -66,8 +66,8 @@
       "x": "sepal_length_cm", "y": "petal_length_cm", "group": "species",
       "filter": {"species": "Iris-setosa"}, "sample_size": 50,
       "encoding": {"raw_points": "circle", "trend": "connected bin means", "interval": "whisker"},
-      "statistics": {"display": "raw_points_and_bin_means", "interval": "bootstrap_percentile_95", "bins": "five equal-count ranked sepal-length groups, tie-break by source row, 10 flowers each", "resamples": 2000, "seed": 76, "resampling_unit": "flower within bin"},
-      "axes": {"x":{"type":"linear","field":"sepal_length_cm","unit":"cm","domain":[4,6],"zero_included":false,"domain_reason":"Zoomed to the setosa sepal-length range; axis starts at 4 cm."},"y":{"type":"linear","field":"petal_length_cm","unit":"cm","domain":[0,2],"zero_included":true}}, "caption": "Fifty setosa flowers are shown. Connected points are means of five ordered groups of ten; whiskers are within-bin 95% percentile bootstrap intervals. The line is a descriptive guide, not a fitted model."
+      "statistics": {"display": "raw_points_and_bin_means", "interval": "bootstrap_percentile_95", "bins": "five equal-count ranked sepal-length groups, tie-break by source row, 10 flowers each", "resamples": 2000, "seed": 76, "resampling_unit": "flower within bin", "jitter": {"purpose": "display_only_separate_close_coordinates", "minimum_center_gap_in": 0.075, "max_display_offset_in": 0.08}},
+      "axes": {"x":{"type":"linear","field":"sepal_length_cm","unit":"cm","domain":[4,6],"zero_included":false,"domain_reason":"Zoomed to the setosa sepal-length range; axis starts at 4 cm."},"y":{"type":"linear","field":"petal_length_cm","unit":"cm","domain":[0,2],"zero_included":true}}, "caption": "50 setosa flowers. Line connects five 10-flower bin means; whiskers are within-bin 95% bootstrap intervals. Small display-only offsets separate overlapping raw points; no model fit."
     }
   ]
 }

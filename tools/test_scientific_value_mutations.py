@@ -65,6 +65,18 @@ class ScientificValueMutationTests(unittest.TestCase):
             raise AssertionError("No coincident observations in fixture")
         self.chart_case("Q01_iris_scatter", collapse)
 
+    def test_collapsed_strip_points_fail(self):
+        def collapse(spec):
+            seen = {}
+            for point in (item for item in spec["elements"] if "data_row" in item):
+                key = (point["type"], point["data_values"]["sepal_length_cm"])
+                if key in seen:
+                    point["x"], point["y"] = seen[key]["x"], seen[key]["y"]
+                    return
+                seen[key] = point
+            raise AssertionError("No equal-value observations in fixture")
+        self.chart_case("Q02_iris_strip", collapse)
+
     def test_moved_interval_endpoint_fails(self):
         def move(spec):
             next(item for item in spec["elements"] if item["type"] == "line"

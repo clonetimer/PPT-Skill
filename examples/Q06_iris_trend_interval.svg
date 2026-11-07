@@ -2,7 +2,7 @@
 <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>
 <rect width="1600" height="900" fill="#FFFFFF"/>
 <text x="62.400000000000006" y="65.63333333333333" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="36.666666666666664" fill="#26343C" font-weight="700"><tspan x="62.400000000000006" dy="0">Within-setosa trend with raw points and intervals</tspan></text>
-<text x="84.0" y="803.8166666666667" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#26343C"><tspan x="84.0" dy="0">Fifty setosa flowers are shown. Connected points are means of five ordered groups of ten; whiskers are within-bin 95% percentile bootstrap intervals. The line is a descriptive guide, not a fitted model.</tspan></text>
+<text x="84.0" y="803.8166666666667" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#26343C"><tspan x="84.0" dy="0">50 setosa flowers. Line connects five 10-flower bin means; whiskers are within-bin 95% bootstrap intervals. Small display-only offsets separate overlapping raw points; no model fit.</tspan></text>
 <text x="84.0" y="861.7416666666666" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="15.833333333333334" fill="#65737C"><tspan x="84.0" dy="0">UCI Iris · 50 flowers · DOI 10.24432/C56C76 · CC BY 4.0</tspan></text>
 <line x1="186.0" y1="679.2" x2="1368.0" y2="679.2" stroke="#5F707B" stroke-width="1.6666666666666667"/>
 <line x1="186.0" y1="162.0" x2="186.0" y2="679.2" stroke="#5F707B" stroke-width="1.6666666666666667"/>
@@ -31,48 +31,48 @@
 <ellipse cx="363.29999999999984" cy="394.73999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="422.4000000000002" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="422.4000000000002" cy="343.0199999999999" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="422.4000000000002" cy="343.0199999999999" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="431.3230037523645" cy="344.19473572998044" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="481.5" cy="343.0199999999999" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="540.5999999999998" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="540.5999999999998" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="540.5999999999998" cy="420.59999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="540.5999999999998" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="549.5230037523642" cy="318.3347357299804" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="599.7" cy="343.0199999999999" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="599.7" cy="265.43999999999994" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="658.8" cy="265.43999999999994" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="658.8" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="658.8" cy="187.86" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="658.8" cy="265.43999999999994" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="658.8" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="667.7230037523642" cy="266.6147357299804" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="667.7230037523642" cy="318.3347357299804" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="717.9000000000002" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="717.9000000000002" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="717.9000000000002" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="717.9000000000002" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="726.8230037523646" cy="292.4747357299804" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="721.3441508912861" cy="299.61491579260155" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="777.0" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="777.0" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="777.0" cy="265.43999999999994" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="777.0" cy="265.43999999999994" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="785.9230037523643" cy="266.6147357299804" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="777.0" cy="368.87999999999994" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="777.0" cy="343.0199999999999" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="777.0" cy="265.43999999999994" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="777.0" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="780.4441508912857" cy="273.75491579260154" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="785.9230037523643" cy="318.3347357299804" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="836.0999999999997" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="836.0999999999997" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="845.023003752364" cy="318.3347357299804" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="836.0999999999997" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="836.0999999999997" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="845.023003752364" cy="292.4747357299804" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="836.0999999999997" cy="239.57999999999996" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="836.0999999999997" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="839.5441508912855" cy="299.61491579260155" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="836.0999999999997" cy="187.86" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="836.0999999999997" cy="265.43999999999994" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="895.2000000000002" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="895.2000000000002" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="895.2000000000002" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="904.1230037523644" cy="292.4747357299804" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="954.2999999999998" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="1013.4000000000003" cy="239.57999999999996" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="1013.4000000000003" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="1013.4000000000003" cy="343.0199999999999" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="1013.4000000000003" cy="239.57999999999996" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
-<ellipse cx="1013.4000000000003" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="1022.3230037523646" cy="240.75473572998044" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
+<ellipse cx="1022.3230037523646" cy="292.4747357299804" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="1072.5" cy="317.15999999999997" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="1072.5" cy="343.0199999999999" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>
 <ellipse cx="1190.7000000000003" cy="291.29999999999995" rx="4.2" ry="4.2" fill="#9CB4BA" stroke="#FFFFFF" stroke-width="0.9166666666666666"/>

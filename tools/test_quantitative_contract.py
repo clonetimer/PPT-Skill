@@ -35,6 +35,12 @@ class QuantitativeContractTests(unittest.TestCase):
         with self.assertRaises((AssertionError, ValueError)):
             validate_config(changed)
 
+    def test_undisclosed_strip_jitter_fails(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][1]["caption"] = "All 50 flowers per species are shown."
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
     def test_missing_unit_fails(self):
         changed = copy.deepcopy(self.config)
         changed["data"]["columns"]["petal_length_cm"]["unit"] = ""
