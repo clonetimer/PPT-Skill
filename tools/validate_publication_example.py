@@ -30,6 +30,23 @@ def main():
     assert {e["data_row"] for e in points} == set(source_rows)
     assert all(e["data_values"]["petal_length_cm"] == source_rows[e["data_row"]]["petal_length_cm"]
                for e in points)
+    centers = {name: 1.88 + index * 1.86 for index, name in enumerate(
+        ("Iris-setosa", "Iris-versicolor", "Iris-virginica"))}
+    for point in points:
+        row = source_rows[point["data_row"]]
+        jitter = ((row["source_row"] * 37) % 101 - 50) / 50 * .20
+        expected_x = centers[row["species"]] + jitter
+        expected_y = 3.23 - row["petal_length_cm"] / 8 * (3.23 - .32)
+        assert math.isclose(point["x"] + point["w"] / 2, expected_x, abs_tol=1e-6)
+        assert math.isclose(point["y"] + point["h"] / 2, expected_y, abs_tol=1e-6)
+    markers = [e for e in spec["elements"] if e["type"] == "ellipse"
+               and math.isclose(e.get("w", 0), .104, abs_tol=1e-6)
+               and e.get("fill") == "#1C303A"]
+    assert len(markers) == 3
+    for marker, item in zip(markers, spec["computed_values"]):
+        assert math.isclose(marker["x"] + marker["w"] / 2, centers[item["species"]], abs_tol=1e-6)
+        expected_y = 3.23 - item["mean"] / 8 * (3.23 - .32)
+        assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0001)
     labels = [e["text"] for e in spec["elements"] if e["type"] == "text"]
     assert "Petal length (cm)" in labels and "Species" in labels
     deck = Presentation(ROOT / f"dist/{STEM}.pptx")

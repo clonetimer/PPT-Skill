@@ -47,8 +47,18 @@ class ScientificValueMutationTests(unittest.TestCase):
     def test_wrong_bootstrap_interval_fails(self):
         self.chart_case("Q03_iris_mean_ci", lambda spec: spec["computed_values"][0]["ci95"].__setitem__(0, 0.0))
 
+    def test_moved_raw_point_fails(self):
+        def move(spec):
+            next(item for item in spec["elements"] if "data_row" in item)["x"] += .5
+        self.chart_case("Q01_iris_scatter", move)
+
     def test_wrong_ablation_prediction_fails(self):
         self.chart_case("Q05_iris_ablation", lambda spec: spec["computed_values"][0].update(correct=1))
+
+    def test_wrong_ablation_bar_height_fails(self):
+        def shorten(spec):
+            next(item for item in spec["elements"] if "row_predictions" in item)["h"] -= 1
+        self.chart_case("Q05_iris_ablation", shorten)
 
     def test_undisclosed_image_adjustment_fails(self):
         path = ROOT / "figure_specs/image/I01_cell_image_quant.json"

@@ -14,6 +14,30 @@ from build_quantitative_examples import ROOT, CONFIG, load_data, predict_loo, NA
 from scientific_ir import validate_spec
 
 
+def check_point_geometry(chart, point, row):
+    """Verify the actual plotted centre against the source row and declared axes."""
+    kind = chart["kind"]
+    if kind == "scatter":
+        x = 1.28 + row["petal_length_cm"] / 7 * (9.80 - 1.28)
+        y = 5.66 - row["petal_width_cm"] / 3 * (5.66 - 1.30)
+    elif kind in {"strip", "point_ci"}:
+        centers = {name: 1.30 + (i + .5) * (11.90 - 1.30) / 3 for i, name in enumerate(NAMES)}
+        jitter = ((row["source_row"] * 37) % 101 - 50) / 50 * .32
+        x = centers[row["species"]] + jitter
+        value = row["petal_length_cm" if kind == "point_ci" else "sepal_length_cm"]
+        low, high = (0, 8) if kind == "point_ci" else (3, 9)
+        y = 5.66 - (value - low) / (high - low) * (5.66 - 1.28)
+    elif kind == "trend_interval":
+        x = 1.55 + (row["sepal_length_cm"] - 4) / 2 * (11.40 - 1.55)
+        y = 5.66 - row["petal_length_cm"] / 2 * (5.66 - 1.35)
+    else:
+        return
+    actual_x = point["x"] + point["w"] / 2
+    actual_y = point["y"] + point["h"] / 2
+    assert math.isclose(actual_x, x, abs_tol=1e-6), (chart["id"], row["source_row"], "x")
+    assert math.isclose(actual_y, y, abs_tol=1e-6), (chart["id"], row["source_row"], "y")
+
+
 def validate_config(config):
     meta = config["data"]
     assert meta["row_unit"] and meta["source_url"] and meta["license"]
@@ -70,6 +94,7 @@ def validate_outputs(config, rows):
                 assert all(row[key] == value for key, value in point["data_values"].items())
                 assert point["type"] == {"Iris-setosa": "ellipse", "Iris-versicolor": "rect",
                                          "Iris-virginica": "trapezoid"}[row["species"]]
+                check_point_geometry(chart, point, row)
         elif chart["kind"] == "confusion_matrix":
             cells = [e for e in spec["elements"] if "source_rows" in e]
             assert len(cells) == 9
@@ -101,6 +126,9 @@ def validate_outputs(config, rows):
                                                     "predicted": pred} for row, pred in zip(rows, predictions)]
                 assert any(e["type"] == "text" and e["text"] == f"{item['correct']} / {len(rows)} correct"
                            for e in spec["elements"])
+                expected_height = 4.46 * item["accuracy_percent"] / 100
+                assert math.isclose(bar["h"], expected_height, abs_tol=.00005)
+                assert math.isclose(bar["y"] + bar["h"], 1.40 + 4.46, abs_tol=1e-6)
         if chart["kind"] == "point_ci":
             assert len(spec["computed_values"]) == 3
             for item in spec["computed_values"]:
@@ -112,6 +140,15 @@ def validate_outputs(config, rows):
                 boot = sorted(statistics.mean(rng.choices(raw, k=len(raw)))
                               for _ in range(chart["statistics"]["resamples"]))
                 assert item["ci95"] == [round(boot[49], 4), round(boot[1949], 4)]
+            markers = [e for e in spec["elements"] if e["type"] == "ellipse"
+                       and math.isclose(e.get("w", 0), .17, abs_tol=1e-6)
+                       and e.get("fill") == "#1C303A"]
+            assert len(markers) == 3
+            for index, (marker, item) in enumerate(zip(markers, spec["computed_values"])):
+                expected_x = 1.30 + (index + .5) * (11.90 - 1.30) / 3
+                expected_y = 5.66 - item["mean"] / 8 * (5.66 - 1.28)
+                assert math.isclose(marker["x"] + marker["w"] / 2, expected_x, abs_tol=1e-6)
+                assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0001)
         if chart["kind"] == "trend_interval":
             assert len(spec["computed_values"]) == 5
             selected = sorted(chart_lookup.values(), key=lambda r: (r[chart["x"]], r["source_row"]))
@@ -127,6 +164,15 @@ def validate_outputs(config, rows):
                 boot = sorted(statistics.mean(rng.choices(ys, k=10))
                               for _ in range(chart["statistics"]["resamples"]))
                 assert item["ci95_cm"] == [round(boot[49], 4), round(boot[1949], 4)]
+            markers = [e for e in spec["elements"] if e["type"] == "ellipse"
+                       and math.isclose(e.get("w", 0), .15, abs_tol=1e-6)
+                       and e.get("fill") == "#1C303A"]
+            assert len(markers) == 5
+            for marker, item in zip(markers, spec["computed_values"]):
+                expected_x = 1.55 + (item["x_mean_cm"] - 4) / 2 * (11.40 - 1.55)
+                expected_y = 5.66 - item["y_mean_cm"] / 2 * (5.66 - 1.35)
+                assert math.isclose(marker["x"] + marker["w"] / 2, expected_x, abs_tol=.0003)
+                assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0003)
         print(f"PASS {stem}: {len(points)} raw points, {len(spec['computed_values'])} summaries")
 
 
