@@ -29,7 +29,10 @@
       "h": 0.42,
       "size": 24,
       "font": "Microsoft YaHei",
-      "bold": true
+      "bold": true,
+      "id": "el_0001",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -40,7 +43,10 @@
       "h": 0.26,
       "size": 13.5,
       "color": "#7A8790",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0002",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -51,7 +57,10 @@
       "fill": "#C5D9E8",
       "stroke": "#5C6675",
       "sw": 1.25,
-      "radius": 0.12
+      "radius": 0.12,
+      "id": "el_0003",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -62,7 +71,10 @@
       "h": 0.28,
       "size": 16.5,
       "bold": true,
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0004",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -73,7 +85,10 @@
       "h": 0.55,
       "size": 13,
       "color": "#667680",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0005",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -84,7 +99,10 @@
       "fill": "#D9CCE3",
       "stroke": "#5C6675",
       "sw": 1.25,
-      "radius": 0.12
+      "radius": 0.12,
+      "id": "el_0006",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -95,7 +113,10 @@
       "h": 0.28,
       "size": 16.5,
       "bold": true,
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0007",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -106,7 +127,10 @@
       "h": 0.55,
       "size": 13,
       "color": "#667680",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0008",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -117,7 +141,10 @@
       "fill": "#C5E0CC",
       "stroke": "#5C6675",
       "sw": 1.25,
-      "radius": 0.12
+      "radius": 0.12,
+      "id": "el_0009",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -128,7 +155,10 @@
       "h": 0.28,
       "size": 16.5,
       "bold": true,
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0010",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -139,7 +169,10 @@
       "h": 0.55,
       "size": 13,
       "color": "#667680",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0011",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -150,7 +183,10 @@
       "fill": "#D5E8C5",
       "stroke": "#5C6675",
       "sw": 1.25,
-      "radius": 0.12
+      "radius": 0.12,
+      "id": "el_0012",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -161,7 +197,10 @@
       "h": 0.28,
       "size": 16.5,
       "bold": true,
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0013",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -172,7 +211,10 @@
       "h": 0.55,
       "size": 13,
       "color": "#667680",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0014",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -180,7 +222,10 @@
       "y1": 2.14,
       "x2": 3.72,
       "y2": 2.14,
-      "arrow": true
+      "arrow": true,
+      "id": "el_0015",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -188,7 +233,10 @@
       "y1": 2.14,
       "x2": 6.86,
       "y2": 2.14,
-      "arrow": true
+      "arrow": true,
+      "id": "el_0016",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -196,7 +244,10 @@
       "y1": 2.14,
       "x2": 10,
       "y2": 2.14,
-      "arrow": true
+      "arrow": true,
+      "id": "el_0017",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -207,7 +258,10 @@
       "h": 0.2,
       "size": 11.5,
       "color": "#65717C",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0018",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -218,7 +272,10 @@
       "h": 0.2,
       "size": 10.5,
       "color": "#65717C",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0019",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -229,14 +286,20 @@
       "h": 0.2,
       "size": 10.5,
       "color": "#65717C",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0020",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
       "x1": 11.28,
       "y1": 2.73,
       "x2": 11.28,
-      "y2": 3.04
+      "y2": 3.04,
+      "id": "el_0021",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -244,7 +307,10 @@
       "y1": 3.04,
       "x2": 1.85,
       "y2": 3.04,
-      "dash": true
+      "dash": true,
+      "id": "el_0022",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -252,7 +318,10 @@
       "y1": 3.04,
       "x2": 1.85,
       "y2": 2.73,
-      "arrow": true
+      "arrow": true,
+      "id": "el_0023",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -263,7 +332,10 @@
       "h": 0.2,
       "size": 12,
       "color": "#65717C",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0024",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -275,7 +347,10 @@
       "size": 17,
       "bold": true,
       "font": "Microsoft YaHei",
-      "align": "left"
+      "align": "left",
+      "id": "el_0025",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -287,7 +362,10 @@
       "size": 13.5,
       "color": "#7A8790",
       "font": "Microsoft YaHei",
-      "align": "left"
+      "align": "left",
+      "id": "el_0026",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -298,7 +376,10 @@
       "fill": "#D5E8C5",
       "stroke": "#5C6675",
       "sw": 1.25,
-      "radius": 0.12
+      "radius": 0.12,
+      "id": "el_0027",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -309,7 +390,10 @@
       "h": 0.27,
       "size": 16.5,
       "bold": true,
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0028",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -320,7 +404,10 @@
       "h": 0.58,
       "size": 12.8,
       "color": "#667680",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0029",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -331,7 +418,10 @@
       "fill": "#F7E9C8",
       "stroke": "#5C6675",
       "sw": 1.25,
-      "radius": 0.12
+      "radius": 0.12,
+      "id": "el_0030",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -342,7 +432,10 @@
       "h": 0.27,
       "size": 16.5,
       "bold": true,
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0031",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -353,7 +446,10 @@
       "h": 0.58,
       "size": 12.8,
       "color": "#667680",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0032",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -364,7 +460,10 @@
       "fill": "#C5D9E8",
       "stroke": "#5C6675",
       "sw": 1.25,
-      "radius": 0.12
+      "radius": 0.12,
+      "id": "el_0033",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -375,7 +474,10 @@
       "h": 0.27,
       "size": 16.5,
       "bold": true,
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0034",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -386,7 +488,10 @@
       "h": 0.58,
       "size": 12.8,
       "color": "#667680",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0035",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -397,7 +502,10 @@
       "fill": "#F4D2D2",
       "stroke": "#5C6675",
       "sw": 1.25,
-      "radius": 0.12
+      "radius": 0.12,
+      "id": "el_0036",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -408,7 +516,10 @@
       "h": 0.27,
       "size": 16.5,
       "bold": true,
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0037",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -419,7 +530,10 @@
       "h": 0.58,
       "size": 12.8,
       "color": "#667680",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0038",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -427,7 +541,10 @@
       "y1": 4.82,
       "x2": 3.72,
       "y2": 4.82,
-      "arrow": true
+      "arrow": true,
+      "id": "el_0039",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -435,7 +552,10 @@
       "y1": 4.82,
       "x2": 6.86,
       "y2": 4.82,
-      "arrow": true
+      "arrow": true,
+      "id": "el_0040",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -446,7 +566,10 @@
       "h": 0.16,
       "size": 9.5,
       "color": "#65717C",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0041",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -457,14 +580,20 @@
       "h": 0.16,
       "size": 9.5,
       "color": "#65717C",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0042",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
       "x1": 1.85,
       "y1": 5.37,
       "x2": 1.85,
-      "y2": 5.78
+      "y2": 5.78,
+      "id": "el_0043",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -472,7 +601,10 @@
       "y1": 5.78,
       "x2": 11.28,
       "y2": 5.78,
-      "dash": true
+      "dash": true,
+      "id": "el_0044",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -480,7 +612,10 @@
       "y1": 5.78,
       "x2": 11.28,
       "y2": 5.37,
-      "arrow": true
+      "arrow": true,
+      "id": "el_0045",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -491,7 +626,10 @@
       "h": 0.18,
       "size": 12,
       "color": "#65717C",
-      "font": "Microsoft YaHei"
+      "font": "Microsoft YaHei",
+      "id": "el_0046",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -500,7 +638,10 @@
       "x2": 12.78,
       "y2": 6.28,
       "color": "#AEB8BF",
-      "sw": 0.7
+      "sw": 0.7,
+      "id": "el_0047",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -512,7 +653,30 @@
       "size": 12.8,
       "color": "#5D6972",
       "font": "Microsoft YaHei",
-      "align": "left"
+      "align": "left",
+      "id": "el_0048",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    }
+  ],
+  "schema_version": "7.6.0-dev",
+  "figure_contract": {
+    "claim": "The diagram communicates an online FDIR and guarded reconfiguration loop.",
+    "archetype": "schematic_led_composite",
+    "output_mode": "presentation",
+    "unverified": [
+      "Mission-specific timing and authorization rules require a primary source."
+    ]
+  },
+  "evidence_records": [
+    {
+      "id": "source_1",
+      "source": "docs/SOURCE_ATTRIBUTION.md",
+      "source_file_sha256": "11a711d94ee94d59e287166c03a6e6e44fda118f5ca15f566951a074fe98ed95",
+      "source_locator": "User-provided visual references, especially slide 213; original deck is not redistributed",
+      "status": "domain_adaptation",
+      "scope": "Conceptual engineering flow; not an exact published-system topology.",
+      "reuse": "derivative_redraw_only"
     }
   ]
 }

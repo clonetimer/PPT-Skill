@@ -6,7 +6,11 @@ NS="{http://www.w3.org/2000/svg}"
 def check(p):
     root=ET.parse(p).getroot()
     ok=root.tag==NS+"svg" and all(root.attrib.get(k) for k in ("width","height","viewBox"))
-    ok=ok and root.find(".//"+NS+"image") is None and root.find(".//"+NS+"foreignObject") is None
+    images=root.findall(".//"+NS+"image")
+    if images:
+        ok=ok and p.name=="I01_cell_image_quant.svg" and len(images)==1
+        ok=ok and images[0].attrib.get("href","").startswith("data:image/png;base64,")
+    ok=ok and root.find(".//"+NS+"foreignObject") is None
     print(("PASS " if ok else "FAIL ")+str(p))
     return ok
 paths=[Path(x) for x in sys.argv[1:]] or sorted(Path("examples").glob("*.svg"))

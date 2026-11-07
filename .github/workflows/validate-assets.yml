@@ -14,17 +14,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Historical FigureSpec and render parity uses the pre-V7.6 commit.
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install validation dependencies
-        run: python -m pip install --disable-pip-version-check python-pptx jsonschema
+        run: python -m pip install --disable-pip-version-check python-pptx jsonschema Pillow numpy pypdf
       - name: Build B01/F07
         run: python tools/build_v71_examples.py
       - name: Build C01
         run: |
           python tools/build_c01_v73.py
           python tools/build_c01_v74.py
+      - name: Build data and image examples
+        run: |
+          python tools/build_quantitative_examples.py
+          python tools/build_wine_scatter.py
+          python tools/build_publication_example.py
+          python tools/build_image_quant_example.py
+          python tools/build_deck_benchmark.py
       - name: Validate SVG and JSON
         run: |
           python tools/validate_svg_examples.py
@@ -42,20 +51,72 @@ jobs:
           python tools/validate_c01_v74.py
           python tools/validate_deck_spec.py
           python tools/validate_manifest.py
+          python tools/validate_scientific_ir.py
+          python tools/validate_quantitative_examples.py
+          python tools/validate_wine_scatter.py
+          python tools/test_wine_contract.py
+          python tools/validate_publication_example.py
+          python tools/validate_image_quant_example.py
+          python tools/test_scientific_ir.py
+          python tools/test_quantitative_contract.py
+          python tools/test_chart_contract.py
+          python tools/test_scientific_value_mutations.py
+          python tools/validate_research_benchmark.py
+          python tools/test_release_readiness.py
+          python tools/validate_output_profiles.py
+          python tools/test_output_profiles.py
+          python tools/check_scientific_accessibility.py
+          python tools/validate_render_record.py
+          python tools/test_render_record_canonical.py
+          python tools/validate_render_semantics.py
+          python tools/validate_legacy_label_parity.py
+          python tools/validate_deck_benchmark.py
       - name: Audit generated PPTX
         run: |
           python tools/audit_pptx.py dist/C01_FBG_construction_v73.pptx --strict
           python tools/audit_pptx.py dist/C01_SEANet_graph_level_v73.pptx --strict
           python tools/audit_pptx.py dist/C01_composite_defense_slide_v74.pptx --strict
+          python tools/audit_pptx.py dist/Q01_iris_scatter.pptx --strict
+          python tools/audit_pptx.py dist/Q02_iris_strip.pptx --strict
+          python tools/audit_pptx.py dist/Q03_iris_mean_ci.pptx --strict
+          python tools/audit_pptx.py dist/Q03_iris_mean_ci_nature.pptx --strict
+          python tools/audit_pptx.py dist/Q04_iris_confusion.pptx --strict
+          python tools/audit_pptx.py dist/Q05_iris_ablation.pptx --strict
+          python tools/audit_pptx.py dist/Q06_iris_trend_interval.pptx --strict
+          python tools/audit_pptx.py dist/Q07_wine_scatter.pptx --strict
+          python tools/audit_pptx.py dist/Q08_wine_strip.pptx --strict
+          python tools/audit_pptx.py dist/I01_cell_image_quant.pptx --strict --allow-raster
+          python tools/audit_pptx.py dist/DECK01_c01_defense.pptx --strict
       - name: Compile tools
         run: python -m py_compile tools/*.py
+      - name: Prepare separate review stages
+        run: |
+          python tools/prepare_scientific_review_bundle.py --stage initial --output dist/scientific_review_initial_v76.zip
+          python tools/prepare_scientific_review_bundle.py --stage reconciliation --output dist/scientific_review_reconciliation_v76.zip
+      - name: Upload initial review packet
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-v7.6-initial-review-packet
+          path: dist/scientific_review_initial_v76.zip
+          if-no-files-found: error
+      - name: Upload reconciliation packet
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-v7.6-reconciliation-packet
+          path: dist/scientific_review_reconciliation_v76.zip
+          if-no-files-found: error
       - name: Upload generated vector assets
         uses: actions/upload-artifact@v4
         with:
-          name: ppt-skill-v7.4-C01-assets
+          name: ppt-skill-v7.6-research-figure-assets
           path: |
             examples/C01_*_v73.svg
             dist/C01_*_v73.pptx
             examples/C01_composite_defense_slide_v74.svg
             dist/C01_composite_defense_slide_v74.pptx
+            examples/Q*.svg
+            dist/Q*.pptx
+            examples/I01_*.svg
+            dist/I01_*.pptx
+            dist/DECK01_c01_defense.pptx
           if-no-files-found: error

@@ -48,7 +48,7 @@ def audit(path):
     return {"file":path.name,"slide_count":len(prs.slides),"theme_first_effect_has_shadow":shadow,"slides":slides}
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("pptx",type=Path);ap.add_argument("--output",type=Path);ap.add_argument("--strict",action="store_true")
+    ap=argparse.ArgumentParser();ap.add_argument("pptx",type=Path);ap.add_argument("--output",type=Path);ap.add_argument("--strict",action="store_true");ap.add_argument("--allow-raster",action="store_true",help="Permit disclosed source-image panels")
     args=ap.parse_args(); result=audit(args.pptx); rendered=json.dumps(result,ensure_ascii=False,indent=2)
     if args.output:args.output.write_text(rendered+"\n",encoding="utf-8")
     print(rendered)
@@ -58,7 +58,7 @@ def main():
         for s in result["slides"]:
             if s["out_of_bounds"]:failures.append(f"slide {s['slide']} out-of-bounds")
             if s["text_box_overlaps"]:failures.append(f"slide {s['slide']} text overlaps")
-            if s["non_svg_picture_objects"]:failures.append(f"slide {s['slide']} non-SVG pictures")
+            if s["non_svg_picture_objects"] and not args.allow_raster:failures.append(f"slide {s['slide']} non-SVG pictures")
         if failures:raise SystemExit("\n".join(failures))
     return 0
 

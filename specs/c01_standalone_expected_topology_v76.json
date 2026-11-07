@@ -1,0 +1,26 @@
+{
+  "figure_id": "C01_SEANet_graph_level",
+  "source": "docs/C01_V73_SOURCE.md",
+  "review_status": "publisher_graphical_abstract_1198x886_checked; pixel_overlay_and_domain_review_pending",
+  "critical_labels": {
+    "label_input": "Input",
+    "label_gcn_1": "GCN",
+    "label_pooling_1": "pooling",
+    "label_gcn_2": "GCN",
+    "label_pooling_2": "pooling",
+    "label_sr_main": "SR",
+    "label_sum": "+",
+    "label_ea": "Energy-assisted\nmodule",
+    "label_sr_aux": "SR",
+    "label_dense": "Dense",
+    "label_class_output": "fault class"
+  },
+  "critical_edges": [
+    ["input", "gcn_1"], ["gcn_1", "pooling_1"],
+    ["pooling_1", "gcn_2"], ["gcn_2", "pooling_2"],
+    ["pooling_2", "sr_main"], ["sr_main", "sum"],
+    ["input", "ea"], ["ea", "gcn_1"],
+    ["pooling_1", "sr_aux"], ["sr_aux", "sum"],
+    ["sum", "dense"], ["dense", "class_output"]
+  ]
+}

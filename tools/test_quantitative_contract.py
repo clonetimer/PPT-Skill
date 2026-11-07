@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+"""Fail scientific chart configurations with omitted metadata."""
+from __future__ import annotations
+
+import copy
+import json
+import unittest
+
+from build_quantitative_examples import CONFIG, load_data, predict_loo
+from validate_quantitative_examples import validate_axis_coverage, validate_config
+
+
+class QuantitativeContractTests(unittest.TestCase):
+    def setUp(self):
+        self.config = json.loads(CONFIG.read_text(encoding="utf-8"))
+
+    def test_baseline(self):
+        validate_config(self.config)
+
+    def test_leave_one_out_excludes_self_and_breaks_distance_ties_by_source_row(self):
+        rows = [{"source_row": 1, "x": 0, "species": "A"},
+                {"source_row": 2, "x": 2, "species": "B"},
+                {"source_row": 3, "x": 1, "species": "C"}]
+        self.assertEqual(predict_loo(rows, ("x",)), ["C", "C", "A"])
+
+    def test_missing_source_fails(self):
+        changed = copy.deepcopy(self.config)
+        changed["data"]["source_url"] = ""
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_missing_transform_log_fails(self):
+        changed = copy.deepcopy(self.config)
+        changed["data"]["transforms"] = []
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_undisclosed_scatter_jitter_fails(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][0]["caption"] = "Each point is one flower."
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_undisclosed_strip_jitter_fails(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][1]["caption"] = "All 50 flowers per species are shown."
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_missing_unit_fails(self):
+        changed = copy.deepcopy(self.config)
+        changed["data"]["columns"]["petal_length_cm"]["unit"] = ""
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_missing_n_fails(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][0]["sample_size"] = 0
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_undeclared_prediction_field_fails(self):
+        changed = copy.deepcopy(self.config)
+        del changed["charts"][3]["derived_fields"]["predicted_species"]
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_wrong_derived_unit_fails(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][4]["derived_fields"]["accuracy_percent"]["unit"] = "cm"
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_derived_field_needs_existing_source_columns(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][4]["derived_fields"]["accuracy_percent"]["source_fields"] = ["unknown"]
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_classifier_contract_cannot_change_without_implementation(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][3]["statistics"]["algorithm"]["k"] = 5
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_ablation_feature_sets_match_rendered_groups(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][4]["statistics"]["feature_sets"][1]["fields"] = ["sepal_length_cm"]
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_ablation_must_use_paired_folds(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][4]["statistics"]["paired_folds"] = False
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_missing_error_definition_fails(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][2]["statistics"]["interval"] = ""
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_missing_axis_contract_fails(self):
+        changed = copy.deepcopy(self.config)
+        del changed["charts"][0]["axes"]
+        with self.assertRaises((AssertionError, ValueError, KeyError)):
+            validate_config(changed)
+
+    def test_truncated_axis_needs_reason(self):
+        changed = copy.deepcopy(self.config)
+        del changed["charts"][1]["axes"]["y"]["domain_reason"]
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_zero_flag_must_match_domain(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][0]["axes"]["x"]["zero_included"] = False
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_axis_cannot_hide_source_values(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][0]["axes"]["x"]["domain"] = [0, 5]
+        with self.assertRaises(AssertionError):
+            validate_axis_coverage(changed["charts"][0], load_data(self.config),
+                                   self.config["data"]["columns"])
+
+
+if __name__ == "__main__":
+    unittest.main()

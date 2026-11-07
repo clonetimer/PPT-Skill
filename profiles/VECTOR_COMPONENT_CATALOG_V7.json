@@ -1,5 +1,5 @@
 {
-  "version": "7.5.0-dev",
+  "version": "7.6.0-dev",
   "components": [
     {
       "id": "dashed_or_solid_panel",
@@ -93,7 +93,10 @@
       "id": "figure_spec",
       "used_in": [
         "B",
-        "F07"
+        "F07",
+        "C01",
+        "Q01–Q06",
+        "I01"
       ],
       "editable": true
     },
@@ -127,5 +130,5 @@
       "editable": true
     }
   ],
-  "source_of_truth": "JSON FigureSpec drives SVG and native PowerPoint outputs for B01/F07; other figures retain per-figure SVG/PPTX sources until migrated."
+  "source_of_truth": "JSON FigureSpec drives SVG and native PowerPoint for B01, F07, C01, Q01–Q06 and I01. Quantitative data and microscopy pixels retain source hashes and linked contracts."
 }

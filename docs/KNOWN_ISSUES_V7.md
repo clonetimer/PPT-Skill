@@ -14,7 +14,7 @@
 - B01: engineering adaptation of FDIR/mode management, not a reproduction of a published figure or the user's original slide.
 - C01: source-visible structural redraw. Sensor glyphs are vector stand-ins; some graph topology remains schematic. A region-by-region overlay against the author-published graphic is still required.
 - F07: exact channel-to-cell coordinates are not available; the grid remains neutral and explicitly schematic.
-- FigureSpec dual rendering currently covers B01/F07 only.
+- Historical V7.1 status: dual rendering covered B01/F07 only. Current V7.6 development examples also cover C01, six Iris charts, one publication-size re-layout and one image-plus-quantification panel.
 - SVG and Office rendering are not pixel-identical because font metrics and text engines differ.
 - Windows PowerPoint and macOS PowerPoint still require independent checks.
 

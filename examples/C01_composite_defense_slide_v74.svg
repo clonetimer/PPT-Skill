@@ -10,6 +10,7 @@
 <text x="480.6" y="194.21666666666667" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="18.333333333333332" fill="#28343C" font-weight="700"><tspan x="480.6" dy="0">OCF / notch filter</tspan></text>
 <text x="712.8" y="194.21666666666667" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="18.333333333333332" fill="#28343C" font-weight="700"><tspan x="712.8" dy="0">Band subgraphs</tspan></text>
 <text x="964.8" y="194.21666666666667" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="18.333333333333332" fill="#28343C" font-weight="700"><tspan x="964.8" dy="0">Total graph</tspan></text>
+<rect x="602.4" y="210.0" width="199.2" height="223.20000000000002" rx="0.0" fill="#FFFFFF" stroke="#D5DEE4" stroke-width="1.3333333333333333"/>
 <circle cx="91.55999999999999" cy="223.56" r="6.57" fill="#E8F0F3" stroke="#668A9C" stroke-width="2"/>
 <circle cx="91.55999999999999" cy="223.56" r="2.19" fill="#668A9C"/>
 <line x1="91.55999999999999" y1="232.32" x2="91.55999999999999" y2="241.07999999999998" stroke="#668A9C" stroke-width="2"/>
@@ -151,17 +152,23 @@
 <ellipse cx="895.8000000000001" cy="651.0" rx="27.0" ry="27.0" fill="#FFFFFF" stroke="#43525B" stroke-width="1.6666666666666667"/>
 <text x="895.8000000000001" y="658.55" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#28343C" font-weight="700"><tspan x="895.8000000000001" dy="0">+</tspan></text>
 <line x1="836.4" y1="651.5999999999999" x2="865.2" y2="651.5999999999999" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
-<line x1="925.2" y1="651.5999999999999" x2="1016.4000000000001" y2="651.5999999999999" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
-<text x="1000.8000000000001" y="632.2333333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#687780"><tspan x="1000.8000000000001" dy="0">diagnosis</tspan></text>
-<line x1="141.6" y1="684.0" x2="141.6" y2="748.8000000000001" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
+<rect x="945.6" y="620.4" width="84.0" height="61.2" rx="4.2" fill="#F3F7F9" stroke="#7896A6" stroke-width="1.3333333333333333"/>
+<text x="987.6" y="656.8333333333334" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#28343C" font-weight="700"><tspan x="987.6" dy="0">Dense</tspan></text>
+<line x1="925.2" y1="651.5999999999999" x2="942.0" y2="651.5999999999999" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
+<line x1="1033.1999999999998" y1="651.5999999999999" x2="1068.0" y2="651.5999999999999" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
+<text x="1057.1999999999998" y="705.7416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="15.833333333333334" fill="#687780"><tspan x="1057.1999999999998" dy="0">class</tspan></text>
+<line x1="141.6" y1="684.0" x2="141.6" y2="748.8000000000001" stroke="#43525B" stroke-width="1.6666666666666667"/>
 <rect x="153.6" y="723.6" width="314.40000000000003" height="57.599999999999994" rx="4.2" fill="#F7F5F9" stroke="#8A7CA5" stroke-width="1.3333333333333333"/>
 <text x="311.4" y="758.525" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C" font-weight="700"><tspan x="311.4" dy="0">Energy-assisted module</tspan></text>
 <line x1="145.2" y1="752.4" x2="150.0" y2="752.4" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
-<rect x="501.59999999999997" y="723.6" width="86.39999999999999" height="57.599999999999994" rx="4.2" fill="#F7F5F9" stroke="#8A7CA5" stroke-width="1.3333333333333333"/>
-<text x="544.8" y="758.525" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C" font-weight="700"><tspan x="544.8" dy="0">SR</tspan></text>
-<line x1="471.6" y1="752.4" x2="498.00000000000006" y2="752.4" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
-<line x1="592.8000000000001" y1="752.4" x2="895.2" y2="752.4" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
-<line x1="896.4" y1="746.4" x2="896.4" y2="681.5999999999999" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
+<line x1="278.4" y1="720.0" x2="278.4" y2="685.2" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
+<rect x="614.4" y="723.6" width="86.39999999999999" height="57.599999999999994" rx="4.2" fill="#F7F5F9" stroke="#8A7CA5" stroke-width="1.3333333333333333"/>
+<text x="657.6" y="758.525" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C" font-weight="700"><tspan x="657.6" dy="0">SR</tspan></text>
+<line x1="460.79999999999995" y1="680.4" x2="480.0" y2="698.4000000000001" stroke="#43525B" stroke-width="1.6666666666666667"/>
+<line x1="480.0" y1="698.4000000000001" x2="480.0" y2="752.4" stroke="#43525B" stroke-width="1.6666666666666667"/>
+<line x1="480.0" y1="752.4" x2="610.8" y2="752.4" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
+<line x1="705.6" y1="752.4" x2="895.2" y2="752.4" stroke="#43525B" stroke-width="1.6666666666666667"/>
+<line x1="895.2" y1="752.4" x2="895.2" y2="681.5999999999999" stroke="#43525B" stroke-width="1.6666666666666667" marker-end="url(#ar)"/>
 <text x="1142.3999999999999" y="153.95000000000002" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#28343C" font-weight="700"><tspan x="1142.3999999999999" dy="0">Reading guide</tspan></text>
 <rect x="1144.8" y="189.60000000000002" width="44.4" height="44.4" rx="21.599999999999998" fill="#EAF2F5" stroke="#7896A6" stroke-width="1.3333333333333333"/>
 <text x="1167.0" y="217.325" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C" font-weight="700"><tspan x="1167.0" dy="0">1</tspan></text>
@@ -174,7 +181,7 @@
 <rect x="1144.8" y="446.40000000000003" width="44.4" height="44.4" rx="21.599999999999998" fill="#EAF2F5" stroke="#7896A6" stroke-width="1.3333333333333333"/>
 <text x="1167.0" y="474.125" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C" font-weight="700"><tspan x="1167.0" dy="0">3</tspan></text>
 <text x="1203.6" y="467.5083333333333" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="19.166666666666668" fill="#28343C" font-weight="700"><tspan x="1203.6" dy="0">Diagnose</tspan></text>
-<text x="1203.6" y="528.725" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C"><tspan x="1203.6" dy="0">Fuse GCN/pooling and energy-assisted SR paths.</tspan></text>
+<text x="1203.6" y="528.725" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C"><tspan x="1203.6" dy="0">EA feeds first GCN; pooled features branch to two SR paths.</tspan></text>
 <text x="1142.3999999999999" y="609.7083333333334" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="19.166666666666668" fill="#28343C" font-weight="700"><tspan x="1142.3999999999999" dy="0">Evidence boundary</tspan></text>
 <text x="1142.3999999999999" y="675.725" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C"><tspan x="1142.3999999999999" dy="0">Sensor glyphs and graph adjacency are schematic vector redraws.</tspan></text>
 <text x="1142.3999999999999" y="758.8" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="15.833333333333334" fill="#687780"><tspan x="1142.3999999999999" dy="0">Lee et al., EAAI 179 (2026), 115273</tspan><tspan x="1142.3999999999999" dy="18.683333333333334">DOI: 10.1016/j.engappai.2026.115273</tspan></text>

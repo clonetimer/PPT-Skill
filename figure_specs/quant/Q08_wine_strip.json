@@ -1,0 +1,3635 @@
+{
+  "id": "Q08_wine_strip",
+  "version": "7.6.0-dev",
+  "canvas": {
+    "width_in": 13.333,
+    "height_in": 7.5
+  },
+  "style": {
+    "font": "Arial"
+  },
+  "data_lineage": {
+    "data_ref": "data/wine_uci.data",
+    "sha256": "6be6b1203f3d51df0b553a70e57b8a723cd405683958204f96d23d7cd6aea659",
+    "source_url": "https://archive.ics.uci.edu/dataset/109/wine",
+    "doi": "10.24432/C5PC7J",
+    "row_count": 178,
+    "chart_spec": "specs/wine_charts_v76.json",
+    "chart_spec_sha256": "3c406aec54bd6050ea84c1b6579c0ee3fed768f26b224963235c4008e09d94ee"
+  },
+  "chart_contract": {
+    "id": "Q08_wine_strip",
+    "kind": "strip",
+    "claim": "Alcohol measurements overlap across the three coded wine cultivars.",
+    "x": "cultivar",
+    "y": "alcohol",
+    "group": "cultivar",
+    "sample_size": 178,
+    "encoding": {
+      "color": "cultivar",
+      "shape": "cultivar"
+    },
+    "statistics": {
+      "display": "all_raw_points",
+      "interval": "none",
+      "jitter": {
+        "purpose": "display_only_horizontal_beeswarm",
+        "minimum_center_gap_in": 0.075,
+        "max_display_offset_in": 0.6
+      }
+    },
+    "axes": {
+      "x": {
+        "type": "category",
+        "field": "cultivar",
+        "unit": "category",
+        "categories": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      "y": {
+        "type": "linear",
+        "field": "alcohol",
+        "unit": "source unit not reported",
+        "domain": [
+          10,
+          15
+        ],
+        "zero_included": false,
+        "domain_reason": "Zoomed to the measured range; axis starts at 10."
+      }
+    },
+    "caption": "All 178 samples are shown by coded cultivar. Horizontal display-only offsets separate close values without changing alcohol measurements. UCI does not report the source unit."
+  },
+  "computed_values": [],
+  "elements": [
+    {
+      "type": "text",
+      "text": "Wine chemistry: alcohol by coded cultivar",
+      "x": 0.52,
+      "y": 0.19,
+      "w": 12.2,
+      "h": 0.5,
+      "size": 22,
+      "bold": true,
+      "align": "left",
+      "color": "#26343C",
+      "id": "el_0001",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "All 178 samples remain visible; horizontal offsets separate close values. UCI does not report the source unit.",
+      "x": 0.7,
+      "y": 6.5,
+      "w": 11.9,
+      "h": 0.35,
+      "size": 11,
+      "bold": false,
+      "align": "left",
+      "color": "#26343C",
+      "id": "el_0002",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "UCI Wine · 178 samples · DOI 10.24432/C5PC7J · CC BY 4.0",
+      "x": 0.7,
+      "y": 7.02,
+      "w": 11.9,
+      "h": 0.23,
+      "size": 9.5,
+      "bold": false,
+      "align": "left",
+      "color": "#65737C",
+      "id": "el_0003",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.3,
+      "y1": 5.66,
+      "x2": 11.9,
+      "y2": 5.66,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0004",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.3,
+      "y1": 1.28,
+      "x2": 1.3,
+      "y2": 5.66,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0005",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 3.0666666666666664,
+      "y1": 5.66,
+      "x2": 3.0666666666666664,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0006",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Cultivar 1",
+      "x": 2.6166666666666663,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0007",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 6.6,
+      "y1": 5.66,
+      "x2": 6.6,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0008",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Cultivar 2",
+      "x": 6.1499999999999995,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0009",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 10.133333333333335,
+      "y1": 5.66,
+      "x2": 10.133333333333335,
+      "y2": 5.74,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0010",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Cultivar 3",
+      "x": 9.683333333333335,
+      "y": 5.78,
+      "w": 0.9,
+      "h": 0.26,
+      "size": 10.5,
+      "bold": false,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0011",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.22,
+      "y1": 5.66,
+      "x2": 1.3,
+      "y2": 5.66,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0012",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "10",
+      "x": 0.55,
+      "y": 5.54,
+      "w": 0.6,
+      "h": 0.25,
+      "size": 10.5,
+      "bold": false,
+      "align": "right",
+      "color": "#26343C",
+      "id": "el_0013",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.22,
+      "y1": 4.784,
+      "x2": 1.3,
+      "y2": 4.784,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0014",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "11",
+      "x": 0.55,
+      "y": 4.664,
+      "w": 0.6,
+      "h": 0.25,
+      "size": 10.5,
+      "bold": false,
+      "align": "right",
+      "color": "#26343C",
+      "id": "el_0015",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.22,
+      "y1": 3.9080000000000004,
+      "x2": 1.3,
+      "y2": 3.9080000000000004,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0016",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "12",
+      "x": 0.55,
+      "y": 3.7880000000000003,
+      "w": 0.6,
+      "h": 0.25,
+      "size": 10.5,
+      "bold": false,
+      "align": "right",
+      "color": "#26343C",
+      "id": "el_0017",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.22,
+      "y1": 3.0320000000000005,
+      "x2": 1.3,
+      "y2": 3.0320000000000005,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0018",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "13",
+      "x": 0.55,
+      "y": 2.9120000000000004,
+      "w": 0.6,
+      "h": 0.25,
+      "size": 10.5,
+      "bold": false,
+      "align": "right",
+      "color": "#26343C",
+      "id": "el_0019",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.22,
+      "y1": 2.156,
+      "x2": 1.3,
+      "y2": 2.156,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0020",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "14",
+      "x": 0.55,
+      "y": 2.036,
+      "w": 0.6,
+      "h": 0.25,
+      "size": 10.5,
+      "bold": false,
+      "align": "right",
+      "color": "#26343C",
+      "id": "el_0021",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 1.22,
+      "y1": 1.2800000000000002,
+      "x2": 1.3,
+      "y2": 1.2800000000000002,
+      "color": "#5F707B",
+      "sw": 1,
+      "id": "el_0022",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "15",
+      "x": 0.55,
+      "y": 1.1600000000000001,
+      "w": 0.6,
+      "h": 0.25,
+      "size": 10.5,
+      "bold": false,
+      "align": "right",
+      "color": "#26343C",
+      "id": "el_0023",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Cultivar code",
+      "x": 1.3,
+      "y": 6.19,
+      "w": 10.6,
+      "h": 0.29,
+      "size": 12,
+      "bold": true,
+      "align": "center",
+      "color": "#26343C",
+      "id": "el_0024",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Alcohol (unit unreported)",
+      "x": 0.35,
+      "y": 0.84,
+      "w": 2.2,
+      "h": 0.27,
+      "size": 11,
+      "bold": true,
+      "align": "left",
+      "color": "#26343C",
+      "id": "el_0025",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 1.9195200000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 1,
+      "data_values": {
+        "alcohol": 14.23,
+        "cultivar": "1"
+      },
+      "id": "el_0026",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 2.8218000000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 2,
+      "data_values": {
+        "alcohol": 13.2,
+        "cultivar": "1"
+      },
+      "id": "el_0027",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.101666666666666,
+      "y": 2.85684,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 3,
+      "data_values": {
+        "alcohol": 13.16,
+        "cultivar": "1"
+      },
+      "id": "el_0028",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 1.796880000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 4,
+      "data_values": {
+        "alcohol": 14.37,
+        "cultivar": "1"
+      },
+      "id": "el_0029",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.9616666666666664,
+      "y": 2.78676,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 5,
+      "data_values": {
+        "alcohol": 13.24,
+        "cultivar": "1"
+      },
+      "id": "el_0030",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1066666666666665,
+      "y": 1.9458000000000009,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 6,
+      "data_values": {
+        "alcohol": 14.2,
+        "cultivar": "1"
+      },
+      "id": "el_0031",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1066666666666665,
+      "y": 1.7793599999999998,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 7,
+      "data_values": {
+        "alcohol": 14.39,
+        "cultivar": "1"
+      },
+      "id": "el_0032",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 2.06844,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 8,
+      "data_values": {
+        "alcohol": 14.06,
+        "cultivar": "1"
+      },
+      "id": "el_0033",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 1.3939200000000007,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 9,
+      "data_values": {
+        "alcohol": 14.83,
+        "cultivar": "1"
+      },
+      "id": "el_0034",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 2.2436400000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 10,
+      "data_values": {
+        "alcohol": 13.86,
+        "cultivar": "1"
+      },
+      "id": "el_0035",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.101666666666666,
+      "y": 2.0334000000000003,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 11,
+      "data_values": {
+        "alcohol": 14.1,
+        "cultivar": "1"
+      },
+      "id": "el_0036",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.976666666666666,
+      "y": 2.0158800000000006,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 12,
+      "data_values": {
+        "alcohol": 14.12,
+        "cultivar": "1"
+      },
+      "id": "el_0037",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 2.34,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 13,
+      "data_values": {
+        "alcohol": 13.75,
+        "cultivar": "1"
+      },
+      "id": "el_0038",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.061666666666666,
+      "y": 1.4640000000000006,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 14,
+      "data_values": {
+        "alcohol": 14.75,
+        "cultivar": "1"
+      },
+      "id": "el_0039",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.956666666666666,
+      "y": 1.78812,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 15,
+      "data_values": {
+        "alcohol": 14.38,
+        "cultivar": "1"
+      },
+      "id": "el_0040",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 2.4451199999999993,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 16,
+      "data_values": {
+        "alcohol": 13.63,
+        "cultivar": "1"
+      },
+      "id": "el_0041",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.076666666666666,
+      "y": 1.8581999999999999,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 17,
+      "data_values": {
+        "alcohol": 14.3,
+        "cultivar": "1"
+      },
+      "id": "el_0042",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1066666666666665,
+      "y": 2.26992,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 18,
+      "data_values": {
+        "alcohol": 13.83,
+        "cultivar": "1"
+      },
+      "id": "el_0043",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.931666666666666,
+      "y": 1.954560000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 19,
+      "data_values": {
+        "alcohol": 14.19,
+        "cultivar": "1"
+      },
+      "id": "el_0044",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1066666666666665,
+      "y": 2.4363599999999996,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 20,
+      "data_values": {
+        "alcohol": 13.64,
+        "cultivar": "1"
+      },
+      "id": "el_0045",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.9216666666666664,
+      "y": 2.06844,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 21,
+      "data_values": {
+        "alcohol": 14.06,
+        "cultivar": "1"
+      },
+      "id": "el_0046",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 3.05832,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 22,
+      "data_values": {
+        "alcohol": 12.93,
+        "cultivar": "1"
+      },
+      "id": "el_0047",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.9616666666666664,
+      "y": 2.375039999999999,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 23,
+      "data_values": {
+        "alcohol": 13.71,
+        "cultivar": "1"
+      },
+      "id": "el_0048",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.061666666666666,
+      "y": 3.1284,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 24,
+      "data_values": {
+        "alcohol": 12.85,
+        "cultivar": "1"
+      },
+      "id": "el_0049",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 2.559,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 25,
+      "data_values": {
+        "alcohol": 13.5,
+        "cultivar": "1"
+      },
+      "id": "el_0050",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 2.9532,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 26,
+      "data_values": {
+        "alcohol": 13.05,
+        "cultivar": "1"
+      },
+      "id": "el_0051",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 2.6553599999999995,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 27,
+      "data_values": {
+        "alcohol": 13.39,
+        "cultivar": "1"
+      },
+      "id": "el_0052",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.0316666666666663,
+      "y": 2.7341999999999995,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 28,
+      "data_values": {
+        "alcohol": 13.3,
+        "cultivar": "1"
+      },
+      "id": "el_0053",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.956666666666666,
+      "y": 2.234880000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 29,
+      "data_values": {
+        "alcohol": 13.87,
+        "cultivar": "1"
+      },
+      "id": "el_0054",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1316666666666664,
+      "y": 2.1034800000000002,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 30,
+      "data_values": {
+        "alcohol": 14.02,
+        "cultivar": "1"
+      },
+      "id": "el_0055",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1066666666666665,
+      "y": 2.3575199999999996,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 31,
+      "data_values": {
+        "alcohol": 13.73,
+        "cultivar": "1"
+      },
+      "id": "el_0056",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.9666666666666663,
+      "y": 2.4889200000000002,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 32,
+      "data_values": {
+        "alcohol": 13.58,
+        "cultivar": "1"
+      },
+      "id": "el_0057",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1766666666666663,
+      "y": 2.40132,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 33,
+      "data_values": {
+        "alcohol": 13.68,
+        "cultivar": "1"
+      },
+      "id": "el_0058",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8966666666666665,
+      "y": 2.33124,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 34,
+      "data_values": {
+        "alcohol": 13.76,
+        "cultivar": "1"
+      },
+      "id": "el_0059",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1066666666666665,
+      "y": 2.55024,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 35,
+      "data_values": {
+        "alcohol": 13.51,
+        "cultivar": "1"
+      },
+      "id": "el_0060",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.956666666666666,
+      "y": 2.57652,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 36,
+      "data_values": {
+        "alcohol": 13.48,
+        "cultivar": "1"
+      },
+      "id": "el_0061",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1066666666666665,
+      "y": 2.7517200000000006,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 37,
+      "data_values": {
+        "alcohol": 13.28,
+        "cultivar": "1"
+      },
+      "id": "el_0062",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1066666666666665,
+      "y": 2.9532,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 38,
+      "data_values": {
+        "alcohol": 13.05,
+        "cultivar": "1"
+      },
+      "id": "el_0063",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.956666666666666,
+      "y": 2.9356799999999996,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 39,
+      "data_values": {
+        "alcohol": 13.07,
+        "cultivar": "1"
+      },
+      "id": "el_0064",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.181666666666666,
+      "y": 1.9282799999999998,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 40,
+      "data_values": {
+        "alcohol": 14.22,
+        "cultivar": "1"
+      },
+      "id": "el_0065",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1716666666666664,
+      "y": 2.5064399999999996,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 41,
+      "data_values": {
+        "alcohol": 13.56,
+        "cultivar": "1"
+      },
+      "id": "el_0066",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1066666666666665,
+      "y": 2.6378399999999997,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 42,
+      "data_values": {
+        "alcohol": 13.41,
+        "cultivar": "1"
+      },
+      "id": "el_0067",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1716666666666664,
+      "y": 2.2261199999999994,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 43,
+      "data_values": {
+        "alcohol": 13.88,
+        "cultivar": "1"
+      },
+      "id": "el_0068",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1766666666666663,
+      "y": 2.78676,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 44,
+      "data_values": {
+        "alcohol": 13.24,
+        "cultivar": "1"
+      },
+      "id": "el_0069",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.181666666666666,
+      "y": 2.9532,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 45,
+      "data_values": {
+        "alcohol": 13.05,
+        "cultivar": "1"
+      },
+      "id": "el_0070",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8566666666666665,
+      "y": 1.9370399999999994,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 46,
+      "data_values": {
+        "alcohol": 14.21,
+        "cultivar": "1"
+      },
+      "id": "el_0071",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.181666666666666,
+      "y": 1.78812,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 47,
+      "data_values": {
+        "alcohol": 14.38,
+        "cultivar": "1"
+      },
+      "id": "el_0072",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8816666666666664,
+      "y": 2.2086,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 48,
+      "data_values": {
+        "alcohol": 13.9,
+        "cultivar": "1"
+      },
+      "id": "el_0073",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.1766666666666663,
+      "y": 2.0334000000000003,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 49,
+      "data_values": {
+        "alcohol": 14.1,
+        "cultivar": "1"
+      },
+      "id": "el_0074",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.061666666666666,
+      "y": 2.1735600000000006,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 50,
+      "data_values": {
+        "alcohol": 13.94,
+        "cultivar": "1"
+      },
+      "id": "el_0075",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8816666666666664,
+      "y": 2.9532,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 51,
+      "data_values": {
+        "alcohol": 13.05,
+        "cultivar": "1"
+      },
+      "id": "el_0076",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8366666666666664,
+      "y": 2.26992,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 52,
+      "data_values": {
+        "alcohol": 13.83,
+        "cultivar": "1"
+      },
+      "id": "el_0077",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.226666666666666,
+      "y": 2.27868,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 53,
+      "data_values": {
+        "alcohol": 13.82,
+        "cultivar": "1"
+      },
+      "id": "el_0078",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.7816666666666663,
+      "y": 2.3224800000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 54,
+      "data_values": {
+        "alcohol": 13.77,
+        "cultivar": "1"
+      },
+      "id": "el_0079",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.2566666666666664,
+      "y": 2.34876,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 55,
+      "data_values": {
+        "alcohol": 13.74,
+        "cultivar": "1"
+      },
+      "id": "el_0080",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.891666666666666,
+      "y": 2.5064399999999996,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 56,
+      "data_values": {
+        "alcohol": 13.56,
+        "cultivar": "1"
+      },
+      "id": "el_0081",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.2566666666666664,
+      "y": 1.9282799999999998,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 57,
+      "data_values": {
+        "alcohol": 14.22,
+        "cultivar": "1"
+      },
+      "id": "el_0082",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 2.8966666666666665,
+      "y": 2.742960000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 58,
+      "data_values": {
+        "alcohol": 13.29,
+        "cultivar": "1"
+      },
+      "id": "el_0083",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "ellipse",
+      "x": 3.331666666666666,
+      "y": 2.3662799999999997,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#376F75",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 59,
+      "data_values": {
+        "alcohol": 13.72,
+        "cultivar": "1"
+      },
+      "id": "el_0084",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 3.5488800000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 60,
+      "data_values": {
+        "alcohol": 12.37,
+        "cultivar": "2"
+      },
+      "id": "el_0085",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.635,
+      "y": 3.58392,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 61,
+      "data_values": {
+        "alcohol": 12.33,
+        "cultivar": "2"
+      },
+      "id": "el_0086",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 3.3123599999999995,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 62,
+      "data_values": {
+        "alcohol": 12.64,
+        "cultivar": "2"
+      },
+      "id": "el_0087",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 2.4100800000000002,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 63,
+      "data_values": {
+        "alcohol": 13.67,
+        "cultivar": "2"
+      },
+      "id": "el_0088",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.489999999999999,
+      "y": 3.5488800000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 64,
+      "data_values": {
+        "alcohol": 12.37,
+        "cultivar": "2"
+      },
+      "id": "el_0089",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 3.72408,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 65,
+      "data_values": {
+        "alcohol": 12.17,
+        "cultivar": "2"
+      },
+      "id": "el_0090",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.704999999999999,
+      "y": 3.5488800000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 66,
+      "data_values": {
+        "alcohol": 12.37,
+        "cultivar": "2"
+      },
+      "id": "el_0091",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 2.9006400000000006,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 67,
+      "data_values": {
+        "alcohol": 13.11,
+        "cultivar": "2"
+      },
+      "id": "el_0092",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.414999999999999,
+      "y": 3.5488800000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 68,
+      "data_values": {
+        "alcohol": 12.37,
+        "cultivar": "2"
+      },
+      "id": "el_0093",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 2.6991600000000004,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 69,
+      "data_values": {
+        "alcohol": 13.34,
+        "cultivar": "2"
+      },
+      "id": "el_0094",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.635,
+      "y": 3.6890399999999994,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 70,
+      "data_values": {
+        "alcohol": 12.21,
+        "cultivar": "2"
+      },
+      "id": "el_0095",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.534999999999999,
+      "y": 3.618960000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 71,
+      "data_values": {
+        "alcohol": 12.29,
+        "cultivar": "2"
+      },
+      "id": "el_0096",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 2.2436400000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 72,
+      "data_values": {
+        "alcohol": 13.86,
+        "cultivar": "2"
+      },
+      "id": "el_0097",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 2.56776,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 73,
+      "data_values": {
+        "alcohol": 13.49,
+        "cultivar": "2"
+      },
+      "id": "el_0098",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 3.0057599999999995,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 74,
+      "data_values": {
+        "alcohol": 12.99,
+        "cultivar": "2"
+      },
+      "id": "el_0099",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 3.9080399999999993,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 75,
+      "data_values": {
+        "alcohol": 11.96,
+        "cultivar": "2"
+      },
+      "id": "el_0100",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 4.17084,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 76,
+      "data_values": {
+        "alcohol": 11.66,
+        "cultivar": "2"
+      },
+      "id": "el_0101",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.635,
+      "y": 2.9707200000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 77,
+      "data_values": {
+        "alcohol": 13.03,
+        "cultivar": "2"
+      },
+      "id": "el_0102",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 4.01316,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 78,
+      "data_values": {
+        "alcohol": 11.84,
+        "cultivar": "2"
+      },
+      "id": "el_0103",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.7749999999999995,
+      "y": 3.58392,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 79,
+      "data_values": {
+        "alcohol": 12.33,
+        "cultivar": "2"
+      },
+      "id": "el_0104",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.619999999999999,
+      "y": 3.2598000000000007,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 80,
+      "data_values": {
+        "alcohol": 12.7,
+        "cultivar": "2"
+      },
+      "id": "el_0105",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.635,
+      "y": 3.873,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 81,
+      "data_values": {
+        "alcohol": 12.0,
+        "cultivar": "2"
+      },
+      "id": "el_0106",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.534999999999999,
+      "y": 3.2422799999999996,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 82,
+      "data_values": {
+        "alcohol": 12.72,
+        "cultivar": "2"
+      },
+      "id": "el_0107",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 3.80292,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 83,
+      "data_values": {
+        "alcohol": 12.08,
+        "cultivar": "2"
+      },
+      "id": "el_0108",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.51,
+      "y": 2.9532,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 84,
+      "data_values": {
+        "alcohol": 13.05,
+        "cultivar": "2"
+      },
+      "id": "el_0109",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.64,
+      "y": 4.01316,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 85,
+      "data_values": {
+        "alcohol": 11.84,
+        "cultivar": "2"
+      },
+      "id": "el_0110",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.47,
+      "y": 3.28608,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 86,
+      "data_values": {
+        "alcohol": 12.67,
+        "cultivar": "2"
+      },
+      "id": "el_0111",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.489999999999999,
+      "y": 3.7328399999999995,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 87,
+      "data_values": {
+        "alcohol": 12.16,
+        "cultivar": "2"
+      },
+      "id": "el_0112",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.64,
+      "y": 4.1796,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 88,
+      "data_values": {
+        "alcohol": 11.65,
+        "cultivar": "2"
+      },
+      "id": "el_0113",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.489999999999999,
+      "y": 4.188359999999999,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 89,
+      "data_values": {
+        "alcohol": 11.64,
+        "cultivar": "2"
+      },
+      "id": "el_0114",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.664999999999999,
+      "y": 3.80292,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 90,
+      "data_values": {
+        "alcohol": 12.08,
+        "cultivar": "2"
+      },
+      "id": "el_0115",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.459999999999999,
+      "y": 3.80292,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 91,
+      "data_values": {
+        "alcohol": 12.08,
+        "cultivar": "2"
+      },
+      "id": "el_0116",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.494999999999999,
+      "y": 3.873,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 92,
+      "data_values": {
+        "alcohol": 12.0,
+        "cultivar": "2"
+      },
+      "id": "el_0117",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.694999999999999,
+      "y": 3.2685600000000004,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 93,
+      "data_values": {
+        "alcohol": 12.69,
+        "cultivar": "2"
+      },
+      "id": "el_0118",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.459999999999999,
+      "y": 3.618960000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 94,
+      "data_values": {
+        "alcohol": 12.29,
+        "cultivar": "2"
+      },
+      "id": "el_0119",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.715,
+      "y": 4.2058800000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 95,
+      "data_values": {
+        "alcohol": 11.62,
+        "cultivar": "2"
+      },
+      "id": "el_0120",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 3.4612799999999995,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 96,
+      "data_values": {
+        "alcohol": 12.47,
+        "cultivar": "2"
+      },
+      "id": "el_0121",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.489999999999999,
+      "y": 4.03944,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 97,
+      "data_values": {
+        "alcohol": 11.81,
+        "cultivar": "2"
+      },
+      "id": "el_0122",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.385,
+      "y": 3.618960000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 98,
+      "data_values": {
+        "alcohol": 12.29,
+        "cultivar": "2"
+      },
+      "id": "el_0123",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.34,
+      "y": 3.5488800000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 99,
+      "data_values": {
+        "alcohol": 12.37,
+        "cultivar": "2"
+      },
+      "id": "el_0124",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.31,
+      "y": 3.618960000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 100,
+      "data_values": {
+        "alcohol": 12.29,
+        "cultivar": "2"
+      },
+      "id": "el_0125",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.739999999999999,
+      "y": 3.80292,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 101,
+      "data_values": {
+        "alcohol": 12.08,
+        "cultivar": "2"
+      },
+      "id": "el_0126",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.635,
+      "y": 3.3474000000000004,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 102,
+      "data_values": {
+        "alcohol": 12.6,
+        "cultivar": "2"
+      },
+      "id": "el_0127",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.85,
+      "y": 3.5751600000000003,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 103,
+      "data_values": {
+        "alcohol": 12.34,
+        "cultivar": "2"
+      },
+      "id": "el_0128",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.715,
+      "y": 4.03068,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 104,
+      "data_values": {
+        "alcohol": 11.82,
+        "cultivar": "2"
+      },
+      "id": "el_0129",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.635,
+      "y": 3.42624,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 105,
+      "data_values": {
+        "alcohol": 12.51,
+        "cultivar": "2"
+      },
+      "id": "el_0130",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.63,
+      "y": 3.50508,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 106,
+      "data_values": {
+        "alcohol": 12.42,
+        "cultivar": "2"
+      },
+      "id": "el_0131",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.704999999999999,
+      "y": 3.654,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 107,
+      "data_values": {
+        "alcohol": 12.25,
+        "cultivar": "2"
+      },
+      "id": "el_0132",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.404999999999999,
+      "y": 3.2422799999999996,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 108,
+      "data_values": {
+        "alcohol": 12.72,
+        "cultivar": "2"
+      },
+      "id": "el_0133",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.779999999999999,
+      "y": 3.6802799999999998,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 109,
+      "data_values": {
+        "alcohol": 12.22,
+        "cultivar": "2"
+      },
+      "id": "el_0134",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.414999999999999,
+      "y": 4.21464,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 110,
+      "data_values": {
+        "alcohol": 11.61,
+        "cultivar": "2"
+      },
+      "id": "el_0135",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 4.3460399999999995,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 111,
+      "data_values": {
+        "alcohol": 11.46,
+        "cultivar": "2"
+      },
+      "id": "el_0136",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.499999999999999,
+      "y": 3.4174800000000007,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 112,
+      "data_values": {
+        "alcohol": 12.52,
+        "cultivar": "2"
+      },
+      "id": "el_0137",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.595,
+      "y": 4.08324,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 113,
+      "data_values": {
+        "alcohol": 11.76,
+        "cultivar": "2"
+      },
+      "id": "el_0138",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.63,
+      "y": 4.3898399999999995,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 114,
+      "data_values": {
+        "alcohol": 11.41,
+        "cultivar": "2"
+      },
+      "id": "el_0139",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.385,
+      "y": 3.80292,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 115,
+      "data_values": {
+        "alcohol": 12.08,
+        "cultivar": "2"
+      },
+      "id": "el_0140",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 4.722720000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 116,
+      "data_values": {
+        "alcohol": 11.03,
+        "cultivar": "2"
+      },
+      "id": "el_0141",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.414999999999999,
+      "y": 4.03068,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 117,
+      "data_values": {
+        "alcohol": 11.82,
+        "cultivar": "2"
+      },
+      "id": "el_0142",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.77,
+      "y": 3.50508,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 118,
+      "data_values": {
+        "alcohol": 12.42,
+        "cultivar": "2"
+      },
+      "id": "el_0143",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.47,
+      "y": 3.1984800000000004,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 119,
+      "data_values": {
+        "alcohol": 12.77,
+        "cultivar": "2"
+      },
+      "id": "el_0144",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.709999999999999,
+      "y": 3.873,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 120,
+      "data_values": {
+        "alcohol": 12.0,
+        "cultivar": "2"
+      },
+      "id": "el_0145",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.489999999999999,
+      "y": 4.354800000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 121,
+      "data_values": {
+        "alcohol": 11.45,
+        "cultivar": "2"
+      },
+      "id": "el_0146",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.5649999999999995,
+      "y": 4.258439999999999,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 122,
+      "data_values": {
+        "alcohol": 11.56,
+        "cultivar": "2"
+      },
+      "id": "el_0147",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.2749999999999995,
+      "y": 3.50508,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 123,
+      "data_values": {
+        "alcohol": 12.42,
+        "cultivar": "2"
+      },
+      "id": "el_0148",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.435,
+      "y": 2.9532,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 124,
+      "data_values": {
+        "alcohol": 13.05,
+        "cultivar": "2"
+      },
+      "id": "el_0149",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.779999999999999,
+      "y": 3.986880000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 125,
+      "data_values": {
+        "alcohol": 11.87,
+        "cultivar": "2"
+      },
+      "id": "el_0150",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.8149999999999995,
+      "y": 3.81168,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 126,
+      "data_values": {
+        "alcohol": 12.07,
+        "cultivar": "2"
+      },
+      "id": "el_0151",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.845,
+      "y": 3.4963200000000003,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 127,
+      "data_values": {
+        "alcohol": 12.43,
+        "cultivar": "2"
+      },
+      "id": "el_0152",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.34,
+      "y": 4.056960000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 128,
+      "data_values": {
+        "alcohol": 11.79,
+        "cultivar": "2"
+      },
+      "id": "el_0153",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.209999999999999,
+      "y": 3.5488800000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 129,
+      "data_values": {
+        "alcohol": 12.37,
+        "cultivar": "2"
+      },
+      "id": "el_0154",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 6.3149999999999995,
+      "y": 3.8379600000000007,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#A45C32",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 130,
+      "data_values": {
+        "alcohol": 12.04,
+        "cultivar": "2"
+      },
+      "id": "el_0155",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 3.119640000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 131,
+      "data_values": {
+        "alcohol": 12.86,
+        "cultivar": "3"
+      },
+      "id": "el_0156",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.173333333333334,
+      "y": 3.1021199999999993,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 132,
+      "data_values": {
+        "alcohol": 12.88,
+        "cultivar": "3"
+      },
+      "id": "el_0157",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.033333333333335,
+      "y": 3.16344,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 133,
+      "data_values": {
+        "alcohol": 12.81,
+        "cultivar": "3"
+      },
+      "id": "el_0158",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 3.2598000000000007,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 134,
+      "data_values": {
+        "alcohol": 12.7,
+        "cultivar": "3"
+      },
+      "id": "el_0159",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 3.42624,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 135,
+      "data_values": {
+        "alcohol": 12.51,
+        "cultivar": "3"
+      },
+      "id": "el_0160",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 3.3474000000000004,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 136,
+      "data_values": {
+        "alcohol": 12.6,
+        "cultivar": "3"
+      },
+      "id": "el_0161",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 3.654,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 137,
+      "data_values": {
+        "alcohol": 12.25,
+        "cultivar": "3"
+      },
+      "id": "el_0162",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.173333333333334,
+      "y": 3.4087200000000006,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 138,
+      "data_values": {
+        "alcohol": 12.53,
+        "cultivar": "3"
+      },
+      "id": "el_0163",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 2.56776,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 139,
+      "data_values": {
+        "alcohol": 13.49,
+        "cultivar": "3"
+      },
+      "id": "el_0164",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 9.958333333333334,
+      "y": 3.13716,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 140,
+      "data_values": {
+        "alcohol": 12.84,
+        "cultivar": "3"
+      },
+      "id": "el_0165",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.053333333333335,
+      "y": 3.05832,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 141,
+      "data_values": {
+        "alcohol": 12.93,
+        "cultivar": "3"
+      },
+      "id": "el_0166",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 2.6816400000000002,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 142,
+      "data_values": {
+        "alcohol": 13.36,
+        "cultivar": "3"
+      },
+      "id": "el_0167",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.173333333333334,
+      "y": 2.5414800000000004,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 143,
+      "data_values": {
+        "alcohol": 13.52,
+        "cultivar": "3"
+      },
+      "id": "el_0168",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 2.4538800000000007,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 144,
+      "data_values": {
+        "alcohol": 13.62,
+        "cultivar": "3"
+      },
+      "id": "el_0169",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.173333333333334,
+      "y": 3.654,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 145,
+      "data_values": {
+        "alcohol": 12.25,
+        "cultivar": "3"
+      },
+      "id": "el_0170",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 2.85684,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 146,
+      "data_values": {
+        "alcohol": 13.16,
+        "cultivar": "3"
+      },
+      "id": "el_0171",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 2.2261199999999994,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 147,
+      "data_values": {
+        "alcohol": 13.88,
+        "cultivar": "3"
+      },
+      "id": "el_0172",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.248333333333335,
+      "y": 3.1108800000000008,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 148,
+      "data_values": {
+        "alcohol": 12.87,
+        "cultivar": "3"
+      },
+      "id": "el_0173",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.168333333333335,
+      "y": 2.7166799999999998,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 149,
+      "data_values": {
+        "alcohol": 13.32,
+        "cultivar": "3"
+      },
+      "id": "el_0174",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.128333333333334,
+      "y": 2.92692,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 150,
+      "data_values": {
+        "alcohol": 13.08,
+        "cultivar": "3"
+      },
+      "id": "el_0175",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.023333333333335,
+      "y": 2.559,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 151,
+      "data_values": {
+        "alcohol": 13.5,
+        "cultivar": "3"
+      },
+      "id": "el_0176",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.143333333333334,
+      "y": 3.1809600000000007,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 152,
+      "data_values": {
+        "alcohol": 12.79,
+        "cultivar": "3"
+      },
+      "id": "el_0177",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.033333333333335,
+      "y": 2.9006400000000006,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 153,
+      "data_values": {
+        "alcohol": 13.11,
+        "cultivar": "3"
+      },
+      "id": "el_0178",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.143333333333334,
+      "y": 2.7955199999999993,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 154,
+      "data_values": {
+        "alcohol": 13.23,
+        "cultivar": "3"
+      },
+      "id": "el_0179",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.023333333333335,
+      "y": 3.36492,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 155,
+      "data_values": {
+        "alcohol": 12.58,
+        "cultivar": "3"
+      },
+      "id": "el_0180",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.198333333333334,
+      "y": 2.84808,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 156,
+      "data_values": {
+        "alcohol": 13.17,
+        "cultivar": "3"
+      },
+      "id": "el_0181",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.168333333333335,
+      "y": 2.26116,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 157,
+      "data_values": {
+        "alcohol": 13.84,
+        "cultivar": "3"
+      },
+      "id": "el_0182",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.043333333333335,
+      "y": 3.4788000000000006,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 158,
+      "data_values": {
+        "alcohol": 12.45,
+        "cultivar": "3"
+      },
+      "id": "el_0183",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 1.8231600000000003,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 159,
+      "data_values": {
+        "alcohol": 14.34,
+        "cultivar": "3"
+      },
+      "id": "el_0184",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.243333333333334,
+      "y": 2.57652,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 160,
+      "data_values": {
+        "alcohol": 13.48,
+        "cultivar": "3"
+      },
+      "id": "el_0185",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 3.5576400000000006,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 161,
+      "data_values": {
+        "alcohol": 12.36,
+        "cultivar": "3"
+      },
+      "id": "el_0186",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.143333333333334,
+      "y": 2.3925600000000005,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 162,
+      "data_values": {
+        "alcohol": 13.69,
+        "cultivar": "3"
+      },
+      "id": "el_0187",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 9.883333333333335,
+      "y": 3.1284,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 163,
+      "data_values": {
+        "alcohol": 12.85,
+        "cultivar": "3"
+      },
+      "id": "el_0188",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.128333333333334,
+      "y": 3.0320399999999994,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 164,
+      "data_values": {
+        "alcohol": 12.96,
+        "cultivar": "3"
+      },
+      "id": "el_0189",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 2.3137200000000004,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 165,
+      "data_values": {
+        "alcohol": 13.78,
+        "cultivar": "3"
+      },
+      "id": "el_0190",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.033333333333335,
+      "y": 2.3575199999999996,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 166,
+      "data_values": {
+        "alcohol": 13.73,
+        "cultivar": "3"
+      },
+      "id": "el_0191",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 9.958333333333334,
+      "y": 2.6028000000000007,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 167,
+      "data_values": {
+        "alcohol": 13.45,
+        "cultivar": "3"
+      },
+      "id": "el_0192",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.313333333333334,
+      "y": 3.15468,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 168,
+      "data_values": {
+        "alcohol": 12.82,
+        "cultivar": "3"
+      },
+      "id": "el_0193",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 9.993333333333334,
+      "y": 2.4889200000000002,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 169,
+      "data_values": {
+        "alcohol": 13.58,
+        "cultivar": "3"
+      },
+      "id": "el_0194",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.028333333333334,
+      "y": 2.6466,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 170,
+      "data_values": {
+        "alcohol": 13.4,
+        "cultivar": "3"
+      },
+      "id": "el_0195",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.033333333333335,
+      "y": 3.697800000000001,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 171,
+      "data_values": {
+        "alcohol": 12.2,
+        "cultivar": "3"
+      },
+      "id": "el_0196",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.218333333333334,
+      "y": 3.1984800000000004,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 172,
+      "data_values": {
+        "alcohol": 12.77,
+        "cultivar": "3"
+      },
+      "id": "el_0197",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.098333333333334,
+      "y": 1.98084,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 173,
+      "data_values": {
+        "alcohol": 14.16,
+        "cultivar": "3"
+      },
+      "id": "el_0198",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.218333333333334,
+      "y": 2.375039999999999,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 174,
+      "data_values": {
+        "alcohol": 13.71,
+        "cultivar": "3"
+      },
+      "id": "el_0199",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.198333333333334,
+      "y": 2.6466,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 175,
+      "data_values": {
+        "alcohol": 13.4,
+        "cultivar": "3"
+      },
+      "id": "el_0200",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.073333333333334,
+      "y": 2.7604800000000003,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 176,
+      "data_values": {
+        "alcohol": 13.27,
+        "cultivar": "3"
+      },
+      "id": "el_0201",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 9.978333333333335,
+      "y": 2.84808,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 177,
+      "data_values": {
+        "alcohol": 13.17,
+        "cultivar": "3"
+      },
+      "id": "el_0202",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "trapezoid",
+      "x": 10.173333333333334,
+      "y": 2.007119999999999,
+      "w": 0.07,
+      "h": 0.07,
+      "fill": "#755A91",
+      "stroke": "#FFFFFF",
+      "sw": 0.55,
+      "data_row": 178,
+      "data_values": {
+        "alcohol": 14.13,
+        "cultivar": "3"
+      },
+      "id": "el_0203",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    }
+  ],
+  "schema_version": "7.6.0-dev",
+  "figure_contract": {
+    "claim": "Alcohol measurements overlap across the three coded wine cultivars.",
+    "archetype": "quantitative_grid",
+    "output_mode": "presentation",
+    "unverified": [
+      "Physical unit for alcohol is not supplied by UCI."
+    ]
+  },
+  "evidence_records": [
+    {
+      "id": "source_1",
+      "source": "data/wine_uci.data",
+      "source_file_sha256": "6be6b1203f3d51df0b553a70e57b8a723cd405683958204f96d23d7cd6aea659",
+      "source_locator": "source_row plus source positions 0 (coded cultivar) and 1 (alcohol)",
+      "status": "data_driven",
+      "scope": "All 178 raw source rows are plotted; UCI does not report the physical unit for alcohol.",
+      "reuse": "CC BY 4.0; cite UCI Wine DOI 10.24432/C5PC7J"
+    }
+  ]
+}

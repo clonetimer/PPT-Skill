@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clonetimer/PPT-Skill/specs/chart_spec_v76.schema.json",
+  "title": "Data and chart contracts for scientific result figures",
+  "type": "object", "required": ["schema_version", "data", "charts"],
+  "properties": {
+    "schema_version": {"const": "7.6.0-dev"},
+    "data": {
+      "type": "object", "required": ["id", "file", "source_url", "doi", "license", "sha256", "row_count", "row_unit", "columns", "missing_value_policy", "transforms"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "file": {"type": "string", "minLength": 1},
+        "source_url": {"type": "string", "format": "uri"},
+        "doi": {"type": "string", "minLength": 1},
+        "license": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "row_count": {"type": "integer", "minimum": 1},
+        "row_unit": {"type": "string", "minLength": 1},
+        "columns": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/column"}},
+        "missing_value_policy": {"enum": ["fail", "documented_exclusion", "documented_imputation"]},
+        "transforms": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "charts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/chart"}}
+  },
+  "$defs": {
+    "column": {
+      "type": "object", "required": ["type", "unit", "source_position"],
+      "properties": {
+        "type": {"enum": ["number", "category"]},
+        "unit": {"type": "string", "minLength": 1},
+        "source_position": {"type": "integer", "minimum": 0}
+      }
+    },
+    "chart": {
+      "type": "object", "required": ["id", "kind", "claim", "x", "y", "group", "sample_size", "encoding", "statistics", "axes", "caption"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["scatter", "strip", "point_ci", "confusion_matrix", "ablation", "trend_interval"]},
+        "claim": {"type": "string", "minLength": 1},
+        "x": {"type": "string", "minLength": 1},
+        "y": {"type": "string", "minLength": 1},
+        "group": {"type": "string", "minLength": 1},
+        "sample_size": {"type": "integer", "minimum": 1},
+        "encoding": {"type": "object", "minProperties": 1},
+        "statistics": {"type": "object", "required": ["display", "interval"], "properties": {
+          "algorithm": {"$ref": "#/$defs/nearestNeighborAlgorithm"},
+          "paired_folds": {"type": "boolean"},
+          "feature_sets": {"type": "array", "minItems": 2, "items": {"type": "object",
+            "required": ["label", "fields"], "properties": {
+              "label": {"type": "string", "minLength": 1},
+              "fields": {"type": "array", "minItems": 1, "uniqueItems": true,
+                "items": {"type": "string", "minLength": 1}}
+            }}}
+        }},
+        "derived_fields": {"type": "object", "minProperties": 1,
+          "additionalProperties": {"$ref": "#/$defs/derivedField"}},
+        "axes": {"type": "object", "required": ["x", "y"], "properties": {
+          "x": {"$ref": "#/$defs/axis"}, "y": {"$ref": "#/$defs/axis"}
+        }},
+        "caption": {"type": "string", "minLength": 1}
+      },
+      "allOf": [{"if": {"properties": {"kind": {"enum": ["confusion_matrix", "ablation"]}}},
+                 "then": {"required": ["derived_fields"], "properties": {
+                   "statistics": {"required": ["algorithm"]}}}},
+                {"if": {"properties": {"kind": {"const": "ablation"}}},
+                 "then": {"properties": {"statistics": {"required": ["feature_sets", "paired_folds"]}}}}]
+    },
+    "nearestNeighborAlgorithm": {
+      "type": "object",
+      "required": ["classifier", "k", "distance", "feature_scaling", "validation", "distance_tie_break"],
+      "properties": {
+        "classifier": {"const": "nearest_neighbor"}, "k": {"const": 1},
+        "distance": {"const": "euclidean"}, "feature_scaling": {"const": "none"},
+        "validation": {"const": "leave_one_out"},
+        "distance_tie_break": {"const": "lowest_source_row"},
+        "features": {"type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "derivedField": {
+      "type": "object", "required": ["type", "unit", "source_fields", "derivation"],
+      "properties": {
+        "type": {"enum": ["number", "category"]},
+        "unit": {"type": "string", "minLength": 1},
+        "source_fields": {"type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}},
+        "derivation": {"type": "string", "minLength": 1}
+      }
+    },
+    "axis": {
+      "oneOf": [
+        {"type": "object", "required": ["type", "field", "unit", "domain", "zero_included"],
+         "properties": {"type": {"const": "linear"}, "field": {"type": "string", "minLength": 1},
+           "unit": {"type": "string", "minLength": 1},
+           "domain": {"type": "array", "prefixItems": [{"type": "number"}, {"type": "number"}], "minItems": 2, "maxItems": 2},
+           "zero_included": {"type": "boolean"}, "domain_reason": {"type": "string", "minLength": 1}}},
+        {"type": "object", "required": ["type", "field", "unit", "categories"],
+         "properties": {"type": {"const": "category"}, "field": {"type": "string", "minLength": 1},
+           "unit": {"const": "category"}, "categories": {"type": "array", "minItems": 1,
+             "uniqueItems": true, "items": {"type": "string", "minLength": 1}}}}
+      ]
+    }
+  }
+}

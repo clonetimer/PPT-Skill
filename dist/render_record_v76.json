@@ -1,0 +1,344 @@
+{
+  "schema_version": "7.6.0-dev",
+  "build_commands": [
+    "python tools/build_quantitative_examples.py",
+    "python tools/build_wine_scatter.py",
+    "python tools/build_publication_example.py",
+    "python tools/build_image_quant_example.py",
+    "pwsh tools/export_quantitative_pdf.ps1"
+  ],
+  "tool_versions": {
+    "python": "3.12.14",
+    "python_pptx": "1.0.2",
+    "pillow": "13.0.0",
+    "pypdf": "6.10.0",
+    "pdf_exporter": {
+      "exporter": "Microsoft PowerPoint",
+      "version": "16.0",
+      "export_method": "Presentation.SaveAs PDF (32); Slide.Export PNG",
+      "figure_ids": [
+        "Q01_iris_scatter",
+        "Q02_iris_strip",
+        "Q03_iris_mean_ci",
+        "Q03_iris_mean_ci_nature",
+        "Q04_iris_confusion",
+        "Q05_iris_ablation",
+        "Q06_iris_trend_interval",
+        "Q07_wine_scatter",
+        "Q08_wine_strip",
+        "I01_cell_image_quant"
+      ]
+    }
+  },
+  "platform": "Windows-11-10.0.26200-SP0",
+  "source_assets_sha256": {
+    "data/iris_uci.csv": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+    "data/wine_uci.data": "6be6b1203f3d51df0b553a70e57b8a723cd405683958204f96d23d7cd6aea659",
+    "data/cell_scikit_image_v026.png": "8d23a7fb81f7cc877cd09f330357fc7f595651306e84e17252f6e0a1b3f61515"
+  },
+  "pipeline_sources_canonical_sha256": {
+    "tools/build_quantitative_examples.py": "2b5f819a0d807edb0b0bb91cef143efab60f378ef3a499af41561b6e14a3eaf4",
+    "tools/build_wine_scatter.py": "65f4b644ff20c4e001ef774ea08be599a9143cdcb60ecc7bb071a8013830084f",
+    "tools/build_publication_example.py": "966826b493dcf946795bf12d3269480f1c0fadaca3a28e8ddc88bde284d131d6",
+    "tools/build_image_quant_example.py": "5e09f9ea9e083886c085e743e9433ffe59d22e2d659b617a3e64226b4a2d027e",
+    "tools/chart_data.py": "b12f386f846b45175885b7f7c543068482f4579e59e411aa42a1fec079db2a28",
+    "tools/chart_contract.py": "6f8de13ea5fcb707f31f6dfe7e99c1493705cfa04a455858eb1bb234a0fca14e",
+    "tools/scientific_ir.py": "bd975a5ecbdaa664c6cc24126056d828a23e2ba83c615b3b9488e764bcd5e50d",
+    "tools/render_figure_spec.py": "9bac44fdd9eba0f60ca244d1f37b47315cb75793e3647feefcebfdc067668dce",
+    "tools/export_quantitative_pdf.ps1": "111ae2c8468c85d73d9abc2e4a6ae836bf7ecac2b687678526647544ca423a20",
+    "tools/audit_pptx.py": "8bea812aa29fc82618b6e296b320a74bb348406aad8ab980a24752a527210aa2",
+    "tools/record_scientific_render.py": "3a17c2a6c9ee71a5bd54dcc1a2bcdf25b8fb70325cb793064a3c1fcabb91befb"
+  },
+  "figures": [
+    {
+      "figure_id": "Q01_iris_scatter",
+      "figure_spec": "figure_specs/quant/Q01_iris_scatter.json",
+      "input_sha256": "0102d5941d20a8bc1503527636f60aa532e0ed919ffdcd3bf7cc6907ae62e19c",
+      "input_canonical_sha256": "74d526aa1f57d927822e8d51175b1fe4606a779052f90cdc5ae330db2ead9b6d",
+      "outputs_sha256": {
+        "svg": "03d6cf776c8c8eb6098027f4e55feaeded22a375f5a770b8d218894b4d82aa0e",
+        "pptx": "9738907b6c1d9bb00450d90ad45001cce4a9dd6734129055d93c28e2f303ec8c",
+        "pdf": "f876bcc19e4c2e22324c428761331b2a7b7adffdc6f043148d644c06734e0dfd",
+        "preview.png": "e906f39ba6bb770c6fc47b7ca7324c9f316a6823cf782b777bd43b47817b0786"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "7f78f577926b8de6987ba4b7287e2825b6519e0af5d07451efe1711af3d006f4",
+        "pptx": "c528721f6b37cec11f3c5d8c2501f1714d04184587a9c0dfe93b9b4a2108f8cf"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "Q02_iris_strip",
+      "figure_spec": "figure_specs/quant/Q02_iris_strip.json",
+      "input_sha256": "ed82427f756cc1e7514106c0730165f615c443acc23ee7188f4dcf9a5ff3c17b",
+      "input_canonical_sha256": "976142a20ef701bc614e132bea87944923136232706bc516d936341ce08d28d9",
+      "outputs_sha256": {
+        "svg": "250af3fb9ca042409cbf96276c3dc6bfadcd410a6b9b4060da485709333fb6de",
+        "pptx": "8ef09072f2573592ec713019cf79fd4019950607b54395d238ddabd4d85edc82",
+        "pdf": "bbfd177006b8a969c36c46acf8d31df1657957e15df4195d4c4cb1764ce30840",
+        "preview.png": "2c761507823d2ac1a3baf1c73c0992c99fb88caf3a44a889000988dfe85a2aa6"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "0f69c4dd03dca8c5fcc04776611c4209f5e5a7c77f0f18ca153e335efc748520",
+        "pptx": "6f093ae5bfccd6337ad66affc6317da1bb89d2cb3a1a05bc4cf1a02bf6ac9cba"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "Q03_iris_mean_ci",
+      "figure_spec": "figure_specs/quant/Q03_iris_mean_ci.json",
+      "input_sha256": "4f9b5f2abb062e6227b58c797454e9ea2df44fda676c5e3b4c856c9e29cfb39e",
+      "input_canonical_sha256": "fc04fd614ba4630d705e05a200fe0513d8eee65f2aa132729235808401556bd2",
+      "outputs_sha256": {
+        "svg": "73035582a320e32a5c3b7c28b51e352751a929ac5f7ea2646e7de493e5d1a15d",
+        "pptx": "cb50e2803356b6feb57bb57c720b6c228b1c92d89afba93b238687879c1cdab4",
+        "pdf": "d443b1198da1af0b48f2dc649b8f6db3fc69fe484c6b3e825a354eaf2420ee0d",
+        "preview.png": "147b7effd8501e72b2786fab6a1c4d9e3131b4ac97e3b4b386319bc88a963570"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "c0f57b7176c6694fa83fa981ef1f8398fabca7fe4a6bf8396feb1d866259cdad",
+        "pptx": "a37f0cce1ebd48f528e848850521de375b4bb251845fdcdbb56be752732c8a6e"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "Q03_iris_mean_ci_nature",
+      "figure_spec": "figure_specs/quant/Q03_iris_mean_ci_nature.json",
+      "input_sha256": "2473d4c2ce49e8c515cac37d1fab0698b24b44ddd54c509dd04ae57b7db1f09d",
+      "input_canonical_sha256": "273e6893a70794570c3c56b4086e24f8a0652f5857c1451b43a2c12cc03c54d6",
+      "outputs_sha256": {
+        "svg": "67b382cdabd880c084c87614f43944475e453117abfd8143400bdefdc8a36eda",
+        "pptx": "47294b88cc020631d4491fdb3d025f53022b9e53fafdc0986b2e244a28accb73",
+        "pdf": "943b9f432bb0d971cc5ea51edd59ceaa69d1e71665df72b8026b4a4b8ad46107",
+        "preview.png": "908390ad400931cb845c3823bc68e636188969cde192c0f1dc97e7788994b536"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "67bd6976508cb4169227a2b099ac2fdbba6f4be2afaec46026538cb0efba1fec",
+        "pptx": "24c53ef94de903931326acd7df634c3b8b72908fa8ffda08026fb5e8a8615369"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "Q04_iris_confusion",
+      "figure_spec": "figure_specs/quant/Q04_iris_confusion.json",
+      "input_sha256": "7a9fc71e8b42beffa1a9c35f999aa0c7403fa606cbdcc6455417fbc02f03bb8a",
+      "input_canonical_sha256": "ceeb98a28cfad7b583e11855d5bcf864b3567f9693e25e595df571d6c05c8139",
+      "outputs_sha256": {
+        "svg": "7f9c3a9e8aa66e088ebd24bbad271c3d477ffdaee79f72cd727e58f33918cc00",
+        "pptx": "590aff3110aa090e8ca1098f9ec4efc66720469197c7b3dc8ca9602a9009d363",
+        "pdf": "94f582ea258705d3235837fd700c78a9c52c09decfafeb27d16f95b3ac758c11",
+        "preview.png": "f80e8b9bb2a97567215988851ca28d746e803ff97a7a64ef254aaf0d94b009e5"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "39fb985c2be7b074a527583722306196090a5b2dabbc20e31f50362bcc0c0e40",
+        "pptx": "3662cd7a79ddbb110ade4433bba37f08bb6ea9da403b7818ce226d7947031011"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "Q05_iris_ablation",
+      "figure_spec": "figure_specs/quant/Q05_iris_ablation.json",
+      "input_sha256": "0c69077d965f4cd5b7fde24f1aa4477df0fffac847d09ad76768c11eadd0b5be",
+      "input_canonical_sha256": "e387979216e11eedb5d3a1df278b2f34cde51f2ff15be00e6c92637725023a6c",
+      "outputs_sha256": {
+        "svg": "14f5c53c5ec9b8ea32dcc54d308cfca1b22fb32ba2e2e73537ebec306b31e2d5",
+        "pptx": "40b91e77d906e217c7c8aae45521d68e93f260ca3ab1f4b4c0491587370bf285",
+        "pdf": "e95d76cc072853be790f394ece58413d546a72bf54cbc74ee97700664a4bb9a0",
+        "preview.png": "249ad3d34e6c71919975c87f4147b691f4aa0035611b457c2f70f599caf240db"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "4264a49e5bb61cb7a90f57a793cd6af9a43e79f7257399e5a090229084e4cb42",
+        "pptx": "a0d07976cb78d0e340a51c56bf6ed71337f19dcb4fb01070e8a6a6f9439e446e"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "Q06_iris_trend_interval",
+      "figure_spec": "figure_specs/quant/Q06_iris_trend_interval.json",
+      "input_sha256": "4c84dd71e9a9dc581a35984b69a0b3f2d91afaf2f740ada5641f0866b6f8f835",
+      "input_canonical_sha256": "e6d95d51b79f95c44fce8bfdde843ddfc448b5f31010cc0a7b53bfc489c975b6",
+      "outputs_sha256": {
+        "svg": "8d95f4460430dca07b3f1de98647b31a5ba4ddcff1a6c3f59aa6be40be8524eb",
+        "pptx": "21d0f328e67648f1f99f29332181e9e13dfe449351ae40631e484c75d73d3f08",
+        "pdf": "6cc881c0af7b786b619106bbafdb5e072b91dac0c1785c8c132ccc41b8ce8647",
+        "preview.png": "afdc1c3ef9382be1e5f445c3faf7d9ca152ad83c0c2df74453a1a8f638f2d3f3"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "43c963414f8bad81a06509cb6a57d9dbc5e532fa5b4ad41f649909eb9184e128",
+        "pptx": "8f3400705f75334131ee824765aca47ed091e7b7773afef39746394b64b3ca96"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "Q07_wine_scatter",
+      "figure_spec": "figure_specs/quant/Q07_wine_scatter.json",
+      "input_sha256": "3d08a75e71d1d1af91dbe87ce088327a2119695c4b149399ae5ea0c8349ee374",
+      "input_canonical_sha256": "75e6cde50ddc698b46f0f5b06e0eee49000f017381185eaf4dcbfd3357547cbe",
+      "outputs_sha256": {
+        "svg": "80236664fd75eaea60ff629200956a56ceaff95d759711e428bd8bd86bab017e",
+        "pptx": "5a57eed857490f163f8f2d88fec01ef63a82ecf469fbad64687b2c9af20f3547",
+        "pdf": "2a1568924c418e696b7c008a421af75b27a6a4faca5ed176015bb30a6ece7136",
+        "preview.png": "6b202118d5987cc8cc3136d9ed1e8072169bb48de437c4dd2cf82e477ffa28a2"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "9691ff4212c45b2b9abf306715ec4d45b8e970d6f5705a45a63a9581b7a01a8d",
+        "pptx": "8d4fb51e1d06870ee08a87690c34e834e8a689c6926c45bbde2f84ddcf0dc66f"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "Q08_wine_strip",
+      "figure_spec": "figure_specs/quant/Q08_wine_strip.json",
+      "input_sha256": "64856fd94f4161e6c703bbd2a2bbc28cad1df0c87e7d26eb92071b20b0ca5e49",
+      "input_canonical_sha256": "8370f07a1cc69a8e26d46cfab6e91f30ecd1ca35427806300215109af92936d0",
+      "outputs_sha256": {
+        "svg": "15b5d3e81f4f58a905570f79c6d785c465e41dd75b03e5777560d8ce80001032",
+        "pptx": "553a443cf5e879679d0d20ebf2cebfe9392d6eafd2b776bdf8dac2b95e307374",
+        "pdf": "a50dbd787e5faea5e94889824ef45f9c0815cabbf03c5190ccf6a5e01a80270e",
+        "preview.png": "252af5e3fa7b22a46bbd06c4187b1e1604b17c2b7cb9eb5d5643a3c970fc38ff"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "c91e83ad74022344d7accf1f734342d7c4a9b361a207178869295a99ec3ad797",
+        "pptx": "5473d87efdb90628df9c1dd7401403237222ce8876d1a855aca5b99ed0d191e3"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "I01_cell_image_quant",
+      "figure_spec": "figure_specs/image/I01_cell_image_quant.json",
+      "input_sha256": "836ecc02ff5f9ad9c1b62399a201a7893e15c93d9ef07f13293b3e40f92c9889",
+      "input_canonical_sha256": "fa4b48f792bcb2ccd790794a29d5316bbec3a32f3a880b20dc5e64e43ff81eb6",
+      "outputs_sha256": {
+        "svg": "a64dbb677c2a57667ccc807052e1d78f04acd6e5772186a8c5d72e21a6c6ec1e",
+        "pptx": "3a295236fa568dc66313114b9419b970135cc5a6854d7aa68366a52475ae8fe6",
+        "pdf": "70bbca97fc46f599ecb2002c9629e5a46167838797c243d7eef4b7fce504955d",
+        "preview.png": "8c42737a782223e57dec4e9375917559261a9face072f094e53148779794715f"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "ea8440f3451269ac3c78ef1a5826bd5016ae1d329e1a35d73689b795c3cad6a9",
+        "pptx": "176df2783767d2ecb8279705109904020e2b6a4d5f99d24921cd294c469b1d5d"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    }
+  ]
+}

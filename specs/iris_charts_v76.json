@@ -1,0 +1,81 @@
+{
+  "schema_version": "7.6.0-dev",
+  "data": {
+    "id": "uci_iris_150",
+    "file": "data/iris_uci.csv",
+    "source_url": "https://archive.ics.uci.edu/dataset/53/iris",
+    "doi": "10.24432/C56C76",
+    "license": "CC BY 4.0",
+    "sha256": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+    "row_count": 150,
+    "row_unit": "one iris flower",
+    "columns": {
+      "sepal_length_cm": {"type": "number", "unit": "cm", "source_position": 0},
+      "sepal_width_cm": {"type": "number", "unit": "cm", "source_position": 1},
+      "petal_length_cm": {"type": "number", "unit": "cm", "source_position": 2},
+      "petal_width_cm": {"type": "number", "unit": "cm", "source_position": 3},
+      "species": {"type": "category", "unit": "category", "source_position": 4}
+    },
+    "missing_value_policy": "fail",
+    "transforms": ["parse original CSV without reordering or excluding rows"]
+  },
+  "charts": [
+    {
+      "id": "Q01_iris_scatter", "kind": "scatter",
+      "claim": "The three iris species occupy different regions in petal measurements.",
+      "x": "petal_length_cm", "y": "petal_width_cm", "group": "species",
+      "sample_size": 150, "encoding": {"color": "species", "shape": "species"},
+      "statistics": {"display": "all_raw_points", "interval": "none", "jitter": {"purpose": "display_only_separate_coincident_coordinates", "minimum_center_gap_in": 0.06, "max_display_offset_in": 0.15}},
+      "axes": {"x":{"type":"linear","field":"petal_length_cm","unit":"cm","domain":[0,7],"zero_included":true},"y":{"type":"linear","field":"petal_width_cm","unit":"cm","domain":[0,3],"zero_included":true}}, "caption": "Each point is one flower. Coincident measurements receive small display-only offsets; source values and calculations are unchanged."
+    },
+    {
+      "id": "Q02_iris_strip", "kind": "strip",
+      "claim": "Sepal length distributions overlap across species.",
+      "x": "species", "y": "sepal_length_cm", "group": "species",
+      "sample_size": 150, "encoding": {"color": "species", "shape": "species"},
+      "statistics": {"display": "all_raw_points", "interval": "none", "jitter": {"purpose": "display_only_horizontal_beeswarm", "minimum_center_gap_in": 0.075, "max_display_offset_in": 0.35}},
+      "axes": {"x":{"type":"category","field":"species","unit":"category","categories":["Iris-setosa","Iris-versicolor","Iris-virginica"]},"y":{"type":"linear","field":"sepal_length_cm","unit":"cm","domain":[3,9],"zero_included":false,"domain_reason":"Zoomed to show the observed distribution; axis starts at 3 cm."}}, "caption": "All 50 flowers per species are shown; display-only horizontal offsets separate equal measurements."
+    },
+    {
+      "id": "Q03_iris_mean_ci", "kind": "point_ci",
+      "claim": "Species differ in sample mean petal length.",
+      "x": "species", "y": "petal_length_cm", "group": "species",
+      "sample_size": 150, "encoding": {"color": "species", "shape": "species"},
+      "statistics": {"display": "mean_with_raw_points", "interval": "bootstrap_percentile_95", "resamples": 2000, "seed": 76, "resampling_unit": "flower within species", "jitter": {"purpose": "display_only_horizontal_beeswarm", "minimum_center_gap_in": 0.05, "max_display_offset_in": 0.55}},
+      "axes": {"x":{"type":"category","field":"species","unit":"category","categories":["Iris-setosa","Iris-versicolor","Iris-virginica"]},"y":{"type":"linear","field":"petal_length_cm","unit":"cm","domain":[0,8],"zero_included":true}}, "caption": "Small dots show all flowers with display-only horizontal offsets. Large mean dots and 95% percentile bootstrap intervals appear to the right of each group (2,000 within-species resamples)."
+    },
+    {
+      "id": "Q04_iris_confusion", "kind": "confusion_matrix",
+      "claim": "A simple nearest-neighbor baseline makes some cross-species errors.",
+      "x": "predicted_species", "y": "actual_species", "group": "species",
+      "derived_fields": {
+        "predicted_species": {"type": "category", "unit": "category", "source_fields": ["sepal_length_cm", "sepal_width_cm", "petal_length_cm", "petal_width_cm", "species"], "derivation": "For each source row, predict species using leave-one-out Euclidean 1-NN on the four unscaled measurements; source row order resolves distance ties."},
+        "actual_species": {"type": "category", "unit": "category", "source_fields": ["species"], "derivation": "Copy the source species label without changing categories."}
+      },
+      "sample_size": 150, "encoding": {"color": "count", "text": "count"},
+      "statistics": {"display": "raw_counts", "interval": "none", "algorithm": {"classifier": "nearest_neighbor", "k": 1, "distance": "euclidean", "feature_scaling": "none", "validation": "leave_one_out", "distance_tie_break": "lowest_source_row", "features": ["sepal_length_cm", "sepal_width_cm", "petal_length_cm", "petal_width_cm"]}},
+      "axes": {"x":{"type":"category","field":"predicted_species","unit":"category","categories":["Iris-setosa","Iris-versicolor","Iris-virginica"]},"y":{"type":"category","field":"actual_species","unit":"category","categories":["Iris-setosa","Iris-versicolor","Iris-virginica"]}}, "caption": "Counts are from 150 deterministic leave-one-out predictions. This is a demonstrator baseline, not a published model result."
+    },
+    {
+      "id": "Q05_iris_ablation", "kind": "ablation",
+      "claim": "Removing sepal measurements changes this demonstrator's leave-one-out accuracy.",
+      "x": "feature_set", "y": "accuracy_percent", "group": "feature_set",
+      "derived_fields": {
+        "feature_set": {"type": "category", "unit": "category", "source_fields": ["sepal_length_cm", "sepal_width_cm", "petal_length_cm", "petal_width_cm"], "derivation": "Compare all four measurements with the two petal measurements on identical leave-one-out folds."},
+        "accuracy_percent": {"type": "number", "unit": "%", "source_fields": ["sepal_length_cm", "sepal_width_cm", "petal_length_cm", "petal_width_cm", "species"], "derivation": "For each feature set, divide the number of correct leave-one-out 1-NN predictions by 150 source flowers and multiply by 100."}
+      },
+      "sample_size": 150, "encoding": {"bar_height": "accuracy_percent", "text": "correct_count"},
+      "statistics": {"display": "paired_accuracy", "interval": "none", "algorithm": {"classifier": "nearest_neighbor", "k": 1, "distance": "euclidean", "feature_scaling": "none", "validation": "leave_one_out", "distance_tie_break": "lowest_source_row"}, "paired_folds": true, "feature_sets": [{"label": "All four measurements", "fields": ["sepal_length_cm", "sepal_width_cm", "petal_length_cm", "petal_width_cm"]}, {"label": "Petal measurements only", "fields": ["petal_length_cm", "petal_width_cm"]}]},
+      "axes": {"x":{"type":"category","field":"feature_set","unit":"category","categories":["All four measurements","Petal measurements only"]},"y":{"type":"linear","field":"accuracy_percent","unit":"%","domain":[0,100],"zero_included":true}}, "caption": "Paired 150-row leave-one-out 1-NN comparison; 4-feature baseline versus petal-only. Accuracy is descriptive; no paper performance claim."
+    },
+    {
+      "id": "Q06_iris_trend_interval", "kind": "trend_interval",
+      "claim": "Within setosa, petal length varies across ordered sepal-length groups.",
+      "x": "sepal_length_cm", "y": "petal_length_cm", "group": "species",
+      "filter": {"species": "Iris-setosa"}, "sample_size": 50,
+      "encoding": {"raw_points": "circle", "trend": "connected bin means", "interval": "whisker"},
+      "statistics": {"display": "raw_points_and_bin_means", "interval": "bootstrap_percentile_95", "bins": "five equal-count ranked sepal-length groups, tie-break by source row, 10 flowers each", "resamples": 2000, "seed": 76, "resampling_unit": "flower within bin", "jitter": {"purpose": "display_only_separate_close_coordinates", "minimum_center_gap_in": 0.075, "max_display_offset_in": 0.08}},
+      "axes": {"x":{"type":"linear","field":"sepal_length_cm","unit":"cm","domain":[4,6],"zero_included":false,"domain_reason":"Zoomed to the setosa sepal-length range; axis starts at 4 cm."},"y":{"type":"linear","field":"petal_length_cm","unit":"cm","domain":[0,2],"zero_included":true}}, "caption": "50 setosa flowers. Line connects five 10-flower bin means; whiskers are within-bin 95% bootstrap intervals. Small display-only offsets separate overlapping raw points; no model fit."
+    }
+  ]
+}

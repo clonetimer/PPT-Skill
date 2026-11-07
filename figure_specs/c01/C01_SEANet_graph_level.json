@@ -28,7 +28,10 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0001",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -40,7 +43,10 @@
       "stroke": "#43525B",
       "sw": 1,
       "radius": 0,
-      "dash": true
+      "dash": true,
+      "id": "el_0002",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -52,7 +58,10 @@
       "stroke": "#AEBBC2",
       "sw": 0.8,
       "radius": 0.14,
-      "dash": false
+      "dash": false,
+      "id": "el_0003",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -64,7 +73,10 @@
       "stroke": "#AEBBC2",
       "sw": 0.8,
       "radius": 0.14,
-      "dash": false
+      "dash": false,
+      "id": "el_0004",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -76,7 +88,11 @@
       "stroke": "#43525B",
       "sw": 1.1,
       "radius": 0.14,
-      "dash": false
+      "dash": false,
+      "id": "el_0005",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "input"
     },
     {
       "type": "text",
@@ -90,7 +106,11 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0006",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_input"
     },
     {
       "type": "graph",
@@ -205,7 +225,10 @@
       "fill": "#7896A6",
       "r": 0.045,
       "edge": "#43525B",
-      "sw": 0.65
+      "sw": 0.65,
+      "id": "el_0007",
+      "semantic_role": "schematic_graph",
+      "evidence_ref": "source_1"
     },
     {
       "type": "line",
@@ -216,7 +239,11 @@
       "color": "#43525B",
       "sw": 1.45,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0008",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "input__gcn_1"
     },
     {
       "type": "rect",
@@ -228,7 +255,10 @@
       "stroke": "#E4EAED",
       "sw": 0.3,
       "radius": 0.14,
-      "dash": false
+      "dash": false,
+      "id": "el_0009",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -240,7 +270,11 @@
       "stroke": "#43525B",
       "sw": 1.05,
       "radius": 0.14,
-      "dash": false
+      "dash": false,
+      "id": "el_0010",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "gcn_1"
     },
     {
       "type": "text",
@@ -254,7 +288,11 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0011",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_gcn_1"
     },
     {
       "type": "trapezoid",
@@ -264,7 +302,10 @@
       "h": 0.86,
       "fill": "#E4EAED",
       "stroke": "#E4EAED",
-      "sw": 0.3
+      "sw": 0.3,
+      "id": "el_0012",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "trapezoid",
@@ -274,7 +315,11 @@
       "h": 0.86,
       "fill": "#F1F4F5",
       "stroke": "#43525B",
-      "sw": 1.05
+      "sw": 1.05,
+      "id": "el_0013",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "pooling_1"
     },
     {
       "type": "text",
@@ -288,7 +333,11 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0014",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_pooling_1"
     },
     {
       "type": "line",
@@ -299,7 +348,11 @@
       "color": "#43525B",
       "sw": 1.35,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0015",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "gcn_1__pooling_1"
     },
     {
       "type": "rect",
@@ -311,7 +364,10 @@
       "stroke": "#E4EAED",
       "sw": 0.3,
       "radius": 0.14,
-      "dash": false
+      "dash": false,
+      "id": "el_0016",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -323,7 +379,11 @@
       "stroke": "#43525B",
       "sw": 1.05,
       "radius": 0.14,
-      "dash": false
+      "dash": false,
+      "id": "el_0017",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "gcn_2"
     },
     {
       "type": "text",
@@ -337,7 +397,11 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0018",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_gcn_2"
     },
     {
       "type": "line",
@@ -348,7 +412,11 @@
       "color": "#43525B",
       "sw": 1.35,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0019",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "pooling_1__gcn_2"
     },
     {
       "type": "trapezoid",
@@ -358,7 +426,10 @@
       "h": 0.86,
       "fill": "#E4EAED",
       "stroke": "#E4EAED",
-      "sw": 0.3
+      "sw": 0.3,
+      "id": "el_0020",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "trapezoid",
@@ -368,7 +439,11 @@
       "h": 0.86,
       "fill": "#F1F4F5",
       "stroke": "#43525B",
-      "sw": 1.05
+      "sw": 1.05,
+      "id": "el_0021",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "pooling_2"
     },
     {
       "type": "text",
@@ -382,7 +457,11 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0022",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_pooling_2"
     },
     {
       "type": "line",
@@ -393,7 +472,11 @@
       "color": "#43525B",
       "sw": 1.35,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0023",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "gcn_2__pooling_2"
     },
     {
       "type": "rect",
@@ -405,7 +488,10 @@
       "stroke": "#E4EAED",
       "sw": 0.3,
       "radius": 0.12,
-      "dash": false
+      "dash": false,
+      "id": "el_0024",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -417,7 +503,11 @@
       "stroke": "#43525B",
       "sw": 1,
       "radius": 0.12,
-      "dash": false
+      "dash": false,
+      "id": "el_0025",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "sr_main"
     },
     {
       "type": "text",
@@ -431,7 +521,11 @@
       "color": "#FFFFFF",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0026",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_sr_main"
     },
     {
       "type": "line",
@@ -442,7 +536,11 @@
       "color": "#43525B",
       "sw": 1.35,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0027",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "pooling_2__sr_main"
     },
     {
       "type": "ellipse",
@@ -452,7 +550,11 @@
       "h": 0.62,
       "fill": "#FFFFFF",
       "stroke": "#43525B",
-      "sw": 1.2
+      "sw": 1.2,
+      "id": "el_0028",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "sum"
     },
     {
       "type": "text",
@@ -466,7 +568,11 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0029",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_sum"
     },
     {
       "type": "line",
@@ -477,7 +583,11 @@
       "color": "#43525B",
       "sw": 1.35,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0030",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "sr_main__sum"
     },
     {
       "type": "line",
@@ -488,7 +598,11 @@
       "color": "#43525B",
       "sw": 1.35,
       "arrow": false,
-      "dash": false
+      "dash": false,
+      "id": "el_0031",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "input__ea"
     },
     {
       "type": "line",
@@ -499,7 +613,11 @@
       "color": "#43525B",
       "sw": 1.35,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0032",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "input__ea"
     },
     {
       "type": "rect",
@@ -511,7 +629,10 @@
       "stroke": "#E4EAED",
       "sw": 0.3,
       "radius": 0.14,
-      "dash": false
+      "dash": false,
+      "id": "el_0033",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -523,7 +644,11 @@
       "stroke": "#43525B",
       "sw": 1.05,
       "radius": 0.14,
-      "dash": false
+      "dash": false,
+      "id": "el_0034",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "ea"
     },
     {
       "type": "text",
@@ -537,18 +662,26 @@
       "color": "#28343C",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0035",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_ea"
     },
     {
       "type": "line",
-      "x1": 5.03,
-      "y1": 5.12,
-      "x2": 5.58,
-      "y2": 5.12,
+      "x1": 3.55,
+      "y1": 4.7,
+      "x2": 3.55,
+      "y2": 3.94,
       "color": "#43525B",
       "sw": 1.35,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0036",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "ea__gcn_1"
     },
     {
       "type": "rect",
@@ -560,7 +693,10 @@
       "stroke": "#E4EAED",
       "sw": 0.3,
       "radius": 0.12,
-      "dash": false
+      "dash": false,
+      "id": "el_0037",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -572,7 +708,11 @@
       "stroke": "#43525B",
       "sw": 1,
       "radius": 0.12,
-      "dash": false
+      "dash": false,
+      "id": "el_0038",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "sr_aux"
     },
     {
       "type": "text",
@@ -586,7 +726,11 @@
       "color": "#FFFFFF",
       "bold": true,
       "align": "center",
-      "italic": false
+      "italic": false,
+      "id": "el_0039",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_sr_aux"
     },
     {
       "type": "line",
@@ -597,7 +741,11 @@
       "color": "#43525B",
       "sw": 1.35,
       "arrow": false,
-      "dash": false
+      "dash": false,
+      "id": "el_0040",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "sr_aux__sum"
     },
     {
       "type": "line",
@@ -608,7 +756,11 @@
       "color": "#43525B",
       "sw": 1.35,
       "arrow": true,
-      "dash": false
+      "dash": false,
+      "id": "el_0041",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "sr_aux__sum"
     },
     {
       "type": "text",
@@ -622,11 +774,14 @@
       "color": "#687780",
       "bold": false,
       "align": "left",
-      "italic": false
+      "italic": false,
+      "id": "el_0042",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
-      "text": "Paper terminology: SR = sensitivity-aware readout. No additional classifier block is inserted beyond the source's summation node.",
+      "text": "Publisher graphical abstract: EA feeds the first GCN; the first pooling branches to a second SR; both SR outputs merge before Dense classification.",
       "x": 0.8,
       "y": 6.55,
       "w": 11.8,
@@ -636,7 +791,224 @@
       "color": "#687780",
       "bold": false,
       "align": "left",
-      "italic": true
+      "italic": true,
+      "id": "el_0043",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 5.54,
+      "y1": 3.93,
+      "x2": 5.54,
+      "y2": 5.12,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": false,
+      "dash": false,
+      "id": "el_0044",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "pooling_1__sr_aux"
+    },
+    {
+      "type": "line",
+      "x1": 5.54,
+      "y1": 5.12,
+      "x2": 5.63,
+      "y2": 5.12,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false,
+      "id": "el_0045",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "pooling_1__sr_aux"
+    },
+    {
+      "type": "rect",
+      "x": 11.27,
+      "y": 3.05,
+      "w": 1.02,
+      "h": 0.86,
+      "fill": "#E8F0F3",
+      "stroke": "#43525B",
+      "sw": 1.05,
+      "radius": 0.12,
+      "dash": false,
+      "id": "el_0046",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "dense"
+    },
+    {
+      "type": "text",
+      "text": "Dense",
+      "x": 11.32,
+      "y": 3.23,
+      "w": 0.92,
+      "h": 0.42,
+      "size": 15,
+      "font": "Times New Roman",
+      "color": "#28343C",
+      "bold": true,
+      "align": "center",
+      "italic": false,
+      "id": "el_0047",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_dense"
+    },
+    {
+      "type": "line",
+      "x1": 11.06,
+      "y1": 3.48,
+      "x2": 11.24,
+      "y2": 3.48,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false,
+      "id": "el_0048",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "sum__dense"
+    },
+    {
+      "type": "rect",
+      "x": 12.51,
+      "y": 3.14,
+      "w": 0.27,
+      "h": 0.68,
+      "fill": "#FFFFFF",
+      "stroke": "#43525B",
+      "sw": 1.0,
+      "radius": 0,
+      "dash": false,
+      "id": "el_0049",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "class_output"
+    },
+    {
+      "type": "rect",
+      "x": 12.55,
+      "y": 3.39,
+      "w": 0.19,
+      "h": 0.17,
+      "fill": "#DCA16C",
+      "stroke": "#43525B",
+      "sw": 0.5,
+      "radius": 0,
+      "dash": false,
+      "id": "el_0050",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 12.31,
+      "y1": 3.48,
+      "x2": 12.48,
+      "y2": 3.48,
+      "color": "#43525B",
+      "sw": 1.35,
+      "arrow": true,
+      "dash": false,
+      "id": "el_0051",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1",
+      "semantic_link": "dense__class_output"
+    },
+    {
+      "type": "text",
+      "text": "fault class",
+      "x": 12.06,
+      "y": 4.05,
+      "w": 0.76,
+      "h": 0.28,
+      "size": 10.5,
+      "font": "Times New Roman",
+      "color": "#28343C",
+      "bold": false,
+      "align": "center",
+      "italic": false,
+      "id": "el_0052",
+      "semantic_role": "scientific_label",
+      "evidence_ref": "source_1",
+      "semantic_id": "label_class_output"
     }
+  ],
+  "schema_version": "7.6.0-dev",
+  "figure_contract": {
+    "claim": "GCN/pooling and energy-assisted SR paths converge at the summation node.",
+    "archetype": "schematic_led_composite",
+    "output_mode": "presentation",
+    "unverified": [
+      "Numerical adjacency matrix",
+      "Pixel-level source-image match"
+    ]
+  },
+  "evidence_records": [
+    {
+      "id": "source_1",
+      "source": "docs/C01_V73_SOURCE.md",
+      "source_file_sha256": "08fb792243f10a8f386f415d4dd7952491beb637198e7983b70f11ce0b102f04",
+      "source_locator": "Author-published graphical abstract, Paper-grounded statements, and Terminology",
+      "status": "source_visible_redraw",
+      "scope": "Visible graph-level method topology; node coordinates are schematic.",
+      "reuse": "derivative_redraw_only"
+    }
+  ],
+  "semantic_edges": [
+    [
+      "input",
+      "gcn_1"
+    ],
+    [
+      "gcn_1",
+      "pooling_1"
+    ],
+    [
+      "pooling_1",
+      "gcn_2"
+    ],
+    [
+      "gcn_2",
+      "pooling_2"
+    ],
+    [
+      "pooling_2",
+      "sr_main"
+    ],
+    [
+      "sr_main",
+      "sum"
+    ],
+    [
+      "input",
+      "ea"
+    ],
+    [
+      "ea",
+      "gcn_1"
+    ],
+    [
+      "pooling_1",
+      "sr_aux"
+    ],
+    [
+      "sr_aux",
+      "sum"
+    ],
+    [
+      "sum",
+      "dense"
+    ],
+    [
+      "dense",
+      "class_output"
+    ]
   ]
 }

@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+"""Check the committed Windows export attestation without rewriting it on CI."""
+from __future__ import annotations
+
+import json
+
+from record_scientific_render import (ROOT, IDS, canonical_spec_digest, canonical_svg_digest,
+                                      canonical_pptx_digest, canonical_source_digest, digest,
+                                      pdf_font_audit, PIPELINE_SOURCES)
+
+
+def validate_pipeline_sources(record: dict) -> None:
+    observed = record.get("pipeline_sources_canonical_sha256", {})
+    assert set(observed) == set(PIPELINE_SOURCES), "Pipeline source inventory changed"
+    for relpath in PIPELINE_SOURCES:
+        assert observed[relpath] == canonical_source_digest(ROOT / relpath), relpath
+
+
+def main():
+    record = json.loads((ROOT / "dist/render_record_v76.json").read_text(encoding="utf-8"))
+    exporter = json.loads((ROOT / "dist/export_quantitative_metadata_v76.json").read_text(encoding="utf-8-sig"))
+    assert record["schema_version"] == "7.6.0-dev"
+    assert "python tools/build_wine_scatter.py" in record["build_commands"]
+    assert record["tool_versions"]["pdf_exporter"] == exporter
+    assert exporter["exporter"] == "Microsoft PowerPoint" and exporter["version"]
+    assert set(exporter["figure_ids"]) == set(IDS)
+    validate_pipeline_sources(record)
+    for relpath, expected in record["source_assets_sha256"].items():
+        assert digest(ROOT / relpath) == expected, relpath
+    assert len(record["figures"]) == len(IDS)
+    for figure in record["figures"]:
+        figure_id = figure["figure_id"]
+        assert figure_id in IDS
+        spec = ROOT / figure["figure_spec"]
+        assert canonical_spec_digest(spec) == figure["input_canonical_sha256"], figure_id
+        assert canonical_svg_digest(ROOT / f"examples/{figure_id}.svg") == figure["outputs_canonical_sha256"]["svg"], figure_id
+        assert canonical_pptx_digest(ROOT / f"dist/{figure_id}.pptx") == figure["outputs_canonical_sha256"]["pptx"], figure_id
+        expected_font = json.loads(spec.read_text(encoding="utf-8"))["style"]["font"]
+        font_audit = pdf_font_audit(ROOT / f"dist/{figure_id}.pdf", expected_font)
+        assert font_audit == figure["qa"]["pdf_fonts"], figure_id
+        assert font_audit["embedded"] and not font_audit["substitution_detected"], figure_id
+        for kind in ("pdf", "preview.png"):
+            assert digest(ROOT / f"dist/{figure_id}.{kind}") == figure["outputs_sha256"][kind], (figure_id, kind)
+        assert figure["qa"]["automated"] == "pass"
+        assert figure["qa"]["manual_final_size"] == "pending_independent_review"
+    print(f"PASS committed render record: {len(IDS)} Windows-exported figures with embedded expected fonts; manual review pending")
+
+
+if __name__ == "__main__":
+    main()
