@@ -73,7 +73,7 @@ Before drawing, create a DeckSpec with audience, time budget, narrative order, d
 
 ## C01 source-matched pattern
 FBG: sensor rows and waveforms → OCF/notch filter → B1/B2/B3/Bq subgraphs → total graph.
-SEANet: Input → GCN → pooling → GCN → pooling → SR; parallel Input → EA module → SR; both feed the summation node.
+SEANet: Input → first GCN → first pooling → second GCN → second pooling → upper SR → summation → Dense → fault class. Input also enters the energy-assist module, which feeds the first GCN; the first pooling branches to a lower SR that also feeds the summation. Do not draw an EA-to-lower-SR shortcut.
 The paper text defines SR as sensitivity-aware readout. Sensor photographs may be replaced with vector silhouettes when vector-first output is required; disclose this. Graph coordinates remain schematic unless a numerical adjacency matrix is available.
 
 ## Composite defense-slide layout
