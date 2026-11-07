@@ -11,6 +11,10 @@ def validate_publication_target(target, publication_profile):
     missing = [key for key in publication_profile["requires_before_build"] if not target.get(key)]
     assert not missing, f"Publication target missing: {missing}"
     assert target["final_width_mm"] > 0 and target["final_height_mm"] > 0
+    assert target["maximum_height_mm"] >= target["final_height_mm"]
+    assert target["figure_class"]
+    assert target["preferred_submission_format"] in target["allowed_formats"]
+    assert target["guide_checked_date"]
     assert target["minimum_text_pt"] > 0 and target["raster_resolution_dpi"] > 0
     assert target["maximum_text_pt"] >= target["minimum_text_pt"]
     assert "PDF" in target["allowed_formats"]

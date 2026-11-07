@@ -18,10 +18,21 @@ class OutputProfileTests(unittest.TestCase):
             validate_publication_target({}, PROFILE)
 
     def test_complete_target_passes(self):
-        validate_publication_target({"journal_name": "Example Journal", "author_guide_url": "https://example.org/guide",
-                                     "final_width_mm": 180, "final_height_mm": 120, "allowed_formats": ["PDF"],
+        validate_publication_target({"journal_name": "Example Journal", "figure_class": "main_figure",
+                                     "author_guide_url": "https://example.org/guide", "guide_checked_date": "2026-11-07",
+                                     "final_width_mm": 180, "final_height_mm": 120, "maximum_height_mm": 160,
+                                     "allowed_formats": ["PDF"], "preferred_submission_format": "PDF",
                                      "minimum_text_pt": 5, "maximum_text_pt": 7,
                                      "raster_resolution_dpi": 300}, PROFILE)
+
+    def test_height_exceeding_target_fails(self):
+        target = {"journal_name": "Example Journal", "figure_class": "main_figure",
+                  "author_guide_url": "https://example.org/guide", "guide_checked_date": "2026-11-07",
+                  "final_width_mm": 180, "final_height_mm": 180, "maximum_height_mm": 160,
+                  "allowed_formats": ["PDF"], "preferred_submission_format": "PDF",
+                  "minimum_text_pt": 5, "maximum_text_pt": 7, "raster_resolution_dpi": 300}
+        with self.assertRaises(AssertionError):
+            validate_publication_target(target, PROFILE)
 
 
 if __name__ == "__main__":

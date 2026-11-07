@@ -28,6 +28,7 @@
 - Declared Q04 prediction/actual labels and Q05 feature-set/accuracy measures as derived fields with source columns, units and calculation rules; missing or inconsistent derivations now fail contract validation.
 - Bound Q04/Q05 to a structured leave-one-out 1-NN algorithm contract, including tie handling, feature scaling and exact compared feature sets; builder and output checks now consume those fields. A hand-computed tie fixture and frozen Iris confusion/accuracy values detect algorithm drift.
 - Added source-file hashes and local locators to every FigureSpec EvidenceRecord; validation now catches stale local evidence while distinguishing a hashed evidence ledger from publisher artwork that is not redistributed.
+- Rechecked Nature's current main-figure guide and made figure class, maximum height, guide-check date and preferred submission format explicit in the publication target; the Q03 demonstrator remains pending actual-size and editorial review. The publication caption is now a hash-locked review artifact.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

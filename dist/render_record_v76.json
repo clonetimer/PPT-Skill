@@ -123,8 +123,8 @@
     {
       "figure_id": "Q03_iris_mean_ci_nature",
       "figure_spec": "figure_specs/quant/Q03_iris_mean_ci_nature.json",
-      "input_sha256": "57a0c2903e11d809c5938a11c3555aef27597c10dd7eed335375a7b97b637b2d",
-      "input_canonical_sha256": "ba07d85717eadfa90771841421fcf298069120948c4730f32a12027295fe63f5",
+      "input_sha256": "eb832af56838168c3fb3d5673448f8f7324d2a92c5c55d4761fa9928170d7202",
+      "input_canonical_sha256": "a96f42b5bfc18bc0a1a8533b0601e1ec603d87a3f4b1158dd9cf64b7f0f4a0c8",
       "outputs_sha256": {
         "svg": "67b382cdabd880c084c87614f43944475e453117abfd8143400bdefdc8a36eda",
         "pptx": "47294b88cc020631d4491fdb3d025f53022b9e53fafdc0986b2e244a28accb73",

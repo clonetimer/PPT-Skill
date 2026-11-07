@@ -70,8 +70,10 @@ def build():
     target = {
         "journal_name": "Nature", "author_guide_url": "https://research-figure-guide.nature.com/figures/building-and-exporting-figure-panels/",
         "specifications_url": "https://research-figure-guide.nature.com/figures/preparing-figures-our-specifications/",
-        "guide_checked_date": "2026-11-07", "final_width_mm": WIDTH_MM, "final_height_mm": HEIGHT_MM,
-        "allowed_formats": ["PDF", "SVG", "PPTX"], "minimum_text_pt": 5,
+        "guide_checked_date": "2026-11-07", "figure_class": "main_figure",
+        "final_width_mm": WIDTH_MM, "final_height_mm": HEIGHT_MM, "maximum_height_mm": 170,
+        "allowed_formats": ["PDF", "SVG", "PPTX"], "preferred_submission_format": "PDF",
+        "minimum_text_pt": 5,
         "maximum_text_pt": 7, "raster_resolution_dpi": 450,
         "status": "demonstration_requires_journal_and_expert_review"
     }

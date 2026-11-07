@@ -31,6 +31,8 @@ def artifact_paths(task_id):
     if task_id.startswith("Q") or task_id == "I01":
         paths.extend(f"dist/{stem}.{suffix}" for suffix in
                      ("pdf", "preview.png", "grayscale.png", "protanopia.png", "deuteranopia.png"))
+        if task_id == "Q03P":
+            paths.append("docs/Q03_NATURE_PUBLICATION_CAPTION.md")
     elif task_id == "C01_composite":
         paths.append(f"dist/{stem}_preview.pdf")
     elif task_id == "DECK01":

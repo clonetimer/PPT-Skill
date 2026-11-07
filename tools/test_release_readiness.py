@@ -54,6 +54,12 @@ class ReleaseGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_review(review)
 
+    def test_changed_publication_caption_blocks_stale_review(self):
+        review = self.complete_synthetic_review()
+        review["tasks"]["Q03P"]["artifacts_sha256"]["docs/Q03_NATURE_PUBLICATION_CAPTION.md"] = "0" * 64
+        with self.assertRaises(ValueError):
+            validate_review(review)
+
     def test_missing_preview_blocks_release(self):
         review = self.complete_synthetic_review()
         review["tasks"]["I01"]["artifacts_sha256"].pop("dist/I01_cell_image_quant.preview.png")

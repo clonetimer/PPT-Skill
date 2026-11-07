@@ -21,6 +21,10 @@ def main():
     validate_spec(spec)
     assert spec["figure_contract"]["output_mode"] == "publication"
     assert spec["scientific_source_ref"] == "figure_specs/quant/Q03_iris_mean_ci.json"
+    target = spec["publication_target"]
+    assert target["journal_name"] == "Nature" and target["figure_class"] == "main_figure"
+    assert target["final_width_mm"] == 183 and target["maximum_height_mm"] == 170
+    assert target["preferred_submission_format"] == "PDF"
     assert spec["computed_values"] == source["computed_values"]
     assert spec["chart_contract"] == source["chart_contract"]
     assert spec["chart_contract"]["axes"]["x"]["categories"] == [
