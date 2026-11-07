@@ -13,6 +13,7 @@
 - Checked chart text against the colored shape underneath it, including confusion-matrix cells and ablation bars; a low-contrast cell mutation now fails.
 - Clarified SKILL.md routing, output-mode boundaries and a seven-step workflow with explicit stop conditions for unsupported claims and unreleased review gates.
 - Audited displayed bootstrap whisker endpoints against computed intervals for presentation and publication figures; moved-endpoint mutations now fail.
+- Verified that I01's drawn scale bar, histogram bar geometry and printed threshold summary match the raw image and declared calibration; scale-bar and histogram mutations now fail.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

@@ -75,6 +75,21 @@ class ScientificValueMutationTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             with_changed_spec(path, changed, validate_image)
 
+    def test_wrong_drawn_scale_bar_fails(self):
+        path = ROOT / "figure_specs/image/I01_cell_image_quant.json"
+        changed = json.loads(path.read_text(encoding="utf-8"))
+        next(item for item in changed["elements"] if item["type"] == "line"
+             and item.get("color") == "#FFFFFF" and item.get("sw") == 3)["x1"] += .2
+        with self.assertRaises(AssertionError):
+            with_changed_spec(path, changed, validate_image)
+
+    def test_wrong_histogram_bar_height_fails(self):
+        path = ROOT / "figure_specs/image/I01_cell_image_quant.json"
+        changed = json.loads(path.read_text(encoding="utf-8"))
+        next(item for item in changed["elements"] if "histogram_bin" in item)["h"] += .5
+        with self.assertRaises(AssertionError):
+            with_changed_spec(path, changed, validate_image)
+
     def test_low_contrast_confusion_cell_fails(self):
         path = ROOT / "figure_specs/quant/Q04_iris_confusion.json"
         changed = json.loads(path.read_text(encoding="utf-8"))
