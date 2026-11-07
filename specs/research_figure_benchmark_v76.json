@@ -4,8 +4,24 @@
     "reviewer": "independent domain reviewer assigned to each task; initial source and visual scoring precedes benchmark expectations and traps",
     "dimensions": ["scientific_accuracy", "data_image_integrity", "readability", "accessibility", "editability_reproducibility", "visual_quality"],
     "scale": "0–4 per dimension, with written evidence for every score",
+    "score_anchors": {
+      "0": "Unusable or not assessable from the supplied evidence",
+      "1": "Material defects or major evidence gaps remain",
+      "2": "Adequate for the stated purpose, with only documented minor limitations",
+      "3": "Clear and reliable, with no material limitation found",
+      "4": "Exemplary and independently reproducible for the stated purpose"
+    },
+    "dimension_checks": {
+      "scientific_accuracy": "Claims, labels, relations, formulas and plotted values match the source and stated evidence boundary",
+      "data_image_integrity": "Rows, transformations, image processing, statistics and sample units are traceable and disclosed",
+      "readability": "Important text, marks and relations are readable at the actual delivery size",
+      "accessibility": "Critical distinctions survive grayscale and color-vision previews and have non-color cues",
+      "editability_reproducibility": "Native objects and source inputs can be inspected and the figure can be regenerated",
+      "visual_quality": "Visual hierarchy, spacing and chart choice make the intended conclusion understandable"
+    },
+    "minimum_passing_score_per_dimension": 2,
     "hard_fail": ["wrong_critical_relation_or_formula_or_value", "unclear_source_status", "undisclosed_image_processing", "unreadable_or_occluded_important_content"],
-    "rule": "Any hard failure blocks release regardless of mean score. Automated passes do not replace independent interpretation and final-size review."
+    "rule": "Every dimension must score at least 2; any hard failure blocks release regardless of mean score. Automated passes do not replace independent interpretation and final-size review."
   },
   "tasks": [
     {"id": "B01", "category": "engineering_mechanism", "discipline": "aerospace_systems", "mode": "presentation", "source": "docs/SOURCE_ATTRIBUTION.md", "input": "figure_specs/B01_engineering_fdir.json", "expected": ["online diagnosis connects to guarded reconfiguration", "feedback and mode states remain explicit"], "traps": ["inventing mission timing", "omitting guarded transition"], "status": "automated_fixture"},

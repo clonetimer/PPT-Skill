@@ -60,6 +60,7 @@ def validate_review(review: dict) -> None:
     expected_ids = {task["id"] for task in benchmark["tasks"]}
     require(set(results) == expected_ids, "Every benchmark task needs one review")
     dimensions = benchmark["scoring"]["dimensions"]
+    minimum_score = benchmark["scoring"]["minimum_passing_score_per_dimension"]
     hard_fails = benchmark["scoring"]["hard_fail"]
     for task in benchmark["tasks"]:
         task_id = task["id"]
@@ -95,6 +96,8 @@ def validate_review(review: dict) -> None:
             require(type(item.get("score")) is int and 0 <= item["score"] <= 4,
                     f"{task_id}: {dimension} score must be 0–4")
             require(bool(item.get("evidence")), f"{task_id}: {dimension} evidence required")
+            require(item["score"] >= minimum_score,
+                    f"{task_id}: {dimension} score below release floor {minimum_score}")
         failures = result.get("hard_fail", {})
         require(set(failures) == set(hard_fails), f"{task_id}: hard-failure checklist incomplete")
         require(all(type(failures[key]) is bool for key in hard_fails), f"{task_id}: hard failure unresolved")

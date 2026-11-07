@@ -45,6 +45,11 @@ def main():
     assert len({task["id"] for task in tasks}) == len(tasks)
     assert len(benchmark["scoring"]["dimensions"]) == 6
     assert len(benchmark["scoring"]["hard_fail"]) == 4
+    assert set(benchmark["scoring"]["dimension_checks"]) == set(benchmark["scoring"]["dimensions"])
+    assert set(benchmark["scoring"]["score_anchors"]) == {str(value) for value in range(5)}
+    assert all(benchmark["scoring"]["score_anchors"].values())
+    assert type(benchmark["scoring"]["minimum_passing_score_per_dimension"]) is int
+    assert 1 <= benchmark["scoring"]["minimum_passing_score_per_dimension"] <= 4
     categories = {task["category"] for task in tasks}
     assert {"paper_figure_redraw", "full_defense_narrative", "engineering_mechanism",
             "quant_interval", "ablation_comparison", "image_plus_quant"} <= categories

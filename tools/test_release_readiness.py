@@ -42,6 +42,12 @@ class ReleaseGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_review(review)
 
+    def test_low_dimension_score_blocks_release(self):
+        review = self.complete_synthetic_review()
+        review["tasks"]["Q03"]["scores"]["visual_quality"]["score"] = 1
+        with self.assertRaises(ValueError):
+            validate_review(review)
+
     def test_changed_pdf_blocks_stale_review(self):
         review = self.complete_synthetic_review()
         review["tasks"]["Q03P"]["artifacts_sha256"]["dist/Q03_iris_mean_ci_nature.pdf"] = "0" * 64
