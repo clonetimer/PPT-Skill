@@ -3,13 +3,37 @@
 from __future__ import annotations
 
 import unittest
+import tempfile
+import zipfile
+from pathlib import Path
 
 from validate_release_readiness import prepare_template, validate_review
-from prepare_scientific_review_bundle import bundle_paths
+from prepare_scientific_review_bundle import build, bundle_paths
 from scientific_ir import ROOT
 
 
 class ReleaseGateTests(unittest.TestCase):
+    def test_stages_can_be_distributed_separately(self):
+        temporary_root = ROOT / ".testtmp"
+        temporary_root.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=temporary_root) as folder:
+            initial, reconciliation = (Path(folder) / name for name in ("initial.zip", "reconciliation.zip"))
+            build(initial, "initial")
+            build(reconciliation, "reconciliation")
+            with zipfile.ZipFile(initial) as archive:
+                names = set(archive.namelist())
+                assert "initial_review_form.md" in names
+                form = archive.read("initial_review_form.md").decode("utf-8")
+                assert "Q07" in form and "invented chemical units" not in form
+                assert "review_template.json" not in names
+                assert not any(name.startswith("unblind_review/") for name in names)
+                assert "blind_review/dist/Q03_iris_mean_ci.pdf" in names
+            with zipfile.ZipFile(reconciliation) as archive:
+                names = set(archive.namelist())
+                assert "review_template.json" in names
+                assert "unblind_review/specs/research_figure_benchmark_v76.json" in names
+                assert not any(name.startswith("blind_review/") for name in names)
+
     def complete_synthetic_review(self):
         review = prepare_template()
         disciplines = {result["required_discipline"] for result in review["tasks"].values()}

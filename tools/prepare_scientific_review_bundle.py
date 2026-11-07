@@ -46,33 +46,63 @@ def bundle_paths() -> tuple[list[Path], list[Path]]:
     return sorted(blind), sorted(unblind)
 
 
-def build(output: Path) -> None:
+def initial_review_form() -> str:
+    benchmark = json.loads((ROOT / "specs/research_figure_benchmark_v76.json").read_text(encoding="utf-8"))
+    lines = [
+        "# Stage 1 independent review record",
+        "",
+        "Inspect only blind_review/ sources and rendered figures. Record the initial score and evidence",
+        "at actual viewing size before receiving the reconciliation archive.",
+        "File names and sources can disclose project identity; benchmark expectations and implementation are withheld.",
+        "",
+        "Reviewer name, field, date and time:",
+        "Display or print size, viewing distance, and equipment:",
+        "Archive SHA-256 and source links checked:",
+        "",
+        "| Task | Initial score (0–4) | Source/figure evidence | Final-size observations | Critical concern |",
+        "|---|---:|---|---|---|",
+    ]
+    lines.extend(f"| {task['id']} | | | | |" for task in benchmark["tasks"])
+    lines.extend(["", "Freeze this record before opening the reconciliation archive.", ""])
+    return "\n".join(lines)
+
+
+def build(output: Path, stage: str = "combined") -> None:
+    if stage not in {"initial", "reconciliation", "combined"}:
+        raise ValueError(stage)
     if output.exists():
         raise FileExistsError(f"Refusing to overwrite {output}")
     output.parent.mkdir(parents=True, exist_ok=True)
-    note = (
-        "Independent scientific figure review bundle\n"
-        "Stage 1: inspect blind_review/ sources and rendered figures at final viewing size.\n"
-        "Record an initial score and evidence for each task before opening unblind_review/.\n"
-        "Stage 2: inspect unblind_review/ benchmark expectations, traps, specs and methods.\n"
-        "Reconcile any differences, then complete review_template.json for all 15 tasks.\n"
-        "The second stage includes source data, build scripts and validators.\n"
-        "Example checks: python unblind_review/tools/validate_quantitative_examples.py\n"
-        "                python unblind_review/tools/validate_wine_scatter.py\n"
-        "                python unblind_review/tools/validate_publication_example.py\n"
-        "Read review_form.md before scoring.\n"
-        "Run: python unblind_review/tools/validate_release_readiness.py --review review_template.json\n"
-        "The template is unfilled; this archive does not assert scientific or journal approval.\n"
-        "Publisher-owned source artwork is linked in source docs rather than redistributed.\n"
+    initial_note = (
+        "Independent scientific figure review: initial stage\n"
+        "Inspect blind_review/ sources and rendered figures at actual viewing size.\n"
+        "Record each initial score, evidence and size observation in initial_review_form.md.\n"
+        "Freeze that record before receiving any benchmark expectations or implementation.\n"
+        "Some file names and sources may reveal project identity. Publisher-owned artwork\n"
+        "is linked in source documents rather than redistributed.\n"
     )
+    reconciliation_note = (
+        "Independent scientific figure review: reconciliation stage\n"
+        "Open only after the initial review record has been frozen.\n"
+        "Inspect unblind_review/ expectations, traps, inputs, builders and validators.\n"
+        "Complete review_template.json for all 15 tasks using review_form.md.\n"
+        "Example: python unblind_review/tools/validate_quantitative_examples.py\n"
+        "Run: python unblind_review/tools/validate_release_readiness.py --review review_template.json\n"
+        "The template is unfilled and does not assert scientific or journal approval.\n"
+    )
+    note = (initial_note if stage == "initial" else reconciliation_note if stage == "reconciliation"
+            else initial_note + "\n" + reconciliation_note)
     blind, unblind = bundle_paths()
     with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
-        for path in blind:
-            archive.write(path, "blind_review/" + path.relative_to(ROOT).as_posix())
-        for path in unblind:
-            archive.write(path, "unblind_review/" + path.relative_to(ROOT).as_posix())
-        archive.writestr("review_form.md", (ROOT / "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md").read_text(encoding="utf-8"))
-        archive.writestr("review_template.json", json.dumps(prepare_template(), ensure_ascii=False, indent=2)+"\n")
+        if stage in {"initial", "combined"}:
+            for path in blind:
+                archive.write(path, "blind_review/" + path.relative_to(ROOT).as_posix())
+            archive.writestr("initial_review_form.md", initial_review_form())
+        if stage in {"reconciliation", "combined"}:
+            for path in unblind:
+                archive.write(path, "unblind_review/" + path.relative_to(ROOT).as_posix())
+            archive.writestr("review_form.md", (ROOT / "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md").read_text(encoding="utf-8"))
+            archive.writestr("review_template.json", json.dumps(prepare_template(), ensure_ascii=False, indent=2)+"\n")
         archive.writestr("REVIEW_README.txt", note)
     print(f"Prepared unfilled review bundle: {output}")
 
@@ -80,4 +110,6 @@ def build(output: Path) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
-    build(parser.parse_args().output)
+    parser.add_argument("--stage", choices=("initial", "reconciliation", "combined"), default="combined")
+    args = parser.parse_args()
+    build(args.output, args.stage)

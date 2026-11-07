@@ -1,6 +1,7 @@
 # Changelog
 
 ## V7.6.0-dev — Scientific evidence and data channels
+- Split independent review into separately distributable initial and reconciliation archives; the initial packet contains no benchmark expectations, FigureSpecs or review template, and CI uploads the stages as separate artifacts.
 - Recorded canonical hashes of all direct builder, renderer, data-contract, PowerPoint export and render-audit sources; render-record validation now rejects a stale generation pipeline across Windows/Linux line endings.
 - Required quantitative data-lineage fields in the FigureSpec schema and checked the embedded chart and source metadata against the exact hashed ChartSpec; mismatched statistics or sample counts now fail mutation tests.
 - Bound each quantitative FigureSpec to a canonical ChartSpec content hash and the independent review template to each raw ChartSpec file hash; stale chart configurations now fail validation and release review.

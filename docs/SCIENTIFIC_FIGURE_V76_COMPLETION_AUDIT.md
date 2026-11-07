@@ -10,11 +10,11 @@
 | B：原始点可见、SVG/PPTX/PDF 可复现 | Q01/Q02/Q03/Q06/Q07/Q08 的原始点分离有几何检查；Q03/Q06 汇总标记避让；`dist/render_record_v76.json` 锁定 PowerPoint PDF 和生成链源码规范化哈希；独立评审包解压后已重建两张 Wine 图并通过规范化哈希和数据行核对 | 自动通过；最终观看尺寸仍需人工复核 |
 | C：图像完整性 | I01 的 CC0 原图、哈希、处理日志、0.107 µm/像素校准、10 µm 比例尺与像素直方图由 `tools/validate_image_quant_example.py` 核对 | 单图示例自动通过；不代表生物学重复或细胞分割 |
 | C：可访问性与双载体 | `tools/check_scientific_accessibility.py` 检查文字、关键图形标记、线和示意箭头对比度，生成灰度及近似色觉差异预览；`tools/validate_output_profiles.py` 检查 14 个演示规格和 1 个 Nature 主图示例；PDF 字体、尺寸、矢量层由渲染及出版示例验证器核对 | 自动预检通过；实际投影和 183 × 100 mm 印刷尺寸未复核 |
-| D：固定基准与发布硬门槛 | `specs/research_figure_benchmark_v76.json` 有 15 项、5 个学科、6 维评分和 4 类硬失败；`tools/validate_release_readiness.py` 锁定来源、FigureSpec、ChartSpec 配置、图件与 Q03P 图注哈希，要求领域匹配、先评后核对、逐维至少 2 分及终尺寸证据；`tools/test_release_readiness.py` 的通过数据仅为合成测试 | 基准和门槛已实现；仓库内真实独立评审记录 0/15 |
+| D：固定基准与发布硬门槛 | `specs/research_figure_benchmark_v76.json` 有 15 项、5 个学科、6 维评分和 4 类硬失败；`tools/validate_release_readiness.py` 锁定来源、FigureSpec、ChartSpec 配置、图件与 Q03P 图注哈希，要求领域匹配、先评后核对、逐维至少 2 分及终尺寸证据；CI 分别上传仅含来源/图件/中立初评表的首阶段包和含预期/实现的核对包，须顺序发放；`tools/test_release_readiness.py` 的通过数据仅为合成测试 | 基准和门槛已实现；仓库内真实独立评审记录 0/15 |
 
 ## 未完成的验收证据
 
-1. **独立领域复核：**当前没有已填写的真实评审表。15 项任务分别需要具备航空系统、机械故障诊断、应用统计、分析化学或细胞成像相应经验的未参与制图人员；同一人可覆盖其实际专业范围内的多项任务。使用 `tools/prepare_scientific_review_bundle.py` 生成的两阶段材料包，先看来源与图件，再看规格、预期和已知陷阱。
+1. **独立领域复核：**当前没有已填写的真实评审表。15 项任务分别需要具备航空系统、机械故障诊断、应用统计、分析化学或细胞成像相应经验的未参与制图人员；同一人可覆盖其实际专业范围内的多项任务。顺序发放 `tools/prepare_scientific_review_bundle.py` 生成的两个独立材料包，先冻结来源/图件初评，再发放规格、预期和已知陷阱。
 2. **实际终尺寸：**演示图需要记录设备、投影距离和读不清的具体元素；Q03P 需要在 183 × 100 mm 的物理印刷尺寸或经校准的等效显示尺寸检查，并记录尺寸证据。现有 PNG/PDF 尺寸与字体检查不能代替这一步。
 3. **外部来源边界：**C01 仍缺对作者原图的高分辨率逐区叠图复核；其输出继续标为结构性重绘。Q03P 是 Nature 主图尺寸示例，尚未进行投稿前的目标期刊最终核验。
 
