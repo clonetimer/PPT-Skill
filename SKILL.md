@@ -1,6 +1,7 @@
 ---
 name: academic-defense-ppt
-version: 7.6.0-dev
+metadata:
+  version: 7.6.0-dev
 description: >
   Plan and build source-grounded academic defense slides and editable research figures.
   Use for 科研答辩PPT、论文图重绘、科研绘图、学术汇报, academic defense slides,
