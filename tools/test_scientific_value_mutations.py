@@ -53,6 +53,18 @@ class ScientificValueMutationTests(unittest.TestCase):
             next(item for item in spec["elements"] if "data_row" in item)["x"] += .5
         self.chart_case("Q01_iris_scatter", move)
 
+    def test_collapsed_coincident_points_fail(self):
+        def collapse(spec):
+            seen = {}
+            for point in (item for item in spec["elements"] if "data_row" in item):
+                key = tuple(point["data_values"][name] for name in ("petal_length_cm", "petal_width_cm"))
+                if key in seen:
+                    point["x"], point["y"] = seen[key]["x"], seen[key]["y"]
+                    return
+                seen[key] = point
+            raise AssertionError("No coincident observations in fixture")
+        self.chart_case("Q01_iris_scatter", collapse)
+
     def test_moved_interval_endpoint_fails(self):
         def move(spec):
             next(item for item in spec["elements"] if item["type"] == "line"

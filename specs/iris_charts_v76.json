@@ -25,8 +25,8 @@
       "claim": "The three iris species occupy different regions in petal measurements.",
       "x": "petal_length_cm", "y": "petal_width_cm", "group": "species",
       "sample_size": 150, "encoding": {"color": "species", "shape": "species"},
-      "statistics": {"display": "all_raw_points", "interval": "none"},
-      "axes": {"x":{"type":"linear","field":"petal_length_cm","unit":"cm","domain":[0,7],"zero_included":true},"y":{"type":"linear","field":"petal_width_cm","unit":"cm","domain":[0,3],"zero_included":true}}, "caption": "Each point is one flower; no inferential comparison is claimed."
+      "statistics": {"display": "all_raw_points", "interval": "none", "jitter": {"purpose": "display_only_separate_coincident_coordinates", "minimum_center_gap_in": 0.06, "max_display_offset_in": 0.15}},
+      "axes": {"x":{"type":"linear","field":"petal_length_cm","unit":"cm","domain":[0,7],"zero_included":true},"y":{"type":"linear","field":"petal_width_cm","unit":"cm","domain":[0,3],"zero_included":true}}, "caption": "Each point is one flower. Coincident measurements receive small display-only offsets; source values and calculations are unchanged."
     },
     {
       "id": "Q02_iris_strip", "kind": "strip",

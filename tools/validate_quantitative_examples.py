@@ -33,6 +33,10 @@ def check_point_geometry(chart, point, row):
     if kind == "scatter":
         x = scale_axis(row[chart["x"]], chart["axes"]["x"], 1.28, 9.80)
         y = scale_axis(row[chart["y"]], chart["axes"]["y"], 5.66, 1.30)
+        actual_x = point["x"] + point["w"] / 2
+        actual_y = point["y"] + point["h"] / 2
+        assert math.hypot(actual_x-x, actual_y-y) <= chart["statistics"]["jitter"]["max_display_offset_in"]+1e-9
+        return
     elif kind in {"strip", "point_ci"}:
         categories = chart["axes"]["x"]["categories"]
         centers = {name: 1.30 + (i + .5) * (11.90 - 1.30) / len(categories)
@@ -82,6 +86,11 @@ def validate_config(config):
         if chart["kind"] not in {"confusion_matrix", "ablation"}:
             assert chart["x"] in meta["columns"] and chart["y"] in meta["columns"]
         assert chart["statistics"]["display"] and chart["statistics"]["interval"]
+        if chart["kind"] == "scatter":
+            jitter = chart["statistics"]["jitter"]
+            assert jitter["purpose"] == "display_only_separate_coincident_coordinates"
+            assert .05 < jitter["minimum_center_gap_in"] <= jitter["max_display_offset_in"] <= .15
+            assert "display-only offsets" in chart["caption"].lower()
         if chart["kind"] == "point_ci":
             assert chart["statistics"]["interval"] == "bootstrap_percentile_95"
             assert chart["statistics"]["resamples"] >= 1000
@@ -126,6 +135,24 @@ def validate_outputs(config, rows):
                 assert point["type"] == {"Iris-setosa": "ellipse", "Iris-versicolor": "rect",
                                          "Iris-virginica": "trapezoid"}[row["species"]]
                 check_point_geometry(chart, point, row)
+            if chart["kind"] == "scatter":
+                counts = Counter((row[chart["x"]], row[chart["y"]]) for row in chart_lookup.values())
+                centers = []
+                moved = 0
+                for point in points:
+                    row = lookup[point["data_row"]]
+                    actual = (point["x"]+point["w"]/2, point["y"]+point["h"]/2)
+                    exact = (scale_axis(row[chart["x"]], chart["axes"]["x"], 1.28, 9.80),
+                             scale_axis(row[chart["y"]], chart["axes"]["y"], 5.66, 1.30))
+                    distance = math.dist(actual, exact)
+                    if counts[(row[chart["x"]], row[chart["y"]])] == 1:
+                        assert distance <= 1e-9, (stem, row["source_row"], "unique point moved")
+                    moved += distance > 1e-9
+                    centers.append(actual)
+                assert moved == sum(count-1 for count in counts.values())
+                minimum = chart["statistics"]["jitter"]["minimum_center_gap_in"]
+                assert all(math.dist(first, second) >= minimum-1e-9
+                           for i, first in enumerate(centers) for second in centers[i+1:])
         elif chart["kind"] == "confusion_matrix":
             cells = [e for e in spec["elements"] if "source_rows" in e]
             assert len(cells) == 9

@@ -20,6 +20,7 @@
 - Stratified benchmark tasks by four disciplines and required each task's independent reviewer to declare matching field expertise.
 - Bound release reviews to every required visual artifact, including PDFs and accessibility previews, rather than only the editable PPTX; missing or changed outputs block release.
 - Added explicit numeric-axis domains, zero policies and zoom reasons to six chart contracts; validation rejects missing transformation logs and source values clipped by declared axes.
+- Separated Q01's 48 coincident Iris observations with bounded, disclosed display-only offsets; all 150 native points now have distinct visible centers while retaining unmodified source values.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

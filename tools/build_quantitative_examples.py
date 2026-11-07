@@ -107,17 +107,45 @@ def scaled(value, low, high, out_low, out_high):
     return out_low + (value-low) / (high-low) * (out_high-out_low)
 
 
+def separated_scatter_positions(rows, chart):
+    """Separate coincident measured coordinates with bounded display-only offsets."""
+    minimum = chart["statistics"]["jitter"]["minimum_center_gap_in"]
+    maximum = chart["statistics"]["jitter"]["max_display_offset_in"]
+    x0, x1, y0, y1 = 1.28, 9.80, 1.30, 5.66
+    placed = []
+    positions = {}
+    for row in rows:
+        true_x = scaled(row[chart["x"]], *chart["axes"]["x"]["domain"], x0, x1)
+        true_y = scaled(row[chart["y"]], *chart["axes"]["y"]["domain"], y1, y0)
+        candidate = None
+        for step in range(int(maximum/.005)+1):
+            radius = step*.005
+            angles = (0,) if step == 0 else (2*math.pi*(j+.5*(step%2))/24 for j in range(24))
+            for angle in angles:
+                x, y = true_x+radius*math.cos(angle), true_y+radius*math.sin(angle)
+                if all(math.hypot(x-px, y-py) >= minimum-1e-9 for px, py in placed):
+                    candidate = (x, y)
+                    break
+            if candidate:
+                break
+        assert candidate is not None, (row["source_row"], "scatter packing exceeded bound")
+        positions[row["source_row"]] = candidate
+        placed.append(candidate)
+    return positions
+
+
 def scatter(chart, meta, rows):
     fig = Figure(chart, meta); fig.setup()
     x0, x1, y0, y1 = 1.28, 9.80, 1.30, 5.66
     fig.axes(x0, y0, x1, y1, "Petal length (cm)", "Petal width (cm)",
              [(scaled(v, 0, 7, x0, x1), str(v)) for v in range(0, 8)],
              [(scaled(v, 0, 3, y1, y0), str(v)) for v in range(0, 4)])
+    positions = separated_scatter_positions(rows, chart)
     for row in rows:
-        x = scaled(row["petal_length_cm"], 0, 7, x0, x1)
-        y = scaled(row["petal_width_cm"], 0, 3, y1, y0)
+        x, y = positions[row["source_row"]]
         fig.point(x, y, COLORS[row["species"]], row,
-                  {"petal_length_cm": row["petal_length_cm"], "petal_width_cm": row["petal_width_cm"]})
+                  {"petal_length_cm": row["petal_length_cm"], "petal_width_cm": row["petal_width_cm"]},
+                  r=.025)
     for i, name in enumerate(NAMES):
         y = 1.90 + i*.48
         shape = {"Iris-setosa": "ellipse", "Iris-versicolor": "rect",
