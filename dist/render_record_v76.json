@@ -44,6 +44,10 @@
         "pdf": "7210ee8402b1700f972fd1b643fa76b918af411c0c3469f6ae0a3206f1d8988b",
         "preview.png": "d5349e953c332dc6ac67192c8fb8651bd94d05f95b1ada9792acce0dc3341794"
       },
+      "outputs_canonical_sha256": {
+        "svg": "603f0aa8765433ae5afea05c9153546d706ce3fa472a0d139010e36bf4dbec79",
+        "pptx": "7e36cdf96fb533aa0371c9b6b4619a17e061a1369fb3bcd5c3e4f82fd3932022"
+      },
       "qa": {
         "automated": "pass",
         "pdf_fonts": {
@@ -68,6 +72,10 @@
         "pptx": "12477369f28b28289a6ca9dc1b1b3a64bda52e31ee897cfcf6e78c395c877d10",
         "pdf": "fc1dc4f5e56f8c26e6785ce1723c9fe7f794797e5b58a2d19bb274e13d83f681",
         "preview.png": "db5ebf9e4a534194136c3bf15626f5338fb12ad2082a4429b55ec6071e6ccf3f"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "df59d41614300b713ffa14e2739634b11ca2655e6d3b10834e9ee3cf48a416ae",
+        "pptx": "5b2fddd4549de8b13e022d5ee934cca0af8d3370cef820f6146c8340b153e623"
       },
       "qa": {
         "automated": "pass",
@@ -94,6 +102,10 @@
         "pdf": "e42819459db4c6d0ef7f5eb96e9954ddde098e27e72639268751f0bdd5707807",
         "preview.png": "875c07098a9f5e5f9acd0a0f1ee492c76314b1dc91870c2bb6c9931cf6896b79"
       },
+      "outputs_canonical_sha256": {
+        "svg": "85f30982b4b2b794870ed407c37cf0d363692e1c5f1e54ca8c6c8a33791a94a9",
+        "pptx": "0a861c389f35bd819c42ca73b00350feb0bbb5bcdee13c0fd6eb4e7b8d1b8908"
+      },
       "qa": {
         "automated": "pass",
         "pdf_fonts": {
@@ -118,6 +130,10 @@
         "pptx": "111210d119ddbeda14eeea582387112c66a23b9d9b5fd4ea5fcf0796778a9919",
         "pdf": "ae22b802aff893904b38731c954bbd3203815d509b115e7cb259ea1a750846fd",
         "preview.png": "f8fe17255aa2901ad4eea47ad75a83d9a57821b1ea4b3880fe4a2acc2252d8dd"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "2f2bcc3aa67ba46d25f8e9892e4111dedf5315b437f7b0363a9a23196f86601d",
+        "pptx": "e826d1d744a9d90e39dd453f4b82e989c5a43023ef354475638c5382fe045b06"
       },
       "qa": {
         "automated": "pass",
@@ -144,6 +160,10 @@
         "pdf": "7024d4d03815cbfc2ec93761abe967aedea5d65145fc404a9b23e08571b9d6a5",
         "preview.png": "f80e8b9bb2a97567215988851ca28d746e803ff97a7a64ef254aaf0d94b009e5"
       },
+      "outputs_canonical_sha256": {
+        "svg": "39fb985c2be7b074a527583722306196090a5b2dabbc20e31f50362bcc0c0e40",
+        "pptx": "3662cd7a79ddbb110ade4433bba37f08bb6ea9da403b7818ce226d7947031011"
+      },
       "qa": {
         "automated": "pass",
         "pdf_fonts": {
@@ -168,6 +188,10 @@
         "pptx": "41f8e9760978ba036749bb4b87f3a908be1b91ff9f64d2bbf624a83778eabec4",
         "pdf": "7b430f047547b7fd693533034f72bc914906db5ca224afe1d577f5d3ec6ccd78",
         "preview.png": "249ad3d34e6c71919975c87f4147b691f4aa0035611b457c2f70f599caf240db"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "4264a49e5bb61cb7a90f57a793cd6af9a43e79f7257399e5a090229084e4cb42",
+        "pptx": "a0d07976cb78d0e340a51c56bf6ed71337f19dcb4fb01070e8a6a6f9439e446e"
       },
       "qa": {
         "automated": "pass",
@@ -194,6 +218,10 @@
         "pdf": "4bbf3be5922ca84a3da9c17b9567aefbacf051839cdb291cb924a46ba625f4d7",
         "preview.png": "9a0c78a1b840cce09ffc3e8380297574d64de43825e844e9daba724a24379308"
       },
+      "outputs_canonical_sha256": {
+        "svg": "80df8feeff62fe90ddc1a453bade296f3f3bcb8e6a971b30fa5aa96cea5804f6",
+        "pptx": "788a77ee0eaafc245e8d5c34b63f41586468b43321dbe3ae7a7fd5f3eb7bf2e7"
+      },
       "qa": {
         "automated": "pass",
         "pdf_fonts": {
@@ -218,6 +246,10 @@
         "pptx": "3a295236fa568dc66313114b9419b970135cc5a6854d7aa68366a52475ae8fe6",
         "pdf": "6bcbd89d1cc26171a3932ff3d745ccc6968b80e7867aab1a0de3457658c4cdcb",
         "preview.png": "8c42737a782223e57dec4e9375917559261a9face072f094e53148779794715f"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "ea8440f3451269ac3c78ef1a5826bd5016ae1d329e1a35d73689b795c3cad6a9",
+        "pptx": "176df2783767d2ecb8279705109904020e2b6a4d5f99d24921cd294c469b1d5d"
       },
       "qa": {
         "automated": "pass",

@@ -61,6 +61,7 @@ jobs:
           python tools/test_output_profiles.py
           python tools/check_scientific_accessibility.py
           python tools/validate_render_record.py
+          python tools/test_render_record_canonical.py
           python tools/validate_render_semantics.py
           python tools/validate_deck_benchmark.py
       - name: Audit generated PPTX

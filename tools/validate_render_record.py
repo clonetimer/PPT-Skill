@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import json
 
-from record_scientific_render import ROOT, IDS, canonical_spec_digest, digest, pdf_font_audit
+from record_scientific_render import (ROOT, IDS, canonical_spec_digest, canonical_svg_digest,
+                                      canonical_pptx_digest, digest, pdf_font_audit)
 
 
 def main():
@@ -22,6 +23,8 @@ def main():
         assert figure_id in IDS
         spec = ROOT / figure["figure_spec"]
         assert canonical_spec_digest(spec) == figure["input_canonical_sha256"], figure_id
+        assert canonical_svg_digest(ROOT / f"examples/{figure_id}.svg") == figure["outputs_canonical_sha256"]["svg"], figure_id
+        assert canonical_pptx_digest(ROOT / f"dist/{figure_id}.pptx") == figure["outputs_canonical_sha256"]["pptx"], figure_id
         expected_font = json.loads(spec.read_text(encoding="utf-8"))["style"]["font"]
         font_audit = pdf_font_audit(ROOT / f"dist/{figure_id}.pdf", expected_font)
         assert font_audit == figure["qa"]["pdf_fonts"], figure_id

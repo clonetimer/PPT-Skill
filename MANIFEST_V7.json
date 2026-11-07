@@ -65,6 +65,7 @@
       "tools/check_scientific_accessibility.py",
       "tools/record_scientific_render.py",
       "tools/validate_render_record.py",
+      "tools/test_render_record_canonical.py",
       "tools/validate_render_semantics.py",
       "tools/validate_research_benchmark.py",
       "tools/validate_release_readiness.py",

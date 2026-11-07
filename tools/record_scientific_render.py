@@ -6,6 +6,8 @@ import hashlib
 import json
 import platform
 import re
+import xml.etree.ElementTree as ET
+import zipfile
 from pathlib import Path
 
 import PIL
@@ -28,6 +30,24 @@ def canonical_spec_digest(path: Path):
     value = json.loads(path.read_text(encoding="utf-8"))
     canonical = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def canonical_svg_digest(path: Path):
+    return hashlib.sha256(ET.canonicalize(path.read_text(encoding="utf-8")).encode("utf-8")).hexdigest()
+
+
+def canonical_pptx_digest(path: Path):
+    """Hash ZIP member names and payloads, ignoring container timestamps/order."""
+    digest = hashlib.sha256()
+    with zipfile.ZipFile(path) as archive:
+        names = sorted(archive.namelist())
+        assert len(names) == len(set(names)), path
+        for name in names:
+            payload = archive.read(name)
+            for value in (name.encode("utf-8"), payload):
+                digest.update(len(value).to_bytes(8, "big"))
+                digest.update(value)
+    return digest.hexdigest()
 
 
 def pdf_font_audit(path: Path, expected_family: str):
@@ -76,6 +96,9 @@ def main():
                         "input_sha256": digest(spec),
                         "input_canonical_sha256": canonical_spec_digest(spec),
                         "outputs_sha256": {kind: digest(path) for kind, path in outputs.items()},
+                        "outputs_canonical_sha256": {
+                            "svg": canonical_svg_digest(outputs["svg"]),
+                            "pptx": canonical_pptx_digest(outputs["pptx"])},
                         "qa": {"automated": "pass", "pdf_fonts": font_audit,
                                "manual_final_size": "pending_independent_review"}})
     record = {
