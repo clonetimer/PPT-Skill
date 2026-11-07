@@ -129,7 +129,7 @@ def separated_strip_positions(rows, chart, centers, yfield, low, high, y0, y1):
     positions = {}
     for row in rows:
         y = scaled(row[yfield], low, high, y1, y0)
-        group = placed[row["species"]]
+        group = placed[row[chart["group"]]]
         offset = None
         for step in range(int(maximum/.005)+1):
             candidates = (0,) if step == 0 else (step*.005, -step*.005)
@@ -141,7 +141,7 @@ def separated_strip_positions(rows, chart, centers, yfield, low, high, y0, y1):
                 break
         assert offset is not None, (row["source_row"], "beeswarm packing exceeded bound")
         group.append((offset, y))
-        positions[row["source_row"]] = (centers[row["species"]]+offset, y)
+        positions[row["source_row"]] = (centers[row[chart["group"]]]+offset, y)
     return positions
 
 

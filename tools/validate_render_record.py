@@ -12,6 +12,7 @@ def main():
     record = json.loads((ROOT / "dist/render_record_v76.json").read_text(encoding="utf-8"))
     exporter = json.loads((ROOT / "dist/export_quantitative_metadata_v76.json").read_text(encoding="utf-8-sig"))
     assert record["schema_version"] == "7.6.0-dev"
+    assert "python tools/build_wine_scatter.py" in record["build_commands"]
     assert record["tool_versions"]["pdf_exporter"] == exporter
     assert exporter["exporter"] == "Microsoft PowerPoint" and exporter["version"]
     assert set(exporter["figure_ids"]) == set(IDS)

@@ -30,6 +30,8 @@ def prepare_template() -> dict:
             "required_discipline": task["discipline"], "reviewer_id": "",
             "source_sha256": sha256(ROOT / task["source"]),
             "input_sha256": sha256(ROOT / task["input"]),
+            "related_inputs_sha256": {path: sha256(ROOT / path)
+                                      for path in task.get("related_inputs", [])},
             "artifacts_sha256": {path: sha256(ROOT / path) for path in artifact_paths(task["id"])},
             "source_checked": False, "scientific_relationships_checked": False,
             "initial_review_before_expectations": {"completed": False, "score": None, "evidence": ""},
@@ -81,6 +83,11 @@ def validate_review(review: dict) -> None:
         spec = ROOT / task["input"]
         require(result.get("source_sha256") == sha256(source), f"{task_id}: source changed")
         require(result.get("input_sha256") == sha256(spec), f"{task_id}: input changed")
+        related = result.get("related_inputs_sha256", {})
+        expected_related = task.get("related_inputs", [])
+        require(set(related) == set(expected_related), f"{task_id}: related inputs changed")
+        for path in expected_related:
+            require(related[path] == sha256(ROOT / path), f"{task_id}: {path} changed")
         artifacts = result.get("artifacts_sha256", {})
         expected_artifacts = artifact_paths(task_id)
         require(set(artifacts) == set(expected_artifacts), f"{task_id}: reviewed artifact list changed")

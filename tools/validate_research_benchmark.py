@@ -34,6 +34,11 @@ def artifact_paths(task_id):
                      ("pdf", "preview.png", "grayscale.png", "protanopia.png", "deuteranopia.png"))
         if task_id == "Q03P":
             paths.append("docs/Q03_NATURE_PUBLICATION_CAPTION.md")
+        if task_id == "Q07":
+            paths.append("examples/Q08_wine_strip.svg")
+            paths.extend(f"dist/Q08_wine_strip.{suffix}" for suffix in
+                         ("pptx", "pdf", "preview.png", "grayscale.png",
+                          "protanopia.png", "deuteranopia.png"))
     elif task_id == "C01_composite":
         paths.append(f"dist/{stem}_preview.pdf")
     elif task_id == "DECK01":
@@ -63,6 +68,7 @@ def main():
         assert task["mode"] in {"presentation", "publication"}
         assert task["discipline"] in disciplines
         assert (ROOT / task["source"]).is_file() and (ROOT / task["input"]).is_file()
+        assert all((ROOT / path).is_file() for path in task.get("related_inputs", []))
         assert task["expected"] and task["traps"]
         assert task["status"] in {"automated_fixture", "contract_only"}
         if task["status"] == "automated_fixture":

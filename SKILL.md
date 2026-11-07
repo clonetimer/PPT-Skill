@@ -43,7 +43,7 @@ The presentation profile supports projected defense slides. The publication prof
 
 ## FigureSpec
 
-The UCI Wine example tests a second chemistry dataset using `specs/wine_charts_v76.json`, `python tools/build_wine_scatter.py` and `python tools/validate_wine_scatter.py`. Its source does not report physical units for the selected measurements; both axes disclose this, and coded cultivars are not named varieties.
+The UCI Wine scatter and distribution examples test a second chemistry dataset using `specs/wine_charts_v76.json`, `python tools/build_wine_scatter.py` and `python tools/validate_wine_scatter.py`. Its source does not report physical units for the selected measurements; the numeric axes disclose this, and coded cultivars are not named varieties.
 
 `tools/chart_data.py` loads both datasets with source hashes and row links. `tools/chart_contract.py` enforces sample size, source and derived fields, axis type/unit/domain/category coverage, zero policy and bootstrap definitions across both datasets; run `python tools/test_chart_contract.py` when changing either contract. Other chart renderers still need dataset-specific adaptation.
 

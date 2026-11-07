@@ -7,7 +7,7 @@
 - Added a CC0 quantitative-phase image plus raw-pixel histogram, with source hash, processing log, calibration and scale-bar checks.
 - Added CI build and validation for the new examples. Independent domain and final-size review remains pending.
 - Added a Nature two-column publication-size Q03 demonstrator with the same rows/statistics as the presentation panel, final-size PDF geometry and embedded-font checks; CI now verifies committed PowerPoint export records and SVG/PPTX/PDF labels without forging a Linux exporter claim.
-- Recorded observed PDF font names and embedding for all nine Windows-exported research figures, including Type 0 composite fonts, and checked them against the requested font family.
+- Recorded observed PDF font names and embedding for all ten Windows-exported research figures, including Type 0 composite fonts, and checked them against the requested font family.
 - Added coordinate audits that recompute raw-point positions, summary markers and ablation bar heights from source rows and statistics; displaced points and bars now fail negative tests.
 - Added a release-readiness command that requires independent per-task review evidence and current artifact hashes; development CI tests the gate with synthetic data but does not fabricate reviewer approval.
 - Checked chart text against the colored shape underneath it, including confusion-matrix cells and ablation bars; a low-contrast cell mutation now fails.
@@ -35,8 +35,9 @@
 - Extended the 3:1 preflight to the visible arrows in the five schematic FigureSpecs, with a low-contrast C01 connector mutation test.
 - Added a requirement-by-requirement V7.6 completion audit that distinguishes machine-verified clauses from independent final-size review still needing evidence.
 - Compared the five migrated figures' labels against their pre-V7.6 committed FigureSpec/SVG files and the three committed C01 PPTX files; stabilized text-source hashes across Windows and Linux checkouts.
-- Added UCI Wine as a second real dataset and an analytical-chemistry benchmark task. Its 178 source-linked points reproduce to SVG, native PPTX and PowerPoint PDF, with both axes disclosing that the source does not report physical units. The shared data loader and scatter placement now have cross-dataset evidence; other chart kinds remain Iris-only.
+- Added UCI Wine as a second real dataset and an analytical-chemistry benchmark task. Its 178 source-linked points reproduce to SVG, native PPTX and PowerPoint PDF, with both numeric axes disclosing that the source does not report physical units. The shared data loader, scatter and distribution placement now have cross-dataset evidence; four other chart kinds remain Iris-only.
 - Added a dataset-independent ChartSpec validator for sample counts, axes, source/derived fields, category coverage and bootstrap definitions, with mutation checks on both Iris and Wine.
+- Reused the categorical beeswarm placement for a second UCI Wine distribution figure. Both Wine plots preserve all 178 source rows in SVG/PPTX/PowerPoint PDF; the single Q07 benchmark task hashes both figures and both FigureSpecs without exposing specs in the first-stage blind packet.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

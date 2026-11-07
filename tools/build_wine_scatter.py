@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Build a second-data-source scatter example from UCI Wine without Iris assumptions."""
+"""Build scatter and distribution examples from UCI Wine with shared chart primitives."""
 from __future__ import annotations
 
 import json
 from collections import Counter
 
-from build_quantitative_examples import Figure, scaled, separated_scatter_positions
+from build_quantitative_examples import Figure, scaled, separated_scatter_positions, separated_strip_positions
 from chart_data import load_rows
 from chart_contract import validate_chart_contract
 from render_figure_spec import render
@@ -18,7 +18,7 @@ SHAPES = {"1": "ellipse", "2": "rect", "3": "trapezoid"}
 
 def build() -> dict:
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
-    chart, = config["charts"]
+    chart = next(item for item in config["charts"] if item["kind"] == "scatter")
     meta = config["data"]
     rows = load_rows(meta)
     validate_chart_contract(config, rows)
@@ -60,13 +60,46 @@ def build() -> dict:
     return spec
 
 
+def build_strip() -> dict:
+    config = json.loads(CONFIG.read_text(encoding="utf-8"))
+    chart = next(item for item in config["charts"] if item["kind"] == "strip")
+    meta = config["data"]
+    rows = load_rows(meta)
+    validate_chart_contract(config, rows)
+    assert Counter(row["cultivar"] for row in rows) == {"1": 59, "2": 71, "3": 48}
+    fig = Figure(chart, meta, "specs/wine_charts_v76.json")
+    fig.text("Wine chemistry: alcohol by coded cultivar", .52, .19, 12.2, .50,
+             22, True, "left")
+    fig.text("All 178 samples remain visible; horizontal offsets separate close values. UCI does not report the source unit.",
+             .70, 6.50, 11.9, .35, 11, align="left")
+    fig.text("UCI Wine · 178 samples · DOI 10.24432/C5PC7J · CC BY 4.0", .70, 7.02,
+             11.9, .23, 9.5, align="left", color="#65737C")
+    x0, x1, y0, y1 = 1.30, 11.90, 1.28, 5.66
+    categories = chart["axes"]["x"]["categories"]
+    centers = {code: x0 + (index+.5)*(x1-x0)/len(categories)
+               for index, code in enumerate(categories)}
+    low, high = chart["axes"]["y"]["domain"]
+    fig.axes(x0, y0, x1, y1, "Cultivar code", "Alcohol (unit unreported)",
+             [(centers[code], f"Cultivar {code}") for code in categories],
+             [(scaled(value, low, high, y1, y0), str(value)) for value in range(10, 16)])
+    positions = separated_strip_positions(rows, chart, centers, chart["y"], low, high, y0, y1)
+    for row in rows:
+        x, y = positions[row["source_row"]]
+        code = row["cultivar"]
+        fig.point(x, y, COLORS[code], row,
+                  {"alcohol": row["alcohol"], "cultivar": code}, r=.035, shape=SHAPES[code])
+    spec = fig.finish()
+    validate_spec(spec)
+    return spec
+
+
 def main() -> None:
-    spec = build()
-    stem = spec["id"]
-    (ROOT / "figure_specs/quant" / f"{stem}.json").write_text(
-        json.dumps(spec, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    render(spec, ROOT / f"examples/{stem}.svg", ROOT / f"dist/{stem}.pptx")
-    print(f"Built {stem}: {len(spec['elements'])} elements")
+    for spec in (build(), build_strip()):
+        stem = spec["id"]
+        (ROOT / "figure_specs/quant" / f"{stem}.json").write_text(
+            json.dumps(spec, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        render(spec, ROOT / f"examples/{stem}.svg", ROOT / f"dist/{stem}.pptx")
+        print(f"Built {stem}: {len(spec['elements'])} elements")
 
 
 if __name__ == "__main__":

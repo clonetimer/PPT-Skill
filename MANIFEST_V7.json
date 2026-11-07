@@ -22,6 +22,7 @@
       "figure_specs/quant/Q05_iris_ablation.json",
       "figure_specs/quant/Q06_iris_trend_interval.json",
       "figure_specs/quant/Q07_wine_scatter.json",
+      "figure_specs/quant/Q08_wine_strip.json",
       "figure_specs/image/I01_cell_image_quant.json"
     ],
     "examples": [
@@ -38,6 +39,7 @@
       "examples/Q05_iris_ablation.svg",
       "examples/Q06_iris_trend_interval.svg",
       "examples/Q07_wine_scatter.svg",
+      "examples/Q08_wine_strip.svg",
       "examples/I01_cell_image_quant.svg"
     ],
     "tools": [
@@ -110,6 +112,7 @@
       "dist/Q05_iris_ablation.pptx",
       "dist/Q06_iris_trend_interval.pptx",
       "dist/Q07_wine_scatter.pptx",
+      "dist/Q08_wine_strip.pptx",
       "dist/I01_cell_image_quant.pptx",
       "dist/Q01_iris_scatter.pdf",
       "dist/Q02_iris_strip.pdf",
@@ -119,6 +122,7 @@
       "dist/Q05_iris_ablation.pdf",
       "dist/Q06_iris_trend_interval.pdf",
       "dist/Q07_wine_scatter.pdf",
+      "dist/Q08_wine_strip.pdf",
       "dist/I01_cell_image_quant.pdf",
       "dist/render_record_v76.json",
       "dist/export_quantitative_metadata_v76.json",

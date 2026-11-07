@@ -3,7 +3,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$ids = @('Q01_iris_scatter', 'Q02_iris_strip', 'Q03_iris_mean_ci', 'Q03_iris_mean_ci_nature', 'Q04_iris_confusion', 'Q05_iris_ablation', 'Q06_iris_trend_interval', 'Q07_wine_scatter', 'I01_cell_image_quant')
+$ids = @('Q01_iris_scatter', 'Q02_iris_strip', 'Q03_iris_mean_ci', 'Q03_iris_mean_ci_nature', 'Q04_iris_confusion', 'Q05_iris_ablation', 'Q06_iris_trend_interval', 'Q07_wine_scatter', 'Q08_wine_strip', 'I01_cell_image_quant')
 $dist = Join-Path $RepositoryRoot 'dist'
 $app = New-Object -ComObject PowerPoint.Application
 try {

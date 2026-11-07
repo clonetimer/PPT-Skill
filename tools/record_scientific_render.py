@@ -19,7 +19,7 @@ from audit_pptx import audit
 from scientific_ir import ROOT
 
 IDS = ["Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature",
-       "Q04_iris_confusion", "Q05_iris_ablation", "Q06_iris_trend_interval", "Q07_wine_scatter", "I01_cell_image_quant"]
+       "Q04_iris_confusion", "Q05_iris_ablation", "Q06_iris_trend_interval", "Q07_wine_scatter", "Q08_wine_strip", "I01_cell_image_quant"]
 
 
 def digest(path: Path):
@@ -103,6 +103,7 @@ def main():
                                "manual_final_size": "pending_independent_review"}})
     record = {
         "schema_version": "7.6.0-dev", "build_commands": ["python tools/build_quantitative_examples.py",
+            "python tools/build_wine_scatter.py",
             "python tools/build_publication_example.py", "python tools/build_image_quant_example.py",
             "pwsh tools/export_quantitative_pdf.ps1"],
         "tool_versions": {"python": platform.python_version(), "python_pptx": pptx.__version__,

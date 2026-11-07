@@ -17,7 +17,7 @@
 - License: CC BY 4.0. Cite Aeberhard and Forina (1992), UCI Wine, when reusing the data or chart.
 - SHA-256: `6be6b1203f3d51df0b553a70e57b8a723cd405683958204f96d23d7cd6aea659`.
 - Source positions 0, 1 and 10 map to coded cultivar, alcohol and color intensity. UCI does not report physical units for the selected measurements; the chart discloses this on both axes. Coded cultivars are not named varieties.
-- Data and chart contract: `specs/wine_charts_v76.json`; all 178 rows are plotted, with bounded display-only offsets for coincident positions.
+- Data and chart contract: `specs/wine_charts_v76.json`; both the scatter and distribution examples plot all 178 rows, with bounded display-only offsets to separate close marks.
 
 ## Quantitative-phase cell image
 

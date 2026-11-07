@@ -11,6 +11,7 @@
                        "Q05_iris_ablation",
                        "Q06_iris_trend_interval",
                        "Q07_wine_scatter",
+                       "Q08_wine_strip",
                        "I01_cell_image_quant"
                    ]
 }

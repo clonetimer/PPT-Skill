@@ -112,5 +112,13 @@
     "evidence_status": "data_driven",
     "evidence_scope": "All 178 raw source rows are plotted; the source does not report physical units for these variables.",
     "reuse": "CC BY 4.0; cite UCI Wine DOI 10.24432/C5PC7J", "unverified": ["Physical units for alcohol and color intensity are not supplied by UCI."]
+  },
+  "Q08_wine_strip": {
+    "claim": "Alcohol measurements overlap across the three coded wine cultivars.",
+    "archetype": "quantitative_grid", "output_mode": "presentation",
+    "source": "data/wine_uci.data", "source_locator": "source_row plus source positions 0 (coded cultivar) and 1 (alcohol)",
+    "evidence_status": "data_driven",
+    "evidence_scope": "All 178 raw source rows are plotted; UCI does not report the physical unit for alcohol.",
+    "reuse": "CC BY 4.0; cite UCI Wine DOI 10.24432/C5PC7J", "unverified": ["Physical unit for alcohol is not supplied by UCI."]
   }
 }

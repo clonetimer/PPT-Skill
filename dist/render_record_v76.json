@@ -2,6 +2,7 @@
   "schema_version": "7.6.0-dev",
   "build_commands": [
     "python tools/build_quantitative_examples.py",
+    "python tools/build_wine_scatter.py",
     "python tools/build_publication_example.py",
     "python tools/build_image_quant_example.py",
     "pwsh tools/export_quantitative_pdf.ps1"
@@ -24,6 +25,7 @@
         "Q05_iris_ablation",
         "Q06_iris_trend_interval",
         "Q07_wine_scatter",
+        "Q08_wine_strip",
         "I01_cell_image_quant"
       ]
     }
@@ -252,6 +254,35 @@
       "outputs_canonical_sha256": {
         "svg": "9691ff4212c45b2b9abf306715ec4d45b8e970d6f5705a45a63a9581b7a01a8d",
         "pptx": "8d4fb51e1d06870ee08a87690c34e834e8a689c6926c45bbde2f84ddcf0dc66f"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "Q08_wine_strip",
+      "figure_spec": "figure_specs/quant/Q08_wine_strip.json",
+      "input_sha256": "7736251c7465898ef578654a53ed5b90467540fb3928e75c4124f930ef8b2a49",
+      "input_canonical_sha256": "7b27fce7fe1035034b44ec22a31cbd3d8148b4aead8abade991c530cd6fc808d",
+      "outputs_sha256": {
+        "svg": "15b5d3e81f4f58a905570f79c6d785c465e41dd75b03e5777560d8ce80001032",
+        "pptx": "553a443cf5e879679d0d20ebf2cebfe9392d6eafd2b776bdf8dac2b95e307374",
+        "pdf": "a50dbd787e5faea5e94889824ef45f9c0815cabbf03c5190ccf6a5e01a80270e",
+        "preview.png": "252af5e3fa7b22a46bbd06c4187b1e1604b17c2b7cb9eb5d5643a3c970fc38ff"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "c91e83ad74022344d7accf1f734342d7c4a9b361a207178869295a99ec3ad797",
+        "pptx": "5473d87efdb90628df9c1dd7401403237222ce8876d1a855aca5b99ed0d191e3"
       },
       "qa": {
         "automated": "pass",

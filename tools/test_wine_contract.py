@@ -11,7 +11,7 @@ from pathlib import Path
 
 from build_wine_scatter import CONFIG
 from chart_data import load_rows
-from validate_wine_scatter import SPEC, check
+from validate_wine_scatter import SPEC, STRIP_SPEC, check
 
 
 class WineContractTests(unittest.TestCase):
@@ -19,6 +19,11 @@ class WineContractTests(unittest.TestCase):
     def setUpClass(cls):
         cls.config = json.loads(CONFIG.read_text(encoding="utf-8"))
         cls.spec = json.loads(SPEC.read_text(encoding="utf-8"))
+        cls.strip_spec = json.loads(STRIP_SPEC.read_text(encoding="utf-8"))
+
+    def test_both_wine_charts_pass(self):
+        check(self.config, self.spec)
+        check(self.config, self.strip_spec)
 
     def test_source_hash(self):
         changed = copy.deepcopy(self.config)
@@ -35,6 +40,12 @@ class WineContractTests(unittest.TestCase):
     def test_position(self):
         changed = copy.deepcopy(self.spec)
         next(e for e in changed["elements"] if "data_row" in e)["x"] += 1
+        with self.assertRaises(AssertionError):
+            check(self.config, changed)
+
+    def test_strip_position(self):
+        changed = copy.deepcopy(self.strip_spec)
+        next(e for e in changed["elements"] if "data_row" in e)["y"] += .1
         with self.assertRaises(AssertionError):
             check(self.config, changed)
 

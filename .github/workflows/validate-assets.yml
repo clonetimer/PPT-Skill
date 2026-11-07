@@ -84,6 +84,7 @@ jobs:
           python tools/audit_pptx.py dist/Q05_iris_ablation.pptx --strict
           python tools/audit_pptx.py dist/Q06_iris_trend_interval.pptx --strict
           python tools/audit_pptx.py dist/Q07_wine_scatter.pptx --strict
+          python tools/audit_pptx.py dist/Q08_wine_strip.pptx --strict
           python tools/audit_pptx.py dist/I01_cell_image_quant.pptx --strict --allow-raster
           python tools/audit_pptx.py dist/DECK01_c01_defense.pptx --strict
       - name: Compile tools

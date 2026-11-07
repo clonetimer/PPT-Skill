@@ -38,6 +38,7 @@ def bundle_paths() -> tuple[list[Path], list[Path]]:
         blind.add(ROOT / task["source"])
         blind.update(ROOT / path for path in artifact_paths(task["id"]))
         unblind.add(ROOT / task["input"])
+        unblind.update(ROOT / path for path in task.get("related_inputs", []))
     unblind |= blind  # Stage 2 is self-contained for the release validator.
     missing = [str(path) for path in unblind if not path.is_file()]
     if missing:

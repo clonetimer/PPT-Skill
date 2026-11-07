@@ -60,6 +60,12 @@ class ReleaseGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_review(review)
 
+    def test_changed_second_wine_input_blocks_stale_review(self):
+        review = self.complete_synthetic_review()
+        review["tasks"]["Q07"]["related_inputs_sha256"]["figure_specs/quant/Q08_wine_strip.json"] = "0" * 64
+        with self.assertRaises(ValueError):
+            validate_review(review)
+
     def test_missing_preview_blocks_release(self):
         review = self.complete_synthetic_review()
         review["tasks"]["I01"]["artifacts_sha256"].pop("dist/I01_cell_image_quant.preview.png")
@@ -96,6 +102,8 @@ class ReleaseGateTests(unittest.TestCase):
         assert ROOT / "specs/research_figure_benchmark_v76.json" in unblind
         assert ROOT / "figure_specs/quant/Q03_iris_mean_ci.json" not in blind
         assert ROOT / "figure_specs/quant/Q03_iris_mean_ci.json" in unblind
+        assert ROOT / "figure_specs/quant/Q08_wine_strip.json" not in blind
+        assert ROOT / "figure_specs/quant/Q08_wine_strip.json" in unblind
         assert ROOT / "dist/Q03_iris_mean_ci.pdf" in blind
         assert ROOT / "dist/Q03_iris_mean_ci.pdf" in unblind
         assert ROOT / "tools/validate_quantitative_examples.py" not in blind
