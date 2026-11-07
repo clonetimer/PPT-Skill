@@ -23,6 +23,9 @@ def main():
     assert spec["scientific_source_ref"] == "figure_specs/quant/Q03_iris_mean_ci.json"
     assert spec["computed_values"] == source["computed_values"]
     assert spec["chart_contract"] == source["chart_contract"]
+    assert spec["chart_contract"]["axes"]["x"]["categories"] == [
+        "Iris-setosa", "Iris-versicolor", "Iris-virginica"]
+    assert spec["chart_contract"]["axes"]["y"]["domain"] == [0, 8]
     assert spec["data_lineage"] == source["data_lineage"]
     source_rows = {row["source_row"]: row for row in rows}
     points = [e for e in spec["elements"] if "data_row" in e]

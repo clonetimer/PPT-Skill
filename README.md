@@ -2,7 +2,7 @@
 
 ## V7.6 development — Evidence-linked scientific figures
 
-The current workflow links FigureSpec elements to evidence, checks C01's critical drawn arrows against its declared relationships, and builds six data-driven charts plus one image-and-quantification panel from public source assets. SVG and editable PPTX come from the same FigureSpec; PowerPoint-exported PDFs are included as inspected previews. See [the research-figure upgrade plan](docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md) for scope and remaining gates.
+The current workflow links FigureSpec elements to evidence, checks C01's critical drawn arrows against its declared relationships, and builds six data-driven charts plus one image-and-quantification panel from public source assets. The chart contract declares axis domains, zero policy and reasons for truncated ranges. SVG and editable PPTX come from the same FigureSpec; PowerPoint-exported PDFs are included as inspected previews. See [the research-figure upgrade plan](docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md) for scope and remaining gates.
 
 ```bash
 python tools/build_quantitative_examples.py

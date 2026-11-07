@@ -36,12 +36,12 @@
     {
       "figure_id": "Q01_iris_scatter",
       "figure_spec": "figure_specs/quant/Q01_iris_scatter.json",
-      "input_sha256": "d9495fd961c0c2fc83ed8e51282923923a158f9d340d174cbd006b3abca79f74",
-      "input_canonical_sha256": "8d600671fb50731d59994583e444cecd9276f172a8774d450023a2af0716a5d1",
+      "input_sha256": "6a8488f3a43674dd12d2f8891aeb389bcb8f9c41383dcb73f44642f4450ceee1",
+      "input_canonical_sha256": "fed052f1babf61c42e920c55022ddb42a5adef228b3f0d76681683737eede569",
       "outputs_sha256": {
         "svg": "d103116ef40aae8671bd49f05827e707d644dd0a042f569dbf7534dc10fc2901",
-        "pptx": "ab8fa7c36ca8066d19ea24bab8f3ddd9ab5870ecaad41a0b3de80276c189fb59",
-        "pdf": "7210ee8402b1700f972fd1b643fa76b918af411c0c3469f6ae0a3206f1d8988b",
+        "pptx": "12949a02e6bf85a2b89db9cb3b9f6ac3ceca1617f00661d09c61cbbe65448987",
+        "pdf": "ac24147e93ffbea5e5a30f0cc5338c1624080693a7ce0f41489d17e3db58ec61",
         "preview.png": "d5349e953c332dc6ac67192c8fb8651bd94d05f95b1ada9792acce0dc3341794"
       },
       "outputs_canonical_sha256": {
@@ -65,12 +65,12 @@
     {
       "figure_id": "Q02_iris_strip",
       "figure_spec": "figure_specs/quant/Q02_iris_strip.json",
-      "input_sha256": "5eac27b9f3c5fc22488656261e6ed07fc2f6e702e634f94f9618ba9db5313b01",
-      "input_canonical_sha256": "c4d65f558879597b510fb3fa6de7b777d70d47fe50babe632224f4fdf9e928d3",
+      "input_sha256": "fd9dc6a0cb9300dcac3271a267bb1dfea69a41ff64afcad9112c37c97b36a238",
+      "input_canonical_sha256": "997d5dbf9db0d3fff0df77489ea7e1fb8695f361e343bbd0275327eacf7570e0",
       "outputs_sha256": {
         "svg": "1c08c121599f462cc5baa86261c0ffec3ebf6780887143dc55ca68a1fb8b6696",
-        "pptx": "12477369f28b28289a6ca9dc1b1b3a64bda52e31ee897cfcf6e78c395c877d10",
-        "pdf": "fc1dc4f5e56f8c26e6785ce1723c9fe7f794797e5b58a2d19bb274e13d83f681",
+        "pptx": "d0fe84b1376879093ad9e3acc87a19833a2e4788aa17b12679018ef173c75d8a",
+        "pdf": "d67040ef0533f1f74493c1c6785dc133120e654d2b2c0ec1d1386975cce51620",
         "preview.png": "db5ebf9e4a534194136c3bf15626f5338fb12ad2082a4429b55ec6071e6ccf3f"
       },
       "outputs_canonical_sha256": {
@@ -94,12 +94,12 @@
     {
       "figure_id": "Q03_iris_mean_ci",
       "figure_spec": "figure_specs/quant/Q03_iris_mean_ci.json",
-      "input_sha256": "44e5db17f6a673e5341c15af5724e1698f933d2bb6d8d257d810e1bf963f1968",
-      "input_canonical_sha256": "a58346fbc00f7015ed3d62251b7c13ed060b988c4ad339270fe579e0b554fca1",
+      "input_sha256": "efecae259dae2490c1974b7fc586b2c41b0e9ea65fbdbb3731ea44bdc3c9fc53",
+      "input_canonical_sha256": "8d754f2630f147063c8d0d324492d108c6faedbabbe4ef01d6c3551287a77336",
       "outputs_sha256": {
         "svg": "d7f7ed5ac802adbe1bef8b7b48b619685acf420674ef3f159c92eaa7561ee025",
-        "pptx": "06d9b2a15edf07f7f50c43556c850bb3617a30dff38a6091b2bc7dd4cfe0ef2f",
-        "pdf": "e42819459db4c6d0ef7f5eb96e9954ddde098e27e72639268751f0bdd5707807",
+        "pptx": "b5eae3ed3a303e327855feb5829e8b317a1a68c139c495ea6444d09583ae8404",
+        "pdf": "812794f0a42eca62c80860cb2329ac3d3b830ab628330b1c474d37fe3ebba417",
         "preview.png": "875c07098a9f5e5f9acd0a0f1ee492c76314b1dc91870c2bb6c9931cf6896b79"
       },
       "outputs_canonical_sha256": {
@@ -123,12 +123,12 @@
     {
       "figure_id": "Q03_iris_mean_ci_nature",
       "figure_spec": "figure_specs/quant/Q03_iris_mean_ci_nature.json",
-      "input_sha256": "79cea890bf815fabe3965b1d4a181f0623977538dfee3f9c0accdec52a2b6ca0",
-      "input_canonical_sha256": "b9a3dd75af1817a11bc1d1a36d2c1bc5e2653e5f37be8cc68f61848341798c5b",
+      "input_sha256": "fecfe3e4b40d803a1af522ff84ab3ca2e6fdb7c6b39db423ab0ce5743b544cf4",
+      "input_canonical_sha256": "af2c6a6ab3a31e49efd74a0ca87f2127eb50476336c23971a7eea06bdbe9420e",
       "outputs_sha256": {
         "svg": "5c9dbf87cbbaf342fcce0a3e8409caf216084e8197e6ea568eb3edbdef595d14",
-        "pptx": "111210d119ddbeda14eeea582387112c66a23b9d9b5fd4ea5fcf0796778a9919",
-        "pdf": "ae22b802aff893904b38731c954bbd3203815d509b115e7cb259ea1a750846fd",
+        "pptx": "d28b97f38a711bf58de622bf47625318daf1abb81c56a2facb08b7f3b09711f4",
+        "pdf": "f728d5f70f16851b9a9de08dbb31f3dda043b93510379158ff0a04cac9679f5f",
         "preview.png": "f8fe17255aa2901ad4eea47ad75a83d9a57821b1ea4b3880fe4a2acc2252d8dd"
       },
       "outputs_canonical_sha256": {
@@ -152,12 +152,12 @@
     {
       "figure_id": "Q04_iris_confusion",
       "figure_spec": "figure_specs/quant/Q04_iris_confusion.json",
-      "input_sha256": "3cf270525a4dcefec64c74141f9d55cdd70bb4c624fec0bb891d5d3f48ced43b",
-      "input_canonical_sha256": "43188cf217d65f1259af1ea17b975893afa3b9b0dde41b3bd7b697df30cb6ea1",
+      "input_sha256": "b88b5baa2179eaab17bab97738a7dc6c5b4027251a285c17c64b4783c50ec480",
+      "input_canonical_sha256": "79753cb3b0d2bbac2984c2bae2ed4ecd06587c0caf13c776607ba935b8499a2e",
       "outputs_sha256": {
         "svg": "7f9c3a9e8aa66e088ebd24bbad271c3d477ffdaee79f72cd727e58f33918cc00",
-        "pptx": "58f4efaac4798a7419cc8326b4c570dd2a95c0ff2d5e79014903818d184817f1",
-        "pdf": "7024d4d03815cbfc2ec93761abe967aedea5d65145fc404a9b23e08571b9d6a5",
+        "pptx": "43e84f6f70ced7bd16948a5de0e38c26413c0401aa4176a63c22d7d05a35dac7",
+        "pdf": "6bb83aba469c804a1c5e6dd2f93682e550b8a5781e2082f58c7317ddc9451479",
         "preview.png": "f80e8b9bb2a97567215988851ca28d746e803ff97a7a64ef254aaf0d94b009e5"
       },
       "outputs_canonical_sha256": {
@@ -181,12 +181,12 @@
     {
       "figure_id": "Q05_iris_ablation",
       "figure_spec": "figure_specs/quant/Q05_iris_ablation.json",
-      "input_sha256": "def0dabf1dc1dd23b1cac1a2c398a78b10a691eaca927f375008148815166904",
-      "input_canonical_sha256": "61c20c50edf71038d2ea737a4fa722229d7a91db3999ec1d02a15f03b7d67af1",
+      "input_sha256": "d2d2571e868946b1c5eadb39e930e70658c60d25cffc54c07e1b68ad9668c85b",
+      "input_canonical_sha256": "42dd4a689c1524fcc51145f5e4226bb40f1537051b03a6ea6bb707d825c58a68",
       "outputs_sha256": {
         "svg": "14f5c53c5ec9b8ea32dcc54d308cfca1b22fb32ba2e2e73537ebec306b31e2d5",
-        "pptx": "41f8e9760978ba036749bb4b87f3a908be1b91ff9f64d2bbf624a83778eabec4",
-        "pdf": "7b430f047547b7fd693533034f72bc914906db5ca224afe1d577f5d3ec6ccd78",
+        "pptx": "7c0ea85f6a61007503d7887730a89b0c7ada7abbfe04e5a659c5430182f1a528",
+        "pdf": "c0cc4b56d4872877259e775b6a700718754815716c1cd87fe49e222d1d7fa58f",
         "preview.png": "249ad3d34e6c71919975c87f4147b691f4aa0035611b457c2f70f599caf240db"
       },
       "outputs_canonical_sha256": {
@@ -210,12 +210,12 @@
     {
       "figure_id": "Q06_iris_trend_interval",
       "figure_spec": "figure_specs/quant/Q06_iris_trend_interval.json",
-      "input_sha256": "9d8311bf8286edd9debfeba9e7d3eef8bf7863d96e665573d29048d17c11d9e8",
-      "input_canonical_sha256": "c5a4e1a339dbcb34c414e5566f6a23c03549ffca5f32aec7e812313488459763",
+      "input_sha256": "c3d48cf894a597c7ba9a8c1f736f0f03d85783c3bbf100569e28dbf3f8195738",
+      "input_canonical_sha256": "1cbadcee794fc7860dc9e47663f4fa9555bd0c49bda7970126a335b3e2c4ea5a",
       "outputs_sha256": {
         "svg": "75aaf0db641724e6f0606487fb4822b64828bb02299e45b7f7a18d66a1742d88",
-        "pptx": "ca761a49a7da2a251bc6b3ba5836f3a152c20fde23fe587a4a3ad8a5cda74e1d",
-        "pdf": "4bbf3be5922ca84a3da9c17b9567aefbacf051839cdb291cb924a46ba625f4d7",
+        "pptx": "82c9e4e072b4694b4bb52a032901224f715005970c3c2d1a9d82ab7052210833",
+        "pdf": "8e31930e9facd52feb32688702611a5036112fa7a75e59720c6b37cdffe36863",
         "preview.png": "9a0c78a1b840cce09ffc3e8380297574d64de43825e844e9daba724a24379308"
       },
       "outputs_canonical_sha256": {
@@ -244,7 +244,7 @@
       "outputs_sha256": {
         "svg": "a64dbb677c2a57667ccc807052e1d78f04acd6e5772186a8c5d72e21a6c6ec1e",
         "pptx": "3a295236fa568dc66313114b9419b970135cc5a6854d7aa68366a52475ae8fe6",
-        "pdf": "6bcbd89d1cc26171a3932ff3d745ccc6968b80e7867aab1a0de3457658c4cdcb",
+        "pdf": "a61821fa841347c251fea66f1af8857c5b35a1bba23ad9d6ee0f675353adb759",
         "preview.png": "8c42737a782223e57dec4e9375917559261a9face072f094e53148779794715f"
       },
       "outputs_canonical_sha256": {

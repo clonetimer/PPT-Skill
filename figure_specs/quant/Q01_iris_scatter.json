@@ -32,6 +32,28 @@
       "display": "all_raw_points",
       "interval": "none"
     },
+    "axes": {
+      "x": {
+        "type": "linear",
+        "field": "petal_length_cm",
+        "unit": "cm",
+        "domain": [
+          0,
+          7
+        ],
+        "zero_included": true
+      },
+      "y": {
+        "type": "linear",
+        "field": "petal_width_cm",
+        "unit": "cm",
+        "domain": [
+          0,
+          3
+        ],
+        "zero_included": true
+      }
+    },
     "caption": "Each point is one flower; no inferential comparison is claimed."
   },
   "computed_values": [],

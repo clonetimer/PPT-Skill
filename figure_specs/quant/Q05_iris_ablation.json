@@ -35,6 +35,27 @@
       "splits": "same 150 leave-one-out folds for both feature sets",
       "seed": "not_used"
     },
+    "axes": {
+      "x": {
+        "type": "category",
+        "field": "feature_set",
+        "unit": "category",
+        "categories": [
+          "All four measurements",
+          "Petal measurements only"
+        ]
+      },
+      "y": {
+        "type": "linear",
+        "field": "accuracy_percent",
+        "unit": "%",
+        "domain": [
+          0,
+          100
+        ],
+        "zero_included": true
+      }
+    },
     "caption": "Paired 150-row leave-one-out 1-NN comparison; 4-feature baseline versus petal-only. Accuracy is descriptive; no paper performance claim."
   },
   "computed_values": [

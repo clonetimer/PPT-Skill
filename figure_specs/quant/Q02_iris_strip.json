@@ -33,6 +33,29 @@
       "interval": "none",
       "jitter": "deterministic display-only horizontal offset"
     },
+    "axes": {
+      "x": {
+        "type": "category",
+        "field": "species",
+        "unit": "category",
+        "categories": [
+          "Iris-setosa",
+          "Iris-versicolor",
+          "Iris-virginica"
+        ]
+      },
+      "y": {
+        "type": "linear",
+        "field": "sepal_length_cm",
+        "unit": "cm",
+        "domain": [
+          3,
+          9
+        ],
+        "zero_included": false,
+        "domain_reason": "Zoomed to show the observed distribution; axis starts at 3 cm."
+      }
+    },
     "caption": "All 50 observations per species are shown; horizontal jitter has no numeric meaning."
   },
   "computed_values": [],

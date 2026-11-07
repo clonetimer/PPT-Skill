@@ -40,6 +40,29 @@
       "seed": 76,
       "resampling_unit": "flower within bin"
     },
+    "axes": {
+      "x": {
+        "type": "linear",
+        "field": "sepal_length_cm",
+        "unit": "cm",
+        "domain": [
+          4,
+          6
+        ],
+        "zero_included": false,
+        "domain_reason": "Zoomed to the setosa sepal-length range; axis starts at 4 cm."
+      },
+      "y": {
+        "type": "linear",
+        "field": "petal_length_cm",
+        "unit": "cm",
+        "domain": [
+          0,
+          2
+        ],
+        "zero_included": true
+      }
+    },
     "caption": "Fifty setosa flowers are shown. Connected points are means of five ordered groups of ten; whiskers are within-bin 95% percentile bootstrap intervals. The line is a descriptive guide, not a fitted model."
   },
   "computed_values": [

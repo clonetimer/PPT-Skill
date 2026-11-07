@@ -14,22 +14,35 @@ from build_quantitative_examples import ROOT, CONFIG, load_data, predict_loo, NA
 from scientific_ir import validate_spec
 
 
+def scale_axis(value, axis, out_low, out_high):
+    low, high = axis["domain"]
+    return out_low + (value-low) / (high-low) * (out_high-out_low)
+
+
+def validate_axis_coverage(chart, rows, columns):
+    for axis in chart["axes"].values():
+        if axis["type"] == "linear" and axis["field"] in columns:
+            low, high = axis["domain"]
+            assert all(low <= row[axis["field"]] <= high for row in rows), (
+                chart["id"], axis["field"], "clipped source value")
+
+
 def check_point_geometry(chart, point, row):
     """Verify the actual plotted centre against the source row and declared axes."""
     kind = chart["kind"]
     if kind == "scatter":
-        x = 1.28 + row["petal_length_cm"] / 7 * (9.80 - 1.28)
-        y = 5.66 - row["petal_width_cm"] / 3 * (5.66 - 1.30)
+        x = scale_axis(row[chart["x"]], chart["axes"]["x"], 1.28, 9.80)
+        y = scale_axis(row[chart["y"]], chart["axes"]["y"], 5.66, 1.30)
     elif kind in {"strip", "point_ci"}:
-        centers = {name: 1.30 + (i + .5) * (11.90 - 1.30) / 3 for i, name in enumerate(NAMES)}
+        categories = chart["axes"]["x"]["categories"]
+        centers = {name: 1.30 + (i + .5) * (11.90 - 1.30) / len(categories)
+                   for i, name in enumerate(categories)}
         jitter = ((row["source_row"] * 37) % 101 - 50) / 50 * .32
         x = centers[row["species"]] + jitter
-        value = row["petal_length_cm" if kind == "point_ci" else "sepal_length_cm"]
-        low, high = (0, 8) if kind == "point_ci" else (3, 9)
-        y = 5.66 - (value - low) / (high - low) * (5.66 - 1.28)
+        y = scale_axis(row[chart["y"]], chart["axes"]["y"], 5.66, 1.28)
     elif kind == "trend_interval":
-        x = 1.55 + (row["sepal_length_cm"] - 4) / 2 * (11.40 - 1.55)
-        y = 5.66 - row["petal_length_cm"] / 2 * (5.66 - 1.35)
+        x = scale_axis(row[chart["x"]], chart["axes"]["x"], 1.55, 11.40)
+        y = scale_axis(row[chart["y"]], chart["axes"]["y"], 5.66, 1.35)
     else:
         return
     actual_x = point["x"] + point["w"] / 2
@@ -41,12 +54,29 @@ def check_point_geometry(chart, point, row):
 def validate_config(config):
     meta = config["data"]
     assert meta["row_unit"] and meta["source_url"] and meta["license"]
+    assert meta["transforms"] and all(meta["transforms"])
     assert meta["missing_value_policy"] in {"fail", "documented_exclusion", "documented_imputation"}
     assert len({field["source_position"] for field in meta["columns"].values()}) == len(meta["columns"])
     for field in meta["columns"].values():
         assert field["unit"], "Every numeric or categorical axis needs a declared unit/type"
     for chart in config["charts"]:
         assert chart["claim"] and chart["caption"]
+        assert set(chart["axes"]) == {"x", "y"}
+        for direction in ("x", "y"):
+            axis = chart["axes"][direction]
+            assert axis["field"] == chart[direction]
+            if axis["field"] in meta["columns"]:
+                assert axis["unit"] == meta["columns"][axis["field"]]["unit"]
+            if axis["type"] == "linear":
+                low, high = axis["domain"]
+                assert math.isfinite(low) and math.isfinite(high) and low < high
+                assert axis["zero_included"] is (low <= 0 <= high)
+                assert axis["zero_included"] or axis.get("domain_reason")
+            else:
+                assert axis["type"] == "category" and axis["unit"] == "category"
+                assert axis["categories"] and len(axis["categories"]) == len(set(axis["categories"]))
+                if axis["field"] in {"species", "actual_species", "predicted_species"}:
+                    assert axis["categories"] == NAMES
         assert chart["sample_size"] == (50 if chart.get("filter") == {"species": "Iris-setosa"} else meta["row_count"])
         assert chart["group"] in meta["columns"] or chart["kind"] == "ablation" and chart["group"] == "feature_set"
         if chart["kind"] not in {"confusion_matrix", "ablation"}:
@@ -87,6 +117,7 @@ def validate_outputs(config, rows):
         points = [e for e in spec["elements"] if "data_row" in e]
         chart_lookup = {key: row for key, row in lookup.items()
                         if not chart.get("filter") or row["species"] == chart["filter"]["species"]}
+        validate_axis_coverage(chart, chart_lookup.values(), config["data"]["columns"])
         if chart["kind"] not in {"confusion_matrix", "ablation"}:
             assert Counter(e["data_row"] for e in points) == Counter({key: 1 for key in chart_lookup})
             for point in points:
@@ -114,6 +145,8 @@ def validate_outputs(config, rows):
         else:
             bars = [e for e in spec["elements"] if "row_predictions" in e]
             assert len(bars) == len(spec["computed_values"]) == 2
+            assert chart["axes"]["x"]["categories"] == [item["feature_set"] for item in spec["computed_values"]]
+            assert chart["axes"]["y"]["unit"] == "%"
             for bar, item in zip(bars, spec["computed_values"]):
                 predictions = predict_loo(rows, tuple(item["features"]))
                 expected_rows = [row["source_row"] for row, pred in zip(rows, predictions)
@@ -126,7 +159,8 @@ def validate_outputs(config, rows):
                                                     "predicted": pred} for row, pred in zip(rows, predictions)]
                 assert any(e["type"] == "text" and e["text"] == f"{item['correct']} / {len(rows)} correct"
                            for e in spec["elements"])
-                expected_height = 4.46 * item["accuracy_percent"] / 100
+                expected_height = 4.46 * (item["accuracy_percent"] - chart["axes"]["y"]["domain"][0]) / (
+                    chart["axes"]["y"]["domain"][1] - chart["axes"]["y"]["domain"][0])
                 assert math.isclose(bar["h"], expected_height, abs_tol=.00005)
                 assert math.isclose(bar["y"] + bar["h"], 1.40 + 4.46, abs_tol=1e-6)
         if chart["kind"] == "point_ci":
@@ -146,7 +180,7 @@ def validate_outputs(config, rows):
             assert len(markers) == 3
             for index, (marker, item) in enumerate(zip(markers, spec["computed_values"])):
                 expected_x = 1.30 + (index + .5) * (11.90 - 1.30) / 3
-                expected_y = 5.66 - item["mean"] / 8 * (5.66 - 1.28)
+                expected_y = scale_axis(item["mean"], chart["axes"]["y"], 5.66, 1.28)
                 assert math.isclose(marker["x"] + marker["w"] / 2, expected_x, abs_tol=1e-6)
                 assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0001)
             whiskers = [e for e in spec["elements"] if e["type"] == "line"
@@ -155,7 +189,8 @@ def validate_outputs(config, rows):
             assert len(whiskers) == 3
             for index, (whisker, item) in enumerate(zip(whiskers, spec["computed_values"])):
                 expected_x = 1.30 + (index + .5) * (11.90 - 1.30) / 3
-                expected_ys = sorted(5.66 - value / 8 * (5.66 - 1.28) for value in item["ci95"])
+                expected_ys = sorted(scale_axis(value, chart["axes"]["y"], 5.66, 1.28)
+                                     for value in item["ci95"])
                 assert math.isclose(whisker["x1"], expected_x, abs_tol=1e-6)
                 assert all(math.isclose(actual, expected, abs_tol=.0001)
                            for actual, expected in zip(sorted((whisker["y1"], whisker["y2"])), expected_ys))
@@ -179,8 +214,8 @@ def validate_outputs(config, rows):
                        and e.get("fill") == "#1C303A"]
             assert len(markers) == 5
             for marker, item in zip(markers, spec["computed_values"]):
-                expected_x = 1.55 + (item["x_mean_cm"] - 4) / 2 * (11.40 - 1.55)
-                expected_y = 5.66 - item["y_mean_cm"] / 2 * (5.66 - 1.35)
+                expected_x = scale_axis(item["x_mean_cm"], chart["axes"]["x"], 1.55, 11.40)
+                expected_y = scale_axis(item["y_mean_cm"], chart["axes"]["y"], 5.66, 1.35)
                 assert math.isclose(marker["x"] + marker["w"] / 2, expected_x, abs_tol=.0003)
                 assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0003)
             whiskers = [e for e in spec["elements"] if e["type"] == "line"
@@ -188,8 +223,9 @@ def validate_outputs(config, rows):
                         and math.isclose(e["x1"], e["x2"], abs_tol=1e-6)]
             assert len(whiskers) == 5
             for whisker, item in zip(whiskers, spec["computed_values"]):
-                expected_x = 1.55 + (item["x_mean_cm"] - 4) / 2 * (11.40 - 1.55)
-                expected_ys = sorted(5.66 - value / 2 * (5.66 - 1.35) for value in item["ci95_cm"])
+                expected_x = scale_axis(item["x_mean_cm"], chart["axes"]["x"], 1.55, 11.40)
+                expected_ys = sorted(scale_axis(value, chart["axes"]["y"], 5.66, 1.35)
+                                     for value in item["ci95_cm"])
                 assert math.isclose(whisker["x1"], expected_x, abs_tol=.0003)
                 assert all(math.isclose(actual, expected, abs_tol=.0003)
                            for actual, expected in zip(sorted((whisker["y1"], whisker["y2"])), expected_ys))

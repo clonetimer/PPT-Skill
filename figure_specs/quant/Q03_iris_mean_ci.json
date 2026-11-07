@@ -35,6 +35,28 @@
       "seed": 76,
       "resampling_unit": "flower within species"
     },
+    "axes": {
+      "x": {
+        "type": "category",
+        "field": "species",
+        "unit": "category",
+        "categories": [
+          "Iris-setosa",
+          "Iris-versicolor",
+          "Iris-virginica"
+        ]
+      },
+      "y": {
+        "type": "linear",
+        "field": "petal_length_cm",
+        "unit": "cm",
+        "domain": [
+          0,
+          8
+        ],
+        "zero_included": true
+      }
+    },
     "caption": "Large points are sample means; whiskers are 95% percentile bootstrap intervals from 2,000 within-species resamples. Small points show every flower."
   },
   "computed_values": [
