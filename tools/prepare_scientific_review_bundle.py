@@ -18,6 +18,7 @@ UNBLIND_EXTRA = {
     "specs/figure_contracts_v76.json",
     "docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md",
     "docs/SCIENTIFIC_FIGURE_V76_COMPLETION_AUDIT.md",
+    "docs/C01_V76_SOURCE_CORRECTION.md",
     "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md",
     "docs/Q03_NATURE_PUBLICATION_CAPTION.md",
     "data/README.md",

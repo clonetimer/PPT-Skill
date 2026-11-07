@@ -13,6 +13,15 @@ from pptx import Presentation
 from validate_render_semantics import LEGACY, NS, ROOT, normalize
 
 BASE = "7ea999d677a30db1bfcb9497a4d0c3d89403f350"  # Last pre-V7.6 commit.
+APPROVED_C01_CORRECTIONS = {
+    "C01_SEANet_graph_level": (
+        ["Paper terminology: SR = sensitivity-aware readout. No additional classifier block is inserted beyond the source's summation node."],
+        ["Publisher graphical abstract: EA feeds the first GCN; the first pooling branches to a second SR; both SR outputs merge before Dense classification.",
+         "Dense", "fault class"]),
+    "C01_composite_defense_slide": (
+        ["diagnosis", "Fuse GCN/pooling and energy-assisted SR paths."],
+        ["Dense", "class", "EA feeds first GCN; pooled features branch to two SR paths."]),
+}
 
 
 def historical(path: str) -> bytes | None:
@@ -51,7 +60,10 @@ def compare(name: str, kind: str, path: str, reader, baseline: Counter[str] | No
     if before != after:
         missing = before - after
         added = after - before
-        raise AssertionError(f"{name} {kind}: missing={dict(missing)}, added={dict(added)}")
+        correction = APPROVED_C01_CORRECTIONS.get(name)
+        allowed_missing, allowed_added = (Counter(map(normalize, labels)) for labels in correction) if correction else (Counter(), Counter())
+        if missing != allowed_missing or added != allowed_added:
+            raise AssertionError(f"{name} {kind}: missing={dict(missing)}, added={dict(added)}")
     return blob is not None
 
 
@@ -61,8 +73,12 @@ def main() -> None:
         compare(name, "SVG", svg, labels_in_svg)
         baseline = labels_in_spec(historical(spec))
         old_pptx = compare(name, "PPTX", pptx, labels_in_pptx, baseline=baseline)
-        print(f"PASS {name}: historical FigureSpec/SVG labels preserved; "
-              + ("historical PPTX preserved" if old_pptx else "current PPTX matches pre-migration FigureSpec (historical PPTX not committed)"))
+        corrected = name in APPROVED_C01_CORRECTIONS
+        print(f"PASS {name}: historical FigureSpec/SVG labels "
+              + ("match documented C01 source correction; " if corrected else "preserved; ")
+              + ("historical PPTX compared against the correction" if corrected else
+                 "historical PPTX preserved" if old_pptx else
+                 "current PPTX matches pre-migration FigureSpec (historical PPTX not committed)"))
 
 
 if __name__ == "__main__":

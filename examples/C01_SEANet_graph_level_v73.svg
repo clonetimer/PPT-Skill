@@ -60,12 +60,21 @@
 <rect x="363.59999999999997" y="570.0" width="245.99999999999997" height="103.2" rx="16.8" fill="#E4EAED" stroke="#E4EAED" stroke-width="0.5"/>
 <rect x="357.6" y="564.0" width="245.99999999999997" height="103.2" rx="16.8" fill="#F1F4F5" stroke="#43525B" stroke-width="1.75"/>
 <text x="480.6" y="609.12" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="22.0" fill="#28343C" font-weight="700"><tspan x="480.6" dy="0">Energy-assisted</tspan><tspan x="480.6" dy="25.959999999999997">module</tspan></text>
-<line x1="603.6" y1="614.4" x2="669.6" y2="614.4" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<line x1="426.0" y1="564.0" x2="426.0" y2="472.8" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
 <rect x="685.2" y="570.0" width="170.39999999999998" height="103.2" rx="14.399999999999999" fill="#E4EAED" stroke="#E4EAED" stroke-width="0.5"/>
 <rect x="679.2" y="564.0" width="170.39999999999998" height="103.2" rx="14.399999999999999" fill="#89949A" stroke="#43525B" stroke-width="1.6666666666666667"/>
 <text x="764.4" y="619.5500000000001" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#FFFFFF" font-weight="700"><tspan x="764.4" dy="0">SR</tspan></text>
 <line x1="849.6" y1="614.4" x2="1286.4" y2="614.4" stroke="#43525B" stroke-width="2.25"/>
 <line x1="1286.4" y1="614.4" x2="1286.4" y2="456.0" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
 <text x="96.0" y="765.1083333333333" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="19.166666666666668" fill="#687780"><tspan x="96.0" dy="0">The EA module embeds energy-related features into each graph node; the SR layer models sensor-wise fault sensitivity.</tspan></text>
-<text x="96.0" y="804.8000000000001" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="16.0" fill="#687780" font-style="italic"><tspan x="96.0" dy="0">Paper terminology: SR = sensitivity-aware readout. No additional classifier block is inserted beyond the source's summation node.</tspan></text>
+<text x="96.0" y="804.8000000000001" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="16.0" fill="#687780" font-style="italic"><tspan x="96.0" dy="0">Publisher graphical abstract: EA feeds the first GCN; the first pooling branches to a second SR; both SR outputs merge before Dense classification.</tspan></text>
+<line x1="664.8" y1="471.6" x2="664.8" y2="614.4" stroke="#43525B" stroke-width="2.25"/>
+<line x1="664.8" y1="614.4" x2="675.6" y2="614.4" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<rect x="1352.3999999999999" y="366.0" width="122.4" height="103.2" rx="14.399999999999999" fill="#E8F0F3" stroke="#43525B" stroke-width="1.75"/>
+<text x="1413.6000000000001" y="421.55" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#28343C" font-weight="700"><tspan x="1413.6000000000001" dy="0">Dense</tspan></text>
+<line x1="1327.2" y1="417.6" x2="1348.8" y2="417.6" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<rect x="1501.2" y="376.8" width="32.400000000000006" height="81.60000000000001" rx="0.0" fill="#FFFFFF" stroke="#43525B" stroke-width="1.6666666666666667"/>
+<rect x="1506.0" y="406.8" width="22.8" height="20.400000000000002" rx="0.0" fill="#DCA16C" stroke="#43525B" stroke-width="0.8333333333333334"/>
+<line x1="1477.2" y1="417.6" x2="1497.6000000000001" y2="417.6" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
+<text x="1492.8" y="508.925" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C"><tspan x="1492.8" dy="0">fault class</tspan></text>
 </svg>

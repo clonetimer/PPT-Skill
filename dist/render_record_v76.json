@@ -43,7 +43,7 @@
     "tools/build_image_quant_example.py": "5e09f9ea9e083886c085e743e9433ffe59d22e2d659b617a3e64226b4a2d027e",
     "tools/chart_data.py": "b12f386f846b45175885b7f7c543068482f4579e59e411aa42a1fec079db2a28",
     "tools/chart_contract.py": "6f8de13ea5fcb707f31f6dfe7e99c1493705cfa04a455858eb1bb234a0fca14e",
-    "tools/scientific_ir.py": "a50feeac071f6c2cb03a741ff437c2bbe20dcc6e8ef9d53805e3225cdf29cc77",
+    "tools/scientific_ir.py": "bd975a5ecbdaa664c6cc24126056d828a23e2ba83c615b3b9488e764bcd5e50d",
     "tools/render_figure_spec.py": "9bac44fdd9eba0f60ca244d1f37b47315cb75793e3647feefcebfdc067668dce",
     "tools/export_quantitative_pdf.ps1": "111ae2c8468c85d73d9abc2e4a6ae836bf7ecac2b687678526647544ca423a20",
     "tools/audit_pptx.py": "8bea812aa29fc82618b6e296b320a74bb348406aad8ab980a24752a527210aa2",

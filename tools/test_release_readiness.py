@@ -28,10 +28,14 @@ class ReleaseGateTests(unittest.TestCase):
                 assert "review_template.json" not in names
                 assert not any(name.startswith("unblind_review/") for name in names)
                 assert "blind_review/dist/Q03_iris_mean_ci.pdf" in names
+                assert "blind_review/docs/C01_V76_SOURCE_CORRECTION.md" not in names
+                source = archive.read("blind_review/docs/C01_V73_SOURCE.md").decode("utf-8")
+                assert "previous V7.3/V7.4 redraw incorrectly" not in source
             with zipfile.ZipFile(reconciliation) as archive:
                 names = set(archive.namelist())
                 assert "review_template.json" in names
                 assert "unblind_review/specs/research_figure_benchmark_v76.json" in names
+                assert "unblind_review/docs/C01_V76_SOURCE_CORRECTION.md" in names
                 assert not any(name.startswith("blind_review/") for name in names)
 
     def complete_synthetic_review(self):
@@ -78,6 +82,12 @@ class ReleaseGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_review(review)
 
+    def test_changed_c01_preview_blocks_stale_review(self):
+        review = self.complete_synthetic_review()
+        review["tasks"]["C01_composite"]["artifacts_sha256"]["dist/C01_composite_defense_slide_v74_preview.png"] = "0" * 64
+        with self.assertRaises(ValueError):
+            validate_review(review)
+
     def test_changed_publication_caption_blocks_stale_review(self):
         review = self.complete_synthetic_review()
         review["tasks"]["Q03P"]["artifacts_sha256"]["docs/Q03_NATURE_PUBLICATION_CAPTION.md"] = "0" * 64
@@ -93,6 +103,12 @@ class ReleaseGateTests(unittest.TestCase):
     def test_changed_chart_configuration_blocks_stale_review(self):
         review = self.complete_synthetic_review()
         review["tasks"]["Q03"]["related_inputs_sha256"]["specs/iris_charts_v76.json"] = "0" * 64
+        with self.assertRaises(ValueError):
+            validate_review(review)
+
+    def test_changed_c01_source_correction_blocks_stale_review(self):
+        review = self.complete_synthetic_review()
+        review["tasks"]["C01_SEANet"]["related_inputs_sha256"]["docs/C01_V76_SOURCE_CORRECTION.md"] = "0" * 64
         with self.assertRaises(ValueError):
             validate_review(review)
 

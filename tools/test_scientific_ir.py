@@ -11,9 +11,11 @@ import jsonschema
 from scientific_ir import ROOT, validate_drawn_routes, validate_expected_topology, validate_spec
 
 SPEC = json.loads((ROOT / "figure_specs/c01/C01_composite_defense_slide.json").read_text(encoding="utf-8"))
+STANDALONE = json.loads((ROOT / "figure_specs/c01/C01_SEANet_graph_level.json").read_text(encoding="utf-8"))
 QUANT_SPEC = json.loads((ROOT / "figure_specs/quant/Q03_iris_mean_ci.json").read_text(encoding="utf-8"))
 SCHEMA = json.loads((ROOT / "specs/figure_spec_v76.schema.json").read_text(encoding="utf-8"))
 TOPOLOGY = json.loads((ROOT / "specs/c01_expected_topology_v76.json").read_text(encoding="utf-8"))
+STANDALONE_TOPOLOGY = json.loads((ROOT / "specs/c01_standalone_expected_topology_v76.json").read_text(encoding="utf-8"))
 EDGES = {tuple(edge) for edge in TOPOLOGY["critical_edges"]}
 
 
@@ -21,6 +23,22 @@ class ScientificIRMutationTests(unittest.TestCase):
     def test_baseline(self):
         validate_spec(SPEC)
         validate_expected_topology(SPEC, TOPOLOGY)
+        validate_spec(STANDALONE)
+        validate_expected_topology(STANDALONE, STANDALONE_TOPOLOGY)
+
+    def test_standalone_wrong_ea_shortcut_fails(self):
+        changed = copy.deepcopy(STANDALONE)
+        line = next(e for e in changed["elements"] if e.get("semantic_link") == "ea__gcn_1")
+        line["semantic_link"] = "ea__sr_aux"
+        with self.assertRaises(AssertionError):
+            validate_expected_topology(changed, STANDALONE_TOPOLOGY)
+
+    def test_standalone_missing_dense_route_fails(self):
+        changed = copy.deepcopy(STANDALONE)
+        changed["elements"] = [e for e in changed["elements"]
+                               if e.get("semantic_link") != "sum__dense"]
+        with self.assertRaises(AssertionError):
+            validate_expected_topology(changed, STANDALONE_TOPOLOGY)
 
     def test_missing_visible_edge_fails(self):
         changed = copy.deepcopy(SPEC)

@@ -43,14 +43,14 @@
       "evidence": [{"source": "docs/C01_V73_SOURCE.md", "status": "source_visible"}],
       "layout": "composite_method", "figure_ref": "figure_specs/c01/C01_composite_defense_slide.json",
       "on_slide": ["Frequency-band graph", "Graph-level diagnosis"],
-      "speaker_notes": "Walk through OCF, band subgraphs, GCN/pooling, and EA/SR. State that sensor glyphs and adjacency are schematic."
+      "speaker_notes": "Walk through OCF and band subgraphs. In SEANet, EA feeds the first GCN, first pooling branches to the lower SR, and both SR paths merge before Dense classification. State that sensor glyphs and adjacency are schematic."
     },
     {
       "id": "s03", "role": "evidence_boundary", "claim": "The redraw preserves method topology while leaving numerical adjacency unasserted.",
       "evidence": [{"source": "docs/C01_V74_QA.md", "status": "verified_artifact"}],
       "layout": "evidence_summary", "figure_ref": null,
       "on_slide": ["Source-visible structure", "Schematic graph adjacency"],
-      "speaker_notes": "Identify what was verified and what still requires the original high-resolution figure or quantitative data."
+      "speaker_notes": "Identify the publisher graphical-abstract routes that were checked and the remaining pixel overlay, independent domain review and quantitative-data limits."
     }
   ]
 }

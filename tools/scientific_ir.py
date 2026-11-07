@@ -111,13 +111,15 @@ def validate_drawn_routes(spec: dict, expected_edges: set[tuple[str, str]], tole
     lines = {}
     for e in spec["elements"]:
         if e.get("semantic_link"):
-            assert e["type"] == "line" and e.get("arrow"), e["id"]
+            assert e["type"] == "line", e["id"]
             lines.setdefault(e["semantic_link"], []).append(e)
     assert set(lines) == {f"{a}__{b}" for a, b in expected_edges}
     boxes = semantic_boxes(spec)
     for source, target in expected_edges:
         route = lines[f"{source}__{target}"]
         assert source in boxes and target in boxes
+        assert route[-1].get("arrow"), (source, target, "direction")
+        assert all(not part.get("arrow") for part in route[:-1]), (source, target, "premature arrow")
         assert distance_to_box(route[0]["x1"], route[0]["y1"], boxes[source]) <= tolerance, (source, "start")
         assert distance_to_box(route[-1]["x2"], route[-1]["y2"], boxes[target]) <= tolerance, (target, "end")
         for first, second in zip(route, route[1:]):

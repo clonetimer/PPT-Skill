@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the frozen C01 composite FigureSpec and its SVG/PPTX outputs."""
+"""Build the source-checked C01 composite FigureSpec and its SVG/PPTX outputs."""
 from __future__ import annotations
 
 import json
@@ -38,6 +38,10 @@ def make_spec():
         if semantic_link:
             values["semantic_link"] = semantic_link
         add("line", **values)
+
+    def segment(x1, y1, x2, y2, semantic_link):
+        add("line", x1=x1, y1=y1, x2=x2, y2=y2,
+            color="#43525B", sw=1, semantic_link=semantic_link)
 
     txt("FBG-SEANet: frequency-band graph construction and diagnosis", .42, .16, 12.5, .45, 22, True, "left")
     box(.42, .82, 8.67, 3.05, stroke="#CFD8DE")
@@ -91,23 +95,29 @@ def make_spec():
     add("ellipse", x=7.24, y=5.20, w=.45, h=.45, fill="#FFFFFF", stroke="#43525B", sw=1)
     txt("+", 7.28, 5.25, .37, .33, 15, True, semantic_id="sum")
     arrow(6.97, 5.43, 7.21, 5.43, semantic_link="sr_main__sum")
-    arrow(7.71, 5.43, 8.47, 5.43)
-    txt("diagnosis", 7.82, 5.10, 1.04, .24, 10, color=muted)
-    arrow(1.18, 5.70, 1.18, 6.24, semantic_link="input__ea")
+    box(7.88, 5.17, .70, .51, fill="#F3F7F9", stroke="#7896A6", radius=.035)
+    txt("Dense", 7.91, 5.29, .64, .27, 10, True, semantic_id="dense")
+    arrow(7.71, 5.43, 7.85, 5.43, semantic_link="sum__dense")
+    arrow(8.61, 5.43, 8.90, 5.43)
+    txt("class", 8.61, 5.73, .40, .21, 9.5, color=muted)
+    segment(1.18, 5.70, 1.18, 6.24, "input__ea")
     box(1.28, 6.03, 2.62, .48, fill="#F7F5F9", stroke="#8A7CA5", radius=.035)
     txt("Energy-assisted module", 1.39, 6.14, 2.41, .26, 10.5, True, semantic_id="ea")
     arrow(1.21, 6.27, 1.25, 6.27, semantic_link="input__ea")
-    box(4.18, 6.03, .72, .48, fill="#F7F5F9", stroke="#8A7CA5", radius=.035)
-    txt("SR", 4.25, 6.14, .58, .26, 10.5, True, semantic_id="sr_ea")
-    arrow(3.93, 6.27, 4.15, 6.27, semantic_link="ea__sr_ea")
-    arrow(4.94, 6.27, 7.46, 6.27, semantic_link="sr_ea__sum")
-    arrow(7.47, 6.22, 7.47, 5.68, semantic_link="sr_ea__sum")
+    arrow(2.32, 6.00, 2.32, 5.71, semantic_link="ea__gcn_1")
+    box(5.12, 6.03, .72, .48, fill="#F7F5F9", stroke="#8A7CA5", radius=.035)
+    txt("SR", 5.19, 6.14, .58, .26, 10.5, True, semantic_id="sr_ea")
+    segment(3.84, 5.67, 4.00, 5.82, "pooling_1__sr_ea")
+    segment(4.00, 5.82, 4.00, 6.27, "pooling_1__sr_ea")
+    arrow(4.00, 6.27, 5.09, 6.27, semantic_link="pooling_1__sr_ea")
+    segment(5.88, 6.27, 7.46, 6.27, "sr_ea__sum")
+    arrow(7.46, 6.27, 7.46, 5.68, semantic_link="sr_ea__sum")
 
     txt("Reading guide", 9.52, 1.04, 3.06, .34, 15, True, "left")
     for y, n, title, body in [
         (1.58, "1", "Filter", "Remove operational components from sensor signals."),
         (2.65, "2", "Construct", "Build frequency-specific subgraphs and connect them."),
-        (3.72, "3", "Diagnose", "Fuse GCN/pooling and energy-assisted SR paths."),
+        (3.72, "3", "Diagnose", "EA feeds first GCN; pooled features branch to two SR paths."),
     ]:
         box(9.54, y, .37, .37, fill="#EAF2F5", stroke="#7896A6", radius=.18)
         txt(n, 9.58, y+.045, .29, .27, 10.5, True)
@@ -120,7 +130,8 @@ def make_spec():
     semantic_edges = [["input", "gcn_1"], ["gcn_1", "pooling_1"],
                       ["pooling_1", "gcn_2"], ["gcn_2", "pooling_2"],
                       ["pooling_2", "sr_main"], ["sr_main", "sum"],
-                      ["input", "ea"], ["ea", "sr_ea"], ["sr_ea", "sum"]]
+                      ["input", "ea"], ["ea", "gcn_1"],
+                      ["pooling_1", "sr_ea"], ["sr_ea", "sum"], ["sum", "dense"]]
     semantic_edges += [["ocf", "band_group"]]
     semantic_edges += [[f"band_{i}", "total_graph"] for i in range(1, 5)]
     return enrich_spec({"version": "7.4.0", "id": "C01_composite_defense_slide",

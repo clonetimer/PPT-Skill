@@ -47,6 +47,7 @@
       "tools/build_v71_examples.py",
       "tools/build_c01_v73.py",
       "tools/build_c01_v74.py",
+      "tools/export_c01_preview.ps1",
       "tools/validate_figure_specs.py",
       "tools/validate_c01_v73.py",
       "tools/validate_c01_v74.py",
@@ -77,6 +78,7 @@
       "tools/validate_render_record.py",
       "tools/test_render_record_canonical.py",
       "tools/validate_render_semantics.py",
+      "tools/validate_legacy_label_parity.py",
       "tools/validate_research_benchmark.py",
       "tools/validate_release_readiness.py",
       "tools/test_release_readiness.py",
@@ -91,12 +93,14 @@
       "docs/C01_V73_QA.md",
       "docs/C01_V73_SOURCE.md",
       "docs/C01_V74_QA.md",
+      "docs/C01_V76_SOURCE_CORRECTION.md",
       "docs/DECK_PLANNING_V75.md",
       "docs/QA_REPORT_V7.md",
       "docs/SOURCE_ATTRIBUTION.md",
       "docs/VECTOR_WORKFLOW.md",
       "docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md",
       "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md",
+      "docs/SCIENTIFIC_FIGURE_V76_COMPLETION_AUDIT.md",
       "docs/Q03_NATURE_PUBLICATION_CAPTION.md"
     ],
     "generated_outputs": [
@@ -104,6 +108,7 @@
       "dist/C01_SEANet_graph_level_v73.pptx",
       "dist/C01_composite_defense_slide_v74.pptx",
       "dist/C01_composite_defense_slide_v74_preview.pdf",
+      "dist/C01_composite_defense_slide_v74_preview.png",
       "dist/Q01_iris_scatter.pptx",
       "dist/Q02_iris_strip.pptx",
       "dist/Q03_iris_mean_ci.pptx",
@@ -130,7 +135,7 @@
       "dist/DECK01_c01_defense.pdf"
     ],
     "planning_specs": ["specs/deck_spec_v75.example.json", "specs/deck_spec_v75.schema.json"],
-    "scientific_contracts": ["specs/figure_contracts_v76.json", "specs/figure_spec_v76.schema.json", "specs/c01_expected_topology_v76.json", "specs/iris_charts_v76.json", "specs/wine_charts_v76.json", "specs/chart_spec_v76.schema.json", "specs/research_figure_benchmark_v76.json", "specs/output_profiles_v76.json"],
+    "scientific_contracts": ["specs/figure_contracts_v76.json", "specs/figure_spec_v76.schema.json", "specs/c01_expected_topology_v76.json", "specs/c01_standalone_expected_topology_v76.json", "specs/iris_charts_v76.json", "specs/wine_charts_v76.json", "specs/chart_spec_v76.schema.json", "specs/research_figure_benchmark_v76.json", "specs/output_profiles_v76.json"],
     "source_data": ["data/README.md", "data/iris_uci.csv", "data/wine_uci.data", "data/cell_scikit_image_v026.png"]
   },
   "source_policy": "Do not redistribute the publisher's original graphical abstract; keep only source links and editable derivative redraws."

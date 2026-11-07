@@ -26,14 +26,15 @@ def main():
         "band_1": "B₁", "band_2": "B₂", "band_3": "B₃", "band_4": "Bq",
         "input": "Input", "gcn_1": "GCN", "pooling_1": "pooling",
         "gcn_2": "GCN", "pooling_2": "pooling", "sr_main": "SR",
-        "ea": "Energy-assisted module", "sr_ea": "SR", "sum": "+",
+        "ea": "Energy-assisted module", "sr_ea": "SR", "sum": "+", "dense": "Dense",
     }
     assert labels == expected, (labels, expected)
     expected_edges = {
         ("input", "gcn_1"), ("gcn_1", "pooling_1"),
         ("pooling_1", "gcn_2"), ("gcn_2", "pooling_2"),
         ("pooling_2", "sr_main"), ("sr_main", "sum"),
-        ("input", "ea"), ("ea", "sr_ea"), ("sr_ea", "sum"),
+        ("input", "ea"), ("ea", "gcn_1"),
+        ("pooling_1", "sr_ea"), ("sr_ea", "sum"), ("sum", "dense"),
     }
     expected_edges |= {("ocf", "band_group")}
     expected_edges |= {(f"band_{i}", "total_graph") for i in range(1, 5)}

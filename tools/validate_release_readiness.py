@@ -24,6 +24,8 @@ def review_input_paths(task: dict) -> list[str]:
     """Include every chart configuration used by a reviewed FigureSpec."""
     paths = set(task.get("related_inputs", []))
     for spec_path in [task["input"], *task.get("related_inputs", [])]:
+        if not spec_path.endswith(".json"):
+            continue
         spec = json.loads((ROOT / spec_path).read_text(encoding="utf-8"))
         chart_spec = spec.get("data_lineage", {}).get("chart_spec")
         if chart_spec:

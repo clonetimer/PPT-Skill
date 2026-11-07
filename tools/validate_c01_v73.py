@@ -33,5 +33,6 @@ def check(p,tmp):
 def main():
  files=[ROOT/"figure_specs"/"c01"/f"{stem}.json" for stem in ("C01_FBG_construction","C01_SEANet_graph_level")]
  assert all(p.is_file() for p in files)
- with tempfile.TemporaryDirectory() as t:print(json.dumps([check(p,Path(t)) for p in files],indent=2))
+ test_root=ROOT/".testtmp";test_root.mkdir(exist_ok=True)
+ with tempfile.TemporaryDirectory(dir=test_root) as t:print(json.dumps([check(p,Path(t)) for p in files],indent=2))
 if __name__=="__main__":main()

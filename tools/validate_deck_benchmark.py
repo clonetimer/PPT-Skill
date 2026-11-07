@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 from pptx import Presentation
+from pypdf import PdfReader
 
 from build_deck_benchmark import OUTPUT, ROOT, SPEC
 
@@ -20,9 +21,11 @@ def main():
             assert slide_spec["claim"] in slide_text
         assert all(value in slide_text for value in slide_spec["on_slide"])
         assert slide_spec["speaker_notes"] in slide.notes_slide.notes_text_frame.text
-    assert "OCF / notch filter" in text[1] and "Energy-assisted module" in text[1]
+    assert all(value in text[1] for value in ("OCF / notch filter", "Energy-assisted module", "Dense"))
     assert "schematic" in text[2].lower() and "numerical adjacency" in text[2].lower()
-    assert (ROOT / "dist/DECK01_c01_defense.pdf").is_file()
+    pdf = PdfReader(ROOT / "dist/DECK01_c01_defense.pdf")
+    assert len(pdf.pages) == 3
+    assert "Dense" in (pdf.pages[1].extract_text() or "")
     print("PASS DECK01: ordered claims, source boundary, editable 3-slide output")
 
 

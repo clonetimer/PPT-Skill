@@ -20,7 +20,7 @@ The 15-task benchmark contract is in `specs/research_figure_benchmark_v76.json`;
 
 `specs/output_profiles_v76.json` separates presentation QA from publication prerequisites. Fourteen FigureSpecs use the presentation profile. The [Q03 Nature-size example](docs/Q03_NATURE_PUBLICATION_CAPTION.md) re-lays out the same data and bootstrap summaries at 183 × 100 mm, with editable vector PDF and embedded Arial fonts. It is a production-size demonstrator; editorial and independent domain review remain pending.
 
-The committed render record is checked with `python tools/validate_render_record.py`; it compares canonical SVG XML and PPTX package payloads after a CI rebuild, and verifies the committed PowerPoint PDF/preview hashes. `python tools/validate_render_semantics.py` checks scientific labels across SVG, PPTX and PDF. `python tools/validate_legacy_label_parity.py` compares all five migrated figures with their pre-V7.6 committed FigureSpec/SVG labels and the three historical C01 PPTX files; B01/F07 historical PPTX files were not committed, so their current PPTX labels are compared with the old FigureSpec. This check needs full Git history. CI verifies the Windows PowerPoint export record and does not regenerate it on Linux.
+The committed render record is checked with `python tools/validate_render_record.py`; it compares canonical SVG XML and PPTX package payloads after a CI rebuild, and verifies the committed PowerPoint PDF/preview hashes. `python tools/validate_render_semantics.py` checks scientific labels across SVG, PPTX and PDF. `python tools/validate_legacy_label_parity.py` compares all five migrated figures with their pre-V7.6 committed FigureSpec/SVG labels and the three historical C01 PPTX files, allowing only the documented publisher-source correction for the two SEANet redraws; B01/F07 historical PPTX files were not committed, so their current PPTX labels are compared with the old FigureSpec. This check needs full Git history. CI verifies the Windows PowerPoint export record and does not regenerate it on Linux.
 
 ## V7.5 — Academic presentation planning
 
@@ -28,21 +28,23 @@ The Skill now begins with a DeckSpec and ordered SlideSpecs. It records audience
 
 The package remains a development baseline pending independent scientific and final-size review.
 
-## V7.4 — Reproducible composite defense slide
+## C01 — Reproducible composite defense slide
 A one-slide 16:9 layout restores the supplied V7.2 composition: two related figure panels stacked in the left column and a concise reading guide on the right. The lower diagnosis path is purpose-built for the narrow panel rather than uniformly shrinking a full-width figure.
 
-Local V7.4 deliverables:
+Current deliverables (legacy V7.4 filenames retained):
 - Editable PPTX: `dist/C01_composite_defense_slide_v74.pptx`
 - PDF preview: `dist/C01_composite_defense_slide_v74_preview.pdf`
 - Canonical spec: `figure_specs/c01/C01_composite_defense_slide.json`
 - Editable SVG: `examples/C01_composite_defense_slide_v74.svg`
 
-Rebuild with `python tools/build_c01_v74.py` and validate with `python tools/validate_c01_v74.py`. The current development build has 228 native PowerPoint shapes and 41 text boxes. Automated checks found zero text-box intersections, out-of-bounds objects, picture objects and inherited theme shadows. PDF and PNG were exported using Windows PowerPoint 16.0 and inspected.
+The V7.3/V7.4 filenames and FigureSpec `version` fields identify the layout lineage; the active scientific evidence contract is `schema_version: 7.6.0-dev` and includes the C01 source correction below.
 
-## V7.3 — Two-slide detail version
+Rebuild with `python tools/build_c01_v74.py` and validate with `python tools/validate_c01_v74.py`. The current development build has 234 native PowerPoint shapes and 42 text boxes. Automated checks found zero text-box intersections, out-of-bounds objects, picture objects and inherited theme shadows. `tools/export_c01_preview.ps1` exports the PDF and PNG with Windows PowerPoint 16.0. The V7.6 topology correction is documented in [C01 source correction](docs/C01_V76_SOURCE_CORRECTION.md); pixel overlay and independent domain/final-size review remain pending.
+
+## C01 — Two-slide detail version
 The two-panel C01 method is also available as two separate source-aligned slides:
 1. FBG construction: sensor signals → OCF/notch filter → B1/B2/B3/Bq subgraphs → total graph.
-2. SEANet diagnosis: Input → GCN → pooling → GCN → pooling → SR; parallel Input → EA → SR; both converge at the summation node.
+2. SEANet diagnosis: Input → GCN → pooling → GCN → pooling → SR → summation → Dense → fault class. EA feeds the first GCN; the first pooling also branches to a second SR that reaches the summation.
 
 Build and validate the two-slide detail version:
 ```bash
