@@ -20,10 +20,23 @@ from scientific_ir import ROOT
 
 IDS = ["Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature",
        "Q04_iris_confusion", "Q05_iris_ablation", "Q06_iris_trend_interval", "Q07_wine_scatter", "Q08_wine_strip", "I01_cell_image_quant"]
+PIPELINE_SOURCES = (
+    "tools/build_quantitative_examples.py", "tools/build_wine_scatter.py",
+    "tools/build_publication_example.py", "tools/build_image_quant_example.py",
+    "tools/chart_data.py", "tools/chart_contract.py", "tools/scientific_ir.py",
+    "tools/render_figure_spec.py", "tools/export_quantitative_pdf.ps1",
+    "tools/audit_pptx.py", "tools/record_scientific_render.py",
+)
 
 
 def digest(path: Path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def canonical_source_digest(path: Path):
+    """Hash source text consistently across Git's Windows and Linux line endings."""
+    value = path.read_text(encoding="utf-8-sig").replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
 def canonical_spec_digest(path: Path):
@@ -112,6 +125,8 @@ def main():
         "source_assets_sha256": {"data/iris_uci.csv": digest(ROOT / "data/iris_uci.csv"),
                                  "data/wine_uci.data": digest(ROOT / "data/wine_uci.data"),
                                  "data/cell_scikit_image_v026.png": digest(ROOT / "data/cell_scikit_image_v026.png")},
+        "pipeline_sources_canonical_sha256": {path: canonical_source_digest(ROOT / path)
+                                              for path in PIPELINE_SOURCES},
         "figures": records,
     }
     destination = ROOT / "dist/render_record_v76.json"

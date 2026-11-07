@@ -5,7 +5,15 @@ from __future__ import annotations
 import json
 
 from record_scientific_render import (ROOT, IDS, canonical_spec_digest, canonical_svg_digest,
-                                      canonical_pptx_digest, digest, pdf_font_audit)
+                                      canonical_pptx_digest, canonical_source_digest, digest,
+                                      pdf_font_audit, PIPELINE_SOURCES)
+
+
+def validate_pipeline_sources(record: dict) -> None:
+    observed = record.get("pipeline_sources_canonical_sha256", {})
+    assert set(observed) == set(PIPELINE_SOURCES), "Pipeline source inventory changed"
+    for relpath in PIPELINE_SOURCES:
+        assert observed[relpath] == canonical_source_digest(ROOT / relpath), relpath
 
 
 def main():
@@ -16,6 +24,7 @@ def main():
     assert record["tool_versions"]["pdf_exporter"] == exporter
     assert exporter["exporter"] == "Microsoft PowerPoint" and exporter["version"]
     assert set(exporter["figure_ids"]) == set(IDS)
+    validate_pipeline_sources(record)
     for relpath, expected in record["source_assets_sha256"].items():
         assert digest(ROOT / relpath) == expected, relpath
     assert len(record["figures"]) == len(IDS)

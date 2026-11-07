@@ -5,15 +5,33 @@ from __future__ import annotations
 import tempfile
 import unittest
 import zipfile
+import json
+import copy
 from pathlib import Path
 
-from record_scientific_render import ROOT, canonical_pptx_digest, canonical_svg_digest
+from record_scientific_render import ROOT, canonical_pptx_digest, canonical_source_digest, canonical_svg_digest
+from validate_render_record import validate_pipeline_sources
 
 TEMP_ROOT = ROOT / ".testtmp"
 TEMP_ROOT.mkdir(exist_ok=True)
 
 
 class CanonicalRenderTests(unittest.TestCase):
+    def test_stale_pipeline_source_fails(self):
+        record = json.loads((ROOT / "dist/render_record_v76.json").read_text(encoding="utf-8"))
+        validate_pipeline_sources(record)
+        changed = copy.deepcopy(record)
+        changed["pipeline_sources_canonical_sha256"]["tools/render_figure_spec.py"] = "0" * 64
+        with self.assertRaises(AssertionError):
+            validate_pipeline_sources(changed)
+
+    def test_source_hash_ignores_line_endings(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as folder:
+            first, second = (Path(folder) / name for name in ("a.py", "b.py"))
+            first.write_bytes(b"alpha\nbeta\n")
+            second.write_bytes(b"alpha\r\nbeta\r\n")
+            self.assertEqual(canonical_source_digest(first), canonical_source_digest(second))
+
     def test_pptx_zip_order_and_timestamp_do_not_change_hash(self):
         with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as folder:
             assert Path(folder).resolve().is_relative_to(ROOT.resolve())

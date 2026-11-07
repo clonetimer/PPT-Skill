@@ -36,6 +36,19 @@
     "data/wine_uci.data": "6be6b1203f3d51df0b553a70e57b8a723cd405683958204f96d23d7cd6aea659",
     "data/cell_scikit_image_v026.png": "8d23a7fb81f7cc877cd09f330357fc7f595651306e84e17252f6e0a1b3f61515"
   },
+  "pipeline_sources_canonical_sha256": {
+    "tools/build_quantitative_examples.py": "2b5f819a0d807edb0b0bb91cef143efab60f378ef3a499af41561b6e14a3eaf4",
+    "tools/build_wine_scatter.py": "65f4b644ff20c4e001ef774ea08be599a9143cdcb60ecc7bb071a8013830084f",
+    "tools/build_publication_example.py": "966826b493dcf946795bf12d3269480f1c0fadaca3a28e8ddc88bde284d131d6",
+    "tools/build_image_quant_example.py": "5e09f9ea9e083886c085e743e9433ffe59d22e2d659b617a3e64226b4a2d027e",
+    "tools/chart_data.py": "b12f386f846b45175885b7f7c543068482f4579e59e411aa42a1fec079db2a28",
+    "tools/chart_contract.py": "6f8de13ea5fcb707f31f6dfe7e99c1493705cfa04a455858eb1bb234a0fca14e",
+    "tools/scientific_ir.py": "a50feeac071f6c2cb03a741ff437c2bbe20dcc6e8ef9d53805e3225cdf29cc77",
+    "tools/render_figure_spec.py": "9bac44fdd9eba0f60ca244d1f37b47315cb75793e3647feefcebfdc067668dce",
+    "tools/export_quantitative_pdf.ps1": "111ae2c8468c85d73d9abc2e4a6ae836bf7ecac2b687678526647544ca423a20",
+    "tools/audit_pptx.py": "8bea812aa29fc82618b6e296b320a74bb348406aad8ab980a24752a527210aa2",
+    "tools/record_scientific_render.py": "3a17c2a6c9ee71a5bd54dcc1a2bcdf25b8fb70325cb793064a3c1fcabb91befb"
+  },
   "figures": [
     {
       "figure_id": "Q01_iris_scatter",
@@ -44,7 +57,7 @@
       "input_canonical_sha256": "74d526aa1f57d927822e8d51175b1fe4606a779052f90cdc5ae330db2ead9b6d",
       "outputs_sha256": {
         "svg": "03d6cf776c8c8eb6098027f4e55feaeded22a375f5a770b8d218894b4d82aa0e",
-        "pptx": "b8d998f1b26da51dafe277427a62e2b55d1f0f9f4dfcd5f75fee3b6442319dca",
+        "pptx": "9738907b6c1d9bb00450d90ad45001cce4a9dd6734129055d93c28e2f303ec8c",
         "pdf": "f876bcc19e4c2e22324c428761331b2a7b7adffdc6f043148d644c06734e0dfd",
         "preview.png": "e906f39ba6bb770c6fc47b7ca7324c9f316a6823cf782b777bd43b47817b0786"
       },
@@ -73,7 +86,7 @@
       "input_canonical_sha256": "976142a20ef701bc614e132bea87944923136232706bc516d936341ce08d28d9",
       "outputs_sha256": {
         "svg": "250af3fb9ca042409cbf96276c3dc6bfadcd410a6b9b4060da485709333fb6de",
-        "pptx": "17f465b222353c144a80466ad28286c04ddad6295f6b91a56bd2a17e8c0adc6d",
+        "pptx": "8ef09072f2573592ec713019cf79fd4019950607b54395d238ddabd4d85edc82",
         "pdf": "bbfd177006b8a969c36c46acf8d31df1657957e15df4195d4c4cb1764ce30840",
         "preview.png": "2c761507823d2ac1a3baf1c73c0992c99fb88caf3a44a889000988dfe85a2aa6"
       },
@@ -102,7 +115,7 @@
       "input_canonical_sha256": "fc04fd614ba4630d705e05a200fe0513d8eee65f2aa132729235808401556bd2",
       "outputs_sha256": {
         "svg": "73035582a320e32a5c3b7c28b51e352751a929ac5f7ea2646e7de493e5d1a15d",
-        "pptx": "c5e4c72d042f97d21b05ff83ed981da1128401201a7c66793d591c2ed2bcc07d",
+        "pptx": "cb50e2803356b6feb57bb57c720b6c228b1c92d89afba93b238687879c1cdab4",
         "pdf": "d443b1198da1af0b48f2dc649b8f6db3fc69fe484c6b3e825a354eaf2420ee0d",
         "preview.png": "147b7effd8501e72b2786fab6a1c4d9e3131b4ac97e3b4b386319bc88a963570"
       },
@@ -131,7 +144,7 @@
       "input_canonical_sha256": "273e6893a70794570c3c56b4086e24f8a0652f5857c1451b43a2c12cc03c54d6",
       "outputs_sha256": {
         "svg": "67b382cdabd880c084c87614f43944475e453117abfd8143400bdefdc8a36eda",
-        "pptx": "f134055978a2b3e48d4dbf1b2f4799c76734fb1f653c58df95e407d40d4ce2b5",
+        "pptx": "47294b88cc020631d4491fdb3d025f53022b9e53fafdc0986b2e244a28accb73",
         "pdf": "943b9f432bb0d971cc5ea51edd59ceaa69d1e71665df72b8026b4a4b8ad46107",
         "preview.png": "908390ad400931cb845c3823bc68e636188969cde192c0f1dc97e7788994b536"
       },
@@ -160,7 +173,7 @@
       "input_canonical_sha256": "ceeb98a28cfad7b583e11855d5bcf864b3567f9693e25e595df571d6c05c8139",
       "outputs_sha256": {
         "svg": "7f9c3a9e8aa66e088ebd24bbad271c3d477ffdaee79f72cd727e58f33918cc00",
-        "pptx": "36d8786b28fb00452f5055b001794d35fa09466d933e3d5d03a77435c27feff6",
+        "pptx": "590aff3110aa090e8ca1098f9ec4efc66720469197c7b3dc8ca9602a9009d363",
         "pdf": "94f582ea258705d3235837fd700c78a9c52c09decfafeb27d16f95b3ac758c11",
         "preview.png": "f80e8b9bb2a97567215988851ca28d746e803ff97a7a64ef254aaf0d94b009e5"
       },
@@ -189,7 +202,7 @@
       "input_canonical_sha256": "e387979216e11eedb5d3a1df278b2f34cde51f2ff15be00e6c92637725023a6c",
       "outputs_sha256": {
         "svg": "14f5c53c5ec9b8ea32dcc54d308cfca1b22fb32ba2e2e73537ebec306b31e2d5",
-        "pptx": "3f52378020c281ba922652712838fc4a1e947f3eb417c6f0430c77dc30aead08",
+        "pptx": "40b91e77d906e217c7c8aae45521d68e93f260ca3ab1f4b4c0491587370bf285",
         "pdf": "e95d76cc072853be790f394ece58413d546a72bf54cbc74ee97700664a4bb9a0",
         "preview.png": "249ad3d34e6c71919975c87f4147b691f4aa0035611b457c2f70f599caf240db"
       },
@@ -218,7 +231,7 @@
       "input_canonical_sha256": "e6d95d51b79f95c44fce8bfdde843ddfc448b5f31010cc0a7b53bfc489c975b6",
       "outputs_sha256": {
         "svg": "8d95f4460430dca07b3f1de98647b31a5ba4ddcff1a6c3f59aa6be40be8524eb",
-        "pptx": "9f3dfc722e34772e7877d18fdaff17ce52963f7b043ae43bc643cb70149bd990",
+        "pptx": "21d0f328e67648f1f99f29332181e9e13dfe449351ae40631e484c75d73d3f08",
         "pdf": "6cc881c0af7b786b619106bbafdb5e072b91dac0c1785c8c132ccc41b8ce8647",
         "preview.png": "afdc1c3ef9382be1e5f445c3faf7d9ca152ad83c0c2df74453a1a8f638f2d3f3"
       },
@@ -247,7 +260,7 @@
       "input_canonical_sha256": "75e6cde50ddc698b46f0f5b06e0eee49000f017381185eaf4dcbfd3357547cbe",
       "outputs_sha256": {
         "svg": "80236664fd75eaea60ff629200956a56ceaff95d759711e428bd8bd86bab017e",
-        "pptx": "6e37a4792fd47c43ca75d294577c67ddc9f954837643d1461d052f775249f30c",
+        "pptx": "5a57eed857490f163f8f2d88fec01ef63a82ecf469fbad64687b2c9af20f3547",
         "pdf": "2a1568924c418e696b7c008a421af75b27a6a4faca5ed176015bb30a6ece7136",
         "preview.png": "6b202118d5987cc8cc3136d9ed1e8072169bb48de437c4dd2cf82e477ffa28a2"
       },
@@ -276,7 +289,7 @@
       "input_canonical_sha256": "8370f07a1cc69a8e26d46cfab6e91f30ecd1ca35427806300215109af92936d0",
       "outputs_sha256": {
         "svg": "15b5d3e81f4f58a905570f79c6d785c465e41dd75b03e5777560d8ce80001032",
-        "pptx": "45100bfe0d44b5b8e335b5384f4decad337e0e1254d6feb0f48955563d7f655e",
+        "pptx": "553a443cf5e879679d0d20ebf2cebfe9392d6eafd2b776bdf8dac2b95e307374",
         "pdf": "a50dbd787e5faea5e94889824ef45f9c0815cabbf03c5190ccf6a5e01a80270e",
         "preview.png": "252af5e3fa7b22a46bbd06c4187b1e1604b17c2b7cb9eb5d5643a3c970fc38ff"
       },
