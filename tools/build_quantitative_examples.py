@@ -158,7 +158,8 @@ def separated_strip_positions(rows, chart, centers, yfield, low, high, y0, y1):
     return positions
 
 
-def separated_trend_positions(rows, chart, x0, x1, y0, y1):
+def separated_trend_positions(rows, chart, x0, x1, y0, y1, summary_centers,
+                              raw_radius=.035, summary_radius=.075):
     minimum = chart["statistics"]["jitter"]["minimum_center_gap_in"]
     maximum = chart["statistics"]["jitter"]["max_display_offset_in"]
     placed = []
@@ -172,7 +173,9 @@ def separated_trend_positions(rows, chart, x0, x1, y0, y1):
             angles = (0,) if step == 0 else (2*math.pi*(j+.5*(step%2))/24 for j in range(24))
             for angle in angles:
                 x, y = true_x+radius*math.cos(angle), true_y+radius*math.sin(angle)
-                if all(math.hypot(x-px, y-py) >= minimum-1e-9 for px, py in placed):
+                if (all(math.hypot(x-px, y-py) >= minimum-1e-9 for px, py in placed)
+                        and all(math.hypot(x-sx, y-sy) > raw_radius+summary_radius+1e-9
+                                for sx, sy in summary_centers)):
                     candidate = (x, y)
                     break
             if candidate:
@@ -314,7 +317,12 @@ def trend_interval(chart, meta, rows):
     fig.axes(x0, y0, x1, y1, "Sepal length (cm)", "Petal length (cm)",
              [(scaled(v, 4, 6, x0, x1), f"{v:.1f}") for v in (4, 4.5, 5, 5.5, 6)],
              [(scaled(v, 0, 2, y1, y0), f"{v:.1f}") for v in (0, .5, 1, 1.5, 2)])
-    positions = separated_trend_positions(selected, chart, x0, x1, y0, y1)
+    summary_centers = []
+    for index in range(5):
+        group = selected[index*10:(index+1)*10]
+        summary_centers.append((scaled(statistics.mean(r[chart["x"]] for r in group), 4, 6, x0, x1),
+                                scaled(statistics.mean(r[chart["y"]] for r in group), 0, 2, y1, y0)))
+    positions = separated_trend_positions(selected, chart, x0, x1, y0, y1, summary_centers)
     for row in selected:
         x, y = positions[row["source_row"]]
         fig.point(x, y, "#9CB4BA", row,

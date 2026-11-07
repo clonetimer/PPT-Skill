@@ -263,6 +263,10 @@ def validate_outputs(config, rows):
                 expected_y = scale_axis(item["y_mean_cm"], chart["axes"]["y"], 5.66, 1.35)
                 assert math.isclose(marker["x"] + marker["w"] / 2, expected_x, abs_tol=.0003)
                 assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0003)
+                assert all(math.dist((marker["x"]+marker["w"]/2, marker["y"]+marker["h"]/2),
+                                     (point["x"]+point["w"]/2, point["y"]+point["h"]/2))
+                           > (marker["w"]+point["w"])/2
+                           for point in points), (chart["id"], "summary covers raw observation")
             whiskers = [e for e in spec["elements"] if e["type"] == "line"
                         and e.get("color") == "#1C303A" and e.get("sw") == 1.4
                         and math.isclose(e["x1"], e["x2"], abs_tol=1e-6)]

@@ -22,6 +22,7 @@
 - Added explicit numeric-axis domains, zero policies and zoom reasons to six chart contracts; validation rejects missing transformation logs and source values clipped by declared axes.
 - Separated Q01's 48 coincident Iris observations with bounded, disclosed display-only offsets; all 150 native points now have distinct visible centers while retaining unmodified source values.
 - Separated close raw points in Q02, Q03, Q03P and Q06 with bounded, disclosed offsets and geometry checks; moved Q03 summary marks beside each group so they do not cover observations.
+- Excluded Q06's five summary markers from the raw-point packing area; geometry validation now rejects a summary marker covering any raw observation.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.
