@@ -16,6 +16,7 @@ OUTPUTS = {
         "Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q04_iris_confusion",
         "Q05_iris_ablation", "Q06_iris_trend_interval"), 1)},
     "I01": "dist/I01_cell_image_quant.pptx",
+    "Q03P": "dist/Q03_iris_mean_ci_nature.pptx",
     "DECK01": "dist/DECK01_c01_defense.pptx",
 }
 
@@ -38,7 +39,7 @@ def main():
         if task["status"] == "automated_fixture":
             assert (ROOT / OUTPUTS[task["id"]]).is_file()
     ready = sum(task["status"] == "automated_fixture" for task in tasks)
-    assert ready == len(tasks) == 13
+    assert ready == len(tasks) == 14
     print(f"PASS benchmark contract: {len(tasks)} automated fixtures; expert review pending")
 
 

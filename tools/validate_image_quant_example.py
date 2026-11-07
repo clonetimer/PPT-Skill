@@ -21,7 +21,10 @@ def validate():
     assert hashlib.sha256(raw).hexdigest() == contract["source_sha256"] == SHA256
     assert contract["license"] == "CC0" and contract["source_url"]
     image = Image.open(SOURCE)
-    assert list(image.size) == contract["original_size_px"] == [550, 660]
+    width, height = image.size
+    hist = image.histogram()
+    image.close()
+    assert [width, height] == contract["original_size_px"] == [550, 660]
     display = contract["display"]
     assert display["crop_xywh_px"] == [0, 0, 550, 660]
     assert display["stitching"] == "none" and display["intensity_transform"] == "none"
@@ -29,15 +32,14 @@ def validate():
     panels = [e for e in spec["elements"] if e["type"] == "image"]
     assert len(panels) == 1 and panels[0]["image_ref"] == contract["source_id"]
     assert panels[0]["path"] == contract["source_file"]
-    assert math.isclose(panels[0]["w"] / panels[0]["h"], image.width / image.height, rel_tol=.003)
+    assert math.isclose(panels[0]["w"] / panels[0]["h"], width / height, rel_tol=.003)
     scale = contract["scale_bar"]
     assert scale["length_um"] > 0 and contract["pixel_spacing_um"] > 0
-    expected_inches = scale["length_um"] / contract["pixel_spacing_um"] * panels[0]["w"] / image.width
+    expected_inches = scale["length_um"] / contract["pixel_spacing_um"] * panels[0]["w"] / width
     assert math.isclose(scale["length_display_in"], expected_inches, rel_tol=1e-10)
     quant = contract["quantification"]
-    hist = image.histogram()
     assert quant["image_ref"] == contract["source_id"] and quant["roi"] == "full field"
-    assert quant["n_pixels"] == sum(hist) == image.width * image.height
+    assert quant["n_pixels"] == sum(hist) == width * height
     assert quant["bins"] == [sum(hist[i:i+16]) for i in range(0, 256, 16)]
     assert quant["high_pixel_count"] == sum(hist[quant["threshold"]:])
     assert quant["n_biological_replicates"] == 1 and quant["threshold_role"] == "descriptive display-only"

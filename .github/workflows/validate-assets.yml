@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install validation dependencies
-        run: python -m pip install --disable-pip-version-check python-pptx jsonschema Pillow numpy
+        run: python -m pip install --disable-pip-version-check python-pptx jsonschema Pillow numpy pypdf
       - name: Build B01/F07
         run: python tools/build_v71_examples.py
       - name: Build C01
@@ -28,6 +28,7 @@ jobs:
       - name: Build data and image examples
         run: |
           python tools/build_quantitative_examples.py
+          python tools/build_publication_example.py
           python tools/build_image_quant_example.py
           python tools/build_deck_benchmark.py
       - name: Validate SVG and JSON
@@ -49,14 +50,17 @@ jobs:
           python tools/validate_manifest.py
           python tools/validate_scientific_ir.py
           python tools/validate_quantitative_examples.py
+          python tools/validate_publication_example.py
           python tools/validate_image_quant_example.py
           python tools/test_scientific_ir.py
           python tools/test_quantitative_contract.py
+          python tools/test_scientific_value_mutations.py
           python tools/validate_research_benchmark.py
           python tools/validate_output_profiles.py
           python tools/test_output_profiles.py
           python tools/check_scientific_accessibility.py
-          python tools/record_scientific_render.py
+          python tools/validate_render_record.py
+          python tools/validate_render_semantics.py
           python tools/validate_deck_benchmark.py
       - name: Audit generated PPTX
         run: |
@@ -66,6 +70,7 @@ jobs:
           python tools/audit_pptx.py dist/Q01_iris_scatter.pptx --strict
           python tools/audit_pptx.py dist/Q02_iris_strip.pptx --strict
           python tools/audit_pptx.py dist/Q03_iris_mean_ci.pptx --strict
+          python tools/audit_pptx.py dist/Q03_iris_mean_ci_nature.pptx --strict
           python tools/audit_pptx.py dist/Q04_iris_confusion.pptx --strict
           python tools/audit_pptx.py dist/Q05_iris_ablation.pptx --strict
           python tools/audit_pptx.py dist/Q06_iris_trend_interval.pptx --strict

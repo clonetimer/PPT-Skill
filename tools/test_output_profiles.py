@@ -20,7 +20,8 @@ class OutputProfileTests(unittest.TestCase):
     def test_complete_target_passes(self):
         validate_publication_target({"journal_name": "Example Journal", "author_guide_url": "https://example.org/guide",
                                      "final_width_mm": 180, "final_height_mm": 120, "allowed_formats": ["PDF"],
-                                     "minimum_text_pt": 7, "raster_resolution_dpi": 300}, PROFILE)
+                                     "minimum_text_pt": 5, "maximum_text_pt": 7,
+                                     "raster_resolution_dpi": 300}, PROFILE)
 
 
 if __name__ == "__main__":

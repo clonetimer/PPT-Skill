@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write hashes and tool versions for the five reproducible research examples."""
+"""Record the locally exported research figures and their actual renderer."""
 from __future__ import annotations
 
 import hashlib
@@ -13,7 +13,7 @@ import pptx
 from audit_pptx import audit
 from scientific_ir import ROOT
 
-IDS = ["Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci",
+IDS = ["Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature",
        "Q04_iris_confusion", "Q05_iris_ablation", "Q06_iris_trend_interval", "I01_cell_image_quant"]
 
 
@@ -21,7 +21,16 @@ def digest(path: Path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def canonical_spec_digest(path: Path):
+    value = json.loads(path.read_text(encoding="utf-8"))
+    canonical = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
 def main():
+    exporter = json.loads((ROOT / "dist/export_quantitative_metadata_v76.json").read_text(encoding="utf-8-sig"))
+    assert exporter["exporter"] == "Microsoft PowerPoint"
+    assert set(exporter["figure_ids"]) == set(IDS)
     records = []
     for figure_id in IDS:
         folder = "image" if figure_id.startswith("I") else "quant"
@@ -37,13 +46,15 @@ def main():
                    for s in qa["slides"])
         records.append({"figure_id": figure_id, "figure_spec": str(spec.relative_to(ROOT)).replace("\\", "/"),
                         "input_sha256": digest(spec),
+                        "input_canonical_sha256": canonical_spec_digest(spec),
                         "outputs_sha256": {kind: digest(path) for kind, path in outputs.items()},
                         "qa": {"automated": "pass", "manual_final_size": "pending_independent_review"}})
     record = {
         "schema_version": "7.6.0-dev", "build_commands": ["python tools/build_quantitative_examples.py",
-            "python tools/build_image_quant_example.py", "pwsh tools/export_quantitative_pdf.ps1"],
+            "python tools/build_publication_example.py", "python tools/build_image_quant_example.py",
+            "pwsh tools/export_quantitative_pdf.ps1"],
         "tool_versions": {"python": platform.python_version(), "python_pptx": pptx.__version__,
-                          "pillow": PIL.__version__, "pdf_exporter": "Microsoft PowerPoint 16.0"},
+                          "pillow": PIL.__version__, "pdf_exporter": exporter},
         "platform": platform.platform(), "font_substitution": "not_measured",
         "source_assets_sha256": {"data/iris_uci.csv": digest(ROOT / "data/iris_uci.csv"),
                                  "data/cell_scikit_image_v026.png": digest(ROOT / "data/cell_scikit_image_v026.png")},

@@ -65,6 +65,13 @@
     "evidence_scope": "Raw values and bootstrap summaries derive from the public UCI Iris dataset.",
     "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76", "unverified": []
   },
+  "Q03_iris_mean_ci_nature": {
+    "claim": "Species differ in sample mean petal length.",
+    "archetype": "quantitative_grid", "output_mode": "publication",
+    "source": "data/iris_uci.csv", "evidence_status": "data_driven",
+    "evidence_scope": "Same 150 source flowers and bootstrap summaries as Q03, re-laid out at a Nature two-column example size.",
+    "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76", "unverified": ["Nature editorial acceptance and final production scaling require journal review."]
+  },
   "Q05_iris_ablation": {
     "claim": "Removing sepal measurements changes this demonstrator's leave-one-out accuracy.",
     "archetype": "quantitative_grid", "output_mode": "presentation",

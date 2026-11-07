@@ -10,7 +10,7 @@ import numpy as np
 
 from scientific_ir import ROOT
 
-IDS = ["Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci",
+IDS = ["Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature",
        "Q04_iris_confusion", "Q05_iris_ablation", "Q06_iris_trend_interval", "I01_cell_image_quant"]
 # Full-severity Machado matrices (2009), applied in linear sRGB for screening only.
 # https://doi.org/10.1109/TVCG.2009.113
@@ -50,7 +50,7 @@ def main():
         for e in spec["elements"]:
             if e["type"] == "text" and e.get("color", "#26343C") != "#FFFFFF":
                 assert contrast(e.get("color", "#26343C"), "#FFFFFF") >= 4.5, (figure_id, e["text"])
-        if figure_id in {"Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci"}:
+        if figure_id in {"Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature"}:
             by_species = defaultdict(set)
             for e in spec["elements"]:
                 if "data_row" in e:
@@ -65,13 +65,24 @@ def main():
                            for e in spec["elements"]) for item in spec["computed_values"])
         if figure_id.startswith("I"):
             assert spec["image_contract"]["short_description"] and spec["image_contract"]["long_description"]
+            panel = next(e for e in spec["elements"] if e["type"] == "image")
+            with Image.open(ROOT / panel["path"]) as raw:
+                for label in (e for e in spec["elements"] if e["type"] == "text" and e.get("color") == "#FFFFFF"):
+                    left = max(0, int((label["x"]-panel["x"])/panel["w"]*raw.width))
+                    top = max(0, int((label["y"]-panel["y"])/panel["h"]*raw.height))
+                    right = min(raw.width, int((label["x"]+label["w"]-panel["x"])/panel["w"]*raw.width))
+                    bottom = min(raw.height, int((label["y"]+label["h"]-panel["y"])/panel["h"]*raw.height))
+                    assert left < right and top < bottom
+                    brightest = raw.crop((left, top, right, bottom)).getextrema()[1]
+                    background = f"#{brightest:02X}{brightest:02X}{brightest:02X}"
+                    assert contrast("#FFFFFF", background) >= 4.5, (label["text"], brightest)
         preview = ROOT / f"dist/{figure_id}.preview.png"
         image = Image.open(preview).convert("L")
         image.save(ROOT / f"dist/{figure_id}.grayscale.png")
         for name, matrix in MACHADO_FULL.items():
             cvd_preview(Image.open(preview), matrix).save(ROOT / f"dist/{figure_id}.{name}.png")
         print(f"PASS {figure_id}: text contrast and redundant encoding; grayscale/CVD previews generated")
-    print("Manual checks pending: image-overlay contrast and projection/print readability; previews are approximations")
+    print("Manual checks pending: projection/print readability; CVD previews are approximations")
 
 
 if __name__ == "__main__":

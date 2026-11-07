@@ -14,9 +14,11 @@ python tools/validate_image_quant_example.py
 
 The Iris charts use the public [UCI Iris dataset](https://archive.ics.uci.edu/dataset/53/iris) (CC BY 4.0, DOI 10.24432/C56C76). The image example uses the [CC0 scikit-image cell sample](https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.cell), with documented 0.107 µm pixel spacing. The single-image pixel histogram is descriptive and does not imply biological replication or cell segmentation.
 
-The 13-task benchmark contract is in `specs/research_figure_benchmark_v76.json`; all tasks have automated fixtures, including a three-slide defense deck. Its hard release gates require independent scientific and final-size review before a stable release. `dist/render_record_v76.json` records source/output hashes, tool versions and the remaining manual checks. Grayscale and approximate color-vision previews support visual inspection; independent review remains open.
+The 14-task benchmark contract is in `specs/research_figure_benchmark_v76.json`; all tasks have automated fixtures, including a three-slide defense deck and one publication-size figure. Its hard release gates require independent scientific and final-size review before a stable release. `dist/render_record_v76.json` records source/output hashes, tool versions and the remaining manual checks. Grayscale and approximate color-vision previews support visual inspection; independent review remains open.
 
-`specs/output_profiles_v76.json` separates presentation QA from publication prerequisites. The current ten FigureSpecs use the presentation profile. Publication output requires a selected journal, current author guide and final-size settings before rendering.
+`specs/output_profiles_v76.json` separates presentation QA from publication prerequisites. Twelve FigureSpecs use the presentation profile. The [Q03 Nature-size example](docs/Q03_NATURE_PUBLICATION_CAPTION.md) re-lays out the same data and bootstrap summaries at 183 × 100 mm, with editable vector PDF and embedded Arial fonts. It is a production-size demonstrator; editorial and independent domain review remain pending.
+
+The committed render record is checked with `python tools/validate_render_record.py`; `python tools/validate_render_semantics.py` checks scientific labels across SVG, PPTX and PDF. CI verifies the Windows PowerPoint export record and does not regenerate it on Linux.
 
 ## V7.5 — Academic presentation planning
 

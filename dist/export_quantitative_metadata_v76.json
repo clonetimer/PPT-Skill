@@ -1,0 +1,15 @@
+{
+  "exporter": "Microsoft PowerPoint",
+  "version": "16.0",
+  "export_method": "Presentation.SaveAs PDF (32); Slide.Export PNG",
+  "figure_ids": [
+    "Q01_iris_scatter",
+    "Q02_iris_strip",
+    "Q03_iris_mean_ci",
+    "Q03_iris_mean_ci_nature",
+    "Q04_iris_confusion",
+    "Q05_iris_ablation",
+    "Q06_iris_trend_interval",
+    "I01_cell_image_quant"
+  ]
+}

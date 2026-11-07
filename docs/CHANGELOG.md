@@ -6,6 +6,7 @@
 - Added six reproducible UCI Iris charts with row-level lineage, statistics definitions, SVG/PPTX/PDF outputs and validation, including paired ablation and trend/interval cases.
 - Added a CC0 quantitative-phase image plus raw-pixel histogram, with source hash, processing log, calibration and scale-bar checks.
 - Added CI build and validation for the new examples. Independent domain and final-size review remains pending.
+- Added a Nature two-column publication-size Q03 demonstrator with the same rows/statistics as the presentation panel, final-size PDF geometry and embedded-font checks; CI now verifies committed PowerPoint export records and SVG/PPTX/PDF labels without forging a Linux exporter claim.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

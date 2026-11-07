@@ -11,7 +11,7 @@
     },
     "publication": {
       "target": "journal-specific final figure",
-      "requires_before_build": ["journal_name", "author_guide_url", "final_width_mm", "final_height_mm", "allowed_formats", "minimum_text_pt", "raster_resolution_dpi"],
+      "requires_before_build": ["journal_name", "author_guide_url", "final_width_mm", "final_height_mm", "allowed_formats", "minimum_text_pt", "maximum_text_pt", "raster_resolution_dpi"],
       "required_outputs": ["editable_source", "target_format", "caption", "data_image_provenance"],
       "human_checks": ["final-size print/PDF inspection", "journal-specific technical compliance", "image integrity", "scientific interpretation"]
     }
