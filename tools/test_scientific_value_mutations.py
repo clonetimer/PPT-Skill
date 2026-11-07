@@ -9,6 +9,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from build_quantitative_examples import CONFIG, ROOT, load_data
+from check_scientific_accessibility import check_text_contrast
 from validate_image_quant_example import validate as validate_image
 from validate_quantitative_examples import validate_outputs
 
@@ -66,6 +67,13 @@ class ScientificValueMutationTests(unittest.TestCase):
         changed["image_contract"]["display"]["intensity_transform"] = "contrast stretch"
         with self.assertRaises(AssertionError):
             with_changed_spec(path, changed, validate_image)
+
+    def test_low_contrast_confusion_cell_fails(self):
+        path = ROOT / "figure_specs/quant/Q04_iris_confusion.json"
+        changed = json.loads(path.read_text(encoding="utf-8"))
+        next(item for item in changed["elements"] if "source_rows" in item)["fill"] = "#26343C"
+        with self.assertRaises(AssertionError):
+            check_text_contrast("Q04_iris_confusion", changed)
 
 
 if __name__ == "__main__":

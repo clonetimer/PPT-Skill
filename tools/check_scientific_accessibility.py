@@ -43,13 +43,25 @@ def contrast(a, b):
     return (x+.05)/(y+.05)
 
 
+def check_text_contrast(figure_id, spec):
+    rectangles = [e for e in spec["elements"] if e["type"] == "rect" and e.get("fill")]
+    for label in (e for e in spec["elements"] if e["type"] == "text"):
+        color = label.get("color", "#26343C")
+        if figure_id.startswith("I") and color == "#FFFFFF":
+            continue  # Image pixels are checked against the raw source below.
+        center_x = label["x"] + label["w"] / 2
+        center_y = label["y"] + label["h"] / 2
+        backgrounds = [e["fill"] for e in rectangles if e["x"] <= center_x <= e["x"]+e["w"]
+                       and e["y"] <= center_y <= e["y"]+e["h"]]
+        background = backgrounds[-1] if backgrounds else "#FFFFFF"
+        assert contrast(color, background) >= 4.5, (figure_id, label["text"], background)
+
+
 def main():
     for figure_id in IDS:
         folder = "image" if figure_id.startswith("I") else "quant"
         spec = json.loads((ROOT / f"figure_specs/{folder}/{figure_id}.json").read_text(encoding="utf-8"))
-        for e in spec["elements"]:
-            if e["type"] == "text" and e.get("color", "#26343C") != "#FFFFFF":
-                assert contrast(e.get("color", "#26343C"), "#FFFFFF") >= 4.5, (figure_id, e["text"])
+        check_text_contrast(figure_id, spec)
         if figure_id in {"Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature"}:
             by_species = defaultdict(set)
             for e in spec["elements"]:
@@ -60,7 +72,6 @@ def main():
             assert len(spec["computed_values"]) == 9
             assert sum(e["type"] == "text" and e["text"].isdigit() for e in spec["elements"]) == 9
         if figure_id == "Q05_iris_ablation":
-            assert all(contrast("#FFFFFF", color) >= 4.5 for color in ("#376F75", "#A45C32"))
             assert all(any(e["type"] == "text" and str(item["correct"]) in e["text"]
                            for e in spec["elements"]) for item in spec["computed_values"])
         if figure_id.startswith("I"):
