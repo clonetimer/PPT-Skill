@@ -1,7 +1,7 @@
 {
   "figure_id": "C01_composite_defense_slide",
   "source": "docs/C01_V73_SOURCE.md",
-  "review_status": "publisher_graphical_abstract_1198x886_checked; pixel_overlay_and_domain_review_pending",
+  "review_status": "publisher_graphical_abstract_1198x886_structural_routes_checked; exact_adjacency_unknown; domain_and_final_size_review_pending",
   "critical_labels": {
     "input": "Input", "gcn_1": "GCN", "pooling_1": "pooling",
     "gcn_2": "GCN", "pooling_2": "pooling", "sr_main": "SR",
@@ -16,6 +16,7 @@
     ["input", "ea"], ["ea", "gcn_1"],
     ["pooling_1", "sr_ea"], ["sr_ea", "sum"], ["sum", "dense"],
     ["ocf", "band_group"],
+    ["total_graph", "input"],
     ["band_1", "total_graph"], ["band_2", "total_graph"],
     ["band_3", "total_graph"], ["band_4", "total_graph"]
   ]

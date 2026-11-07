@@ -61,6 +61,13 @@ class ScientificIRMutationTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             validate_drawn_routes(changed, EDGES)
 
+    def test_missing_total_graph_to_network_input_fails(self):
+        changed = copy.deepcopy(SPEC)
+        changed["elements"] = [e for e in changed["elements"]
+                               if e.get("semantic_link") != "total_graph__input"]
+        with self.assertRaises(AssertionError):
+            validate_drawn_routes(changed, EDGES)
+
     def test_swapped_band_label_fails(self):
         changed = copy.deepcopy(SPEC)
         label = next(e for e in changed["elements"] if e.get("semantic_id") == "band_2" and e["type"] == "text")

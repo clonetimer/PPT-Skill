@@ -4,7 +4,7 @@
 
 | 方案条款 | 当前证据 | 判定 |
 |---|---|---|
-| A：统一 FigureSpec、稳定元素 ID、来源与绘制拓扑 | `specs/figure_spec_v76.schema.json`；15 个 `figure_specs/`；`tools/migrate_figure_specs.py`；出版社图 1198 × 886 像素核查及修正记录见 `docs/C01_V76_SOURCE_CORRECTION.md`；`tools/validate_scientific_ir.py` 独立核对 C01 复合图 16 条和单独 SEANet 图 12 条关键可见关系；`tools/test_scientific_ir.py` 包含删边、反向、错标、错误 EA 捷径和来源哈希突变 | 自动通过；独立领域复核仍待完成 |
+| A：统一 FigureSpec、稳定元素 ID、来源与绘制拓扑 | `specs/figure_spec_v76.schema.json`；15 个 `figure_specs/`；`tools/migrate_figure_specs.py`；出版社图 1198 × 886 像素核查及修正记录见 `docs/C01_V76_SOURCE_CORRECTION.md` 与第二轮文献对照报告；`tools/validate_scientific_ir.py` 独立核对 C01 复合图 17 条和单独 SEANet 图 12 条关键可见关系；`tools/test_scientific_ir.py` 包含删边、反向、错标、错误 EA 捷径和来源哈希突变 | 自动通过；独立领域复核仍待完成 |
 | A：文档状态与新旧输出科学标签 | `README.md` 区分开发版；`tools/validate_render_semantics.py` 核对当前 SVG/PPTX/PDF 科学标签；`tools/validate_legacy_label_parity.py` 将五张迁移前 FigureSpec 和 SVG 的文字多重集逐项与当前版对照，C01 两图仅允许来源修正记录中明确列出的标签变化，三张 C01 另对照历史 PPTX；`tools/validate_c01_v73.py` 和 `tools/validate_c01_v74.py` 核对当前结构 | B01/F07/FBG 标签不变；SEANet 与复合图的有依据修正被精确列入例外。B01/F07 历史 PPTX 未入库；标签检查不证明视觉等价 |
 | B：数据、单位、变换、统计与轴契约 | `specs/iris_charts_v76.json`、`specs/wine_charts_v76.json` 和 ChartSpec Schema；`tools/chart_data.py` 共用来源哈希与逐行解析；`tools/chart_contract.py` 在两个数据集上校验样本数、轴类型/单位/范围、类别覆盖及 bootstrap 定义；FigureSpec Schema 强制定量数据链字段，验证器将嵌入的图表定义及来源元数据与哈希锁定的 ChartSpec 逐项比对，独立评审模板另锁定原始配置文件哈希；Iris 验证器检查六类统计图；`tools/validate_wine_scatter.py` 独立核对 UCI Wine 两张图各 178 行、坐标、双编码及未报告单位；负向测试拒绝来源、数值、坐标、单位、配置哈希及嵌入统计定义突变 | Iris 六类与 Wine 散点/分布图自动通过；跨数据集的散点和分布通道有实证，其余四类仍只在 Iris 验证 |
 | B：原始点可见、SVG/PPTX/PDF 可复现 | Q01/Q02/Q03/Q06/Q07/Q08 的原始点分离有几何检查；Q03/Q06 汇总标记避让；`dist/render_record_v76.json` 锁定 PowerPoint PDF 和生成链源码规范化哈希；独立评审包解压后已重建两张 Wine 图并通过规范化哈希和数据行核对 | 自动通过；最终观看尺寸仍需人工复核 |
@@ -16,6 +16,6 @@
 
 1. **独立领域复核：**当前没有已填写的真实评审表。15 项任务分别需要具备航空系统、机械故障诊断、应用统计、分析化学或细胞成像相应经验的未参与制图人员；同一人可覆盖其实际专业范围内的多项任务。顺序发放 `tools/prepare_scientific_review_bundle.py` 生成的两个独立材料包，先冻结来源/图件初评，再发放规格、预期和已知陷阱。
 2. **实际终尺寸：**演示图需要记录设备、投影距离和读不清的具体元素；Q03P 需要在 183 × 100 mm 的物理印刷尺寸或经校准的等效显示尺寸检查，并记录尺寸证据。现有 PNG/PDF 尺寸与字体检查不能代替这一步。
-3. **外部来源边界：**C01 已对出版社图的可见标签与路径进行核查并修正；仍缺像素叠图及独立领域复核，其输出继续标为结构性重绘。Q03P 是 Nature 主图尺寸示例，尚未进行投稿前的目标期刊最终核验。
+3. **外部来源边界：**C01 已对出版社图的可见标签与路径进行两轮核查并修正；答辩重排不以像素一致为目标，未知精确邻接仍标为示意，独立领域复核未完成。Q03P 是 Nature 主图尺寸示例，尚未进行投稿前的目标期刊最终核验。
 
 上述三项缺少实际证据时，`tools/validate_release_readiness.py --review` 不应通过；不得将开发版称为已发布稳定版。

@@ -60,6 +60,10 @@
       "band_group"
     ],
     [
+      "total_graph",
+      "input"
+    ],
+    [
       "band_1",
       "total_graph"
     ],
@@ -213,17 +217,62 @@
       "evidence_ref": "source_1"
     },
     {
+      "type": "text",
+      "text": "band-pass filters",
+      "x": 5.15,
+      "y": 1.72,
+      "w": 1.58,
+      "h": 0.18,
+      "size": 9.5,
+      "bold": false,
+      "align": "center",
+      "color": "#687780",
+      "id": "el_0010",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "connected bands",
+      "x": 7.31,
+      "y": 1.72,
+      "w": 1.46,
+      "h": 0.18,
+      "size": 9.5,
+      "bold": false,
+      "align": "center",
+      "color": "#687780",
+      "id": "el_0011",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
       "type": "rect",
       "x": 5.02,
-      "y": 1.75,
+      "y": 1.94,
       "w": 1.66,
-      "h": 1.86,
+      "h": 1.79,
       "fill": "#FFFFFF",
       "stroke": "#D5DEE4",
       "sw": 0.8,
       "radius": 0,
       "semantic_id": "band_group",
-      "id": "el_0010",
+      "id": "el_0012",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "rect",
+      "x": 7.3,
+      "y": 1.94,
+      "w": 1.5,
+      "h": 1.79,
+      "fill": "#FFFFFF",
+      "stroke": "#D5DEE4",
+      "sw": 0.8,
+      "radius": 0,
+      "semantic_id": "total_graph",
+      "id": "el_0013",
       "semantic_role": "scientific_object",
       "evidence_ref": "source_1"
     },
@@ -234,7 +283,7 @@
       "scale": 0.73,
       "variant": 0,
       "color": "#668A9C",
-      "id": "el_0011",
+      "id": "el_0014",
       "semantic_role": "schematic_sensor",
       "evidence_ref": "source_1"
     },
@@ -249,7 +298,7 @@
       "bold": false,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0012",
+      "id": "el_0015",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -295,7 +344,7 @@
       ],
       "color": "#668A9C",
       "sw": 1.2,
-      "id": "el_0013",
+      "id": "el_0016",
       "semantic_role": "trace",
       "evidence_ref": "source_1"
     },
@@ -308,7 +357,7 @@
       "color": "#43525B",
       "sw": 1,
       "arrow": true,
-      "id": "el_0014",
+      "id": "el_0017",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -316,7 +365,7 @@
       "type": "text",
       "text": "B₁",
       "x": 5.12,
-      "y": 1.825,
+      "y": 2.025,
       "w": 0.35,
       "h": 0.22,
       "size": 11,
@@ -324,14 +373,14 @@
       "align": "center",
       "color": "#668A9C",
       "semantic_id": "band_1",
-      "id": "el_0015",
+      "id": "el_0018",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
     {
       "type": "graph",
       "x": 5.51,
-      "y": 1.7850000000000001,
+      "y": 1.985,
       "w": 1.12,
       "h": 0.31,
       "nodes": [
@@ -378,7 +427,7 @@
       "r": 0.034,
       "edge": "#43525B",
       "sw": 0.7,
-      "id": "el_0016",
+      "id": "el_0019",
       "semantic_role": "scientific_object",
       "evidence_ref": "source_1",
       "semantic_id": "band_1"
@@ -386,16 +435,71 @@
     {
       "type": "line",
       "x1": 6.67,
-      "y1": 1.94,
-      "x2": 7.12,
-      "y2": 2.72,
+      "y1": 2.14,
+      "x2": 7.39,
+      "y2": 2.14,
       "color": "#43525B",
       "sw": 1,
       "arrow": true,
       "semantic_link": "band_1__total_graph",
-      "id": "el_0017",
+      "id": "el_0020",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
+    },
+    {
+      "type": "graph",
+      "x": 7.43,
+      "y": 1.985,
+      "w": 1.23,
+      "h": 0.31,
+      "nodes": [
+        [
+          0.08,
+          0.5
+        ],
+        [
+          0.35,
+          0.12
+        ],
+        [
+          0.65,
+          0.5
+        ],
+        [
+          0.9,
+          0.18
+        ]
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "fill": "#7896A6",
+      "r": 0.034,
+      "edge": "#43525B",
+      "sw": 0.7,
+      "id": "el_0021",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "total_graph"
     },
     {
       "type": "sensor",
@@ -404,7 +508,7 @@
       "scale": 0.73,
       "variant": 1,
       "color": "#6D9A8E",
-      "id": "el_0018",
+      "id": "el_0022",
       "semantic_role": "schematic_sensor",
       "evidence_ref": "source_1"
     },
@@ -419,7 +523,7 @@
       "bold": false,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0019",
+      "id": "el_0023",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -465,7 +569,7 @@
       ],
       "color": "#6D9A8E",
       "sw": 1.2,
-      "id": "el_0020",
+      "id": "el_0024",
       "semantic_role": "trace",
       "evidence_ref": "source_1"
     },
@@ -478,7 +582,7 @@
       "color": "#43525B",
       "sw": 1,
       "arrow": true,
-      "id": "el_0021",
+      "id": "el_0025",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -486,7 +590,7 @@
       "type": "text",
       "text": "B₂",
       "x": 5.12,
-      "y": 2.2750000000000004,
+      "y": 2.4450000000000003,
       "w": 0.35,
       "h": 0.22,
       "size": 11,
@@ -494,14 +598,14 @@
       "align": "center",
       "color": "#6D9A8E",
       "semantic_id": "band_2",
-      "id": "el_0022",
+      "id": "el_0026",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
     {
       "type": "graph",
       "x": 5.51,
-      "y": 2.2350000000000003,
+      "y": 2.4050000000000002,
       "w": 1.12,
       "h": 0.31,
       "nodes": [
@@ -548,7 +652,7 @@
       "r": 0.034,
       "edge": "#43525B",
       "sw": 0.7,
-      "id": "el_0023",
+      "id": "el_0027",
       "semantic_role": "scientific_object",
       "evidence_ref": "source_1",
       "semantic_id": "band_2"
@@ -556,16 +660,71 @@
     {
       "type": "line",
       "x1": 6.67,
-      "y1": 2.39,
-      "x2": 7.12,
-      "y2": 2.72,
+      "y1": 2.56,
+      "x2": 7.39,
+      "y2": 2.56,
       "color": "#43525B",
       "sw": 1,
       "arrow": true,
       "semantic_link": "band_2__total_graph",
-      "id": "el_0024",
+      "id": "el_0028",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
+    },
+    {
+      "type": "graph",
+      "x": 7.43,
+      "y": 2.4050000000000002,
+      "w": 1.23,
+      "h": 0.31,
+      "nodes": [
+        [
+          0.08,
+          0.5
+        ],
+        [
+          0.35,
+          0.12
+        ],
+        [
+          0.65,
+          0.5
+        ],
+        [
+          0.9,
+          0.18
+        ]
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "fill": "#7896A6",
+      "r": 0.034,
+      "edge": "#43525B",
+      "sw": 0.7,
+      "id": "el_0029",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "total_graph"
     },
     {
       "type": "sensor",
@@ -574,7 +733,7 @@
       "scale": 0.73,
       "variant": 2,
       "color": "#B88E58",
-      "id": "el_0025",
+      "id": "el_0030",
       "semantic_role": "schematic_sensor",
       "evidence_ref": "source_1"
     },
@@ -589,7 +748,7 @@
       "bold": false,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0026",
+      "id": "el_0031",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -635,7 +794,7 @@
       ],
       "color": "#B88E58",
       "sw": 1.2,
-      "id": "el_0027",
+      "id": "el_0032",
       "semantic_role": "trace",
       "evidence_ref": "source_1"
     },
@@ -648,7 +807,7 @@
       "color": "#43525B",
       "sw": 1,
       "arrow": true,
-      "id": "el_0028",
+      "id": "el_0033",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -656,7 +815,7 @@
       "type": "text",
       "text": "B₃",
       "x": 5.12,
-      "y": 2.725,
+      "y": 2.865,
       "w": 0.35,
       "h": 0.22,
       "size": 11,
@@ -664,14 +823,14 @@
       "align": "center",
       "color": "#B88E58",
       "semantic_id": "band_3",
-      "id": "el_0029",
+      "id": "el_0034",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
     {
       "type": "graph",
       "x": 5.51,
-      "y": 2.685,
+      "y": 2.825,
       "w": 1.12,
       "h": 0.31,
       "nodes": [
@@ -718,7 +877,7 @@
       "r": 0.034,
       "edge": "#43525B",
       "sw": 0.7,
-      "id": "el_0030",
+      "id": "el_0035",
       "semantic_role": "scientific_object",
       "evidence_ref": "source_1",
       "semantic_id": "band_3"
@@ -726,123 +885,22 @@
     {
       "type": "line",
       "x1": 6.67,
-      "y1": 2.84,
-      "x2": 7.12,
-      "y2": 2.72,
+      "y1": 2.98,
+      "x2": 7.39,
+      "y2": 2.98,
       "color": "#43525B",
       "sw": 1,
       "arrow": true,
       "semantic_link": "band_3__total_graph",
-      "id": "el_0031",
-      "semantic_role": "connector",
-      "evidence_ref": "source_1"
-    },
-    {
-      "type": "sensor",
-      "x": 0.69,
-      "y": 3.14,
-      "scale": 0.73,
-      "variant": 3,
-      "color": "#8A7CA5",
-      "id": "el_0032",
-      "semantic_role": "schematic_sensor",
-      "evidence_ref": "source_1"
-    },
-    {
-      "type": "text",
-      "text": "Sensor M",
-      "x": 1.08,
-      "y": 3.1750000000000003,
-      "w": 1.02,
-      "h": 0.22,
-      "size": 10.5,
-      "bold": false,
-      "align": "left",
-      "color": "#28343C",
-      "id": "el_0033",
-      "semantic_role": "annotation",
-      "evidence_ref": "source_1"
-    },
-    {
-      "type": "polyline",
-      "points": [
-        [
-          2.02,
-          3.3000000000000003
-        ],
-        [
-          2.112,
-          3.365
-        ],
-        [
-          2.204,
-          3.3000000000000003
-        ],
-        [
-          2.2960000000000003,
-          3.2500000000000004
-        ],
-        [
-          2.388,
-          3.3000000000000003
-        ],
-        [
-          2.48,
-          3.365
-        ],
-        [
-          2.572,
-          3.3000000000000003
-        ],
-        [
-          2.664,
-          3.2500000000000004
-        ],
-        [
-          2.7560000000000002,
-          3.3000000000000003
-        ]
-      ],
-      "color": "#8A7CA5",
-      "sw": 1.2,
-      "id": "el_0034",
-      "semantic_role": "trace",
-      "evidence_ref": "source_1"
-    },
-    {
-      "type": "line",
-      "x1": 2.87,
-      "y1": 3.29,
-      "x2": 3.18,
-      "y2": 3.29,
-      "color": "#43525B",
-      "sw": 1,
-      "arrow": true,
-      "id": "el_0035",
-      "semantic_role": "connector",
-      "evidence_ref": "source_1"
-    },
-    {
-      "type": "text",
-      "text": "Bq",
-      "x": 5.12,
-      "y": 3.1750000000000003,
-      "w": 0.35,
-      "h": 0.22,
-      "size": 11,
-      "bold": true,
-      "align": "center",
-      "color": "#8A7CA5",
-      "semantic_id": "band_4",
       "id": "el_0036",
-      "semantic_role": "scientific_label",
+      "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
     {
       "type": "graph",
-      "x": 5.51,
-      "y": 3.1350000000000002,
-      "w": 1.12,
+      "x": 7.43,
+      "y": 2.825,
+      "w": 1.23,
       "h": 0.31,
       "nodes": [
         [
@@ -891,164 +949,131 @@
       "id": "el_0037",
       "semantic_role": "scientific_object",
       "evidence_ref": "source_1",
-      "semantic_id": "band_4"
+      "semantic_id": "total_graph"
     },
     {
-      "type": "line",
-      "x1": 6.67,
-      "y1": 3.29,
-      "x2": 7.12,
-      "y2": 2.72,
-      "color": "#43525B",
-      "sw": 1,
-      "arrow": true,
-      "semantic_link": "band_4__total_graph",
+      "type": "sensor",
+      "x": 0.69,
+      "y": 3.14,
+      "scale": 0.73,
+      "variant": 3,
+      "color": "#8A7CA5",
       "id": "el_0038",
-      "semantic_role": "connector",
-      "evidence_ref": "source_1"
-    },
-    {
-      "type": "rect",
-      "x": 3.19,
-      "y": 1.87,
-      "w": 1.56,
-      "h": 1.67,
-      "fill": "#F7F9FA",
-      "stroke": "#AAB5BC",
-      "sw": 0.8,
-      "radius": 0.05,
-      "semantic_id": "ocf",
-      "id": "el_0039",
-      "semantic_role": "scientific_object",
+      "semantic_role": "schematic_sensor",
       "evidence_ref": "source_1"
     },
     {
       "type": "text",
-      "text": "Notch filter",
-      "x": 3.33,
-      "y": 2.13,
-      "w": 1.27,
-      "h": 0.28,
+      "text": "Sensor M",
+      "x": 1.08,
+      "y": 3.1750000000000003,
+      "w": 1.02,
+      "h": 0.22,
+      "size": 10.5,
+      "bold": false,
+      "align": "left",
+      "color": "#28343C",
+      "id": "el_0039",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "polyline",
+      "points": [
+        [
+          2.02,
+          3.3000000000000003
+        ],
+        [
+          2.112,
+          3.365
+        ],
+        [
+          2.204,
+          3.3000000000000003
+        ],
+        [
+          2.2960000000000003,
+          3.2500000000000004
+        ],
+        [
+          2.388,
+          3.3000000000000003
+        ],
+        [
+          2.48,
+          3.365
+        ],
+        [
+          2.572,
+          3.3000000000000003
+        ],
+        [
+          2.664,
+          3.2500000000000004
+        ],
+        [
+          2.7560000000000002,
+          3.3000000000000003
+        ]
+      ],
+      "color": "#8A7CA5",
+      "sw": 1.2,
+      "id": "el_0040",
+      "semantic_role": "trace",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 2.87,
+      "y1": 3.29,
+      "x2": 3.18,
+      "y2": 3.29,
+      "color": "#43525B",
+      "sw": 1,
+      "arrow": true,
+      "id": "el_0041",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Bq",
+      "x": 5.12,
+      "y": 3.285,
+      "w": 0.35,
+      "h": 0.22,
       "size": 11,
       "bold": true,
       "align": "center",
-      "color": "#28343C",
-      "id": "el_0040",
-      "semantic_role": "annotation",
-      "evidence_ref": "source_1"
-    },
-    {
-      "type": "text",
-      "text": "Operational\ncomponent removed",
-      "x": 3.31,
-      "y": 2.65,
-      "w": 1.32,
-      "h": 0.55,
-      "size": 10,
-      "bold": false,
-      "align": "center",
-      "color": "#28343C",
-      "id": "el_0041",
-      "semantic_role": "annotation",
-      "evidence_ref": "source_1"
-    },
-    {
-      "type": "line",
-      "x1": 4.75,
-      "y1": 2.72,
-      "x2": 5.05,
-      "y2": 2.72,
-      "color": "#43525B",
-      "sw": 1,
-      "arrow": true,
-      "semantic_link": "ocf__band_group",
+      "color": "#8A7CA5",
+      "semantic_id": "band_4",
       "id": "el_0042",
-      "semantic_role": "connector",
-      "evidence_ref": "source_1"
-    },
-    {
-      "type": "line",
-      "x1": 7.13,
-      "y1": 2.72,
-      "x2": 7.3,
-      "y2": 2.72,
-      "color": "#43525B",
-      "sw": 1,
-      "arrow": true,
-      "id": "el_0043",
-      "semantic_role": "connector",
+      "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
     {
       "type": "graph",
-      "x": 7.32,
-      "y": 1.92,
-      "w": 1.43,
-      "h": 1.53,
+      "x": 5.51,
+      "y": 3.245,
+      "w": 1.12,
+      "h": 0.31,
       "nodes": [
         [
           0.08,
+          0.5
+        ],
+        [
+          0.35,
           0.12
         ],
         [
-          0.3,
-          0.08
+          0.65,
+          0.5
         ],
         [
-          0.54,
-          0.1
-        ],
-        [
-          0.78,
-          0.12
-        ],
-        [
-          0.96,
-          0.15
-        ],
-        [
-          0.12,
-          0.38
-        ],
-        [
-          0.36,
-          0.35
-        ],
-        [
-          0.6,
-          0.38
-        ],
-        [
-          0.84,
-          0.37
-        ],
-        [
-          0.1,
-          0.65
-        ],
-        [
-          0.34,
-          0.62
-        ],
-        [
-          0.58,
-          0.66
-        ],
-        [
-          0.82,
-          0.64
-        ],
-        [
-          0.26,
-          0.9
-        ],
-        [
-          0.52,
-          0.88
-        ],
-        [
-          0.76,
-          0.9
+          0.9,
+          0.18
         ]
       ],
       "edges": [
@@ -1065,122 +1090,350 @@
           3
         ],
         [
-          3,
-          4
-        ],
-        [
           0,
-          5
+          2
         ],
         [
           1,
-          5
-        ],
-        [
-          1,
-          6
-        ],
-        [
-          2,
-          6
-        ],
-        [
-          2,
-          7
-        ],
-        [
-          3,
-          7
-        ],
-        [
-          3,
-          8
-        ],
-        [
-          4,
-          8
-        ],
-        [
-          5,
-          6
-        ],
-        [
-          6,
-          7
-        ],
-        [
-          7,
-          8
-        ],
-        [
-          5,
-          9
-        ],
-        [
-          6,
-          10
-        ],
-        [
-          7,
-          11
-        ],
-        [
-          8,
-          12
-        ],
-        [
-          9,
-          10
-        ],
-        [
-          10,
-          11
-        ],
-        [
-          11,
-          12
-        ],
-        [
-          9,
-          13
-        ],
-        [
-          10,
-          13
-        ],
-        [
-          10,
-          14
-        ],
-        [
-          11,
-          14
-        ],
-        [
-          11,
-          15
-        ],
-        [
-          12,
-          15
-        ],
-        [
-          13,
-          14
-        ],
-        [
-          14,
-          15
+          3
         ]
       ],
       "fill": "#7896A6",
-      "r": 0.055,
+      "r": 0.034,
       "edge": "#43525B",
-      "sw": 0.85,
+      "sw": 0.7,
+      "id": "el_0043",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "band_4"
+    },
+    {
+      "type": "line",
+      "x1": 6.67,
+      "y1": 3.4,
+      "x2": 7.39,
+      "y2": 3.4,
+      "color": "#43525B",
+      "sw": 1,
+      "arrow": true,
+      "semantic_link": "band_4__total_graph",
       "id": "el_0044",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "graph",
+      "x": 7.43,
+      "y": 3.245,
+      "w": 1.23,
+      "h": 0.31,
+      "nodes": [
+        [
+          0.08,
+          0.5
+        ],
+        [
+          0.35,
+          0.12
+        ],
+        [
+          0.65,
+          0.5
+        ],
+        [
+          0.9,
+          0.18
+        ]
+      ],
+      "edges": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "fill": "#7896A6",
+      "r": 0.034,
+      "edge": "#43525B",
+      "sw": 0.7,
+      "id": "el_0045",
       "semantic_role": "scientific_object",
       "evidence_ref": "source_1",
       "semantic_id": "total_graph"
+    },
+    {
+      "type": "rect",
+      "x": 3.19,
+      "y": 1.87,
+      "w": 1.56,
+      "h": 1.67,
+      "fill": "#F7F9FA",
+      "stroke": "#AAB5BC",
+      "sw": 0.8,
+      "radius": 0.05,
+      "semantic_id": "ocf",
+      "id": "el_0046",
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Notch filter",
+      "x": 3.33,
+      "y": 2.13,
+      "w": 1.27,
+      "h": 0.28,
+      "size": 11,
+      "bold": true,
+      "align": "center",
+      "color": "#28343C",
+      "id": "el_0047",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Operational\ncomponent removed",
+      "x": 3.31,
+      "y": 2.65,
+      "w": 1.32,
+      "h": 0.55,
+      "size": 10,
+      "bold": false,
+      "align": "center",
+      "color": "#28343C",
+      "id": "el_0048",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Fault cues clearer",
+      "x": 3.28,
+      "y": 3.25,
+      "w": 1.38,
+      "h": 0.2,
+      "size": 9.5,
+      "bold": false,
+      "align": "center",
+      "color": "#43525B",
+      "id": "el_0049",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 4.75,
+      "y1": 2.72,
+      "x2": 5.05,
+      "y2": 2.72,
+      "color": "#43525B",
+      "sw": 1,
+      "arrow": true,
+      "semantic_link": "ocf__band_group",
+      "id": "el_0050",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 7.75,
+      "y1": 2.29,
+      "x2": 7.79,
+      "y2": 2.39,
+      "color": "#43525B",
+      "sw": 1.1,
+      "dash": true,
+      "id": "el_0051",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 8.12,
+      "y1": 2.29,
+      "x2": 8.159999999999998,
+      "y2": 2.39,
+      "color": "#43525B",
+      "sw": 1.1,
+      "dash": true,
+      "id": "el_0052",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 8.46,
+      "y1": 2.29,
+      "x2": 8.5,
+      "y2": 2.39,
+      "color": "#43525B",
+      "sw": 1.1,
+      "dash": true,
+      "id": "el_0053",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 7.75,
+      "y1": 2.71,
+      "x2": 7.79,
+      "y2": 2.81,
+      "color": "#43525B",
+      "sw": 1.1,
+      "dash": true,
+      "id": "el_0054",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 8.12,
+      "y1": 2.71,
+      "x2": 8.159999999999998,
+      "y2": 2.81,
+      "color": "#43525B",
+      "sw": 1.1,
+      "dash": true,
+      "id": "el_0055",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 8.46,
+      "y1": 2.71,
+      "x2": 8.5,
+      "y2": 2.81,
+      "color": "#43525B",
+      "sw": 1.1,
+      "dash": true,
+      "id": "el_0056",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 7.75,
+      "y1": 3.13,
+      "x2": 7.79,
+      "y2": 3.23,
+      "color": "#43525B",
+      "sw": 1.1,
+      "dash": true,
+      "id": "el_0057",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 8.12,
+      "y1": 3.13,
+      "x2": 8.159999999999998,
+      "y2": 3.23,
+      "color": "#43525B",
+      "sw": 1.1,
+      "dash": true,
+      "id": "el_0058",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 8.46,
+      "y1": 3.13,
+      "x2": 8.5,
+      "y2": 3.23,
+      "color": "#43525B",
+      "sw": 1.1,
+      "dash": true,
+      "id": "el_0059",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Inter-band links schematic",
+      "x": 7.17,
+      "y": 3.58,
+      "w": 1.78,
+      "h": 0.2,
+      "size": 9.5,
+      "bold": false,
+      "align": "center",
+      "color": "#687780",
+      "id": "el_0060",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 8.05,
+      "y1": 3.73,
+      "x2": 8.05,
+      "y2": 3.94,
+      "color": "#43525B",
+      "sw": 1,
+      "semantic_link": "total_graph__input",
+      "id": "el_0061",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 8.05,
+      "y1": 3.94,
+      "x2": 0.55,
+      "y2": 3.94,
+      "color": "#43525B",
+      "sw": 1,
+      "semantic_link": "total_graph__input",
+      "id": "el_0062",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 0.55,
+      "y1": 3.94,
+      "x2": 0.55,
+      "y2": 5.43,
+      "color": "#43525B",
+      "sw": 1,
+      "semantic_link": "total_graph__input",
+      "id": "el_0063",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
+    },
+    {
+      "type": "line",
+      "x1": 0.55,
+      "y1": 5.43,
+      "x2": 0.68,
+      "y2": 5.43,
+      "color": "#43525B",
+      "sw": 1,
+      "arrow": true,
+      "semantic_link": "total_graph__input",
+      "id": "el_0064",
+      "semantic_role": "connector",
+      "evidence_ref": "source_1"
     },
     {
       "type": "text",
@@ -1193,7 +1446,7 @@
       "bold": true,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0045",
+      "id": "el_0065",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1207,7 +1460,7 @@
       "stroke": "#7896A6",
       "sw": 0.8,
       "radius": 0.035,
-      "id": "el_0046",
+      "id": "el_0066",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1223,7 +1476,7 @@
       "align": "center",
       "color": "#28343C",
       "semantic_id": "input",
-      "id": "el_0047",
+      "id": "el_0067",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
@@ -1237,7 +1490,7 @@
       "stroke": "#7896A6",
       "sw": 0.8,
       "radius": 0.035,
-      "id": "el_0048",
+      "id": "el_0068",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1253,7 +1506,7 @@
       "align": "center",
       "color": "#28343C",
       "semantic_id": "gcn_1",
-      "id": "el_0049",
+      "id": "el_0069",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
@@ -1267,7 +1520,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "input__gcn_1",
-      "id": "el_0050",
+      "id": "el_0070",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1281,7 +1534,7 @@
       "stroke": "#7896A6",
       "sw": 0.8,
       "radius": 0.035,
-      "id": "el_0051",
+      "id": "el_0071",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1297,7 +1550,7 @@
       "align": "center",
       "color": "#28343C",
       "semantic_id": "pooling_1",
-      "id": "el_0052",
+      "id": "el_0072",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
@@ -1311,7 +1564,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "gcn_1__pooling_1",
-      "id": "el_0053",
+      "id": "el_0073",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1325,7 +1578,7 @@
       "stroke": "#7896A6",
       "sw": 0.8,
       "radius": 0.035,
-      "id": "el_0054",
+      "id": "el_0074",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1341,7 +1594,7 @@
       "align": "center",
       "color": "#28343C",
       "semantic_id": "gcn_2",
-      "id": "el_0055",
+      "id": "el_0075",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
@@ -1355,7 +1608,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "pooling_1__gcn_2",
-      "id": "el_0056",
+      "id": "el_0076",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1369,7 +1622,7 @@
       "stroke": "#7896A6",
       "sw": 0.8,
       "radius": 0.035,
-      "id": "el_0057",
+      "id": "el_0077",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1385,7 +1638,7 @@
       "align": "center",
       "color": "#28343C",
       "semantic_id": "pooling_2",
-      "id": "el_0058",
+      "id": "el_0078",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
@@ -1399,7 +1652,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "gcn_2__pooling_2",
-      "id": "el_0059",
+      "id": "el_0079",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1413,7 +1666,7 @@
       "stroke": "#7896A6",
       "sw": 0.8,
       "radius": 0.035,
-      "id": "el_0060",
+      "id": "el_0080",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1429,7 +1682,7 @@
       "align": "center",
       "color": "#28343C",
       "semantic_id": "sr_main",
-      "id": "el_0061",
+      "id": "el_0081",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
@@ -1443,7 +1696,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "pooling_2__sr_main",
-      "id": "el_0062",
+      "id": "el_0082",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1456,7 +1709,7 @@
       "fill": "#FFFFFF",
       "stroke": "#43525B",
       "sw": 1,
-      "id": "el_0063",
+      "id": "el_0083",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1472,7 +1725,7 @@
       "align": "center",
       "color": "#28343C",
       "semantic_id": "sum",
-      "id": "el_0064",
+      "id": "el_0084",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
@@ -1486,7 +1739,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "sr_main__sum",
-      "id": "el_0065",
+      "id": "el_0085",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1500,7 +1753,7 @@
       "stroke": "#7896A6",
       "sw": 0.8,
       "radius": 0.035,
-      "id": "el_0066",
+      "id": "el_0086",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1516,7 +1769,7 @@
       "align": "center",
       "color": "#28343C",
       "semantic_id": "dense",
-      "id": "el_0067",
+      "id": "el_0087",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
@@ -1530,7 +1783,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "sum__dense",
-      "id": "el_0068",
+      "id": "el_0088",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1543,7 +1796,7 @@
       "color": "#43525B",
       "sw": 1,
       "arrow": true,
-      "id": "el_0069",
+      "id": "el_0089",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1558,7 +1811,7 @@
       "bold": false,
       "align": "center",
       "color": "#687780",
-      "id": "el_0070",
+      "id": "el_0090",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1571,7 +1824,7 @@
       "color": "#43525B",
       "sw": 1,
       "semantic_link": "input__ea",
-      "id": "el_0071",
+      "id": "el_0091",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1585,7 +1838,7 @@
       "stroke": "#8A7CA5",
       "sw": 0.8,
       "radius": 0.035,
-      "id": "el_0072",
+      "id": "el_0092",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1601,7 +1854,7 @@
       "align": "center",
       "color": "#28343C",
       "semantic_id": "ea",
-      "id": "el_0073",
+      "id": "el_0093",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
@@ -1615,7 +1868,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "input__ea",
-      "id": "el_0074",
+      "id": "el_0094",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1629,7 +1882,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "ea__gcn_1",
-      "id": "el_0075",
+      "id": "el_0095",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1643,7 +1896,7 @@
       "stroke": "#8A7CA5",
       "sw": 0.8,
       "radius": 0.035,
-      "id": "el_0076",
+      "id": "el_0096",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1659,7 +1912,7 @@
       "align": "center",
       "color": "#28343C",
       "semantic_id": "sr_ea",
-      "id": "el_0077",
+      "id": "el_0097",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
     },
@@ -1672,7 +1925,7 @@
       "color": "#43525B",
       "sw": 1,
       "semantic_link": "pooling_1__sr_ea",
-      "id": "el_0078",
+      "id": "el_0098",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1685,7 +1938,7 @@
       "color": "#43525B",
       "sw": 1,
       "semantic_link": "pooling_1__sr_ea",
-      "id": "el_0079",
+      "id": "el_0099",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1699,7 +1952,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "pooling_1__sr_ea",
-      "id": "el_0080",
+      "id": "el_0100",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1712,7 +1965,7 @@
       "color": "#43525B",
       "sw": 1,
       "semantic_link": "sr_ea__sum",
-      "id": "el_0081",
+      "id": "el_0101",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1726,7 +1979,7 @@
       "sw": 1,
       "arrow": true,
       "semantic_link": "sr_ea__sum",
-      "id": "el_0082",
+      "id": "el_0102",
       "semantic_role": "connector",
       "evidence_ref": "source_1"
     },
@@ -1741,7 +1994,7 @@
       "bold": true,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0083",
+      "id": "el_0103",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1755,7 +2008,7 @@
       "stroke": "#7896A6",
       "sw": 0.8,
       "radius": 0.18,
-      "id": "el_0084",
+      "id": "el_0104",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1770,7 +2023,7 @@
       "bold": true,
       "align": "center",
       "color": "#28343C",
-      "id": "el_0085",
+      "id": "el_0105",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1785,7 +2038,7 @@
       "bold": true,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0086",
+      "id": "el_0106",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1800,7 +2053,7 @@
       "bold": false,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0087",
+      "id": "el_0107",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1814,7 +2067,7 @@
       "stroke": "#7896A6",
       "sw": 0.8,
       "radius": 0.18,
-      "id": "el_0088",
+      "id": "el_0108",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1829,7 +2082,7 @@
       "bold": true,
       "align": "center",
       "color": "#28343C",
-      "id": "el_0089",
+      "id": "el_0109",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1844,7 +2097,7 @@
       "bold": true,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0090",
+      "id": "el_0110",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1859,7 +2112,7 @@
       "bold": false,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0091",
+      "id": "el_0111",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1873,7 +2126,7 @@
       "stroke": "#7896A6",
       "sw": 0.8,
       "radius": 0.18,
-      "id": "el_0092",
+      "id": "el_0112",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1888,7 +2141,7 @@
       "bold": true,
       "align": "center",
       "color": "#28343C",
-      "id": "el_0093",
+      "id": "el_0113",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1903,7 +2156,7 @@
       "bold": true,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0094",
+      "id": "el_0114",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1918,7 +2171,7 @@
       "bold": false,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0095",
+      "id": "el_0115",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1933,7 +2186,7 @@
       "bold": true,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0096",
+      "id": "el_0116",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1948,7 +2201,7 @@
       "bold": false,
       "align": "left",
       "color": "#28343C",
-      "id": "el_0097",
+      "id": "el_0117",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1963,7 +2216,7 @@
       "bold": false,
       "align": "left",
       "color": "#687780",
-      "id": "el_0098",
+      "id": "el_0118",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     },
@@ -1978,7 +2231,7 @@
       "bold": false,
       "align": "left",
       "color": "#687780",
-      "id": "el_0099",
+      "id": "el_0119",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
     }

@@ -23,6 +23,10 @@ try {
     $benchmark = $app.Presentations.Open($deckPptx, $true, $false, $false)
     try {
         $benchmark.SaveAs($deckPdf, 32)
+        for ($page = 1; $page -le $benchmark.Slides.Count; $page++) {
+            $slidePng = Join-Path $RepositoryRoot "dist/DECK01_c01_defense_slide_$page.png"
+            $benchmark.Slides.Item($page).Export($slidePng, 'PNG', 1600, 900)
+        }
     } finally {
         $benchmark.Close()
     }

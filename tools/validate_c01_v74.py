@@ -37,8 +37,16 @@ def main():
         ("pooling_1", "sr_ea"), ("sr_ea", "sum"), ("sum", "dense"),
     }
     expected_edges |= {("ocf", "band_group")}
+    expected_edges |= {("total_graph", "input")}
     expected_edges |= {(f"band_{i}", "total_graph") for i in range(1, 5)}
     assert {tuple(edge) for edge in spec["semantic_edges"]} == expected_edges
+    assert "band-pass filters" in [e.get("text") for e in spec["elements"]]
+    assert "Fault cues clearer" in [e.get("text") for e in spec["elements"]]
+    total_layers = [e for e in spec["elements"] if e["type"] == "graph"
+                    and e.get("semantic_id") == "total_graph"]
+    interband_links = [e for e in spec["elements"] if e["type"] == "line"
+                       and e.get("dash") and 7.3 <= e["x1"] <= 8.8]
+    assert len(total_layers) == 4 and len(interband_links) == 9
     assert all(e["type"] != "image" for e in spec["elements"])
     assert SVG.exists() and PPTX.exists()
     deck = Presentation(PPTX)

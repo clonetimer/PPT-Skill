@@ -1,6 +1,7 @@
 # Changelog
 
 ## V7.6.0-dev — Scientific evidence and data channels
+- Rechecked C01 against the publisher graphical abstract, added explicit band-pass and OCF-effect labels, replaced the star aggregation sketch with connected frequency-band layers, and drew the total-graph-to-SEANet input route. PowerPoint now refreshes every deck PNG alongside PDF export; source-comparison notes distinguish remaining schematic details from scientific routes.
 - Corrected C01's EA and lower-SR routing and restored Dense classification after inspecting the publisher's 1198 × 886 graphical abstract. Added visible-route checks for the standalone diagram, corrected composite/deck outputs, explicit source evidence and exact legacy-label exceptions.
 - Split independent review into separately distributable initial and reconciliation archives; the initial packet contains no benchmark expectations, FigureSpecs or review template, and CI uploads the stages as separate artifacts.
 - Recorded canonical hashes of all direct builder, renderer, data-contract, PowerPoint export and render-audit sources; render-record validation now rejects a stale generation pipeline across Windows/Linux line endings.

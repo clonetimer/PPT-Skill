@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
 <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>
 <rect width="1600" height="900" fill="#FFFFFF"/>
-<text x="799.8" y="62.03333333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="36.666666666666664" fill="#28343C" font-weight="700"><tspan x="799.8" dy="0">Graph construction (time-frequency graph)</tspan></text>
+<text x="799.8" y="62.03333333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="36.666666666666664" fill="#28343C" font-weight="700"><tspan x="799.8" dy="0">Graph construction (frequency-band graph)</tspan></text>
 <rect x="57.599999999999994" y="110.4" width="1484.3999999999999" height="714.0" rx="0.0" fill="#FFFFFF" stroke="#43525B" stroke-width="1.6666666666666667" stroke-dasharray="8 6"/>
 <text x="969.0" y="188.75" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#28343C" font-weight="700"><tspan x="969.0" dy="0">Band-pass</tspan></text>
 <text x="1376.4" y="188.75" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#28343C" font-weight="700"><tspan x="1376.4" dy="0">Total graph</tspan></text>
@@ -127,4 +127,5 @@
 <circle cx="1432.896" cy="578.64" r="6.6" fill="#7896A6" stroke="#43525B" stroke-width="1.1"/>
 <text x="86.39999999999999" y="747.2833333333333" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="19.666666666666668" fill="#687780"><tspan x="86.39999999999999" dy="0">Band-specific subgraphs are connected to form the final frequency-band graph.</tspan></text>
 <text x="86.39999999999999" y="795.8000000000001" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="16.0" fill="#687780" font-style="italic"><tspan x="86.39999999999999" dy="0">Source-visible structural redraw · sensor photographs are replaced with editable vector silhouettes; graph coordinates are schematic.</tspan></text>
+<text x="630.6" y="631.9416666666666" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="15.833333333333334" fill="#43525B"><tspan x="630.6" dy="0">Fault cues clearer</tspan></text>
 </svg>
