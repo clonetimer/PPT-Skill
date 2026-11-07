@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -28,6 +29,8 @@ def enrich_spec(source: dict) -> dict:
     spec["figure_contract"] = {k: contract[k] for k in ("claim", "archetype", "output_mode", "unverified")}
     spec["evidence_records"] = [{
         "id": "source_1", "source": contract["source"],
+        "source_file_sha256": hashlib.sha256((ROOT / contract["source"]).read_bytes()).hexdigest(),
+        "source_locator": contract["source_locator"],
         "status": contract["evidence_status"], "scope": contract["evidence_scope"],
         "reuse": contract.get("reuse", "derivative_redraw_only")
     }]
@@ -46,7 +49,10 @@ def validate_spec(spec: dict) -> None:
     evidence = {record["id"]: record for record in spec["evidence_records"]}
     assert evidence and len(evidence) == len(spec["evidence_records"])
     for record in evidence.values():
-        assert (ROOT / record["source"]).is_file()
+        source = ROOT / record["source"]
+        assert source.is_file()
+        assert record["source_file_sha256"] == hashlib.sha256(source.read_bytes()).hexdigest()
+        assert record["source_locator"]
         assert record["status"] in {"source_visible_redraw", "paper_grounded", "domain_adaptation", "data_driven"}
         assert record["scope"] and record["reuse"]
     ids = set()

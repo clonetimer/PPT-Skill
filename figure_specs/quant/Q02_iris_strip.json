@@ -2995,6 +2995,8 @@
     {
       "id": "source_1",
       "source": "data/iris_uci.csv",
+      "source_file_sha256": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+      "source_locator": "source_row plus sepal_length_cm and species columns",
       "status": "data_driven",
       "scope": "Every point traces to a row in the public UCI Iris dataset.",
       "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76"

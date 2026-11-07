@@ -1907,6 +1907,8 @@
     {
       "id": "source_1",
       "source": "docs/C01_V73_SOURCE.md",
+      "source_file_sha256": "43ebef4131db19acd4608adb152eb448e243140ca56b18258d1b205f6b29e31b",
+      "source_locator": "Author-published graphical abstract, Paper-grounded statements, and Source boundary",
       "status": "source_visible_redraw",
       "scope": "Paper-grounded labels and visible process sequence; layout and several glyphs are adaptations.",
       "reuse": "derivative_redraw_only"

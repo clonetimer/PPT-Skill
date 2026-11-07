@@ -1461,6 +1461,8 @@
     {
       "id": "source_1",
       "source": "docs/C01_V73_SOURCE.md",
+      "source_file_sha256": "43ebef4131db19acd4608adb152eb448e243140ca56b18258d1b205f6b29e31b",
+      "source_locator": "Author-published graphical abstract and Paper-grounded statements; publisher original is not stored locally",
       "status": "source_visible_redraw",
       "scope": "Visible method sequence and labels; vector sensors and graph adjacency are schematic.",
       "reuse": "derivative_redraw_only"

@@ -2646,6 +2646,8 @@
     {
       "id": "source_1",
       "source": "data/iris_uci.csv",
+      "source_file_sha256": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+      "source_locator": "all 150 source rows; paired leave-one-out predictions for declared feature sets",
       "status": "data_driven",
       "scope": "Paired per-row leave-one-out predictions derived deterministically from UCI Iris.",
       "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76"

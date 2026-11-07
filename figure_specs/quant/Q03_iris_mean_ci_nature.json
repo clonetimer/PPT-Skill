@@ -3096,6 +3096,8 @@
     {
       "id": "source_1",
       "source": "data/iris_uci.csv",
+      "source_file_sha256": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+      "source_locator": "same source rows and petal_length_cm as Q03 presentation chart",
       "status": "data_driven",
       "scope": "Same 150 source flowers and bootstrap summaries as Q03, re-laid out at a Nature two-column example size.",
       "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76"

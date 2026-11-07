@@ -1757,6 +1757,8 @@
     {
       "id": "source_1",
       "source": "data/iris_uci.csv",
+      "source_file_sha256": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+      "source_locator": "50 setosa source rows; sepal_length_cm and petal_length_cm with ranked bins",
       "status": "data_driven",
       "scope": "Fifty raw setosa flowers and within-bin bootstrap summaries derive from UCI Iris rows.",
       "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76"

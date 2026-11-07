@@ -284,6 +284,8 @@
     {
       "id": "source_1",
       "source": "docs/KNOWN_ISSUES_V7.md",
+      "source_file_sha256": "addc374bdfcd4d4133c0eafcdcf04c5f2165b0e5093b2a1746f43f70b01e32e6",
+      "source_locator": "Remaining: F07 channel-to-cell mapping is unavailable; grid is schematic",
       "status": "domain_adaptation",
       "scope": "Schematic grid; no channel-to-cell mapping is asserted.",
       "reuse": "derivative_redraw_only"

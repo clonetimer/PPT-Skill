@@ -36,8 +36,8 @@
     {
       "figure_id": "Q01_iris_scatter",
       "figure_spec": "figure_specs/quant/Q01_iris_scatter.json",
-      "input_sha256": "8f736521c75e585dfe2c993c44708f9fad73bb9548dbd14f8b134c1f9ed4e03b",
-      "input_canonical_sha256": "fbb0e6c369927d806c9eb1041d57561ba08428614d73feba0cc7538744261bff",
+      "input_sha256": "b6687c80afee8e0bc66b49a761db97cf4bbcabf0372f49e6071b564abdd083bf",
+      "input_canonical_sha256": "adf33846453bc6585adc31cd3ba48c8bd07015802a27a843b0ee3aa4b64679ed",
       "outputs_sha256": {
         "svg": "03d6cf776c8c8eb6098027f4e55feaeded22a375f5a770b8d218894b4d82aa0e",
         "pptx": "9738907b6c1d9bb00450d90ad45001cce4a9dd6734129055d93c28e2f303ec8c",
@@ -65,8 +65,8 @@
     {
       "figure_id": "Q02_iris_strip",
       "figure_spec": "figure_specs/quant/Q02_iris_strip.json",
-      "input_sha256": "8c4e9c3e4a27a3f8cbe09eec0b465119e86e93ee1b4798963324f694998e64b5",
-      "input_canonical_sha256": "31826894e28c15198f12ba703b213822bfa307fbcc2918565a092269ad5fad08",
+      "input_sha256": "024fdc8e5b5410c36feb5294ea80bf74b17fbee7e86fa1cc71c11b92f22d08c1",
+      "input_canonical_sha256": "9b927458c0c27d4edf71610be865dfbd6f1fdd4f76b12a7e63f6c650a60ea051",
       "outputs_sha256": {
         "svg": "250af3fb9ca042409cbf96276c3dc6bfadcd410a6b9b4060da485709333fb6de",
         "pptx": "8ef09072f2573592ec713019cf79fd4019950607b54395d238ddabd4d85edc82",
@@ -94,8 +94,8 @@
     {
       "figure_id": "Q03_iris_mean_ci",
       "figure_spec": "figure_specs/quant/Q03_iris_mean_ci.json",
-      "input_sha256": "b19cbf13403eddd77ff95fdf63c8f07dbbf086ea72c41ab58104eae54d824b07",
-      "input_canonical_sha256": "3400b0925c47aada09e4ddf4f036be7dc69dfad69b4e8f84a4fbfdbc4308b92b",
+      "input_sha256": "970c039ab8597bbf8c483708b67ef6c8ac7c45d657256f35dacb40e7de77c8eb",
+      "input_canonical_sha256": "81f89e622fbb57a263b055105b19e3ae50eeb9d53ed04bb9efd154ad2dbe398b",
       "outputs_sha256": {
         "svg": "73035582a320e32a5c3b7c28b51e352751a929ac5f7ea2646e7de493e5d1a15d",
         "pptx": "cb50e2803356b6feb57bb57c720b6c228b1c92d89afba93b238687879c1cdab4",
@@ -123,8 +123,8 @@
     {
       "figure_id": "Q03_iris_mean_ci_nature",
       "figure_spec": "figure_specs/quant/Q03_iris_mean_ci_nature.json",
-      "input_sha256": "b9ea3e4e7ae15b58d4c8d76b04095bd3321da50ef8830d917e5a06fa896627ec",
-      "input_canonical_sha256": "260353dbd0653203203e9264b08a0d11ea4517e68d56039165678772cb7120e2",
+      "input_sha256": "57a0c2903e11d809c5938a11c3555aef27597c10dd7eed335375a7b97b637b2d",
+      "input_canonical_sha256": "ba07d85717eadfa90771841421fcf298069120948c4730f32a12027295fe63f5",
       "outputs_sha256": {
         "svg": "67b382cdabd880c084c87614f43944475e453117abfd8143400bdefdc8a36eda",
         "pptx": "47294b88cc020631d4491fdb3d025f53022b9e53fafdc0986b2e244a28accb73",
@@ -152,8 +152,8 @@
     {
       "figure_id": "Q04_iris_confusion",
       "figure_spec": "figure_specs/quant/Q04_iris_confusion.json",
-      "input_sha256": "75841a6a1b293e96c1cb952364887270dbe4019208f22706698ed7861b42b0bc",
-      "input_canonical_sha256": "8211b1df26b98ac6447748315f971cd0ccb91954092bf03e0294bfed8f7adbca",
+      "input_sha256": "030459c9c6faef7b741f918023f3a2dee861a68d9cb3975cd38befa842d2f93e",
+      "input_canonical_sha256": "68fe0de6c462540bff77702b138cee9ea45a565737812b4a15d444d5005434c4",
       "outputs_sha256": {
         "svg": "7f9c3a9e8aa66e088ebd24bbad271c3d477ffdaee79f72cd727e58f33918cc00",
         "pptx": "590aff3110aa090e8ca1098f9ec4efc66720469197c7b3dc8ca9602a9009d363",
@@ -181,8 +181,8 @@
     {
       "figure_id": "Q05_iris_ablation",
       "figure_spec": "figure_specs/quant/Q05_iris_ablation.json",
-      "input_sha256": "45aab7c36e73b035da20533756a922f9e9263b7b1249a39b6fc6c619075eabb6",
-      "input_canonical_sha256": "9850b03c4e049c847c43e89566bd73bf4e607fbed1c81d7f80e0d754ef6f5ce2",
+      "input_sha256": "89bb1ec17770f64489705998b6a79a450539e426f7026ed59bcdb7d494cb9225",
+      "input_canonical_sha256": "187455cb359615d05f08fc8b1523d346e636e0f5fa0aa223614a80b16ee0ae6c",
       "outputs_sha256": {
         "svg": "14f5c53c5ec9b8ea32dcc54d308cfca1b22fb32ba2e2e73537ebec306b31e2d5",
         "pptx": "40b91e77d906e217c7c8aae45521d68e93f260ca3ab1f4b4c0491587370bf285",
@@ -210,8 +210,8 @@
     {
       "figure_id": "Q06_iris_trend_interval",
       "figure_spec": "figure_specs/quant/Q06_iris_trend_interval.json",
-      "input_sha256": "d35e8c0c693530d419386bf9d16ec83b3aa88339196c8c35ac9bf6e63a8c1b2d",
-      "input_canonical_sha256": "b8dabac960b8906d3aaa4c80427a395d51073b65ca83587d0721bc820d77a516",
+      "input_sha256": "51bfa3edc26404ae5e3b6b1d000ac935bc08f80fe1e1c42be46e23103b0844b6",
+      "input_canonical_sha256": "e04655f27ecdf384fc47a7d03afc3236b7b38cb95ceb0666460aff2a0c2f313e",
       "outputs_sha256": {
         "svg": "1ccd572a5a13fec9b2ee5c9f74e014e707fb80a81734f984b093fc48bec3058c",
         "pptx": "0ba69ad5b621834acce97019ac394aa34809fb93a590b3bd6f479f7a3745f148",
@@ -239,8 +239,8 @@
     {
       "figure_id": "I01_cell_image_quant",
       "figure_spec": "figure_specs/image/I01_cell_image_quant.json",
-      "input_sha256": "2a88a0576f1ec872e17db1210002d18e129edef6f5a8cffa529f73190c4c0bad",
-      "input_canonical_sha256": "8bf0cdad8550e409a3461a741b63624b11fcdcd7779013fd9ba05e27f3e94385",
+      "input_sha256": "836ecc02ff5f9ad9c1b62399a201a7893e15c93d9ef07f13293b3e40f92c9889",
+      "input_canonical_sha256": "fa4b48f792bcb2ccd790794a29d5316bbec3a32f3a880b20dc5e64e43ff81eb6",
       "outputs_sha256": {
         "svg": "a64dbb677c2a57667ccc807052e1d78f04acd6e5772186a8c5d72e21a6c6ec1e",
         "pptx": "3a295236fa568dc66313114b9419b970135cc5a6854d7aa68366a52475ae8fe6",

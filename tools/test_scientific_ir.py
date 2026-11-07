@@ -59,6 +59,18 @@ class ScientificIRMutationTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             validate_spec(changed)
 
+    def test_changed_local_evidence_hash_fails(self):
+        changed = copy.deepcopy(SPEC)
+        changed["evidence_records"][0]["source_file_sha256"] = "0" * 64
+        with self.assertRaises(AssertionError):
+            validate_spec(changed)
+
+    def test_missing_source_locator_fails(self):
+        changed = copy.deepcopy(SPEC)
+        changed["evidence_records"][0]["source_locator"] = ""
+        with self.assertRaises(AssertionError):
+            validate_spec(changed)
+
 
 if __name__ == "__main__":
     unittest.main()

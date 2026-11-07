@@ -4,6 +4,7 @@
     "archetype": "schematic_led_composite",
     "output_mode": "presentation",
     "source": "docs/SOURCE_ATTRIBUTION.md",
+    "source_locator": "User-provided visual references, especially slide 213; original deck is not redistributed",
     "evidence_status": "domain_adaptation",
     "evidence_scope": "Conceptual engineering flow; not an exact published-system topology.",
     "unverified": ["Mission-specific timing and authorization rules require a primary source."]
@@ -13,6 +14,7 @@
     "archetype": "schematic_led_composite",
     "output_mode": "presentation",
     "source": "docs/KNOWN_ISSUES_V7.md",
+    "source_locator": "Remaining: F07 channel-to-cell mapping is unavailable; grid is schematic",
     "evidence_status": "domain_adaptation",
     "evidence_scope": "Schematic grid; no channel-to-cell mapping is asserted.",
     "unverified": ["Exact occupancy and channel coordinates are unavailable."]
@@ -22,6 +24,7 @@
     "archetype": "schematic_led_composite",
     "output_mode": "presentation",
     "source": "docs/C01_V73_SOURCE.md",
+    "source_locator": "Author-published graphical abstract and Paper-grounded statements; publisher original is not stored locally",
     "evidence_status": "source_visible_redraw",
     "evidence_scope": "Visible method sequence and labels; vector sensors and graph adjacency are schematic.",
     "unverified": ["Numerical adjacency matrix", "Pixel-level source-image match"]
@@ -31,6 +34,7 @@
     "archetype": "schematic_led_composite",
     "output_mode": "presentation",
     "source": "docs/C01_V73_SOURCE.md",
+    "source_locator": "Author-published graphical abstract, Paper-grounded statements, and Terminology",
     "evidence_status": "source_visible_redraw",
     "evidence_scope": "Visible graph-level method topology; node coordinates are schematic.",
     "unverified": ["Numerical adjacency matrix", "Pixel-level source-image match"]
@@ -40,6 +44,7 @@
     "archetype": "schematic_led_composite",
     "output_mode": "presentation",
     "source": "docs/C01_V73_SOURCE.md",
+    "source_locator": "Author-published graphical abstract, Paper-grounded statements, and Source boundary",
     "evidence_status": "source_visible_redraw",
     "evidence_scope": "Paper-grounded labels and visible process sequence; layout and several glyphs are adaptations.",
     "unverified": ["Numerical adjacency matrix", "Pixel-level source-image match"]
@@ -47,56 +52,56 @@
   "Q01_iris_scatter": {
     "claim": "The three iris species occupy different regions in petal measurements.",
     "archetype": "quantitative_grid", "output_mode": "presentation",
-    "source": "data/iris_uci.csv", "evidence_status": "data_driven",
+    "source": "data/iris_uci.csv", "source_locator": "source_row plus petal_length_cm, petal_width_cm and species columns", "evidence_status": "data_driven",
     "evidence_scope": "Every point traces to a row in the public UCI Iris dataset.",
     "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76", "unverified": []
   },
   "Q02_iris_strip": {
     "claim": "Sepal length distributions overlap across species.",
     "archetype": "quantitative_grid", "output_mode": "presentation",
-    "source": "data/iris_uci.csv", "evidence_status": "data_driven",
+    "source": "data/iris_uci.csv", "source_locator": "source_row plus sepal_length_cm and species columns", "evidence_status": "data_driven",
     "evidence_scope": "Every point traces to a row in the public UCI Iris dataset.",
     "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76", "unverified": []
   },
   "Q03_iris_mean_ci": {
     "claim": "Species differ in sample mean petal length.",
     "archetype": "quantitative_grid", "output_mode": "presentation",
-    "source": "data/iris_uci.csv", "evidence_status": "data_driven",
+    "source": "data/iris_uci.csv", "source_locator": "source_row plus petal_length_cm and species columns; bootstrap rule in chart contract", "evidence_status": "data_driven",
     "evidence_scope": "Raw values and bootstrap summaries derive from the public UCI Iris dataset.",
     "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76", "unverified": []
   },
   "Q03_iris_mean_ci_nature": {
     "claim": "Species differ in sample mean petal length.",
     "archetype": "quantitative_grid", "output_mode": "publication",
-    "source": "data/iris_uci.csv", "evidence_status": "data_driven",
+    "source": "data/iris_uci.csv", "source_locator": "same source rows and petal_length_cm as Q03 presentation chart", "evidence_status": "data_driven",
     "evidence_scope": "Same 150 source flowers and bootstrap summaries as Q03, re-laid out at a Nature two-column example size.",
     "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76", "unverified": ["Nature editorial acceptance and final production scaling require journal review."]
   },
   "Q05_iris_ablation": {
     "claim": "Removing sepal measurements changes this demonstrator's leave-one-out accuracy.",
     "archetype": "quantitative_grid", "output_mode": "presentation",
-    "source": "data/iris_uci.csv", "evidence_status": "data_driven",
+    "source": "data/iris_uci.csv", "source_locator": "all 150 source rows; paired leave-one-out predictions for declared feature sets", "evidence_status": "data_driven",
     "evidence_scope": "Paired per-row leave-one-out predictions derived deterministically from UCI Iris.",
     "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76", "unverified": []
   },
   "Q06_iris_trend_interval": {
     "claim": "Within setosa, petal length varies across ordered sepal-length groups.",
     "archetype": "quantitative_grid", "output_mode": "presentation",
-    "source": "data/iris_uci.csv", "evidence_status": "data_driven",
+    "source": "data/iris_uci.csv", "source_locator": "50 setosa source rows; sepal_length_cm and petal_length_cm with ranked bins", "evidence_status": "data_driven",
     "evidence_scope": "Fifty raw setosa flowers and within-bin bootstrap summaries derive from UCI Iris rows.",
     "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76", "unverified": []
   },
   "I01_cell_image_quant": {
     "claim": "This sample image has a high-intensity cell region above a darker background; the histogram describes pixel intensities, not a biological population.",
     "archetype": "image_quantitative_composite", "output_mode": "presentation",
-    "source": "data/cell_scikit_image_v026.png", "evidence_status": "data_driven",
+    "source": "data/cell_scikit_image_v026.png", "source_locator": "full 550 x 660 pixel image; calibration and source link in data/README.md", "evidence_status": "data_driven",
     "evidence_scope": "Pixel values and spacing are from the CC0 scikit-image cell sample; all measurements here are image-level demonstrations.",
     "reuse": "CC0; cite scikit-image data.cell and Müller et al. 2018", "unverified": ["Cell segmentation", "Population-level inference"]
   },
   "Q04_iris_confusion": {
     "claim": "A simple nearest-neighbor baseline makes some cross-species errors.",
     "archetype": "quantitative_grid", "output_mode": "presentation",
-    "source": "data/iris_uci.csv", "evidence_status": "data_driven",
+    "source": "data/iris_uci.csv", "source_locator": "all 150 source rows; species and four measurement columns for leave-one-out 1-NN", "evidence_status": "data_driven",
     "evidence_scope": "Leave-one-out predictions computed deterministically from public UCI Iris rows.",
     "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76", "unverified": []
   }

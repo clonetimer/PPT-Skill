@@ -757,6 +757,8 @@
     {
       "id": "source_1",
       "source": "data/iris_uci.csv",
+      "source_file_sha256": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+      "source_locator": "all 150 source rows; species and four measurement columns for leave-one-out 1-NN",
       "status": "data_driven",
       "scope": "Leave-one-out predictions computed deterministically from public UCI Iris rows.",
       "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76"
