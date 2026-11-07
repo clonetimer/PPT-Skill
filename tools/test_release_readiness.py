@@ -10,9 +10,13 @@ from validate_release_readiness import prepare_template, validate_review
 class ReleaseGateTests(unittest.TestCase):
     def complete_synthetic_review(self):
         review = prepare_template()
-        review["reviewer"].update(name="SYNTHETIC TEST", field="test", date="2000-01-01",
-                                  independent_of_build=True, blind_to_implementation_version=True)
+        disciplines = {result["required_discipline"] for result in review["tasks"].values()}
+        review["reviewers"] = {discipline: {
+            "name": "SYNTHETIC TEST", "date": "2000-01-01", "disciplines": [discipline],
+            "independent_of_build": True, "blind_to_implementation_version": True,
+        } for discipline in disciplines}
         for result in review["tasks"].values():
+            result["reviewer_id"] = result["required_discipline"]
             result["source_checked"] = result["scientific_relationships_checked"] = True
             result["final_size"] = {"checked": True, "context": "synthetic", "evidence": "test only"}
             for item in result["scores"].values():
@@ -43,6 +47,12 @@ class ReleaseGateTests(unittest.TestCase):
     def test_missing_final_size_blocks_release(self):
         review = self.complete_synthetic_review()
         review["tasks"]["I01"]["final_size"]["checked"] = False
+        with self.assertRaises(ValueError):
+            validate_review(review)
+
+    def test_wrong_domain_reviewer_blocks_release(self):
+        review = self.complete_synthetic_review()
+        review["tasks"]["I01"]["reviewer_id"] = "applied_statistics"
         with self.assertRaises(ValueError):
             validate_review(review)
 

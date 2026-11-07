@@ -4,7 +4,7 @@
 
 ## 评审元数据
 
-- 评审人/学科：
+- 评审人名单、各自学科与负责任务：
 - 日期、显示设备/投影距离或打印尺寸：
 - 审核的提交哈希：
 - 使用的来源文件/链接及版本：
@@ -48,6 +48,6 @@
 
 ## 机器发布门槛
 
-运行 `python tools/validate_release_readiness.py --prepare review.json` 创建未填写的 JSON 表。评审人逐项填写身份与独立性、来源/科学关系核验、实际终尺寸检查条件与证据、六维评分及各自证据、四项硬失败的布尔结论和任务结论。运行 `python tools/validate_release_readiness.py --review review.json` 进行发布判定。模板中的 `false`、`null` 与空字符串均表示未完成；工件或基准文件变更后须重新评审。机器只检查记录的完整性和文件哈希，不能证明评审人的身份或专业判断。
+运行 `python tools/validate_release_readiness.py --prepare review.json` 创建未填写的 JSON 表。在 `reviewers` 登记评审人、所属学科、独立性和盲评状态；每项任务用 `reviewer_id` 指向覆盖其 `required_discipline` 的评审人。评审人逐项填写来源/科学关系核验、实际终尺寸检查条件与证据、六维评分及各自证据、四项硬失败的布尔结论和任务结论。运行 `python tools/validate_release_readiness.py --review review.json` 进行发布判定。模板中的 `false`、`null` 与空字符串均表示未完成；工件或基准文件变更后须重新评审。机器只检查记录的完整性、领域归属和文件哈希，不能证明评审人的身份或专业判断。
 
 可运行 `python tools/prepare_scientific_review_bundle.py --output review_bundle.zip` 生成评审材料包。包内包含 14 项任务的来源、输入、可用的 SVG/PPTX/PDF/预览、说明文档和空白 JSON 表；出版商原始图稿只保留来源链接，不打包再分发。

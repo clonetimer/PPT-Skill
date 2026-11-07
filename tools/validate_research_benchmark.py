@@ -31,8 +31,12 @@ def main():
     categories = {task["category"] for task in tasks}
     assert {"paper_figure_redraw", "full_defense_narrative", "engineering_mechanism",
             "quant_interval", "ablation_comparison", "image_plus_quant"} <= categories
+    disciplines = {task["discipline"] for task in tasks}
+    assert disciplines == {"aerospace_systems", "machinery_fault_diagnosis",
+                           "applied_statistics", "cell_imaging"}
     for task in tasks:
         assert task["mode"] in {"presentation", "publication"}
+        assert task["discipline"] in disciplines
         assert (ROOT / task["source"]).is_file() and (ROOT / task["input"]).is_file()
         assert task["expected"] and task["traps"]
         assert task["status"] in {"automated_fixture", "contract_only"}

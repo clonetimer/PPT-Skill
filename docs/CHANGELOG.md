@@ -17,6 +17,7 @@
 - Added a portable, unfilled 14-task review bundle generator for independent source and final-size inspection.
 - CI now uploads that unfilled bundle as a separate artifact after all automated figure checks.
 - Render records now hash canonical SVG XML and PPTX member payloads, so CI detects geometry or style drift while ignoring ZIP timestamp/order noise.
+- Stratified benchmark tasks by four disciplines and required each task's independent reviewer to declare matching field expertise.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

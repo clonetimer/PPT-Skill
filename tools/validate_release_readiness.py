@@ -25,9 +25,9 @@ def prepare_template() -> dict:
     benchmark = json.loads(benchmark_path.read_text(encoding="utf-8"))
     return {
         "benchmark_sha256": sha256(benchmark_path),
-        "reviewer": {"name": "", "field": "", "date": "", "independent_of_build": False,
-                     "blind_to_implementation_version": False},
+        "reviewers": {},
         "tasks": {task["id"]: {
+            "required_discipline": task["discipline"], "reviewer_id": "",
             "source_sha256": sha256(ROOT / task["source"]),
             "input_sha256": sha256(ROOT / task["input"]),
             "output_sha256": sha256(ROOT / OUTPUTS[task["id"]]),
@@ -45,11 +45,15 @@ def validate_review(review: dict) -> None:
     benchmark_path = ROOT / "specs/research_figure_benchmark_v76.json"
     benchmark = json.loads(benchmark_path.read_text(encoding="utf-8"))
     require(review.get("benchmark_sha256") == sha256(benchmark_path), "Benchmark changed since review")
-    reviewer = review.get("reviewer", {})
-    require(bool(reviewer.get("name") and reviewer.get("field")), "Reviewer identity and field required")
-    require(reviewer.get("independent_of_build") is True, "Independent reviewer required")
-    require(reviewer.get("blind_to_implementation_version") is True, "Blind review required")
-    require(bool(reviewer.get("date")), "Review date required")
+    reviewers = review.get("reviewers", {})
+    require(isinstance(reviewers, dict) and bool(reviewers), "Reviewer roster required")
+    for reviewer_id, reviewer in reviewers.items():
+        require(bool(reviewer_id and reviewer.get("name") and reviewer.get("date")),
+                f"{reviewer_id}: reviewer identity and date required")
+        require(isinstance(reviewer.get("disciplines"), list) and bool(reviewer["disciplines"]),
+                f"{reviewer_id}: reviewer disciplines required")
+        require(reviewer.get("independent_of_build") is True, f"{reviewer_id}: independence required")
+        require(reviewer.get("blind_to_implementation_version") is True, f"{reviewer_id}: blind review required")
     results = review.get("tasks", {})
     expected_ids = {task["id"] for task in benchmark["tasks"]}
     require(set(results) == expected_ids, "Every benchmark task needs one review")
@@ -58,6 +62,11 @@ def validate_review(review: dict) -> None:
     for task in benchmark["tasks"]:
         task_id = task["id"]
         result = results[task_id]
+        require(result.get("required_discipline") == task["discipline"], f"{task_id}: discipline changed")
+        reviewer_id = result.get("reviewer_id")
+        require(reviewer_id in reviewers, f"{task_id}: assigned reviewer required")
+        require(task["discipline"] in reviewers[reviewer_id]["disciplines"],
+                f"{task_id}: reviewer field does not cover {task['discipline']}")
         require(result.get("source_checked") is True, f"{task_id}: source check required")
         require(result.get("scientific_relationships_checked") is True, f"{task_id}: science check required")
         output = ROOT / OUTPUTS[task_id]
