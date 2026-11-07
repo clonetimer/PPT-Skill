@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
+import tempfile
 import unittest
+from pathlib import Path
 
 from build_wine_scatter import CONFIG
 from chart_data import load_rows
@@ -50,6 +53,21 @@ class WineContractTests(unittest.TestCase):
             mutation(changed)
             with self.assertRaises(AssertionError):
                 load_rows(changed)
+
+    def test_only_terminal_blank_records_are_ignored(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "sample.csv"
+            meta = {"file": "sample.csv", "row_count": 2, "row_unit": "sample",
+                    "missing_value_policy": "fail",
+                    "columns": {"group": {"type": "category", "source_position": 0},
+                                "value": {"type": "number", "source_position": 1}}}
+            path.write_bytes(b"A,1\nB,2\n\n")
+            meta["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+            self.assertEqual(len(load_rows(meta, Path(directory))), 2)
+            path.write_bytes(b"A,1\n\nB,2\n")
+            meta["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+            with self.assertRaises(AssertionError):
+                load_rows(meta, Path(directory))
 
 
 if __name__ == "__main__":

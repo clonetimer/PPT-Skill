@@ -21,7 +21,10 @@ def load_rows(meta: dict, root: Path = ROOT) -> list[dict]:
     assert positions and len(positions) == len(set(positions)) and min(positions) >= 0
     rows = []
     with path.open(encoding="utf-8-sig", newline="") as stream:
-        for source_row, raw in enumerate(csv.reader(stream), 1):
+        raw_rows = list(csv.reader(stream))
+        while raw_rows and not raw_rows[-1]:
+            raw_rows.pop()  # UCI Iris has an empty record after the last observation.
+        for source_row, raw in enumerate(raw_rows, 1):
             assert raw, (source_row, "blank row")
             assert len(raw) > max(positions), (source_row, "missing column")
             parsed = {"source_row": source_row}
