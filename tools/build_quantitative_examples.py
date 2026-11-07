@@ -323,7 +323,7 @@ def trend_interval(chart, meta, rows):
     positions = separated_trend_positions(selected, chart, x0, x1, y0, y1, summary_centers)
     for row in selected:
         x, y = positions[row["source_row"]]
-        fig.point(x, y, "#9CB4BA", row,
+        fig.point(x, y, "#6F8E95", row,
                   {chart["x"]: row[chart["x"]], chart["y"]: row[chart["y"]]}, r=.035)
     locations = []
     for index in range(5):

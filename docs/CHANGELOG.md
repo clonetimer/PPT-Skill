@@ -31,6 +31,7 @@
 - Rechecked Nature's current main-figure guide and made figure class, maximum height, guide-check date and preferred submission format explicit in the publication target; the Q03 demonstrator remains pending actual-size and editorial review. The publication caption is now a hash-locked review artifact.
 - Validated Q01's visible legend against source-group labels, colors and native symbol shapes, and checked visible category/numeric ticks on all six Iris charts and Q03P against their coordinates; label swaps now fail negative tests instead of silently misidentifying observations.
 - Expanded the second-stage independent-review packet to include the source data, chart specifications, builders and validators, so reproducibility can be checked from the extracted archive.
+- Added a 3:1 project preflight for essential chart marks and lines on white plots; darkened Q06 raw observations from 2.18:1 to 3.51:1 against the background, with a low-contrast mutation test.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

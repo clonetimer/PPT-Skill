@@ -210,17 +210,17 @@
     {
       "figure_id": "Q06_iris_trend_interval",
       "figure_spec": "figure_specs/quant/Q06_iris_trend_interval.json",
-      "input_sha256": "51bfa3edc26404ae5e3b6b1d000ac935bc08f80fe1e1c42be46e23103b0844b6",
-      "input_canonical_sha256": "e04655f27ecdf384fc47a7d03afc3236b7b38cb95ceb0666460aff2a0c2f313e",
+      "input_sha256": "789821596241c094b9b65e824df76b64d3e70f03e5f95505d6c33ec0682cd298",
+      "input_canonical_sha256": "9c298b687b6337528b39a7e454195c509f29bfeb6bf700ca298068bdab96272e",
       "outputs_sha256": {
-        "svg": "1ccd572a5a13fec9b2ee5c9f74e014e707fb80a81734f984b093fc48bec3058c",
-        "pptx": "0ba69ad5b621834acce97019ac394aa34809fb93a590b3bd6f479f7a3745f148",
-        "pdf": "adce0c507d3fcbbe8c0186b4b1218c49d02da21fc671c2cfaa09bf5b551c065f",
-        "preview.png": "078a84c1355e92ef158034ab4267297e325d469281c97c40d59cd49ba7b79bb2"
+        "svg": "8d95f4460430dca07b3f1de98647b31a5ba4ddcff1a6c3f59aa6be40be8524eb",
+        "pptx": "21d0f328e67648f1f99f29332181e9e13dfe449351ae40631e484c75d73d3f08",
+        "pdf": "6cc881c0af7b786b619106bbafdb5e072b91dac0c1785c8c132ccc41b8ce8647",
+        "preview.png": "afdc1c3ef9382be1e5f445c3faf7d9ca152ad83c0c2df74453a1a8f638f2d3f3"
       },
       "outputs_canonical_sha256": {
-        "svg": "82f6c5b64dad1dc151b0b7333d90ab8752c25aebeecd9a663423d24bb94549ed",
-        "pptx": "e9a5c29056c6f200728ded1fc2c33854e18a837da93fa49e7dad6bdfbbba4b28"
+        "svg": "43c963414f8bad81a06509cb6a57d9dbc5e532fa5b4ad41f649909eb9184e128",
+        "pptx": "8f3400705f75334131ee824765aca47ed091e7b7773afef39746394b64b3ca96"
       },
       "qa": {
         "automated": "pass",

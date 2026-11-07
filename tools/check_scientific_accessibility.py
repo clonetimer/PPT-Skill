@@ -57,11 +57,26 @@ def check_text_contrast(figure_id, spec):
         assert contrast(color, background) >= 4.5, (figure_id, label["text"], background)
 
 
+def check_mark_contrast(figure_id, spec):
+    """Project preflight for essential chart marks drawn on white plot backgrounds."""
+    if not figure_id.startswith("Q"):
+        return
+    for element in spec["elements"]:
+        color = None
+        if "data_row" in element or "row_predictions" in element:
+            color = element.get("fill")
+        elif element["type"] == "line":
+            color = element.get("color")
+        if color:
+            assert contrast(color, "#FFFFFF") >= 3, (figure_id, element["id"], color)
+
+
 def main():
     for figure_id in IDS:
         folder = "image" if figure_id.startswith("I") else "quant"
         spec = json.loads((ROOT / f"figure_specs/{folder}/{figure_id}.json").read_text(encoding="utf-8"))
         check_text_contrast(figure_id, spec)
+        check_mark_contrast(figure_id, spec)
         if figure_id in {"Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature"}:
             by_species = defaultdict(set)
             for e in spec["elements"]:
@@ -92,7 +107,7 @@ def main():
         image.save(ROOT / f"dist/{figure_id}.grayscale.png")
         for name, matrix in MACHADO_FULL.items():
             cvd_preview(Image.open(preview), matrix).save(ROOT / f"dist/{figure_id}.{name}.png")
-        print(f"PASS {figure_id}: text contrast and redundant encoding; grayscale/CVD previews generated")
+        print(f"PASS {figure_id}: text/mark contrast and redundant encoding; grayscale/CVD previews generated")
     print("Manual checks pending: projection/print readability; CVD previews are approximations")
 
 

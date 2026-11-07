@@ -9,7 +9,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from build_quantitative_examples import CONFIG, ROOT, load_data
-from check_scientific_accessibility import check_text_contrast
+from check_scientific_accessibility import check_mark_contrast, check_text_contrast
 from validate_image_quant_example import validate as validate_image
 from validate_quantitative_examples import validate_outputs
 from validate_publication_example import main as validate_publication
@@ -149,6 +149,13 @@ class ScientificValueMutationTests(unittest.TestCase):
         next(item for item in changed["elements"] if "source_rows" in item)["fill"] = "#26343C"
         with self.assertRaises(AssertionError):
             check_text_contrast("Q04_iris_confusion", changed)
+
+    def test_low_contrast_raw_trend_point_fails(self):
+        path = ROOT / "figure_specs/quant/Q06_iris_trend_interval.json"
+        changed = json.loads(path.read_text(encoding="utf-8"))
+        next(item for item in changed["elements"] if "data_row" in item)["fill"] = "#9CB4BA"
+        with self.assertRaises(AssertionError):
+            check_mark_contrast("Q06_iris_trend_interval", changed)
 
 
 if __name__ == "__main__":
