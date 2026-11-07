@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Historical FigureSpec and render parity uses the pre-V7.6 commit.
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -63,6 +65,7 @@ jobs:
           python tools/validate_render_record.py
           python tools/test_render_record_canonical.py
           python tools/validate_render_semantics.py
+          python tools/validate_legacy_label_parity.py
           python tools/validate_deck_benchmark.py
       - name: Audit generated PPTX
         run: |

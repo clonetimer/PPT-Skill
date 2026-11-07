@@ -5,7 +5,7 @@
 | 方案条款 | 当前证据 | 判定 |
 |---|---|---|
 | A：统一 FigureSpec、稳定元素 ID、来源与绘制拓扑 | `specs/figure_spec_v76.schema.json`；13 个 `figure_specs/`；`tools/migrate_figure_specs.py`；`tools/validate_scientific_ir.py` 独立核对 C01 复合图 14 条关键可见关系；`tools/test_scientific_ir.py` 包含删边、反向、错标和来源哈希突变 | 自动通过 |
-| A：文档状态与新旧输出科学标签 | `README.md` 区分开发版；`tools/validate_render_semantics.py` 核对当前 SVG/PPTX/PDF 科学标签，`tools/validate_c01_v73.py` 和 `tools/validate_c01_v74.py` 核对固定内容 | 当前格式间自动通过；所有历史版本逐项对照仍需人工复核 |
+| A：文档状态与新旧输出科学标签 | `README.md` 区分开发版；`tools/validate_render_semantics.py` 核对当前 SVG/PPTX/PDF 科学标签；`tools/validate_legacy_label_parity.py` 将五张迁移前 FigureSpec 和 SVG 的文字多重集逐项与当前版对照，三张 C01 另对照历史 PPTX；`tools/validate_c01_v73.py` 和 `tools/validate_c01_v74.py` 核对固定内容 | 已提交的五张旧图标签自动通过；B01/F07 历史 PPTX 未入库，当前 PPTX 与迁移前 FigureSpec 对照通过。此项仅证明标签，不证明全部语义或视觉等价 |
 | B：数据、单位、变换、统计与轴契约 | `specs/iris_charts_v76.json` 和 `specs/chart_spec_v76.schema.json`；`tools/validate_quantitative_examples.py` 检查来源哈希、样本量、坐标、派生变量、留一预测、置信区间、可见刻度和图例；负向测试拒绝缺单位、样本数、误差定义、来源或轴范围 | 六类 UCI Iris 任务自动通过；其他学科数据集的泛化尚无实证 |
 | B：原始点可见、SVG/PPTX/PDF 可复现 | Q01/Q02/Q03/Q06 的原始点分离与汇总标记避让有几何检查；`dist/render_record_v76.json` 锁定 PowerPoint PDF；独立评审包解压后已重建定量图并通过规范化哈希检查 | 自动通过；最终观看尺寸仍需人工复核 |
 | C：图像完整性 | I01 的 CC0 原图、哈希、处理日志、0.107 µm/像素校准、10 µm 比例尺与像素直方图由 `tools/validate_image_quant_example.py` 核对 | 单图示例自动通过；不代表生物学重复或细胞分割 |

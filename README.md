@@ -18,7 +18,7 @@ The 14-task benchmark contract is in `specs/research_figure_benchmark_v76.json`;
 
 `specs/output_profiles_v76.json` separates presentation QA from publication prerequisites. Twelve FigureSpecs use the presentation profile. The [Q03 Nature-size example](docs/Q03_NATURE_PUBLICATION_CAPTION.md) re-lays out the same data and bootstrap summaries at 183 × 100 mm, with editable vector PDF and embedded Arial fonts. It is a production-size demonstrator; editorial and independent domain review remain pending.
 
-The committed render record is checked with `python tools/validate_render_record.py`; it compares canonical SVG XML and PPTX package payloads after a CI rebuild, and verifies the committed PowerPoint PDF/preview hashes. `python tools/validate_render_semantics.py` checks scientific labels across SVG, PPTX and PDF. CI verifies the Windows PowerPoint export record and does not regenerate it on Linux.
+The committed render record is checked with `python tools/validate_render_record.py`; it compares canonical SVG XML and PPTX package payloads after a CI rebuild, and verifies the committed PowerPoint PDF/preview hashes. `python tools/validate_render_semantics.py` checks scientific labels across SVG, PPTX and PDF. `python tools/validate_legacy_label_parity.py` compares all five migrated figures with their pre-V7.6 committed FigureSpec/SVG labels and the three historical C01 PPTX files; B01/F07 historical PPTX files were not committed, so their current PPTX labels are compared with the old FigureSpec. This check needs full Git history. CI verifies the Windows PowerPoint export record and does not regenerate it on Linux.
 
 ## V7.5 — Academic presentation planning
 
