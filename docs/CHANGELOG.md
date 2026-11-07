@@ -11,6 +11,8 @@
 - Added coordinate audits that recompute raw-point positions, summary markers and ablation bar heights from source rows and statistics; displaced points and bars now fail negative tests.
 - Added a release-readiness command that requires independent per-task review evidence and current artifact hashes; development CI tests the gate with synthetic data but does not fabricate reviewer approval.
 - Checked chart text against the colored shape underneath it, including confusion-matrix cells and ablation bars; a low-contrast cell mutation now fails.
+- Clarified SKILL.md routing, output-mode boundaries and a seven-step workflow with explicit stop conditions for unsupported claims and unreleased review gates.
+- Audited displayed bootstrap whisker endpoints against computed intervals for presentation and publication figures; moved-endpoint mutations now fail.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

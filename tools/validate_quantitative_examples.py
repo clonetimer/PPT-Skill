@@ -149,6 +149,16 @@ def validate_outputs(config, rows):
                 expected_y = 5.66 - item["mean"] / 8 * (5.66 - 1.28)
                 assert math.isclose(marker["x"] + marker["w"] / 2, expected_x, abs_tol=1e-6)
                 assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0001)
+            whiskers = [e for e in spec["elements"] if e["type"] == "line"
+                        and e.get("color") == "#1C303A" and e.get("sw") == 1.8
+                        and math.isclose(e["x1"], e["x2"], abs_tol=1e-6)]
+            assert len(whiskers) == 3
+            for index, (whisker, item) in enumerate(zip(whiskers, spec["computed_values"])):
+                expected_x = 1.30 + (index + .5) * (11.90 - 1.30) / 3
+                expected_ys = sorted(5.66 - value / 8 * (5.66 - 1.28) for value in item["ci95"])
+                assert math.isclose(whisker["x1"], expected_x, abs_tol=1e-6)
+                assert all(math.isclose(actual, expected, abs_tol=.0001)
+                           for actual, expected in zip(sorted((whisker["y1"], whisker["y2"])), expected_ys))
         if chart["kind"] == "trend_interval":
             assert len(spec["computed_values"]) == 5
             selected = sorted(chart_lookup.values(), key=lambda r: (r[chart["x"]], r["source_row"]))
@@ -173,6 +183,16 @@ def validate_outputs(config, rows):
                 expected_y = 5.66 - item["y_mean_cm"] / 2 * (5.66 - 1.35)
                 assert math.isclose(marker["x"] + marker["w"] / 2, expected_x, abs_tol=.0003)
                 assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0003)
+            whiskers = [e for e in spec["elements"] if e["type"] == "line"
+                        and e.get("color") == "#1C303A" and e.get("sw") == 1.4
+                        and math.isclose(e["x1"], e["x2"], abs_tol=1e-6)]
+            assert len(whiskers) == 5
+            for whisker, item in zip(whiskers, spec["computed_values"]):
+                expected_x = 1.55 + (item["x_mean_cm"] - 4) / 2 * (11.40 - 1.55)
+                expected_ys = sorted(5.66 - value / 2 * (5.66 - 1.35) for value in item["ci95_cm"])
+                assert math.isclose(whisker["x1"], expected_x, abs_tol=.0003)
+                assert all(math.isclose(actual, expected, abs_tol=.0003)
+                           for actual, expected in zip(sorted((whisker["y1"], whisker["y2"])), expected_ys))
         print(f"PASS {stem}: {len(points)} raw points, {len(spec['computed_values'])} summaries")
 
 

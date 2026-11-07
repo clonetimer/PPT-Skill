@@ -53,6 +53,13 @@ class ScientificValueMutationTests(unittest.TestCase):
             next(item for item in spec["elements"] if "data_row" in item)["x"] += .5
         self.chart_case("Q01_iris_scatter", move)
 
+    def test_moved_interval_endpoint_fails(self):
+        def move(spec):
+            next(item for item in spec["elements"] if item["type"] == "line"
+                 and item.get("color") == "#1C303A" and item.get("sw") == 1.8
+                 and item["x1"] == item["x2"])["y2"] += .2
+        self.chart_case("Q03_iris_mean_ci", move)
+
     def test_wrong_ablation_prediction_fails(self):
         self.chart_case("Q05_iris_ablation", lambda spec: spec["computed_values"][0].update(correct=1))
 

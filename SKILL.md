@@ -1,7 +1,12 @@
 ---
 name: academic-defense-ppt
 version: 7.6.0-dev
-description: Research narrative planning and source-matched academic slides with editable vector figures and projection-aware QA.
+description: >
+  Plan and build source-grounded academic defense slides and editable research figures.
+  Use for 科研答辩PPT、论文图重绘、科研绘图、学术汇报, academic defense slides,
+  scientific figure redraws, or data-driven research charts. A publication-size
+  output requires a named journal target and final-size review. Excludes generic
+  marketing decks and scientific claims without traceable evidence.
 ---
 
 # Academic Defense PPT Skill
@@ -16,6 +21,20 @@ Produce technically accurate, readable academic-defense presentations. Select vi
 5. Split dense mechanisms before shrinking labels.
 6. Shadows are off by default. Reproduce them only when visible in the selected source, using explicit source-specific shapes; never inherit the PowerPoint theme shadow.
 7. Distinguish source-visible redraws, paper/code-grounded reconstructions and domain adaptations.
+
+## Workflow
+
+1. Identify the audience, scientific claim, source files, delivery medium and final size. For a journal figure, record its current author-guide URL and production limits before layout.
+2. Write the DeckSpec/SlideSpecs for a talk and a FigureContract for each figure. Mark source-visible, paper-grounded, domain-adapted or data-driven evidence and list unresolved claims.
+3. Build ScientificIR from the source: critical nodes and edges, equations, row-level data or image processing history. Stop if a required claim has no traceable support.
+4. Choose a source-matched style and arrange the panels. Preserve scientific relationships when changing layout between presentation and publication profiles.
+5. Render SVG and editable PPTX from the FigureSpec; export PDF on the recorded PowerPoint host. Keep the raw data/image and transformation record with the output.
+6. Run the schema, scientific, geometry, accessibility, cross-format and render-record checks named below. Resolve every machine-detectable failure before review.
+7. Inspect the actual projection or print size and obtain independent domain review with the 14-task benchmark. Treat any hard failure or missing review as a release stop; ship only a clearly labeled development example until the release gate passes.
+
+## Scope
+
+The presentation profile supports projected defense slides. The publication profile re-lays out the same science for a named journal's final dimensions; its automatic checks are a technical preflight. Evidence status describes how directly a source supports the figure, separately from the output profile. This skill does not certify journal acceptance or make unsupported statistical, biological or engineering claims.
 
 ## Profiles
 - A: black-and-white academic framework, Times New Roman, thin strokes and restrained section boundaries.

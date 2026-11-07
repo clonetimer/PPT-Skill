@@ -47,6 +47,14 @@ def main():
         assert math.isclose(marker["x"] + marker["w"] / 2, centers[item["species"]], abs_tol=1e-6)
         expected_y = 3.23 - item["mean"] / 8 * (3.23 - .32)
         assert math.isclose(marker["y"] + marker["h"] / 2, expected_y, abs_tol=.0001)
+    whiskers = [e for e in spec["elements"] if e["type"] == "line" and e.get("sw") == .9
+                and math.isclose(e["x1"], e["x2"], abs_tol=1e-6)]
+    assert len(whiskers) == 3
+    for whisker, item in zip(whiskers, spec["computed_values"]):
+        assert math.isclose(whisker["x1"], centers[item["species"]], abs_tol=1e-6)
+        expected_ys = sorted(3.23 - value / 8 * (3.23 - .32) for value in item["ci95"])
+        assert all(math.isclose(actual, expected, abs_tol=.0001)
+                   for actual, expected in zip(sorted((whisker["y1"], whisker["y2"])), expected_ys))
     labels = [e["text"] for e in spec["elements"] if e["type"] == "text"]
     assert "Petal length (cm)" in labels and "Species" in labels
     deck = Presentation(ROOT / f"dist/{STEM}.pptx")
