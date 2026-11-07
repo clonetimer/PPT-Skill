@@ -69,6 +69,7 @@
       "tools/validate_research_benchmark.py",
       "tools/validate_release_readiness.py",
       "tools/test_release_readiness.py",
+      "tools/prepare_scientific_review_bundle.py",
       "tools/validate_output_profiles.py",
       "tools/test_output_profiles.py",
       "tools/build_deck_benchmark.py",
