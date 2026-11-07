@@ -12,6 +12,7 @@ from build_quantitative_examples import CONFIG, ROOT, load_data
 from check_scientific_accessibility import check_text_contrast
 from validate_image_quant_example import validate as validate_image
 from validate_quantitative_examples import validate_outputs
+from validate_publication_example import main as validate_publication
 
 
 def with_changed_spec(path, changed, action):
@@ -45,6 +46,12 @@ class ScientificValueMutationTests(unittest.TestCase):
     def test_wrong_confusion_count_fails(self):
         self.chart_case("Q04_iris_confusion", lambda spec: spec["computed_values"][0].update(count=49))
 
+    def test_swapped_confusion_axis_label_fails(self):
+        def relabel(spec):
+            next(item for item in spec["elements"] if item["type"] == "text"
+                 and item["text"] == "versicolor" and item.get("x") == 5.47)["text"] = "virginica"
+        self.chart_case("Q04_iris_confusion", relabel)
+
     def test_wrong_bootstrap_interval_fails(self):
         self.chart_case("Q03_iris_mean_ci", lambda spec: spec["computed_values"][0]["ci95"].__setitem__(0, 0.0))
 
@@ -65,6 +72,13 @@ class ScientificValueMutationTests(unittest.TestCase):
             raise AssertionError("No coincident observations in fixture")
         self.chart_case("Q01_iris_scatter", collapse)
 
+    def test_swapped_scatter_legend_label_fails(self):
+        def swap(spec):
+            label = next(item for item in spec["elements"] if item["type"] == "text"
+                         and item["text"] == "versicolor" and item.get("x") == 10.76)
+            label["text"] = "virginica"
+        self.chart_case("Q01_iris_scatter", swap)
+
     def test_collapsed_strip_points_fail(self):
         def collapse(spec):
             seen = {}
@@ -76,6 +90,21 @@ class ScientificValueMutationTests(unittest.TestCase):
                 seen[key] = point
             raise AssertionError("No equal-value observations in fixture")
         self.chart_case("Q02_iris_strip", collapse)
+
+    def test_wrong_distribution_axis_tick_fails(self):
+        def relabel(spec):
+            tick = next(item for item in spec["elements"] if item["type"] == "text"
+                        and item["text"] == "6" and item.get("x") == .55)
+            tick["text"] = "8"
+        self.chart_case("Q02_iris_strip", relabel)
+
+    def test_wrong_publication_category_tick_fails(self):
+        path = ROOT / "figure_specs/quant/Q03_iris_mean_ci_nature.json"
+        changed = json.loads(path.read_text(encoding="utf-8"))
+        next(item for item in changed["elements"] if item["type"] == "text"
+             and item["text"] == "versicolor" and item.get("y") == 3.35)["text"] = "virginica"
+        with self.assertRaises(AssertionError):
+            with_changed_spec(path, changed, validate_publication)
 
     def test_moved_interval_endpoint_fails(self):
         def move(spec):

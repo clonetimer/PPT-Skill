@@ -75,6 +75,18 @@ def main():
                    for actual, expected in zip(sorted((whisker["y1"], whisker["y2"])), expected_ys))
     labels = [e["text"] for e in spec["elements"] if e["type"] == "text"]
     assert "Petal length (cm)" in labels and "Species" in labels
+    text_elements = [e for e in spec["elements"] if e["type"] == "text"]
+    for index, name in enumerate(("Iris-setosa", "Iris-versicolor", "Iris-virginica")):
+        expected_x = centers[name]-.68
+        assert any(e["text"] == name.removeprefix("Iris-")
+                   and math.isclose(e["x"], expected_x, abs_tol=1e-6)
+                   and math.isclose(e["y"], 3.35, abs_tol=1e-6)
+                   for e in text_elements), (STEM, "category tick", index)
+    for value in (0, 2, 4, 6, 8):
+        expected_y = 3.23 - value/8*(3.23-.32) - .07
+        assert any(e["text"] == str(value) and math.isclose(e["x"], .15, abs_tol=1e-6)
+                   and math.isclose(e["y"], expected_y, abs_tol=1e-6)
+                   for e in text_elements), (STEM, "value tick", value)
     deck = Presentation(ROOT / f"dist/{STEM}.pptx")
     assert len(deck.slides) == 1
     assert math.isclose(deck.slide_width / 914400*25.4, WIDTH_MM, abs_tol=.01)

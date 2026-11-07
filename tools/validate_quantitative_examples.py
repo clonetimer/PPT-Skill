@@ -10,13 +10,46 @@ import statistics
 from collections import Counter
 from pathlib import Path
 
-from build_quantitative_examples import ROOT, CONFIG, load_data, predict_loo, NAMES
+from build_quantitative_examples import ROOT, CONFIG, COLORS, load_data, predict_loo, NAMES
 from scientific_ir import validate_spec
 
 
 def scale_axis(value, axis, out_low, out_high):
     low, high = axis["domain"]
     return out_low + (value-low) / (high-low) * (out_high-out_low)
+
+
+def check_axis_tick_labels(chart, spec):
+    """Tie visible tick text to its declared value and rendered location."""
+    kind = chart["kind"]
+    if kind not in {"scatter", "strip", "point_ci", "trend_interval"}:
+        return
+    if kind == "scatter":
+        x0, x1, y0, y1 = 1.28, 9.80, 1.30, 5.66
+        xticks = [(scale_axis(value, chart["axes"]["x"], x0, x1), str(value)) for value in range(8)]
+        yticks = [(scale_axis(value, chart["axes"]["y"], y1, y0), str(value)) for value in range(4)]
+    elif kind in {"strip", "point_ci"}:
+        x0, x1, y0, y1 = 1.30, 11.90, 1.28, 5.66
+        xticks = [(x0+(index+.5)*(x1-x0)/3, name.removeprefix("Iris-"))
+                  for index, name in enumerate(chart["axes"]["x"]["categories"])]
+        low, high = chart["axes"]["y"]["domain"]
+        yticks = [(scale_axis(value, chart["axes"]["y"], y1, y0), str(value))
+                  for value in range(int(low), int(high)+1)]
+    else:
+        x0, x1, y0, y1 = 1.55, 11.40, 1.35, 5.66
+        xticks = [(scale_axis(value, chart["axes"]["x"], x0, x1), f"{value:.1f}")
+                  for value in (4, 4.5, 5, 5.5, 6)]
+        yticks = [(scale_axis(value, chart["axes"]["y"], y1, y0), f"{value:.1f}")
+                  for value in (0, .5, 1, 1.5, 2)]
+    labels = [e for e in spec["elements"] if e["type"] == "text"]
+    for tick, value in xticks:
+        assert any(e["text"] == value and math.isclose(e["x"], tick-.45, abs_tol=1e-6)
+                   and math.isclose(e["y"], y1+.12, abs_tol=1e-6) for e in labels), (
+                       chart["id"], "x tick", value)
+    for tick, value in yticks:
+        assert any(e["text"] == value and math.isclose(e["x"], x0-.75, abs_tol=1e-6)
+                   and math.isclose(e["y"], tick-.12, abs_tol=1e-6) for e in labels), (
+                       chart["id"], "y tick", value)
 
 
 def validate_axis_coverage(chart, rows, columns):
@@ -158,6 +191,7 @@ def validate_outputs(config, rows):
         spec = json.loads(spec_path.read_text(encoding="utf-8"))
         validate_spec(spec)
         assert spec["chart_contract"] == chart
+        check_axis_tick_labels(chart, spec)
         assert spec["data_lineage"]["sha256"] == config["data"]["sha256"]
         points = [e for e in spec["elements"] if "data_row" in e]
         chart_lookup = {key: row for key, row in lookup.items()
@@ -178,6 +212,18 @@ def validate_outputs(config, rows):
                        for i, first in enumerate(centers) for second in centers[i+1:]), (
                            stem, "raw points overlap")
             if chart["kind"] == "scatter":
+                legend_shapes = [e for e in spec["elements"] if e["type"] in {"ellipse", "rect", "trapezoid"}
+                                 and math.isclose(e.get("x", -1), 10.49, abs_tol=1e-6)
+                                 and math.isclose(e.get("w", 0), .15, abs_tol=1e-6)]
+                assert len(legend_shapes) == len(NAMES)
+                for index, name in enumerate(NAMES):
+                    symbol = legend_shapes[index]
+                    assert symbol["type"] == {"Iris-setosa": "ellipse", "Iris-versicolor": "rect",
+                                              "Iris-virginica": "trapezoid"}[name]
+                    assert symbol["fill"] == COLORS[name]
+                    assert any(e["type"] == "text" and e["text"] == name.removeprefix("Iris-")
+                               and math.isclose(e["y"], symbol["y"]-.03, abs_tol=1e-6)
+                               for e in spec["elements"]), (stem, name, "legend label")
                 counts = Counter((row[chart["x"]], row[chart["y"]]) for row in chart_lookup.values())
                 centers = []
                 moved = 0
@@ -193,6 +239,16 @@ def validate_outputs(config, rows):
                     centers.append(actual)
                 assert moved == sum(count-1 for count in counts.values())
         elif chart["kind"] == "confusion_matrix":
+            text_elements = [e for e in spec["elements"] if e["type"] == "text"]
+            for index, name in enumerate(chart["axes"]["x"]["categories"]):
+                label = name.removeprefix("Iris-")
+                assert any(e["text"] == label and math.isclose(e["x"], 4.05+index*1.42, abs_tol=1e-6)
+                           and math.isclose(e["y"], 1.18, abs_tol=1e-6) for e in text_elements)
+            for index, name in enumerate(chart["axes"]["y"]["categories"]):
+                label = name.removeprefix("Iris-")
+                assert any(e["text"] == label and math.isclose(e["x"], 2.60, abs_tol=1e-6)
+                           and math.isclose(e["y"], 1.99+index*1.42, abs_tol=1e-6)
+                           for e in text_elements)
             cells = [e for e in spec["elements"] if "source_rows" in e]
             assert len(cells) == 9
             assert [item["count"] for item in spec["computed_values"]] == [50, 0, 0, 0, 47, 3, 0, 3, 47]
@@ -210,6 +266,16 @@ def validate_outputs(config, rows):
                               if e["type"] == "text" and e["text"].isdigit()]
             assert printed_counts == [item["count"] for item in spec["computed_values"]]
         else:
+            text_elements = [e for e in spec["elements"] if e["type"] == "text"]
+            assert [item["label"] for item in chart["statistics"]["feature_sets"]] == [
+                "All four measurements", "Petal measurements only"]
+            for x, label in ((4.05, "Four features"), (8.15, "Petal only")):
+                assert any(e["text"] == label and math.isclose(e["x"], x, abs_tol=1e-6)
+                           and math.isclose(e["y"], 5.98, abs_tol=1e-6) for e in text_elements)
+            for value in range(0, 101, 20):
+                y = scale_axis(value, chart["axes"]["y"], 5.86, 1.40)-.12
+                assert any(e["text"] == str(value) and math.isclose(e["x"], 1.38, abs_tol=1e-6)
+                           and math.isclose(e["y"], y, abs_tol=1e-6) for e in text_elements)
             bars = [e for e in spec["elements"] if "row_predictions" in e]
             assert len(bars) == len(spec["computed_values"]) == 2
             assert [item["correct"] for item in spec["computed_values"]] == [144, 143]
