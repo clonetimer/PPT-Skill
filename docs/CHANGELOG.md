@@ -1,6 +1,7 @@
 # Changelog
 
 ## V7.6.0-dev — Scientific evidence and data channels
+- Required quantitative data-lineage fields in the FigureSpec schema and checked the embedded chart and source metadata against the exact hashed ChartSpec; mismatched statistics or sample counts now fail mutation tests.
 - Bound each quantitative FigureSpec to a canonical ChartSpec content hash and the independent review template to each raw ChartSpec file hash; stale chart configurations now fail validation and release review.
 - Migrated five existing FigureSpecs to an evidence-linked contract with typed elements and stable IDs.
 - Added directed-route checks and negative mutations for the C01 critical diagnosis topology.

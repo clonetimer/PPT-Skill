@@ -61,6 +61,16 @@ def validate_spec(spec: dict) -> None:
         lineage = spec["data_lineage"]
         chart_spec = ROOT / lineage["chart_spec"]
         assert chart_spec.is_file() and lineage["chart_spec_sha256"] == canonical_chart_spec_digest(chart_spec)
+        config = json.loads(chart_spec.read_text(encoding="utf-8"))
+        source_data = config["data"]
+        assert lineage["data_ref"] == source_data["file"]
+        assert lineage["sha256"] == source_data["sha256"]
+        assert lineage["row_count"] == source_data["row_count"]
+        assert lineage["source_url"] == source_data["source_url"]
+        assert lineage["doi"] == source_data["doi"]
+        chart = spec["chart_contract"]
+        assert chart in config["charts"]
+        assert contract["claim"] == chart["claim"]
         assert any(record["source"] == lineage["data_ref"] and
                    record["source_file_sha256"] == lineage["sha256"]
                    for record in evidence.values())

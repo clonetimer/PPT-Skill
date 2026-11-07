@@ -21,10 +21,27 @@
       }
     },
     "evidence_records": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}},
+    "data_lineage": {"$ref": "#/$defs/dataLineage"},
+    "chart_contract": {"type": "object", "required": ["id", "claim", "kind"],
+      "properties": {"id": {"type": "string", "minLength": 1},
+        "claim": {"type": "string", "minLength": 1}, "kind": {"type": "string", "minLength": 1}}},
     "semantic_edges": {"type": "array", "items": {"type": "array", "prefixItems": [{"type": "string"}, {"type": "string"}], "minItems": 2, "maxItems": 2}},
     "elements": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/element"}}
   },
+  "allOf": [{"if": {"required": ["figure_contract"],
+    "properties": {"figure_contract": {"properties": {"archetype": {"const": "quantitative_grid"}}}}},
+    "then": {"required": ["data_lineage", "chart_contract"]}}],
   "$defs": {
+    "dataLineage": {"type": "object",
+      "required": ["data_ref", "sha256", "source_url", "doi", "row_count", "chart_spec", "chart_spec_sha256"],
+      "properties": {
+        "data_ref": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "source_url": {"type": "string", "minLength": 1},
+        "doi": {"type": "string", "minLength": 1},
+        "row_count": {"type": "integer", "minimum": 1},
+        "chart_spec": {"type": "string", "minLength": 1},
+        "chart_spec_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
     "evidence": {
       "type": "object", "required": ["id", "source", "source_file_sha256", "source_locator", "status", "scope", "reuse"],
       "properties": {
