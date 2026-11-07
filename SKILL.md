@@ -45,6 +45,8 @@ The presentation profile supports projected defense slides. The publication prof
 
 The UCI Wine example tests a second chemistry dataset using `specs/wine_charts_v76.json`, `python tools/build_wine_scatter.py` and `python tools/validate_wine_scatter.py`. Its source does not report physical units for the selected measurements; both axes disclose this, and coded cultivars are not named varieties.
 
+`tools/chart_data.py` loads both datasets with source hashes and row links. `tools/chart_contract.py` enforces sample size, source and derived fields, axis type/unit/domain/category coverage, zero policy and bootstrap definitions across both datasets; run `python tools/test_chart_contract.py` when changing either contract. Other chart renderers still need dataset-specific adaptation.
+
 Canonical source is JSON under `figure_specs/`. Render SVG and editable native PowerPoint from the same FigureSpec. C01 primitives include text, rect, trapezoid, line, polyline, ellipse, sensor and graph. F07 also uses grid and stack_grid.
 
 Before drawing, write a FigureContract with one defensible claim, output mode, evidence status and unverified items. Every FigureSpec element must have a stable ID, semantic role and evidence reference. EvidenceRecords include a local source file hash and a precise local locator; when the primary artwork is unavailable, state that the hash covers the evidence ledger rather than the original artwork. Validate against `specs/figure_spec_v76.schema.json` and run `python tools/validate_scientific_ir.py`. For C01, the declared critical relations must agree with the visible directed connectors; see `specs/c01_expected_topology_v76.json`.

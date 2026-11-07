@@ -11,6 +11,7 @@ from collections import Counter
 from pathlib import Path
 
 from build_quantitative_examples import ROOT, CONFIG, COLORS, load_data, predict_loo, NAMES
+from chart_contract import validate_chart_contract
 from scientific_ir import validate_spec
 
 
@@ -382,6 +383,7 @@ def main():
     data_path = ROOT / config["data"]["file"]
     assert hashlib.sha256(data_path.read_bytes()).hexdigest() == config["data"]["sha256"]
     rows = load_data(config)
+    validate_chart_contract(config, rows)
     validate_outputs(config, rows)
 
 

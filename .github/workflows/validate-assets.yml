@@ -59,6 +59,7 @@ jobs:
           python tools/validate_image_quant_example.py
           python tools/test_scientific_ir.py
           python tools/test_quantitative_contract.py
+          python tools/test_chart_contract.py
           python tools/test_scientific_value_mutations.py
           python tools/validate_research_benchmark.py
           python tools/test_release_readiness.py

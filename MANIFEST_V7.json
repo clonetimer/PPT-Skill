@@ -57,6 +57,8 @@
       "tools/test_scientific_ir.py",
       "tools/build_quantitative_examples.py",
       "tools/chart_data.py",
+      "tools/chart_contract.py",
+      "tools/test_chart_contract.py",
       "tools/build_wine_scatter.py",
       "tools/validate_wine_scatter.py",
       "tools/test_wine_contract.py",

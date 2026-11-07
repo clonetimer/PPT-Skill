@@ -12,6 +12,7 @@ from pathlib import Path
 from render_figure_spec import render
 from scientific_ir import ROOT, enrich_spec
 from chart_data import load_rows
+from chart_contract import validate_chart_contract
 
 CONFIG = ROOT / "specs/iris_charts_v76.json"
 SPEC_DIR = ROOT / "figure_specs/quant"
@@ -340,6 +341,7 @@ def trend_interval(chart, meta, rows):
 def main():
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     rows = load_data(config)
+    validate_chart_contract(config, rows)
     for chart in config["charts"]:
         if chart["kind"] == "scatter": spec = scatter(chart, config["data"], rows)
         elif chart["kind"] == "strip": spec = strip(chart, config["data"], rows, "sepal_length_cm")

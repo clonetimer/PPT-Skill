@@ -36,6 +36,7 @@
 - Added a requirement-by-requirement V7.6 completion audit that distinguishes machine-verified clauses from independent final-size review still needing evidence.
 - Compared the five migrated figures' labels against their pre-V7.6 committed FigureSpec/SVG files and the three committed C01 PPTX files; stabilized text-source hashes across Windows and Linux checkouts.
 - Added UCI Wine as a second real dataset and an analytical-chemistry benchmark task. Its 178 source-linked points reproduce to SVG, native PPTX and PowerPoint PDF, with both axes disclosing that the source does not report physical units. The shared data loader and scatter placement now have cross-dataset evidence; other chart kinds remain Iris-only.
+- Added a dataset-independent ChartSpec validator for sample counts, axes, source/derived fields, category coverage and bootstrap definitions, with mutation checks on both Iris and Wine.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

@@ -9,6 +9,8 @@ import math
 from collections import Counter
 
 from build_wine_scatter import COLORS, CONFIG, SHAPES
+from chart_contract import validate_chart_contract
+from chart_data import load_rows
 from scientific_ir import ROOT, validate_spec
 
 SPEC = ROOT / "figure_specs/quant/Q07_wine_scatter.json"
@@ -18,6 +20,7 @@ def check(config: dict, spec: dict) -> None:
     chart, = config["charts"]
     meta = config["data"]
     source = ROOT / meta["file"]
+    validate_chart_contract(config, load_rows(meta))
     assert hashlib.sha256(source.read_bytes()).hexdigest() == meta["sha256"]
     with source.open(encoding="utf-8", newline="") as stream:
         raw = list(csv.reader(stream))

@@ -7,6 +7,7 @@ from collections import Counter
 
 from build_quantitative_examples import Figure, scaled, separated_scatter_positions
 from chart_data import load_rows
+from chart_contract import validate_chart_contract
 from render_figure_spec import render
 from scientific_ir import ROOT, validate_spec
 
@@ -20,6 +21,7 @@ def build() -> dict:
     chart, = config["charts"]
     meta = config["data"]
     rows = load_rows(meta)
+    validate_chart_contract(config, rows)
     assert Counter(row["cultivar"] for row in rows) == {"1": 59, "2": 71, "3": 48}
     assert chart["sample_size"] == len(rows)
     for direction in ("x", "y"):
