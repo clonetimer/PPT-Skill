@@ -45,3 +45,7 @@
 - [ ] 所有人工复核结论和证据已附在本表或其链接中。
 
 最终结论：**待评审 / 通过 / 不通过**。问题单与修订提交：
+
+## 机器发布门槛
+
+运行 `python tools/validate_release_readiness.py --prepare review.json` 创建未填写的 JSON 表。评审人逐项填写身份与独立性、来源/科学关系核验、实际终尺寸检查条件与证据、六维评分及各自证据、四项硬失败的布尔结论和任务结论。运行 `python tools/validate_release_readiness.py --review review.json` 进行发布判定。模板中的 `false`、`null` 与空字符串均表示未完成；工件或基准文件变更后须重新评审。机器只检查记录的完整性和文件哈希，不能证明评审人的身份或专业判断。
