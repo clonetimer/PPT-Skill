@@ -12,7 +12,7 @@ from validate_release_readiness import prepare_template
 from validate_research_benchmark import artifact_paths
 
 
-EXTRA = {
+UNBLIND_EXTRA = {
     "SKILL.md", "README.md", "MANIFEST_V7.json",
     "specs/research_figure_benchmark_v76.json", "specs/output_profiles_v76.json",
     "specs/figure_contracts_v76.json",
@@ -25,16 +25,19 @@ EXTRA = {
 }
 
 
-def bundle_paths() -> list[Path]:
+def bundle_paths() -> tuple[list[Path], list[Path]]:
     benchmark = json.loads((ROOT / "specs/research_figure_benchmark_v76.json").read_text(encoding="utf-8"))
-    paths = {ROOT / rel for rel in EXTRA}
+    blind = set()
+    unblind = {ROOT / rel for rel in UNBLIND_EXTRA}
     for task in benchmark["tasks"]:
-        paths.update(ROOT / task[key] for key in ("source", "input"))
-        paths.update(ROOT / path for path in artifact_paths(task["id"]))
-    missing = [str(path) for path in paths if not path.is_file()]
+        blind.add(ROOT / task["source"])
+        blind.update(ROOT / path for path in artifact_paths(task["id"]))
+        unblind.add(ROOT / task["input"])
+    unblind |= blind  # Stage 2 is self-contained for the release validator.
+    missing = [str(path) for path in unblind if not path.is_file()]
     if missing:
         raise FileNotFoundError(f"Review inputs missing: {missing}")
-    return sorted(paths)
+    return sorted(blind), sorted(unblind)
 
 
 def build(output: Path) -> None:
@@ -42,18 +45,24 @@ def build(output: Path) -> None:
         raise FileExistsError(f"Refusing to overwrite {output}")
     output.parent.mkdir(parents=True, exist_ok=True)
     note = (
-        "V7.6 independent scientific figure review bundle\n"
-        "Review the source documents/data and rendered SVG/PPTX/PDF at their final viewing size.\n"
-        "Read docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md before scoring.\n"
-        "Fill review_template_v76.json only after independently checking each of the 14 tasks.\n"
-        "Run: python tools/validate_release_readiness.py --review review_template_v76.json\n"
+        "Independent scientific figure review bundle\n"
+        "Stage 1: inspect blind_review/ sources and rendered figures at final viewing size.\n"
+        "Record an initial score and evidence for each task before opening unblind_review/.\n"
+        "Stage 2: inspect unblind_review/ benchmark expectations, traps, specs and methods.\n"
+        "Reconcile any differences, then complete review_template.json for all 14 tasks.\n"
+        "Read review_form.md before scoring.\n"
+        "Run: python unblind_review/tools/validate_release_readiness.py --review review_template.json\n"
         "The template is unfilled; this archive does not assert scientific or journal approval.\n"
         "Publisher-owned source artwork is linked in source docs rather than redistributed.\n"
     )
+    blind, unblind = bundle_paths()
     with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
-        for path in bundle_paths():
-            archive.write(path, path.relative_to(ROOT).as_posix())
-        archive.writestr("review_template_v76.json", json.dumps(prepare_template(), ensure_ascii=False, indent=2)+"\n")
+        for path in blind:
+            archive.write(path, "blind_review/" + path.relative_to(ROOT).as_posix())
+        for path in unblind:
+            archive.write(path, "unblind_review/" + path.relative_to(ROOT).as_posix())
+        archive.writestr("review_form.md", (ROOT / "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md").read_text(encoding="utf-8"))
+        archive.writestr("review_template.json", json.dumps(prepare_template(), ensure_ascii=False, indent=2)+"\n")
         archive.writestr("REVIEW_README.txt", note)
     print(f"Prepared unfilled review bundle: {output}")
 

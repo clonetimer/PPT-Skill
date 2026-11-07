@@ -5,6 +5,8 @@ from __future__ import annotations
 import unittest
 
 from validate_release_readiness import prepare_template, validate_review
+from prepare_scientific_review_bundle import bundle_paths
+from scientific_ir import ROOT
 
 
 class ReleaseGateTests(unittest.TestCase):
@@ -13,11 +15,13 @@ class ReleaseGateTests(unittest.TestCase):
         disciplines = {result["required_discipline"] for result in review["tasks"].values()}
         review["reviewers"] = {discipline: {
             "name": "SYNTHETIC TEST", "date": "2000-01-01", "disciplines": [discipline],
-            "independent_of_build": True, "blind_to_implementation_version": True,
+            "independent_of_build": True, "scored_before_reading_benchmark_expectations": True,
         } for discipline in disciplines}
         for result in review["tasks"].values():
             result["reviewer_id"] = result["required_discipline"]
             result["source_checked"] = result["scientific_relationships_checked"] = True
+            result["initial_review_before_expectations"] = {"completed": True, "score": 4,
+                                                             "evidence": "synthetic first-stage score"}
             result["final_size"] = {"checked": True, "context": "synthetic", "evidence": "test only"}
             for item in result["scores"].values():
                 item.update(score=4, evidence="synthetic test only")
@@ -56,11 +60,32 @@ class ReleaseGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_review(review)
 
+    def test_missing_initial_review_blocks_release(self):
+        review = self.complete_synthetic_review()
+        review["tasks"]["Q03"]["initial_review_before_expectations"]["completed"] = False
+        with self.assertRaises(ValueError):
+            validate_review(review)
+
+    def test_initial_review_without_score_blocks_release(self):
+        review = self.complete_synthetic_review()
+        review["tasks"]["Q03"]["initial_review_before_expectations"]["score"] = None
+        with self.assertRaises(ValueError):
+            validate_review(review)
+
     def test_wrong_domain_reviewer_blocks_release(self):
         review = self.complete_synthetic_review()
         review["tasks"]["I01"]["reviewer_id"] = "applied_statistics"
         with self.assertRaises(ValueError):
             validate_review(review)
+
+    def test_initial_review_packet_excludes_expectations(self):
+        blind, unblind = bundle_paths()
+        assert ROOT / "specs/research_figure_benchmark_v76.json" not in blind
+        assert ROOT / "specs/research_figure_benchmark_v76.json" in unblind
+        assert ROOT / "figure_specs/quant/Q03_iris_mean_ci.json" not in blind
+        assert ROOT / "figure_specs/quant/Q03_iris_mean_ci.json" in unblind
+        assert ROOT / "dist/Q03_iris_mean_ci.pdf" in blind
+        assert ROOT / "dist/Q03_iris_mean_ci.pdf" in unblind
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # V7.6 科研图独立复核记录表
 
-本表由未参与制图的领域评审填写。先查看每项的来源和 `figure_specs/`，再在实际投影距离或目标印刷尺寸查看 `dist/` 输出；不要先看自动测试结果。一个关键科学关系、公式、数据值或来源状态错误即判不通过。图像处理未披露，或重要内容遮挡/不可读，也判不通过。均分不得抵消硬失败。
+本表由未参与制图的领域评审填写。第一阶段只打开材料包的 `blind_review/`：核对来源，在实际投影距离或目标印刷尺寸查看图件，并记录每项初评分及证据。完成初评后，第二阶段才打开 `unblind_review/` 的基准预期、陷阱、FigureSpec 和自动检查，核对差异并填写最终结论。文件名或来源文档可能透露项目版本，因此这里的“盲”仅指初评时不看基准预期与实现说明，不能声称完全匿名。一个关键科学关系、公式、数据值或来源状态错误即判不通过。图像处理未披露，或重要内容遮挡/不可读，也判不通过。均分不得抵消硬失败。
 
 ## 评审元数据
 
@@ -8,6 +8,7 @@
 - 日期、显示设备/投影距离或打印尺寸：
 - 审核的提交哈希：
 - 使用的来源文件/链接及版本：
+- 第一阶段初评记录及完成时间（核对预期与实现说明之前）：
 
 ## 每任务评分（0–4）
 
@@ -40,7 +41,7 @@
 ## 发布判定
 
 - [ ] 14 项任务的来源和预期关系已核实。
-- [ ] 任务输出经盲评；DECK01 的完整三页叙事已实际制作和检查。
+- [ ] 任务输出先于基准预期和实现说明完成初评；DECK01 的完整三页叙事已实际制作和检查。
 - [ ] 无关键科学错误、来源状态不清、未披露图像处理或不可读内容。
 - [ ] 所有人工复核结论和证据已附在本表或其链接中。
 
@@ -48,6 +49,6 @@
 
 ## 机器发布门槛
 
-运行 `python tools/validate_release_readiness.py --prepare review.json` 创建未填写的 JSON 表。在 `reviewers` 登记评审人、所属学科、独立性和盲评状态；每项任务用 `reviewer_id` 指向覆盖其 `required_discipline` 的评审人。评审人逐项填写来源/科学关系核验、实际终尺寸检查条件与证据、六维评分及各自证据、四项硬失败的布尔结论和任务结论。运行 `python tools/validate_release_readiness.py --review review.json` 进行发布判定。`artifacts_sha256` 锁定该任务需检查的 SVG、PPTX、PDF 与预览文件；模板中的 `false`、`null` 与空字符串均表示未完成。任一工件或基准文件变更后须重新评审。机器只检查记录的完整性、领域归属和文件哈希，不能证明评审人的身份或专业判断。
+运行 `python tools/validate_release_readiness.py --prepare review.json` 创建未填写的 JSON 表。在 `reviewers` 登记评审人、所属学科、独立性和初评先于基准预期的声明；每项任务用 `reviewer_id` 指向覆盖其 `required_discipline` 的评审人。评审人逐项填写 `initial_review_before_expectations` 的初评证据、来源/科学关系核验、实际终尺寸检查条件与证据、六维评分及各自证据、四项硬失败的布尔结论和任务结论。运行 `python tools/validate_release_readiness.py --review review.json` 进行发布判定。`artifacts_sha256` 锁定该任务需检查的 SVG、PPTX、PDF 与预览文件；模板中的 `false`、`null` 与空字符串均表示未完成。任一工件或基准文件变更后须重新评审。机器只检查记录的完整性、领域归属和文件哈希，不能证明评审人的身份、初评顺序或专业判断。
 
-可运行 `python tools/prepare_scientific_review_bundle.py --output review_bundle.zip` 生成评审材料包。包内包含 14 项任务的来源、输入、可用的 SVG/PPTX/PDF/预览、说明文档和空白 JSON 表；出版商原始图稿只保留来源链接，不打包再分发。
+可运行 `python tools/prepare_scientific_review_bundle.py --output review_bundle.zip` 生成两阶段评审材料包。`blind_review/` 包含 14 项任务的来源和图件，`unblind_review/` 包含输入规格、预期、陷阱与实现说明；根目录放说明和空白 JSON 表。出版商原始图稿只保留来源链接，不打包再分发。

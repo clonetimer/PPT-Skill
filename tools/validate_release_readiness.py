@@ -32,6 +32,7 @@ def prepare_template() -> dict:
             "input_sha256": sha256(ROOT / task["input"]),
             "artifacts_sha256": {path: sha256(ROOT / path) for path in artifact_paths(task["id"])},
             "source_checked": False, "scientific_relationships_checked": False,
+            "initial_review_before_expectations": {"completed": False, "score": None, "evidence": ""},
             "final_size": {"checked": False, "context": "", "evidence": ""},
             "scores": {dimension: {"score": None, "evidence": ""}
                        for dimension in benchmark["scoring"]["dimensions"]},
@@ -53,7 +54,8 @@ def validate_review(review: dict) -> None:
         require(isinstance(reviewer.get("disciplines"), list) and bool(reviewer["disciplines"]),
                 f"{reviewer_id}: reviewer disciplines required")
         require(reviewer.get("independent_of_build") is True, f"{reviewer_id}: independence required")
-        require(reviewer.get("blind_to_implementation_version") is True, f"{reviewer_id}: blind review required")
+        require(reviewer.get("scored_before_reading_benchmark_expectations") is True,
+                f"{reviewer_id}: initial review before benchmark expectations required")
     results = review.get("tasks", {})
     expected_ids = {task["id"] for task in benchmark["tasks"]}
     require(set(results) == expected_ids, "Every benchmark task needs one review")
@@ -69,6 +71,11 @@ def validate_review(review: dict) -> None:
                 f"{task_id}: reviewer field does not cover {task['discipline']}")
         require(result.get("source_checked") is True, f"{task_id}: source check required")
         require(result.get("scientific_relationships_checked") is True, f"{task_id}: science check required")
+        initial = result.get("initial_review_before_expectations", {})
+        require(initial.get("completed") is True and
+                type(initial.get("score")) is int and 0 <= initial["score"] <= 4 and
+                bool(initial.get("evidence")),
+                f"{task_id}: initial review evidence required")
         source = ROOT / task["source"]
         spec = ROOT / task["input"]
         require(result.get("source_sha256") == sha256(source), f"{task_id}: source changed")

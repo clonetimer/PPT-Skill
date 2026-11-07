@@ -1,7 +1,7 @@
 {
   "schema_version": "7.6.0-dev",
   "scoring": {
-    "reviewer": "independent domain reviewer assigned to each task, blind to implementation version",
+    "reviewer": "independent domain reviewer assigned to each task; initial source and visual scoring precedes benchmark expectations and traps",
     "dimensions": ["scientific_accuracy", "data_image_integrity", "readability", "accessibility", "editability_reproducibility", "visual_quality"],
     "scale": "0–4 per dimension, with written evidence for every score",
     "hard_fail": ["wrong_critical_relation_or_formula_or_value", "unclear_source_status", "undisclosed_image_processing", "unreadable_or_occluded_important_content"],
