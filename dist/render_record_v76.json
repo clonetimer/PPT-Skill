@@ -152,8 +152,8 @@
     {
       "figure_id": "Q04_iris_confusion",
       "figure_spec": "figure_specs/quant/Q04_iris_confusion.json",
-      "input_sha256": "657f5476bfdf35e4560fd3b30f605c91186d0f807076f270b86d59adeae7bb81",
-      "input_canonical_sha256": "9d7a8e6dd34abe21da69bd317b8744f1d9ca4919ea52573e0fc4bb983345ef50",
+      "input_sha256": "75841a6a1b293e96c1cb952364887270dbe4019208f22706698ed7861b42b0bc",
+      "input_canonical_sha256": "8211b1df26b98ac6447748315f971cd0ccb91954092bf03e0294bfed8f7adbca",
       "outputs_sha256": {
         "svg": "7f9c3a9e8aa66e088ebd24bbad271c3d477ffdaee79f72cd727e58f33918cc00",
         "pptx": "590aff3110aa090e8ca1098f9ec4efc66720469197c7b3dc8ca9602a9009d363",
@@ -181,8 +181,8 @@
     {
       "figure_id": "Q05_iris_ablation",
       "figure_spec": "figure_specs/quant/Q05_iris_ablation.json",
-      "input_sha256": "68459bfcb4db09c87d1389ea04deb6a7aad66c837027a480aa6b6bfaa58c5b6d",
-      "input_canonical_sha256": "413145f04475a99a9c837ca0f2c3985141f163faffaf6499483749452d4f15f8",
+      "input_sha256": "45aab7c36e73b035da20533756a922f9e9263b7b1249a39b6fc6c619075eabb6",
+      "input_canonical_sha256": "9850b03c4e049c847c43e89566bd73bf4e607fbed1c81d7f80e0d754ef6f5ce2",
       "outputs_sha256": {
         "svg": "14f5c53c5ec9b8ea32dcc54d308cfca1b22fb32ba2e2e73537ebec306b31e2d5",
         "pptx": "40b91e77d906e217c7c8aae45521d68e93f260ca3ab1f4b4c0491587370bf285",

@@ -122,7 +122,22 @@ def validate_config(config):
             assert chart["statistics"]["resamples"] >= 1000 and isinstance(chart["statistics"]["seed"], int)
             assert chart["statistics"]["resampling_unit"] == "flower within bin"
         if chart["kind"] in {"confusion_matrix", "ablation"}:
-            assert chart["statistics"]["method"] and chart["statistics"]["splits"]
+            algorithm = chart["statistics"]["algorithm"]
+            assert {key: algorithm[key] for key in ("classifier", "k", "distance", "feature_scaling",
+                                                    "validation", "distance_tie_break")} == {
+                "classifier": "nearest_neighbor", "k": 1, "distance": "euclidean",
+                "feature_scaling": "none", "validation": "leave_one_out",
+                "distance_tie_break": "lowest_source_row"}
+            if chart["kind"] == "confusion_matrix":
+                assert algorithm["features"] == ["sepal_length_cm", "sepal_width_cm",
+                                                 "petal_length_cm", "petal_width_cm"]
+            else:
+                assert chart["statistics"]["paired_folds"] is True
+                groups = chart["statistics"]["feature_sets"]
+                assert [item["label"] for item in groups] == chart["axes"]["x"]["categories"]
+                assert [item["fields"] for item in groups] == [
+                    ["sepal_length_cm", "sepal_width_cm", "petal_length_cm", "petal_width_cm"],
+                    ["petal_length_cm", "petal_width_cm"]]
     try:
         import jsonschema
     except ImportError:
@@ -180,9 +195,10 @@ def validate_outputs(config, rows):
         elif chart["kind"] == "confusion_matrix":
             cells = [e for e in spec["elements"] if "source_rows" in e]
             assert len(cells) == 9
+            assert [item["count"] for item in spec["computed_values"]] == [50, 0, 0, 0, 47, 3, 0, 3, 47]
             assert Counter(row for cell in cells for row in cell["source_rows"]) == Counter({key: 1 for key in lookup})
             assert sum(v["count"] for v in spec["computed_values"]) == len(rows)
-            predictions = predict_loo(rows)
+            predictions = predict_loo(rows, tuple(chart["statistics"]["algorithm"]["features"]))
             expected = Counter((row["species"], pred) for row, pred in zip(rows, predictions))
             for item, cell in zip(spec["computed_values"], cells):
                 pair = (item["actual"], item["predicted"])
@@ -196,9 +212,12 @@ def validate_outputs(config, rows):
         else:
             bars = [e for e in spec["elements"] if "row_predictions" in e]
             assert len(bars) == len(spec["computed_values"]) == 2
+            assert [item["correct"] for item in spec["computed_values"]] == [144, 143]
             assert chart["axes"]["x"]["categories"] == [item["feature_set"] for item in spec["computed_values"]]
             assert chart["axes"]["y"]["unit"] == "%"
             for bar, item in zip(bars, spec["computed_values"]):
+                assert item["features"] == next(group["fields"] for group in chart["statistics"]["feature_sets"]
+                                                if group["label"] == item["feature_set"])
                 predictions = predict_loo(rows, tuple(item["features"]))
                 expected_rows = [row["source_row"] for row, pred in zip(rows, predictions)
                                  if row["species"] == pred]

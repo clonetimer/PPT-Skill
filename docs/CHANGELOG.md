@@ -26,6 +26,7 @@
 - Split the independent review bundle into first-stage source/render inspection and second-stage benchmark/spec reconciliation; the release gate now requires task-level initial-review evidence instead of claiming complete version blindness.
 - Anchored all six independent-review scores with concrete criteria and blocked release when any dimension scores below the declared floor, even if the reviewer marks the task passed.
 - Declared Q04 prediction/actual labels and Q05 feature-set/accuracy measures as derived fields with source columns, units and calculation rules; missing or inconsistent derivations now fail contract validation.
+- Bound Q04/Q05 to a structured leave-one-out 1-NN algorithm contract, including tie handling, feature scaling and exact compared feature sets; builder and output checks now consume those fields. A hand-computed tie fixture and frozen Iris confusion/accuracy values detect algorithm drift.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

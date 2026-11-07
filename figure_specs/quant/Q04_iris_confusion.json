@@ -53,9 +53,20 @@
     "statistics": {
       "display": "raw_counts",
       "interval": "none",
-      "method": "1-nearest-neighbor, Euclidean distance on four unscaled measurements, leave-one-out prediction",
-      "splits": "150 leave-one-out folds",
-      "seed": "not_used"
+      "algorithm": {
+        "classifier": "nearest_neighbor",
+        "k": 1,
+        "distance": "euclidean",
+        "feature_scaling": "none",
+        "validation": "leave_one_out",
+        "distance_tie_break": "lowest_source_row",
+        "features": [
+          "sepal_length_cm",
+          "sepal_width_cm",
+          "petal_length_cm",
+          "petal_width_cm"
+        ]
+      }
     },
     "axes": {
       "x": {

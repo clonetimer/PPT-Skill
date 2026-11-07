@@ -56,9 +56,33 @@
     "statistics": {
       "display": "paired_accuracy",
       "interval": "none",
-      "method": "1-nearest-neighbor, Euclidean distance on unscaled selected measurements, leave-one-out prediction",
-      "splits": "same 150 leave-one-out folds for both feature sets",
-      "seed": "not_used"
+      "algorithm": {
+        "classifier": "nearest_neighbor",
+        "k": 1,
+        "distance": "euclidean",
+        "feature_scaling": "none",
+        "validation": "leave_one_out",
+        "distance_tie_break": "lowest_source_row"
+      },
+      "paired_folds": true,
+      "feature_sets": [
+        {
+          "label": "All four measurements",
+          "fields": [
+            "sepal_length_cm",
+            "sepal_width_cm",
+            "petal_length_cm",
+            "petal_width_cm"
+          ]
+        },
+        {
+          "label": "Petal measurements only",
+          "fields": [
+            "petal_length_cm",
+            "petal_width_cm"
+          ]
+        }
+      ]
     },
     "axes": {
       "x": {

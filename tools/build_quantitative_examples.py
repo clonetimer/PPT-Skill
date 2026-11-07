@@ -252,7 +252,7 @@ def predict_loo(rows, fields=("sepal_length_cm", "sepal_width_cm", "petal_length
 
 def confusion(chart, meta, rows):
     fig = Figure(chart, meta); fig.setup()
-    predictions = predict_loo(rows)
+    predictions = predict_loo(rows, tuple(chart["statistics"]["algorithm"]["features"]))
     counts = Counter((row["species"], predicted) for row, predicted in zip(rows, predictions))
     x0, y0, cell = 4.05, 1.45, 1.42
     fig.text("Predicted species", x0, .82, cell*3, .27, 12, True)
@@ -278,10 +278,8 @@ def confusion(chart, meta, rows):
 
 def ablation(chart, meta, rows):
     fig = Figure(chart, meta); fig.setup()
-    groups = [
-        ("All four measurements", ("sepal_length_cm", "sepal_width_cm", "petal_length_cm", "petal_width_cm")),
-        ("Petal measurements only", ("petal_length_cm", "petal_width_cm")),
-    ]
+    groups = [(item["label"], tuple(item["fields"]))
+              for item in chart["statistics"]["feature_sets"]]
     x0, y0, w, h = 2.13, 1.40, 8.80, 4.46
     fig.axes(x0, y0, x0+w, y0+h, "", "Accuracy (%)",
              [(4.50, "Four features"), (8.60, "Petal only")],

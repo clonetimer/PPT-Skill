@@ -6,7 +6,7 @@ import copy
 import json
 import unittest
 
-from build_quantitative_examples import CONFIG, load_data
+from build_quantitative_examples import CONFIG, load_data, predict_loo
 from validate_quantitative_examples import validate_axis_coverage, validate_config
 
 
@@ -16,6 +16,12 @@ class QuantitativeContractTests(unittest.TestCase):
 
     def test_baseline(self):
         validate_config(self.config)
+
+    def test_leave_one_out_excludes_self_and_breaks_distance_ties_by_source_row(self):
+        rows = [{"source_row": 1, "x": 0, "species": "A"},
+                {"source_row": 2, "x": 2, "species": "B"},
+                {"source_row": 3, "x": 1, "species": "C"}]
+        self.assertEqual(predict_loo(rows, ("x",)), ["C", "C", "A"])
 
     def test_missing_source_fails(self):
         changed = copy.deepcopy(self.config)
@@ -68,6 +74,24 @@ class QuantitativeContractTests(unittest.TestCase):
     def test_derived_field_needs_existing_source_columns(self):
         changed = copy.deepcopy(self.config)
         changed["charts"][4]["derived_fields"]["accuracy_percent"]["source_fields"] = ["unknown"]
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_classifier_contract_cannot_change_without_implementation(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][3]["statistics"]["algorithm"]["k"] = 5
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_ablation_feature_sets_match_rendered_groups(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][4]["statistics"]["feature_sets"][1]["fields"] = ["sepal_length_cm"]
+        with self.assertRaises((AssertionError, ValueError)):
+            validate_config(changed)
+
+    def test_ablation_must_use_paired_folds(self):
+        changed = copy.deepcopy(self.config)
+        changed["charts"][4]["statistics"]["paired_folds"] = False
         with self.assertRaises((AssertionError, ValueError)):
             validate_config(changed)
 
