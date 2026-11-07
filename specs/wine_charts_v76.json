@@ -1,0 +1,33 @@
+{
+  "schema_version": "7.6.0-dev",
+  "data": {
+    "id": "uci_wine_178",
+    "file": "data/wine_uci.data",
+    "source_url": "https://archive.ics.uci.edu/dataset/109/wine",
+    "doi": "10.24432/C5PC7J",
+    "license": "CC BY 4.0",
+    "sha256": "6be6b1203f3d51df0b553a70e57b8a723cd405683958204f96d23d7cd6aea659",
+    "row_count": 178,
+    "row_unit": "one wine sample",
+    "columns": {
+      "cultivar": {"type": "category", "unit": "category", "source_position": 0},
+      "alcohol": {"type": "number", "unit": "source unit not reported", "source_position": 1},
+      "color_intensity": {"type": "number", "unit": "source unit not reported", "source_position": 10}
+    },
+    "missing_value_policy": "fail",
+    "transforms": ["parse original UCI wine.data without reordering, scaling, imputing or excluding rows"]
+  },
+  "charts": [{
+    "id": "Q07_wine_scatter", "kind": "scatter",
+    "claim": "The three coded wine cultivars occupy different regions in alcohol and color-intensity measurements.",
+    "x": "alcohol", "y": "color_intensity", "group": "cultivar",
+    "sample_size": 178, "encoding": {"color": "cultivar", "shape": "cultivar"},
+    "statistics": {"display": "all_raw_points", "interval": "none",
+      "jitter": {"purpose": "display_only_separate_coincident_coordinates", "minimum_center_gap_in": 0.055, "max_display_offset_in": 0.20}},
+    "axes": {
+      "x": {"type": "linear", "field": "alcohol", "unit": "source unit not reported", "domain": [10, 15], "zero_included": false, "domain_reason": "Zoomed to the measured range; axis starts at 10."},
+      "y": {"type": "linear", "field": "color_intensity", "unit": "source unit not reported", "domain": [0, 14], "zero_included": true}
+    },
+    "caption": "Each mark is one wine sample (cultivar codes 1–3). Small display-only offsets separate coincident measurements; source values are unchanged. UCI does not report physical units for these two fields."
+  }]
+}

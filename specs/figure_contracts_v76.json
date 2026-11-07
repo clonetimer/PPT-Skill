@@ -104,5 +104,13 @@
     "source": "data/iris_uci.csv", "source_locator": "all 150 source rows; species and four measurement columns for leave-one-out 1-NN", "evidence_status": "data_driven",
     "evidence_scope": "Leave-one-out predictions computed deterministically from public UCI Iris rows.",
     "reuse": "CC BY 4.0; cite UCI Iris DOI 10.24432/C56C76", "unverified": []
+  },
+  "Q07_wine_scatter": {
+    "claim": "The three coded wine cultivars occupy different regions in alcohol and color-intensity measurements.",
+    "archetype": "quantitative_grid", "output_mode": "presentation",
+    "source": "data/wine_uci.data", "source_locator": "source_row plus source positions 0 (coded cultivar), 1 (alcohol), and 10 (color intensity)",
+    "evidence_status": "data_driven",
+    "evidence_scope": "All 178 raw source rows are plotted; the source does not report physical units for these variables.",
+    "reuse": "CC BY 4.0; cite UCI Wine DOI 10.24432/C5PC7J", "unverified": ["Physical units for alcohol and color intensity are not supplied by UCI."]
   }
 }

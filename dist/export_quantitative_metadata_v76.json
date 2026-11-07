@@ -10,6 +10,7 @@
                        "Q04_iris_confusion",
                        "Q05_iris_ablation",
                        "Q06_iris_trend_interval",
+                       "Q07_wine_scatter",
                        "I01_cell_image_quant"
                    ]
 }

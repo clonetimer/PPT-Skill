@@ -23,6 +23,7 @@
         "Q04_iris_confusion",
         "Q05_iris_ablation",
         "Q06_iris_trend_interval",
+        "Q07_wine_scatter",
         "I01_cell_image_quant"
       ]
     }
@@ -30,6 +31,7 @@
   "platform": "Windows-11-10.0.26200-SP0",
   "source_assets_sha256": {
     "data/iris_uci.csv": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+    "data/wine_uci.data": "6be6b1203f3d51df0b553a70e57b8a723cd405683958204f96d23d7cd6aea659",
     "data/cell_scikit_image_v026.png": "8d23a7fb81f7cc877cd09f330357fc7f595651306e84e17252f6e0a1b3f61515"
   },
   "figures": [
@@ -221,6 +223,35 @@
       "outputs_canonical_sha256": {
         "svg": "43c963414f8bad81a06509cb6a57d9dbc5e532fa5b4ad41f649909eb9184e128",
         "pptx": "8f3400705f75334131ee824765aca47ed091e7b7773afef39746394b64b3ca96"
+      },
+      "qa": {
+        "automated": "pass",
+        "pdf_fonts": {
+          "expected_family": "Arial",
+          "observed_fonts": [
+            "Arial-BoldMT",
+            "ArialMT"
+          ],
+          "embedded": true,
+          "substitution_detected": false
+        },
+        "manual_final_size": "pending_independent_review"
+      }
+    },
+    {
+      "figure_id": "Q07_wine_scatter",
+      "figure_spec": "figure_specs/quant/Q07_wine_scatter.json",
+      "input_sha256": "2d791c218ee26e0e437a593ec3d228444cb4b4839c9c0120fb6415d281757262",
+      "input_canonical_sha256": "b38a9dac250d5d33f5761b5ac70a58f96ed4fc50d634d39f5e1bf255626b06ee",
+      "outputs_sha256": {
+        "svg": "80236664fd75eaea60ff629200956a56ceaff95d759711e428bd8bd86bab017e",
+        "pptx": "5a57eed857490f163f8f2d88fec01ef63a82ecf469fbad64687b2c9af20f3547",
+        "pdf": "2a1568924c418e696b7c008a421af75b27a6a4faca5ed176015bb30a6ece7136",
+        "preview.png": "6b202118d5987cc8cc3136d9ed1e8072169bb48de437c4dd2cf82e477ffa28a2"
+      },
+      "outputs_canonical_sha256": {
+        "svg": "9691ff4212c45b2b9abf306715ec4d45b8e970d6f5705a45a63a9581b7a01a8d",
+        "pptx": "8d4fb51e1d06870ee08a87690c34e834e8a689c6926c45bbde2f84ddcf0dc66f"
       },
       "qa": {
         "automated": "pass",

@@ -11,7 +11,7 @@ import numpy as np
 from scientific_ir import ROOT
 
 IDS = ["Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature",
-       "Q04_iris_confusion", "Q05_iris_ablation", "Q06_iris_trend_interval", "I01_cell_image_quant"]
+       "Q04_iris_confusion", "Q05_iris_ablation", "Q06_iris_trend_interval", "Q07_wine_scatter", "I01_cell_image_quant"]
 SCHEMATIC_SPECS = ["figure_specs/B01_engineering_fdir.json",
                    "figure_specs/F07_telemetry_embedding.json",
                    "figure_specs/c01/C01_FBG_construction.json",
@@ -98,7 +98,7 @@ def main():
         spec = json.loads((ROOT / f"figure_specs/{folder}/{figure_id}.json").read_text(encoding="utf-8"))
         check_text_contrast(figure_id, spec)
         check_mark_contrast(figure_id, spec)
-        if figure_id in {"Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature"}:
+        if figure_id in {"Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature", "Q07_wine_scatter"}:
             by_species = defaultdict(set)
             for e in spec["elements"]:
                 if "data_row" in e:

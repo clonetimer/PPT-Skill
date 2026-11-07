@@ -2,8 +2,6 @@
 """Build four data-linked SVG and native-PPTX chart examples from UCI Iris."""
 from __future__ import annotations
 
-import csv
-import hashlib
 import json
 import math
 import random
@@ -13,6 +11,7 @@ from pathlib import Path
 
 from render_figure_spec import render
 from scientific_ir import ROOT, enrich_spec
+from chart_data import load_rows
 
 CONFIG = ROOT / "specs/iris_charts_v76.json"
 SPEC_DIR = ROOT / "figure_specs/quant"
@@ -28,30 +27,16 @@ TITLES = {"Q01_iris_scatter": "Petal dimensions separate iris species",
 
 def load_data(config):
     meta = config["data"]
-    path = ROOT / meta["file"]
-    digest = hashlib.sha256(path.read_bytes()).hexdigest()
-    assert digest == meta["sha256"], (digest, meta["sha256"])
-    columns = list(meta["columns"])
-    rows = []
-    with path.open(encoding="utf-8", newline="") as stream:
-        for row_number, raw in enumerate(csv.reader(stream), 1):
-            if not raw:
-                continue
-            assert len(raw) == 5, row_number
-            row = {name: (float(raw[i]) if meta["columns"][name]["type"] == "number" else raw[i])
-                   for name, i in ((name, details["source_position"]) for name, details in meta["columns"].items())}
-            assert all(math.isfinite(row[name]) for name in columns if isinstance(row[name], float))
-            assert row["species"] in COLORS
-            row["source_row"] = row_number
-            rows.append(row)
+    rows = load_rows(meta)
     assert len(rows) == meta["row_count"] == 150
     assert Counter(row["species"] for row in rows) == {name: 50 for name in NAMES}
     return rows
 
 
 class Figure:
-    def __init__(self, chart, meta):
+    def __init__(self, chart, meta, chart_spec_path="specs/iris_charts_v76.json"):
         self.chart, self.meta = chart, meta
+        self.chart_spec_path = chart_spec_path
         self.elements = []
         self.values = []
 
@@ -65,9 +50,10 @@ class Figure:
     def line(self, x1, y1, x2, y2, color="#5F707B", sw=1):
         self.add("line", x1=x1, y1=y1, x2=x2, y2=y2, color=color, sw=sw)
 
-    def point(self, x, y, color, row, values, r=.043):
-        shape = {"Iris-setosa": "ellipse", "Iris-versicolor": "rect",
-                 "Iris-virginica": "trapezoid"}[row["species"]]
+    def point(self, x, y, color, row, values, r=.043, shape=None):
+        if shape is None:
+            shape = {"Iris-setosa": "ellipse", "Iris-versicolor": "rect",
+                     "Iris-virginica": "trapezoid"}[row["species"]]
         self.add(shape, x=x-r, y=y-r, w=2*r, h=2*r, fill=color,
                  stroke="#FFFFFF", sw=.55, data_row=row["source_row"], data_values=values)
 
@@ -96,7 +82,7 @@ class Figure:
             "style": {"font": "Arial"},
             "data_lineage": {"data_ref": self.meta["file"], "sha256": self.meta["sha256"],
                              "source_url": self.meta["source_url"], "doi": self.meta["doi"],
-                             "row_count": self.meta["row_count"], "chart_spec": "specs/iris_charts_v76.json"},
+                             "row_count": self.meta["row_count"], "chart_spec": self.chart_spec_path},
             "chart_contract": chart,
             "computed_values": self.values,
             "elements": self.elements,

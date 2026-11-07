@@ -30,6 +30,7 @@ jobs:
       - name: Build data and image examples
         run: |
           python tools/build_quantitative_examples.py
+          python tools/build_wine_scatter.py
           python tools/build_publication_example.py
           python tools/build_image_quant_example.py
           python tools/build_deck_benchmark.py
@@ -52,6 +53,8 @@ jobs:
           python tools/validate_manifest.py
           python tools/validate_scientific_ir.py
           python tools/validate_quantitative_examples.py
+          python tools/validate_wine_scatter.py
+          python tools/test_wine_contract.py
           python tools/validate_publication_example.py
           python tools/validate_image_quant_example.py
           python tools/test_scientific_ir.py
@@ -79,6 +82,7 @@ jobs:
           python tools/audit_pptx.py dist/Q04_iris_confusion.pptx --strict
           python tools/audit_pptx.py dist/Q05_iris_ablation.pptx --strict
           python tools/audit_pptx.py dist/Q06_iris_trend_interval.pptx --strict
+          python tools/audit_pptx.py dist/Q07_wine_scatter.pptx --strict
           python tools/audit_pptx.py dist/I01_cell_image_quant.pptx --strict --allow-raster
           python tools/audit_pptx.py dist/DECK01_c01_defense.pptx --strict
       - name: Compile tools

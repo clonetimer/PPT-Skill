@@ -19,7 +19,7 @@ from audit_pptx import audit
 from scientific_ir import ROOT
 
 IDS = ["Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_ci_nature",
-       "Q04_iris_confusion", "Q05_iris_ablation", "Q06_iris_trend_interval", "I01_cell_image_quant"]
+       "Q04_iris_confusion", "Q05_iris_ablation", "Q06_iris_trend_interval", "Q07_wine_scatter", "I01_cell_image_quant"]
 
 
 def digest(path: Path):
@@ -109,6 +109,7 @@ def main():
                           "pillow": PIL.__version__, "pypdf": pypdf.__version__, "pdf_exporter": exporter},
         "platform": platform.platform(),
         "source_assets_sha256": {"data/iris_uci.csv": digest(ROOT / "data/iris_uci.csv"),
+                                 "data/wine_uci.data": digest(ROOT / "data/wine_uci.data"),
                                  "data/cell_scikit_image_v026.png": digest(ROOT / "data/cell_scikit_image_v026.png")},
         "figures": records,
     }

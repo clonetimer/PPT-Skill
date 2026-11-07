@@ -16,6 +16,7 @@ OUTPUTS = {
         "Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q04_iris_confusion",
         "Q05_iris_ablation", "Q06_iris_trend_interval"), 1)},
     "I01": "dist/I01_cell_image_quant.pptx",
+    "Q07": "dist/Q07_wine_scatter.pptx",
     "Q03P": "dist/Q03_iris_mean_ci_nature.pptx",
     "DECK01": "dist/DECK01_c01_defense.pptx",
 }
@@ -57,7 +58,7 @@ def main():
             "quant_interval", "ablation_comparison", "image_plus_quant"} <= categories
     disciplines = {task["discipline"] for task in tasks}
     assert disciplines == {"aerospace_systems", "machinery_fault_diagnosis",
-                           "applied_statistics", "cell_imaging"}
+                           "applied_statistics", "analytical_chemistry", "cell_imaging"}
     for task in tasks:
         assert task["mode"] in {"presentation", "publication"}
         assert task["discipline"] in disciplines
@@ -67,7 +68,7 @@ def main():
         if task["status"] == "automated_fixture":
             assert all((ROOT / path).is_file() for path in artifact_paths(task["id"]))
     ready = sum(task["status"] == "automated_fixture" for task in tasks)
-    assert ready == len(tasks) == 14
+    assert ready == len(tasks) == 15
     print(f"PASS benchmark contract: {len(tasks)} automated fixtures; expert review pending")
 
 
