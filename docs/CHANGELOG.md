@@ -30,6 +30,7 @@
 - Added source-file hashes and local locators to every FigureSpec EvidenceRecord; validation now catches stale local evidence while distinguishing a hashed evidence ledger from publisher artwork that is not redistributed.
 - Rechecked Nature's current main-figure guide and made figure class, maximum height, guide-check date and preferred submission format explicit in the publication target; the Q03 demonstrator remains pending actual-size and editorial review. The publication caption is now a hash-locked review artifact.
 - Validated Q01's visible legend against source-group labels, colors and native symbol shapes, and checked visible category/numeric ticks on all six Iris charts and Q03P against their coordinates; label swaps now fail negative tests instead of silently misidentifying observations.
+- Expanded the second-stage independent-review packet to include the source data, chart specifications, builders and validators, so reproducibility can be checked from the extracted archive.
 
 ## V7.5.0-dev — Deck planning and V7.4 source closure
 - Added DeckSpec, SlideSpec and SourceStyleSpec planning contracts and validation.

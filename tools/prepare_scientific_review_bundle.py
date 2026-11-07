@@ -19,6 +19,7 @@ UNBLIND_EXTRA = {
     "docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md",
     "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md",
     "docs/Q03_NATURE_PUBLICATION_CAPTION.md",
+    "data/README.md",
     "dist/render_record_v76.json", "dist/export_quantitative_metadata_v76.json",
     "tools/validate_release_readiness.py", "tools/validate_research_benchmark.py",
     "tools/scientific_ir.py",
@@ -29,6 +30,9 @@ def bundle_paths() -> tuple[list[Path], list[Path]]:
     benchmark = json.loads((ROOT / "specs/research_figure_benchmark_v76.json").read_text(encoding="utf-8"))
     blind = set()
     unblind = {ROOT / rel for rel in UNBLIND_EXTRA}
+    unblind.update((ROOT / "tools").glob("*.py"))
+    unblind.update((ROOT / "tools").glob("*.ps1"))
+    unblind.update((ROOT / "specs").glob("*.json"))
     for task in benchmark["tasks"]:
         blind.add(ROOT / task["source"])
         blind.update(ROOT / path for path in artifact_paths(task["id"]))
@@ -50,6 +54,9 @@ def build(output: Path) -> None:
         "Record an initial score and evidence for each task before opening unblind_review/.\n"
         "Stage 2: inspect unblind_review/ benchmark expectations, traps, specs and methods.\n"
         "Reconcile any differences, then complete review_template.json for all 14 tasks.\n"
+        "The second stage includes source data, build scripts and validators.\n"
+        "Example checks: python unblind_review/tools/validate_quantitative_examples.py\n"
+        "                python unblind_review/tools/validate_publication_example.py\n"
         "Read review_form.md before scoring.\n"
         "Run: python unblind_review/tools/validate_release_readiness.py --review review_template.json\n"
         "The template is unfilled; this archive does not assert scientific or journal approval.\n"

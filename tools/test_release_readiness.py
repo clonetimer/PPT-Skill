@@ -98,6 +98,8 @@ class ReleaseGateTests(unittest.TestCase):
         assert ROOT / "figure_specs/quant/Q03_iris_mean_ci.json" in unblind
         assert ROOT / "dist/Q03_iris_mean_ci.pdf" in blind
         assert ROOT / "dist/Q03_iris_mean_ci.pdf" in unblind
+        assert ROOT / "tools/validate_quantitative_examples.py" not in blind
+        assert ROOT / "tools/validate_quantitative_examples.py" in unblind
 
 
 if __name__ == "__main__":

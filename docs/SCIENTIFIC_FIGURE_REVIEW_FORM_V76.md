@@ -53,4 +53,4 @@
 
 运行 `python tools/validate_release_readiness.py --prepare review.json` 创建未填写的 JSON 表。在 `reviewers` 登记评审人、所属学科、独立性和初评先于基准预期的声明；每项任务用 `reviewer_id` 指向覆盖其 `required_discipline` 的评审人。评审人逐项填写 `initial_review_before_expectations` 的初评证据、来源/科学关系核验、实际终尺寸检查条件与证据、六维评分及各自证据、四项硬失败的布尔结论和任务结论。运行 `python tools/validate_release_readiness.py --review review.json` 进行发布判定。`artifacts_sha256` 锁定该任务需检查的 SVG、PPTX、PDF 与预览文件；模板中的 `false`、`null` 与空字符串均表示未完成。任一工件或基准文件变更后须重新评审。机器只检查记录的完整性、领域归属和文件哈希，不能证明评审人的身份、初评顺序或专业判断。
 
-可运行 `python tools/prepare_scientific_review_bundle.py --output review_bundle.zip` 生成两阶段评审材料包。`blind_review/` 包含 14 项任务的来源和图件，`unblind_review/` 包含输入规格、预期、陷阱与实现说明；根目录放说明和空白 JSON 表。出版商原始图稿只保留来源链接，不打包再分发。
+可运行 `python tools/prepare_scientific_review_bundle.py --output review_bundle.zip` 生成两阶段评审材料包。`blind_review/` 包含 14 项任务的来源和图件，`unblind_review/` 包含完整任务输入、构建/校验脚本、预期、陷阱与实现说明，可在第二阶段复跑定量图校验；根目录放说明和空白 JSON 表。出版商原始图稿只保留来源链接，不打包再分发。
