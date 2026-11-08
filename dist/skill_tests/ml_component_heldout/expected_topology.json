@@ -1,0 +1,22 @@
+{
+  "figure_id": "MLH01_wide_resnet_variants",
+  "required_nodes": [
+    "a_layer_0", "a_layer_1", "a_add",
+    "b_layer_0", "b_layer_1", "b_layer_2", "b_add",
+    "c_layer_0", "c_layer_1", "c_add",
+    "d_layer_0", "d_layer_1", "d_layer_2", "d_add"
+  ],
+  "required_edges": [
+    ["a_input","a_layer_0"],["a_input","a_add"],["a_layer_0","a_layer_1"],["a_layer_1","a_add"],["a_add","a_output"],
+    ["b_input","b_layer_0"],["b_input","b_add"],["b_layer_0","b_layer_1"],["b_layer_1","b_layer_2"],["b_layer_2","b_add"],["b_add","b_output"],
+    ["c_input","c_layer_0"],["c_input","c_add"],["c_layer_0","c_layer_1"],["c_layer_1","c_add"],["c_add","c_output"],
+    ["d_input","d_layer_0"],["d_input","d_add"],["d_layer_0","d_layer_1"],["d_layer_1","d_layer_2"],["d_layer_2","d_add"],["d_add","d_output"]
+  ],
+  "critical_labels": {
+    "a_layer_0_label":"conv3×3", "a_layer_1_label":"conv3×3",
+    "b_layer_0_label":"conv1×1", "b_layer_1_label":"conv3×3", "b_layer_2_label":"conv1×1",
+    "c_layer_0_label":"conv3×3", "c_layer_1_label":"conv3×3",
+    "d_layer_0_label":"conv3×3", "d_layer_1_label":"dropout", "d_layer_2_label":"conv3×3"
+  },
+  "source_note": "Wide Residual Networks Figure 1, PDF page 2; BN and ReLU precede each convolution but are omitted in the source figure."
+}

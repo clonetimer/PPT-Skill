@@ -1,0 +1,20 @@
+{
+  "robot": {
+    "source_svg": "https://raw.githubusercontent.com/tabler/tabler-icons/main/icons/outline/robot.svg",
+    "source_sha256": "c42ca8773a82b2bbcfc041fbfef2e207753c9f4e6ab2e5521c173c0497092458",
+    "license": "MIT",
+    "credit": "Tabler Icons by Paweł Kuna and contributors",
+    "license_file": "TABLER_LICENSE.txt",
+    "png_sha256": "61c5eb9b0d17923e444568aeaec4442f118d83cef35a5a68c7472a56eaf9067c"
+  },
+  "open_book": {
+    "source_svg": "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open-text.svg",
+    "source_sha256": "a73c44b3e7586317a1766b529e345a2c94cdd70d838a61c7b05432737b81eb7f",
+    "license": "ISC",
+    "credit": "Lucide Icons and Contributors",
+    "license_file": "LUCIDE_LICENSE.txt",
+    "transformation": "stroke currentColor changed to #4A2E20 to match the paper's book cue",
+    "png_sha256": "90a28781b282945787f0a80f365bbdd4634704937f75e467b96b94149a655d37"
+  },
+  "conversion": "CairoSVG 2.9.1, 512 x 512 transparent PNG fallback for PowerPoint; original SVG assets preserved."
+}

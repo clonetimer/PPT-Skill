@@ -1,0 +1,27 @@
+{
+  "deleted_self_head_segments": 6,
+  "single_self_head_mutation": "PASS existing topology and existing three-head assertions",
+  "gat_hashes": {
+    "png": "dbc0c5c11d3914695d58c97be2486569c20e81d9ac8290916f8e5f11e28ced08",
+    "pdf": "0cf099fdcf86a62bc6e8b84361213aa8cc6c4b2dad2fad2cb85bff5757682d30",
+    "pptx": "4052dc0215e528e73149d4616a3a64b5a93aa409ea8bcd62de0bbde4bc2a0004"
+  },
+  "gat_objects": {
+    "shapes": 68,
+    "connectors": 334,
+    "pictures": 0,
+    "node_endpoint_bindings": 0
+  },
+  "detr_hashes": {
+    "png": "bc54843e29ebb04efa0d890194c82ded060a1bbe7812043956b99ce5e01df257",
+    "pdf": "c97a49a0ffb6dd2b63722f7c836f6ab9d43eb1668138270c563af046fd9c9be1",
+    "pptx": "31a07a79f44d6851192b2427efb434b72af52052c77449af69dcab7ef43a4409"
+  },
+  "detr_objects": {
+    "shapes": 104,
+    "connectors": 48,
+    "pictures": 1,
+    "node_endpoint_bindings": 0
+  },
+  "bird_media_hash": "9bedea6da7951c01881482aba10bf412a01cc4e15177abd163249efdba6b8b87"
+}

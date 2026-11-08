@@ -49,7 +49,7 @@
         "source": {"type": "string", "minLength": 1},
         "source_file_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "source_locator": {"type": "string", "minLength": 1},
-        "status": {"enum": ["source_visible_redraw", "paper_grounded", "domain_adaptation", "data_driven"]},
+        "status": {"enum": ["source_visible_redraw", "source_artwork_excerpt", "paper_grounded", "domain_adaptation", "data_driven"]},
         "scope": {"type": "string", "minLength": 1},
         "reuse": {"type": "string", "minLength": 1}
       }
@@ -58,11 +58,13 @@
       "type": "object", "required": ["id", "type", "semantic_role", "evidence_ref"],
       "properties": {
         "id": {"type": "string", "minLength": 1},
-        "type": {"enum": ["text", "rect", "line", "polyline", "ellipse", "trapezoid", "sensor", "graph", "grid", "stack_grid", "image"]},
+        "type": {"enum": ["text", "rect", "line", "polyline", "polygon", "ellipse", "trapezoid", "sensor", "graph", "grid", "stack_grid", "image"]},
         "semantic_role": {"type": "string", "minLength": 1},
         "evidence_ref": {"type": "string", "minLength": 1},
         "semantic_id": {"type": "string"},
-        "semantic_link": {"type": "string"}
+        "semantic_link": {"type": "string"},
+        "head_id": {"type": "string", "minLength": 1},
+        "arrow_size": {"type": "number", "exclusiveMinimum": 0}
       }
     }
   }

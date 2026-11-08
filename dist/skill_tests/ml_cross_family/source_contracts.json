@@ -1,0 +1,35 @@
+{
+  "gat_figure_1": {
+    "source": "https://arxiv.org/pdf/1710.10903",
+    "locator": "PDF page 4, Figure 1 and Section 2.1",
+    "visual_anchors": [
+      "two unboxed panels: attention coefficient construction on the left, multi-head neighborhood aggregation on the right",
+      "left panel has two bottom feature groups feeding a common attention operator, then softmax to alpha_ij",
+      "right panel has six numbered nodes around center node 1, including its self relation",
+      "three differently colored and styled attention computations run in parallel along the neighborhood edges",
+      "head outputs converge at concat/avg before the final h-prime-1 node"
+    ],
+    "hard_checks": [
+      "do not replace multi-head edge bundles with one ordinary adjacency edge",
+      "do not omit the self contribution of node 1",
+      "do not move softmax before the attention score"
+    ]
+  },
+  "detr_figure_2": {
+    "source": "https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123460205.pdf",
+    "locator": "PDF page 6, Figure 2 and Section 3.2",
+    "visual_anchors": [
+      "four dashed architectural regions: backbone, encoder, decoder, prediction heads",
+      "CNN image feature path and separate positional encoding meet at an additive junction before flattening into encoder tokens",
+      "encoder memory feeds the decoder; colored object queries enter the decoder independently",
+      "four parallel decoder outputs each pass through an FFN to class/box or no-object results",
+      "right-hand bird image demonstrates detected boxes and is an image example, not a processing stage"
+    ],
+    "hard_checks": [
+      "queries must not be shown as sequential autoregressive outputs",
+      "position encoding must join image features before the encoder",
+      "FFN is shared across output positions even if drawn repeatedly",
+      "no-object predictions must be visible"
+    ]
+  }
+}

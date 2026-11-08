@@ -1,0 +1,6 @@
+{
+  "figure_id":"MLR01_resnet_residual_block",
+  "required_nodes":["x","weight1","relu1","weight2","add","relu2"],
+  "required_edges":[["x","weight1"],["x","add"],["weight1","weight2"],["weight2","add"],["add","relu2"]],
+  "source_note":"Figure 2 is original post-activation residual block; bypass branches at input and joins at addition."
+}

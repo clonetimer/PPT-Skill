@@ -1,0 +1,21 @@
+{
+  "TR03_transformer_architecture_source_matched": [
+    ["source_tokens","src_embed"],["src_embed","src_add"],["src_pe","src_add"],
+    ["src_add","enc_self"],["enc_self","enc_norm1"],["enc_norm1","enc_ffn"],
+    ["enc_ffn","enc_norm2"],["target_tokens","tgt_embed"],
+    ["tgt_embed","tgt_add"],["tgt_pe","tgt_add"],
+    ["tgt_add","dec_masked"],["dec_masked","dec_norm1"],
+    ["dec_norm1","dec_cross"],["enc_norm2","dec_cross"],
+    ["dec_cross","dec_norm2"],["dec_norm2","dec_ffn"],
+    ["dec_ffn","dec_norm3"],["dec_norm3","linear"],
+    ["linear","softmax"],["softmax","probabilities"]
+  ],
+  "TR04_transformer_attention_source_matched": [
+    ["q","score"],["k","score"],["score","scale"],
+    ["scale","mask"],["mask","weights"],
+    ["weights","context"],["v","context"],
+    ["mh_q","proj_q"],["mh_k","proj_k"],["mh_v","proj_v"],
+    ["proj_q","heads"],["proj_k","heads"],["proj_v","heads"],
+    ["heads","concat"],["concat","mh_linear"],["mh_linear","mh_output"]
+  ]
+}

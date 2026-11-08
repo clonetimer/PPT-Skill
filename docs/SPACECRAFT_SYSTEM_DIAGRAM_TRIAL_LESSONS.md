@@ -1,0 +1,9 @@
+# Spacecraft system diagram trial (2026-11-07)
+
+This test asks for a working-mechanism block diagram without a named mission. A generic spacecraft has no single hardware list: NASA notes that subsystem implementation depends on mission type and that propulsion can be optional. The example therefore states a bounded configuration—solar-powered, three-axis stabilized, with propulsion—and marks the propulsion region as configuration-dependent. It does not invent performance values or wiring protocols.
+
+Technical evidence and visual reference serve different roles. The NASA 2026 Small Spacecraft Technology pages and NASA spacecraft-bus descriptions ground the functional relations. NASA's historical *Spacecraft Design Summary*, Figure 2-9, was inspected only for engineering figure grammar: dashed subsystem enclosures, orthogonal routed interfaces, named paths and component symbols. Its historic probe/orbiter equipment and numbers were not imported. The separation is recorded in `dist/skill_tests/spacecraft/SOURCE.md` and `source_style.json`.
+
+The diagram's scientific checks cover six mechanisms: electrical generation/storage/distribution, command and science-data exchange, attitude feedback, heat rejection, optional propellant/thrust, and the platform boundary. `expected_topology.json` is independent of the drawing code; four deletion mutations test representative critical paths. The visual review catches issues outside that topology, including whether command and power buses are visibly distinct and whether unlabeled line crossings could imply a physical connection. The final diagram explicitly states the no-junction convention.
+
+The remaining gate is human aerospace interpretation and actual presentation-size viewing. Mechanical connector checks and a plausible engineering aesthetic do not prove that the diagram is a valid spacecraft design or a universal taxonomy.

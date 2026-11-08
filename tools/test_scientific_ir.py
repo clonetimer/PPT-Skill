@@ -26,6 +26,11 @@ class ScientificIRMutationTests(unittest.TestCase):
         validate_spec(STANDALONE)
         validate_expected_topology(STANDALONE, STANDALONE_TOPOLOGY)
 
+    def test_empty_method_topology_rejected(self):
+        empty={"figure_id":SPEC["id"],"required_nodes":[],"required_edges":[]}
+        with self.assertRaisesRegex(AssertionError,"critical routes"):
+            validate_expected_topology(SPEC,empty)
+
     def test_standalone_wrong_ea_shortcut_fails(self):
         changed = copy.deepcopy(STANDALONE)
         line = next(e for e in changed["elements"] if e.get("semantic_link") == "ea__gcn_1")

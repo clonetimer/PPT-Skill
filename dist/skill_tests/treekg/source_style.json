@@ -1,0 +1,12 @@
+{
+  "source": "ACL 2025 Figure 2, PDF page 3",
+  "anchors": [
+    {"evidence":"Figure 2 left and right outer panels","observation":"Two phases occupy unequal widths, with the expansion phase much wider.","decision":"Use a narrow construction panel and a broad operator field."},
+    {"evidence":"Figure 2 graph examples","observation":"Small pastel circular nodes carry the visual argument; edges connect nodes directly.","decision":"Use editable colored circles and native lines as the main marks."},
+    {"evidence":"Figure 2 left tree","observation":"Textbook hierarchy is shown as vertical branching, then horizontal relations appear between peers.","decision":"Distinguish tree edges and inferred horizontal edges in the initial graph."},
+    {"evidence":"Figure 2 expansion field","observation":"Operators are numbered and distributed across graph transformations, not serialized as six equal boxes.","decision":"Arrange numbered operator vignettes in two rows with no repeated processing boxes."},
+    {"evidence":"Figure 2 node colors","observation":"Green catalog, pale yellow entity, peach core, blue non-core and pink duplicate cues are used.","decision":"Retain a reduced version of the same categorical palette."},
+    {"evidence":"Figure 2 dashed marks","observation":"Dashed circles and routes signal candidate matching and inferred connections.","decision":"Use dashed candidate/iteration cues, and label their meaning."},
+    {"evidence":"Figure 2 labels and arrows","observation":"Thin black lines, serif labels, sparse tan transformation arrows and white background.","decision":"Use fine dark strokes, white space and light tan transformation arrows with larger presentation text."}
+  ]
+}

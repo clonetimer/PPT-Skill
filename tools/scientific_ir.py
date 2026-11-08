@@ -12,7 +12,7 @@ from chart_contract import canonical_chart_spec_digest
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACTS = json.loads((ROOT / "specs/figure_contracts_v76.json").read_text(encoding="utf-8"))
-PRIMITIVES = {"text", "rect", "line", "polyline", "ellipse", "trapezoid", "sensor", "graph", "grid", "stack_grid", "image"}
+PRIMITIVES = {"text", "rect", "line", "polyline", "polygon", "ellipse", "trapezoid", "sensor", "graph", "grid", "stack_grid", "image"}
 
 
 def semantic_role(element: dict) -> str:
@@ -55,7 +55,7 @@ def validate_spec(spec: dict) -> None:
         assert source.is_file()
         assert record["source_file_sha256"] == hashlib.sha256(source.read_bytes()).hexdigest()
         assert record["source_locator"]
-        assert record["status"] in {"source_visible_redraw", "paper_grounded", "domain_adaptation", "data_driven"}
+        assert record["status"] in {"source_visible_redraw", "source_artwork_excerpt", "paper_grounded", "domain_adaptation", "data_driven"}
         assert record["scope"] and record["reuse"]
     if contract["archetype"] == "quantitative_grid":
         lineage = spec["data_lineage"]
@@ -97,8 +97,12 @@ def semantic_boxes(spec: dict) -> dict[str, tuple[float, float, float, float]]:
     boxes = {}
     for e in spec["elements"]:
         sid = e.get("semantic_id")
-        if sid and all(k in e for k in ("x", "y", "w", "h")):
-            box = (e["x"], e["y"], e["x"] + e["w"], e["y"] + e["h"])
+        if sid and (all(k in e for k in ("x", "y", "w", "h")) or e["type"] == "polygon"):
+            if e["type"] == "polygon":
+                xs, ys = zip(*e["points"])
+                box = (min(xs), min(ys), max(xs), max(ys))
+            else:
+                box = (e["x"], e["y"], e["x"] + e["w"], e["y"] + e["h"])
             if sid in boxes:
                 a = boxes[sid]
                 box = (min(a[0], box[0]), min(a[1], box[1]), max(a[2], box[2]), max(a[3], box[3]))
@@ -130,7 +134,35 @@ def validate_expected_topology(spec: dict, topology: dict) -> None:
     assert spec["id"] == topology["figure_id"]
     labels = {e["semantic_id"]: e["text"] for e in spec["elements"]
               if e.get("semantic_id") and e["type"] == "text"}
-    assert all(labels.get(key) == value for key, value in topology["critical_labels"].items())
-    critical = {tuple(edge) for edge in topology["critical_edges"]}
+    assert all(labels.get(key) == value for key, value in topology.get("critical_labels", {}).items())
+    semantic_ids = {e["semantic_id"] for e in spec["elements"] if e.get("semantic_id")}
+    assert set(topology.get("required_nodes", [])) <= semantic_ids
+    critical = {tuple(edge) for edge in topology.get("critical_edges", topology.get("required_edges", []))}
+    assert critical, "A method-figure topology must declare source-derived critical routes"
     assert critical <= {tuple(edge) for edge in spec["semantic_edges"]}
     validate_drawn_routes(spec, critical)
+
+
+def validate_head_bundles(spec: dict, bundles: dict, tolerance: float = .23) -> None:
+    """Check every named attention head, including non-middle visual strands."""
+    boxes=semantic_boxes(spec)
+    lines={}
+    for element in spec["elements"]:
+        if element["type"]=="line" and element.get("head_id"):
+            lines.setdefault(element["head_id"],[]).append(element)
+    expected_ids={f"{sid}:head:{i}" for sid,detail in bundles.items()
+                  for i in range(len(detail["colors"]))}
+    assert set(lines)==expected_ids,(set(lines)^expected_ids)
+    for sid,detail in bundles.items():
+        source,target=detail["source"],detail["target"]
+        assert source in boxes and target in boxes
+        for i,color in enumerate(detail["colors"]):
+            path=lines[f"{sid}:head:{i}"]
+            assert len(path)>=2,(sid,i,"short path")
+            assert all(e["color"].lower()==color.lower() for e in path)
+            assert path[-1].get("arrow") and not any(e.get("arrow") for e in path[:-1])
+            assert distance_to_box(path[0]["x1"],path[0]["y1"],boxes[source])<=tolerance
+            assert distance_to_box(path[-1]["x2"],path[-1]["y2"],boxes[target])<=tolerance
+            for first,second in zip(path,path[1:]):
+                assert math.hypot(first["x2"]-second["x1"],
+                                  first["y2"]-second["y1"])<=tolerance

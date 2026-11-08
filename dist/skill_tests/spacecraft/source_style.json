@@ -1,0 +1,13 @@
+{
+  "technical_source": "NASA 2026 Small Spacecraft Technology State of the Art and NASA Webb spacecraft bus pages, listed in SOURCE.md",
+  "visual_reference": "NASA Spacecraft Design Summary, Figure 2-9, 1974, PDF p. 51; visual grammar only",
+  "evidence_status": "domain_adaptation",
+  "anchors": [
+    {"dimension":"subsystem boundaries","evidence":"NASA 1974 Fig. 2-9","observation":"distinct subsystems sit inside dashed, labeled enclosures","decision":"use dashed functional boundaries, not uniform filled cards"},
+    {"dimension":"routing","evidence":"NASA 1974 Fig. 2-9","observation":"orthogonal paths carry named commands, signals and power between regions","decision":"draw routed, labeled power/data/control/heat paths with no unexplained diagonal shortcuts"},
+    {"dimension":"inner components","evidence":"NASA 1974 Fig. 2-9","observation":"arrays, storage, antenna and thrusters have distinct technical glyphs","decision":"draw editable solar grid, antenna, battery, wheel, radiator and nozzle symbols where they clarify function"},
+    {"dimension":"hierarchy","evidence":"NASA 1974 Fig. 2-9","observation":"component nodes are nested in subsystem groups and external interfaces sit outside","decision":"keep ground, Sun and space outside the spacecraft boundary"},
+    {"dimension":"semantic labels","evidence":"NASA 1974 Fig. 2-9","observation":"connector labels identify data and command meanings","decision":"label pathways and use color plus line style redundantly; crossing without a dot is non-connection"},
+    {"dimension":"density","evidence":"NASA 1974 Fig. 2-9 and NASA 2026 platform overview","observation":"engineering diagram favors compact technical content over decorative surfaces","decision":"reserve color for flow class and keep enclosure fills white"}
+  ]
+}

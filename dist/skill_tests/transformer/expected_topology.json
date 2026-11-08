@@ -1,0 +1,18 @@
+{
+  "architecture": [
+    ["source_tokens", "src_embed"], ["src_embed", "encoder_self"],
+    ["encoder_self", "encoder_norm1"], ["encoder_norm1", "encoder_ffn"],
+    ["encoder_ffn", "encoder_norm2"],
+    ["target_shift", "tgt_embed"], ["tgt_embed", "decoder_masked"],
+    ["decoder_masked", "decoder_norm1"], ["decoder_norm1", "decoder_cross"],
+    ["encoder_norm2", "decoder_cross"], ["decoder_cross", "decoder_norm2"],
+    ["decoder_norm2", "decoder_ffn"], ["decoder_ffn", "decoder_norm3"],
+    ["decoder_norm3", "linear_softmax"], ["linear_softmax", "next_token"]
+  ],
+  "attention": [
+    ["qkv", "projections"], ["projections", "heads"],
+    ["heads", "concat"], ["concat", "output_projection"],
+    ["scores", "mask"], ["mask", "softmax"],
+    ["softmax", "weighted_values"], ["values", "weighted_values"]
+  ]
+}

@@ -1,0 +1,13 @@
+# Transformer two-page figure trial (2026-11-07)
+
+The source was Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/pdf/1706.03762), Figures 1–2 and §§3.1–3.5. The development example in `dist/skill_tests/transformer/` splits the original encoder–decoder architecture from its multi-head/scaled-attention detail because both cannot remain legible when compressed into one 16:9 slide. It is a presentation diagram, not a journal-sized figure.
+
+The source-derived `expected_topology.json` was written separately from the drawing declarations. Its architecture relations include the encoder-output → decoder cross-attention K/V handoff. Its attention relations include the separate V input to the weighted sum. `test_topology.py` deletes each of these routes from the graphic and its self-declared edges; the independent fixture still rejects both omissions. This tests the failure mode observed in the earlier GraphRAG trial.
+
+The first render exposed two other issues. The residual bypasses initially appeared to begin at sublayer outputs, which would misstate the input to Add & Norm; they were moved to the pre-sublayer stream. The combined two-slide PowerPoint inherited a theme shadow even though each rendered figure was clean; the final deck was cleaned and re-audited. A causal lower-triangular mask was added as editable shapes to make the future-token restriction visible.
+
+Scientific boundary: the figures reconstruct the original **post-LN** base model (`N=6`, `d_model=512`, `h=8`, `d_k=d_v=64`, `d_ff=2048`). They do not cover modern pre-LN variants, KV caches, optimizer/training details or beam search. The footer's positional-encoding and FFN equations are summaries, not a replacement for the paper's full derivation. The automated checks cannot replace a domain reader or an actual-distance projection inspection.
+
+## Follow-up: source visual grammar
+
+The first two-slide build was scientifically fuller than a basic flowchart but still used uniform rounded blocks and straight horizontal reading. After user feedback, the actual PDF pages containing Figures 1 and 2 were inspected at high resolution. The discrepancy was concrete: the source uses bottom-up unequal towers, operator-specific fills, waveform-to-sum positional inputs, nested residual paths, repeated-layer silhouettes, Q/K convergence and a V bypass, and replicated head geometry. Those seven anchored observations are recorded in `dist/skill_tests/transformer/source_style.json` and drive `TR03`/`TR04`. The revised figures are editable structural redraws, not pixel replicas or evidence of journal acceptance. This trial shows that a FigureSpec topology check and generic structural audit cannot evaluate whether the diagram uses the source's scientific visual language.

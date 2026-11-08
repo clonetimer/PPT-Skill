@@ -1,0 +1,208 @@
+{
+  "nan_feature_width": {
+    "accepted": true,
+    "elements": 3,
+    "bounds": [
+      0,
+      1,
+      NaN,
+      1
+    ],
+    "nonpositive_drawn_geometry": []
+  },
+  "fractional_channels": {
+    "accepted": true,
+    "elements": 3,
+    "bounds": [
+      0,
+      1,
+      0.2,
+      1
+    ],
+    "nonpositive_drawn_geometry": []
+  },
+  "too_narrow_encoder": {
+    "accepted": true,
+    "elements": 2,
+    "bounds": [
+      0,
+      0,
+      0.1,
+      1
+    ],
+    "nonpositive_drawn_geometry": [
+      [
+        "text",
+        [
+          "Encoder",
+          0.08,
+          0.22999999999999998,
+          -0.06,
+          0.54
+        ]
+      ]
+    ]
+  },
+  "too_small_matrix": {
+    "accepted": true,
+    "elements": 31,
+    "bounds": [
+      1,
+      1,
+      1.0299999999999998,
+      1.0299999999999998
+    ],
+    "nonpositive_drawn_geometry": [
+      [
+        "text",
+        [
+          "I\u2081\u00b7T\u2081",
+          2.01,
+          2.18,
+          -0.01,
+          0.2
+        ]
+      ],
+      [
+        "text",
+        [
+          "\u00b7\u00b7\u00b7",
+          2.0199999999999996,
+          2.18,
+          -0.01,
+          0.2
+        ]
+      ],
+      [
+        "text",
+        [
+          "I\u2081\u00b7T\u2099",
+          2.03,
+          2.18,
+          -0.01,
+          0.2
+        ]
+      ],
+      [
+        "text",
+        [
+          "\u22ee",
+          2.01,
+          2.19,
+          -0.01,
+          0.2
+        ]
+      ],
+      [
+        "text",
+        [
+          "\u22f1",
+          2.0199999999999996,
+          2.19,
+          -0.01,
+          0.2
+        ]
+      ],
+      [
+        "text",
+        [
+          "\u22ee",
+          2.03,
+          2.19,
+          -0.01,
+          0.2
+        ]
+      ],
+      [
+        "text",
+        [
+          "I\u2099\u00b7T\u2081",
+          2.01,
+          2.2,
+          -0.01,
+          0.2
+        ]
+      ],
+      [
+        "text",
+        [
+          "\u00b7\u00b7\u00b7",
+          2.0199999999999996,
+          2.2,
+          -0.01,
+          0.2
+        ]
+      ],
+      [
+        "text",
+        [
+          "I\u2099\u00b7T\u2099",
+          2.03,
+          2.2,
+          -0.01,
+          0.2
+        ]
+      ]
+    ]
+  },
+  "late_bad_matrix_index": {
+    "accepted": false,
+    "exception": "ValueError",
+    "message": "No reviewed subscript glyph for '6'",
+    "elements_before_failure": 3
+  },
+  "too_narrow_residual_panel": {
+    "accepted": true,
+    "elements": 14,
+    "bounds": [
+      0,
+      0,
+      1,
+      4.8
+    ],
+    "nonpositive_drawn_geometry": []
+  },
+  "short_residual_bar": {
+    "accepted": true,
+    "elements": 14,
+    "bounds": [
+      0,
+      0,
+      3.25,
+      4.8
+    ],
+    "nonpositive_drawn_geometry": [
+      [
+        "text",
+        [
+          "conv",
+          1.89,
+          1.2349999999999999,
+          0.04000000000000001,
+          -0.020000000000000004
+        ]
+      ],
+      [
+        "text",
+        [
+          "conv",
+          1.89,
+          1.6049999999999998,
+          0.04000000000000001,
+          -0.020000000000000004
+        ]
+      ]
+    ]
+  },
+  "two_matrices_duplicate_ids": [
+    "matrix_cell_0_0",
+    "matrix_cell_0_1",
+    "matrix_cell_0_2",
+    "matrix_cell_1_0",
+    "matrix_cell_1_1",
+    "matrix_cell_1_2",
+    "matrix_cell_2_0",
+    "matrix_cell_2_1",
+    "matrix_cell_2_2"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "gat_original": "PASS",
+  "gat_remove_critical_nodes": "PASS",
+  "gat_source_hash_matches": true,
+  "detr_original": "PASS",
+  "detr_remove_critical_nodes": "PASS",
+  "detr_source_hash_matches": true,
+  "bird_excerpt_sha256": "9bedea6da7951c01881482aba10bf412a01cc4e15177abd163249efdba6b8b87"
+}

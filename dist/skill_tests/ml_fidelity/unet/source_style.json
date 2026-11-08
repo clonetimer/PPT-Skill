@@ -1,0 +1,13 @@
+{
+  "paper":"Ronneberger et al., U-Net, MICCAI 2015, Figure 1, PDF page 2",
+  "source_url":"https://arxiv.org/pdf/1505.04597",
+  "anchors":[
+    "U-shaped five-resolution composition with a deep bottleneck, four lateral copy-and-crop bridges, and no enclosing cards",
+    "Thin blue multi-channel feature-map slabs; width and height contract with resolution and increase again in the expansive path",
+    "White copied feature-map slabs sit beside decoder maps, showing concatenation rather than addition",
+    "Dark-blue conv 3x3/ReLU, dark-red max-pool, green up-conv, gray copy-and-crop, teal 1x1 conv arrows use distinct visual semantics",
+    "Channel counts sit above maps; spatial sizes sit vertically beside them, including 572×572 input and 388×388 output",
+    "Four skip arrows run horizontally from contracted maps to decoder levels, with crop implied by narrower copied slabs",
+    "Legend is integrated at lower right; typography is sparse sans serif around the marks"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "figure_id": "SC01_spacecraft_bus_mechanism",
+  "claim": "A solar-powered, three-axis-stabilized spacecraft bus exchanges commands and data with ground/payload, distributes conditioned power, closes an attitude-control loop, rejects heat, and optionally produces orbital thrust.",
+  "required_edges": [
+    ["ground","transceiver"],["transceiver","ground"],
+    ["transceiver","obc"],["obc","command_bus"],
+    ["command_bus","payload"],["payload","storage"],
+    ["storage","transceiver"],
+    ["sun","solar_array"],["solar_array","pcdu"],
+    ["pcdu","battery"],["battery","pcdu"],
+    ["pcdu","power_bus"],
+    ["power_bus","comms_group"],["power_bus","cdh_group"],
+    ["power_bus","payload_group"],["power_bus","adcs_group"],
+    ["power_bus","thermal_group"],["power_bus","prop_group"],
+    ["command_bus","adcs_control"],["command_bus","prop_valve"],
+    ["adcs_sensor","adcs_control"],["adcs_control","reaction_wheel"],
+    ["reaction_wheel","attitude"],["attitude","adcs_sensor"],
+    ["payload","thermal_control"],["thermal_control","radiator"],
+    ["radiator","space"],
+    ["prop_tank","prop_valve"],["prop_valve","thruster"],
+    ["thruster","orbit"]
+  ],
+  "configuration_boundary": ["Propulsion is assumed for this example but is not universal to all spacecraft.", "ADCS components are representative; mission-specific sensor and actuator sets vary.", "No actual bus voltage, communications protocol, heat load, pointing performance or delta-v is claimed."]
+}

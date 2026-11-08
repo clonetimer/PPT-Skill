@@ -1,0 +1,80 @@
+{
+  "gat": {
+    "evidence": [
+      {
+        "id": "source_1",
+        "source": "dist/skill_tests/ml_cross_family/gat/paper.pdf",
+        "source_file_sha256": "a7d811a44e1c65bf27da3a01859f23a8edbe33b8f96114b4b5066aedb078f284",
+        "source_locator": "Figure 1, PDF page 4; Section 2.1; SHA-256 a7d811a44e1c65bf27da3a01859f23a8edbe33b8f96114b4b5066aedb078f284",
+        "status": "source_visible_redraw",
+        "scope": "Paper figure and caption; critical topology and visual grammar",
+        "reuse": "New editable scholarly redraw; original paper figure is not embedded."
+      }
+    ],
+    "differences": null,
+    "images": [],
+    "png_sha256": "cfac63bc21232570af71a134300ecb6679eac30ee83f8cbe609aeff5c9bf7cab",
+    "pdf_sha256": "205277c2b77f49ce985df6f42281193019bf5b2a2c3f2622ef60f6eee951e3ce",
+    "pptx_sha256": "07c2d9ac3a6a8d6a6442684f6009b92721179c64a2bbb84c95b1878d7f947ed6",
+    "json_sha256": "de6ab46847a41a612ca6949c8d41ea3c54e174c2abdf7ad6846383cbb9cd5a63",
+    "objects": {
+      "p:sp": 67,
+      "p:cxnSp": 361,
+      "p:pic": 0,
+      "a:stCxn": 0,
+      "a:endCxn": 0
+    },
+    "media": {}
+  },
+  "detr": {
+    "evidence": [
+      {
+        "id": "source_1",
+        "source": "dist/skill_tests/ml_cross_family/detr/paper.pdf",
+        "source_file_sha256": "cf016cbc2c80a6bc43ae0058d1824fba77630ddb7e4ac7224e6d0905a51356f8",
+        "source_locator": "Figure 2, PDF page 6; Section 3.2; SHA-256 cf016cbc2c80a6bc43ae0058d1824fba77630ddb7e4ac7224e6d0905a51356f8",
+        "status": "source_visible_redraw",
+        "scope": "Paper figure and caption; critical topology and visual grammar",
+        "reuse": "Editable method redraw with a cited source-paper excerpt in a result image panel."
+      },
+      {
+        "id": "asset_1",
+        "source": "dist/skill_tests/ml_cross_family/detr/bird_excerpt.png",
+        "source_file_sha256": "9bedea6da7951c01881482aba10bf412a01cc4e15177abd163249efdba6b8b87",
+        "source_locator": "https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123460205.pdf; author Carion et al.; license Reuse rights not independently cleared; local evaluation only",
+        "status": "source_artwork_excerpt",
+        "scope": "Exact crop of PDF page 6 Figure 2 right result panel at 160 dpi, pixels (907,262)-(1070,447); includes photograph and raster detection rectangles.",
+        "reuse": "Local comparison only; replace with a licensed original photograph and native detection boxes before public redistribution."
+      }
+    ],
+    "differences": null,
+    "images": [
+      {
+        "type": "image",
+        "path": "dist/skill_tests/ml_cross_family/detr/bird_excerpt.png",
+        "x": 13.42,
+        "y": 0.32,
+        "w": 2.4,
+        "h": 3.3,
+        "semantic_id": "source_bird_example",
+        "id": "el_0118",
+        "semantic_role": "scientific_object",
+        "evidence_ref": "asset_1"
+      }
+    ],
+    "png_sha256": "970a3ee61e687b339a11390fc91900b0d1fc77089d9fb2542db9af2c87af94e2",
+    "pdf_sha256": "f7dc4801368bb50e6ec7383fac17a5652d6c81f8dd229e24a5d8796b66b85cb0",
+    "pptx_sha256": "130f24baff2a944b272ff0cdc094a30574998b315409f80874de2474efa53203",
+    "json_sha256": "bc7a0faeb412547f3e828d85f0a3f8f4d1aa0943fe2fcc3bb9732936dad0d0d4",
+    "objects": {
+      "p:sp": 106,
+      "p:cxnSp": 48,
+      "p:pic": 1,
+      "a:stCxn": 0,
+      "a:endCxn": 0
+    },
+    "media": {
+      "ppt/media/image1.png": "9bedea6da7951c01881482aba10bf412a01cc4e15177abd163249efdba6b8b87"
+    }
+  }
+}

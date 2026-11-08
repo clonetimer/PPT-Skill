@@ -1,0 +1,12 @@
+{
+  "paper":"He et al., Deep Residual Learning, CVPR 2016, Figure 2, PDF page 2",
+  "source_url":"https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf",
+  "anchors":[
+    "One compact vertical computational stream on a white field, with no architectural card frame",
+    "Input x forks before both weight layers and follows a long smooth right-side identity bypass",
+    "Two simple rectangular weight layers appear in the residual branch",
+    "A single ReLU is between the weight layers and another follows the additive junction",
+    "The bypass reaches a circled plus sign from the right, while F(x) reaches it from above",
+    "F(x), F(x)+x, x and identity are placed beside the appropriate route, using math-serif symbols and plain labels"
+  ]
+}

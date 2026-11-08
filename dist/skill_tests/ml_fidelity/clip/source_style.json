@@ -1,0 +1,13 @@
+{
+  "paper":"Radford et al., CLIP, ICML 2021, Figure 1, PDF page 2",
+  "source_url":"https://proceedings.mlr.press/v139/radford21a/radford21a.pdf",
+  "anchors":[
+    "Three unequal but connected numbered regions: left contrastive pre-training, right upper classifier construction, right lower zero-shot use",
+    "Purple text encoders and green image encoders use asymmetric tapered silhouettes, not uniform boxes",
+    "Left N×N similarity matrix has image embeddings as rows, text embeddings as columns and blue highlighted matching diagonal",
+    "Stacked caption cards and stacked dog images signal many paired examples; a real photograph anchors the image modality",
+    "Right upper class-name cards feed a prompt template before the text encoder and T vectors",
+    "Right lower image feeds image encoder and I vector; scores against every T vector select a natural-language answer",
+    "Thin gray black connectors, lavender/green channel fills and sparse sans-serif headings distinguish modalities"
+  ]
+}

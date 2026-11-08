@@ -1,0 +1,17 @@
+{
+  "frozen_input_manifest": "freeze_protocol.json",
+  "build_script_runtime_seconds": 2.91,
+  "runtime_scope": "Execution of build_first_pass.py only; excludes literature search, visual inspection, authoring, PowerPoint export and review. No manual-drawing baseline was timed.",
+  "first_pass_artifact_sha256": {
+    "gat/GAT_Figure1_first_pass.png": "2b427b2a278b47d2016c671a7f68bc00ae935bc1f7979f0e6bfa97bc3469468e",
+    "gat/GAT_Figure1_first_pass.pdf": "0d96ac06275b8f472f37f7d92f250de5c2fb57d8c8bad486a745c134d4010a8b",
+    "gat/GAT_Figure1_first_pass.pptx": "2fdae1550b59af785038d87c3a7b661d0f877ba0b6974593bf92437d15bfd899",
+    "detr/DETR_Figure2_first_pass.png": "86e6f2ad64a557f4a74e2a27971479d3f9b85121b8656080d4cdbf15908e77cc",
+    "detr/DETR_Figure2_first_pass.pdf": "47ed60d4dd29f1db5da1707daaf9b43e461330c2cc5f99a8876a600c96c561b3",
+    "detr/DETR_Figure2_first_pass.pptx": "a99662f18435a8f52be5e7bc716ee9ab269d0a9db438c0179607a549c3d666c3"
+  },
+  "first_pass_observations_before_critic": {
+    "gat": "An unanchored self-loop and several line-through-label hits are visible; scientific and composition scores deferred to independent critic.",
+    "detr": "Includes one source-paper photograph excerpt; editable backbone, encoder, decoder and head shapes are separate. Score deferred to independent critic."
+  }
+}

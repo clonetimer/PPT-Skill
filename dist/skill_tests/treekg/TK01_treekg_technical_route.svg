@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<text x="54.0" y="63.25" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="35.0" fill="#2B3031" font-weight="700"><tspan x="54.0" dy="0">Tree-KG｜从教材树形骨架到可扩展知识图谱</tspan></text>
+<text x="56.4" y="105.06666666666666" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="17.333333333333332" fill="#5B6467"><tspan x="56.4" dy="0">依据 Niu et al., ACL 2025, Figure 2 与 §3.2–3.3 的可编辑讲解版</tspan></text>
+<line x1="54.0" y1="126.0" x2="1866.0" y2="126.0" stroke="#A7B0B0" stroke-width="1.3333333333333333"/>
+<rect x="54.0" y="170.39999999999998" width="494.40000000000003" height="798.0" rx="9.6" fill="#FFFFFF" stroke="#5E6768" stroke-width="2.0"/>
+<rect x="584.4" y="170.39999999999998" width="1281.6" height="798.0" rx="9.6" fill="#FFFFFF" stroke="#5E6768" stroke-width="2.0"/>
+<text x="81.60000000000001" y="210.60000000000002" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="24.0" fill="#2B3031" font-weight="700"><tspan x="81.60000000000001" dy="0">I  初始构建 · Explicit KG</tspan></text>
+<text x="615.6" y="210.60000000000002" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="24.0" fill="#2B3031" font-weight="700"><tspan x="615.6" dy="0">II  迭代扩展 · Hidden KG</tspan></text>
+<rect x="116.39999999999999" y="259.20000000000005" width="122.4" height="91.2" rx="0.0" fill="#FFFFFF" stroke="#7B7770" stroke-width="1.25"/>
+<rect x="109.19999999999999" y="253.2" width="122.4" height="91.2" rx="0.0" fill="#FFFFFF" stroke="#7B7770" stroke-width="1.25"/>
+<rect x="102.0" y="247.20000000000002" width="122.4" height="91.2" rx="0.0" fill="#FFFFFF" stroke="#7B7770" stroke-width="1.25"/>
+<line x1="117.6" y1="268.8" x2="199.20000000000002" y2="268.8" stroke="#7B7770" stroke-width="1.1666666666666667"/>
+<line x1="117.6" y1="289.20000000000005" x2="190.79999999999998" y2="289.20000000000005" stroke="#7B7770" stroke-width="1.1666666666666667"/>
+<line x1="117.6" y1="309.6" x2="205.2" y2="309.6" stroke="#7B7770" stroke-width="1.1666666666666667"/>
+<text x="242.4" y="283.6" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="20.0" fill="#2B3031" font-weight="700"><tspan x="242.4" dy="0">结构化教材</tspan></text>
+<text x="242.4" y="321.725" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="17.5" fill="#5B6467"><tspan x="242.4" dy="0">章 / 节 / 小节</tspan></text>
+<text x="157.20000000000002" y="395.875" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="18.5" fill="#2B3031" font-weight="700"><tspan x="157.20000000000002" dy="0">正则分段</tspan></text>
+<text x="331.8" y="395.875" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="18.5" fill="#2B3031" font-weight="700"><tspan x="331.8" dy="0">自底向上摘要</tspan></text>
+<text x="412.8" y="453.1833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="17.666666666666668" fill="#2B3031" font-weight="700"><tspan x="412.8" dy="0">实体、关系抽取</tspan></text>
+<line x1="163.20000000000002" y1="344.40000000000003" x2="163.20000000000002" y2="366.0" stroke="#B9A47C" stroke-width="2.0833333333333335" marker-end="url(#ar)"/>
+<line x1="222.0" y1="394.8" x2="231.6" y2="394.8" stroke="#B9A47C" stroke-width="2.0833333333333335" marker-end="url(#ar)"/>
+<line x1="372.0" y1="409.20000000000005" x2="372.0" y2="424.8" stroke="#B9A47C" stroke-width="2.0833333333333335" marker-end="url(#ar)"/>
+<line x1="417.6" y1="470.4" x2="417.6" y2="487.19999999999993" stroke="#B9A47C" stroke-width="2.0833333333333335"/>
+<line x1="417.6" y1="487.19999999999993" x2="295.2" y2="487.19999999999993" stroke="#B9A47C" stroke-width="2.0833333333333335"/>
+<line x1="295.2" y1="487.19999999999993" x2="295.2" y2="501.59999999999997" stroke="#B9A47C" stroke-width="2.0833333333333335" marker-end="url(#ar)"/>
+<text x="87.6" y="524.4083333333333" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="17.166666666666668" fill="#5B6467" font-weight="700"><tspan x="87.6" dy="0">① 目录与实体树（纵向边）</tspan></text>
+<ellipse cx="288.0" cy="559.1999999999999" rx="27.6" ry="27.6" fill="#D3EAD2" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="288.0" y="564.7416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="288.0" dy="0">电磁学</tspan></text>
+<ellipse cx="180.0" cy="615.6" rx="26.4" ry="26.4" fill="#D3EAD2" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="180.0" y="621.1416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="180.0" dy="0">电荷</tspan></text>
+<ellipse cx="397.20000000000005" cy="615.5999999999999" rx="28.799999999999997" ry="28.799999999999997" fill="#D3EAD2" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="397.2" y="621.1416666666665" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="397.2" dy="0">库仑定律</tspan></text>
+<ellipse cx="123.6" cy="674.4" rx="26.4" ry="26.4" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="123.60000000000001" y="679.9416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="123.60000000000001" dy="0">负电荷</tspan></text>
+<ellipse cx="229.2" cy="674.4" rx="26.4" ry="26.4" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="229.2" y="679.9416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="229.2" dy="0">电子</tspan></text>
+<ellipse cx="368.3999999999999" cy="674.4" rx="26.4" ry="26.4" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="368.4" y="679.9416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="368.4" dy="0">电子</tspan></text>
+<ellipse cx="472.79999999999995" cy="674.4" rx="26.4" ry="26.4" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="472.79999999999995" y="679.9416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="472.79999999999995" dy="0">电场</tspan></text>
+<line x1="263.5351069420528" y1="571.9761108191502" x2="203.40120205542777" y2="603.3793722599432" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="312.52238634064486" y1="571.8654083297836" x2="371.61142294889225" y2="602.3839217428346" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="161.72525514954475" y1="634.6523935674959" x2="141.87474485045527" y2="655.3476064325041" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="196.94147750258526" y1="635.8471316494312" x2="212.25852249741473" y2="654.1528683505688" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="384.53181747427016" y1="641.4642059900317" x2="380.0125006485856" y2="650.6911445091376" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="419.93334386043824" y1="633.2814896692297" x2="451.96110146126495" y2="658.191967803206" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="514.8" y1="699.6" x2="514.8" y2="730.8" stroke="#B9A47C" stroke-width="2.5" marker-end="url(#ar)"/>
+<text x="87.6" y="742.8083333333333" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="17.166666666666668" fill="#5B6467" font-weight="700"><tspan x="87.6" dy="0">② 关系抽取后（横向边）</tspan></text>
+<ellipse cx="288.0" cy="777.6" rx="27.6" ry="27.6" fill="#D3EAD2" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="288.0" y="783.1416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="288.0" dy="0">电磁学</tspan></text>
+<ellipse cx="180.0" cy="835.2" rx="26.4" ry="26.4" fill="#D3EAD2" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="180.0" y="840.7416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="180.0" dy="0">电荷</tspan></text>
+<ellipse cx="397.20000000000005" cy="835.1999999999999" rx="28.799999999999997" ry="28.799999999999997" fill="#D3EAD2" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="397.2" y="840.7416666666666" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="397.2" dy="0">库仑定律</tspan></text>
+<ellipse cx="123.6" cy="898.8000000000001" rx="26.4" ry="26.4" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="123.60000000000001" y="904.3416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="123.60000000000001" dy="0">负电荷</tspan></text>
+<ellipse cx="229.2" cy="898.8000000000001" rx="26.4" ry="26.4" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="229.2" y="904.3416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="229.2" dy="0">电子</tspan></text>
+<ellipse cx="368.3999999999999" cy="898.8000000000001" rx="26.4" ry="26.4" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="368.4" y="904.3416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="368.4" dy="0">正电荷</tspan></text>
+<ellipse cx="472.79999999999995" cy="898.8000000000001" rx="26.4" ry="26.4" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="472.79999999999995" y="904.3416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="472.79999999999995" dy="0">电场</tspan></text>
+<line x1="263.6470588235294" y1="790.5882352941177" x2="203.2941176470588" y2="822.7764705882353" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="312.41209454232296" y1="790.4767092091375" x2="371.7265100427934" y2="821.7634338687262" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="162.4839387033515" y1="854.9521542281356" x2="141.1160612966485" y2="879.0478457718644" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="196.1534247577137" y1="856.0812563941178" x2="213.0465752422863" y2="877.9187436058822" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="385.3197824647283" y1="861.4354803903916" x2="379.29019940733235" y2="874.750809642141" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="419.2385113180399" y1="853.740334918351" x2="452.59803129179676" y2="881.8046929915116" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="206.4" y1="835.2" x2="368.40000000000003" y2="835.2" stroke="#8B6D68" stroke-width="1.5833333333333333" stroke-dasharray="8 6"/>
+<line x1="255.6" y1="898.8000000000001" x2="341.99999999999994" y2="898.8000000000001" stroke="#8B6D68" stroke-width="1.5833333333333333" stroke-dasharray="8 6"/>
+<text x="90.0" y="952.4000000000001" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.0" fill="#2B3031" font-weight="700"><tspan x="90.0" dy="0">显式 KG：目录骨架 + 领域实体</tspan></text>
+<line x1="1003.1999999999999" y1="234.0" x2="1003.1999999999999" y2="904.8" stroke="#B8C0C0" stroke-width="1.1666666666666667" stroke-dasharray="8 6"/>
+<line x1="1424.3999999999999" y1="234.0" x2="1424.3999999999999" y2="904.8" stroke="#B8C0C0" stroke-width="1.1666666666666667" stroke-dasharray="8 6"/>
+<line x1="607.1999999999999" y1="566.4" x2="1842.0" y2="566.4" stroke="#B8C0C0" stroke-width="1.1666666666666667" stroke-dasharray="8 6"/>
+<text x="616.8" y="266.79999999999995" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="20.0" fill="#2B3031" font-weight="700"><tspan x="616.8" dy="0">1  上下文卷积</tspan></text>
+<line x1="616.8" y1="281.99999999999994" x2="969.6" y2="281.99999999999994" stroke="#A6AFB1" stroke-width="1.0"/>
+<ellipse cx="792.0" cy="416.40000000000003" rx="43.199999999999996" ry="43.199999999999996" fill="#F5D3AC" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="791.9999999999998" y="422.00000000000006" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.0" fill="#2B3031"><tspan x="791.9999999999998" dy="0">电荷</tspan></text>
+<ellipse cx="673.2" cy="366.0" rx="33.6" ry="33.6" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="673.2" y="371.54166666666663" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="673.2" dy="0">电势</tspan></text>
+<line x1="752.230867022989" y1="399.5282466158135" x2="704.1315478710087" y2="379.1224748543673" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<ellipse cx="676.8" cy="470.4" rx="33.6" ry="33.6" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="676.8" y="475.94166666666666" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="676.8" dy="0">电场</tspan></text>
+<line x1="752.8841739665769" y1="434.7355434531671" x2="707.223420248218" y2="456.1390217586478" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<ellipse cx="910.8" cy="364.8" rx="33.6" ry="33.6" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="910.8" y="370.3416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="910.8" dy="0">电子</tspan></text>
+<line x1="831.6237868472988" y1="399.18966833905205" x2="879.9814991187675" y2="378.1858135140707" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<ellipse cx="910.8" cy="470.4" rx="33.6" ry="33.6" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="910.8" y="475.94166666666666" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="910.8" dy="0">正电荷</tspan></text>
+<line x1="831.3278318263845" y1="434.2762871938112" x2="880.2116863572566" y2="456.4962210714802" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<text x="624.0" y="535.6916666666666" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.833333333333332" fill="#5B6467"><tspan x="624.0" dy="0">邻域语义 → 节点描述</tspan></text>
+<text x="1030.8" y="266.79999999999995" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="20.0" fill="#2B3031" font-weight="700"><tspan x="1030.8" dy="0">2  实体聚合</tspan></text>
+<line x1="1030.8" y1="281.99999999999994" x2="1388.4" y2="281.99999999999994" stroke="#A6AFB1" stroke-width="1.0"/>
+<ellipse cx="1201.1999999999998" cy="375.59999999999997" rx="46.800000000000004" ry="46.800000000000004" fill="#F5D3AC" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="1201.2" y="381.4916666666666" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.833333333333332" fill="#2B3031"><tspan x="1201.2" dy="0">核心</tspan></text>
+<ellipse cx="1084.8" cy="469.20000000000005" rx="34.8" ry="34.8" fill="#D8EAF1" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="1084.8" y="474.7416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="1084.8" dy="0">现象</tspan></text>
+<line x1="1201.2" y1="416.40000000000003" x2="1116.4919329262932" y2="454.824277847867" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<ellipse cx="1209.6000000000001" cy="482.4" rx="34.8" ry="34.8" fill="#D8EAF1" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="1209.6000000000001" y="487.9416666666666" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="1209.6000000000001" dy="0">属性</tspan></text>
+<line x1="1201.2" y1="416.40000000000003" x2="1205.2063510673477" y2="447.878472672018" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<ellipse cx="1329.6000000000001" cy="465.59999999999997" rx="34.8" ry="34.8" fill="#D8EAF1" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="1329.6000000000001" y="471.14166666666665" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="1329.6000000000001" dy="0">效应</tspan></text>
+<line x1="1201.2" y1="416.40000000000003" x2="1297.103943692316" y2="453.14824010640143" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<text x="1030.8" y="535.4" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.0" fill="#5B6467"><tspan x="1030.8" dy="0">横向关联 → 核心/非核心纵向边</tspan></text>
+<text x="1455.6000000000001" y="266.79999999999995" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="20.0" fill="#2B3031" font-weight="700"><tspan x="1455.6000000000001" dy="0">6  结构整合</tspan></text>
+<line x1="1455.6000000000001" y1="281.99999999999994" x2="1806.0" y2="281.99999999999994" stroke="#A6AFB1" stroke-width="1.0"/>
+<ellipse cx="1527.6000000000001" cy="363.59999999999997" rx="24.0" ry="24.0" fill="#D3EAD2" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<ellipse cx="1585.2000000000003" cy="411.6" rx="24.0" ry="24.0" fill="#D3EAD2" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<ellipse cx="1525.2000000000003" cy="466.8" rx="24.0" ry="24.0" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<line x1="1546.0373107103371" y1="378.96442559194753" x2="1566.762689289663" y2="396.23557440805246" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="1567.5376557177162" y1="427.8493567397012" x2="1542.862344282284" y2="450.55064326029884" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<text x="1642.8" y="424.4666666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="33.333333333333336" fill="#2B3031"><tspan x="1642.8" dy="0">+</tspan></text>
+<ellipse cx="1704.0" cy="369.59999999999997" rx="24.0" ry="24.0" fill="#D3EAD2" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<ellipse cx="1760.4" cy="414.0" rx="24.0" ry="24.0" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<ellipse cx="1705.2000000000003" cy="469.2" rx="24.0" ry="24.0" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<line x1="1722.8577090795043" y1="384.4454305519502" x2="1741.5422909204956" y2="399.1545694480498" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="1743.4294372515228" y1="430.97056274847716" x2="1722.170562748477" y2="452.2294372515229" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="1607.8275452593114" y1="403.6003627871122" x2="1681.3724547406885" y2="377.59963721288784" stroke="#8B6D68" stroke-width="1.5833333333333333" stroke-dasharray="8 6"/>
+<text x="1454.3999999999999" y="535.6333333333333" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.666666666666668" fill="#5B6467"><tspan x="1454.3999999999999" dy="0">新文本子图 → 对齐并合并</tspan></text>
+<text x="616.8" y="612.4000000000001" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="20.0" fill="#2B3031" font-weight="700"><tspan x="616.8" dy="0">3  节点嵌入</tspan></text>
+<line x1="616.8" y1="627.6" x2="969.6" y2="627.6" stroke="#A6AFB1" stroke-width="1.0"/>
+<ellipse cx="693.6" cy="735.6" rx="36.0" ry="36.0" fill="#F5D3AC" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="693.6" y="742.0166666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="18.333333333333332" fill="#2B3031"><tspan x="693.6" dy="0">A</tspan></text>
+<ellipse cx="846.0" cy="703.2" rx="36.0" ry="36.0" fill="#F5D3AC" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="846.0" y="709.6166666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="18.333333333333332" fill="#2B3031"><tspan x="846.0" dy="0">B</tspan></text>
+<ellipse cx="883.2" cy="807.6" rx="36.0" ry="36.0" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="883.2" y="814.0166666666668" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="18.333333333333332" fill="#2B3031"><tspan x="883.2" dy="0">C</tspan></text>
+<line x1="728.8130138046006" y1="728.113768718707" x2="810.7869861953994" y2="710.6862312812931" stroke="#809096" stroke-width="1.5833333333333333" stroke-dasharray="8 6"/>
+<line x1="858.0834146552356" y1="737.1115185485646" x2="871.1165853447644" y2="773.6884814514356" stroke="#809096" stroke-width="1.5833333333333333" stroke-dasharray="8 6"/>
+<text x="624.0" y="898.0916666666667" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.833333333333332" fill="#5B6467"><tspan x="624.0" dy="0">描述 → 向量；近邻检索</tspan></text>
+<text x="1030.8" y="612.4000000000001" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="20.0" fill="#2B3031" font-weight="700"><tspan x="1030.8" dy="0">4  实体去重</tspan></text>
+<line x1="1030.8" y1="627.6" x2="1388.4" y2="627.6" stroke="#A6AFB1" stroke-width="1.0"/>
+<ellipse cx="1112.3999999999999" cy="715.1999999999999" rx="40.800000000000004" ry="40.800000000000004" fill="#F2D5DD" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="1112.4" y="720.7416666666667" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="1112.4" dy="0">电荷</tspan></text>
+<ellipse cx="1293.6000000000001" cy="721.1999999999999" rx="44.4" ry="44.4" fill="#F2D5DD" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<text x="1293.6" y="717.3999999999999" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#2B3031"><tspan x="1293.6" dy="0">Electric</tspan><tspan x="1293.6" dy="18.683333333333334">charge</tspan></text>
+<line x1="1155.6000000000001" y1="715.2" x2="1245.6000000000001" y2="720.0" stroke="#8B6D68" stroke-width="1.75" stroke-dasharray="8 6"/>
+<text x="1033.1999999999998" y="823.5166666666667" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.333333333333332" fill="#5B6467"><tspan x="1033.1999999999998" dy="0">同角色 + 近邻 + LLM 判同</tspan></text>
+<text x="1033.1999999999998" y="898.0916666666667" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.833333333333332" fill="#5B6467"><tspan x="1033.1999999999998" dy="0">并查集合并</tspan></text>
+<text x="1455.6000000000001" y="612.4000000000001" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="20.0" fill="#2B3031" font-weight="700"><tspan x="1455.6000000000001" dy="0">5  边预测</tspan></text>
+<line x1="1455.6000000000001" y1="627.6" x2="1806.0" y2="627.6" stroke="#A6AFB1" stroke-width="1.0"/>
+<ellipse cx="1520.3999999999999" cy="723.6" rx="27.6" ry="27.6" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<ellipse cx="1631.9999999999998" cy="699.6" rx="27.6" ry="27.6" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<ellipse cx="1755.6" cy="771.5999999999999" rx="27.6" ry="27.6" fill="#F3F0B0" stroke="#2B3031" stroke-width="1.4166666666666667"/>
+<line x1="1547.3830933917263" y1="717.797184216833" x2="1605.0169066082735" y2="705.4028157831671" stroke="#2B3031" stroke-width="1.5833333333333333"/>
+<line x1="1655.8486911669788" y1="713.4924414564924" x2="1731.7513088330213" y2="757.7075585435075" stroke="#8B6D68" stroke-width="1.5833333333333333" stroke-dasharray="8 6"/>
+<text x="1455.6000000000001" y="838.1500000000001" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="17.0" fill="#2B3031"><tspan x="1455.6000000000001" dy="0">cos(zᵤ,zᵥ) + AA + CA</tspan></text>
+<text x="1455.6000000000001" y="897.9166666666667" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.333333333333332" fill="#5B6467"><tspan x="1455.6000000000001" dy="0">排序 → LLM 强度阈值 → 加边</tspan></text>
+<line x1="553.2" y1="549.6" x2="577.1999999999999" y2="549.6" stroke="#B9A47C" stroke-width="2.0833333333333335" marker-end="url(#ar)"/>
+<text x="1719.6000000000001" y="318.2583333333334" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.166666666666668" fill="#5B6467"><tspan x="1719.6000000000001" dy="0">新增文本子图</tspan></text>
+<text x="1656.6000000000001" y="947.9333333333333" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="18.666666666666668" fill="#2B3031" font-weight="700"><tspan x="1656.6000000000001" dy="0">扩展后的 Tree-KG</tspan></text>
+<text x="58.8" y="1017.0083333333332" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="17.166666666666668" fill="#5B6467"><tspan x="58.8" dy="0">图注：六类算子可灵活组合；图中不规定固定执行顺序。颜色区分类别；虚线表示横向、候选或推断关系。</tspan></text>
+</svg>
