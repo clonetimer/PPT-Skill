@@ -44,13 +44,14 @@ def addtext(sl,e,df):
  for j,t in enumerate(e["text"].split("\n")):
   p=f.paragraphs[0] if j==0 else f.add_paragraph();p.alignment=al;p.space_before=Pt(0);p.space_after=Pt(0);p.line_spacing=1
   r=p.add_run();r.text=t;r.font.name=e.get("font",df);r.font.size=Pt(e.get("size",14));r.font.bold=e.get("bold",False);r.font.italic=e.get("italic",False);r.font.color.rgb=rgb(e.get("color","#28343C"))
+ if e.get("rotation"):s.rotation=e["rotation"]
  nofx(s)
 def addline(sl,e):
  s=sl.shapes.add_connector(MSO_CONNECTOR.STRAIGHT,Inches(e["x1"]),Inches(e["y1"]),Inches(e["x2"]),Inches(e["y2"]));c=rgb(e.get("color","#43525B"));s.line.color.rgb=c;s.line.width=Pt(e.get("sw",1))
  if e.get("dash"):s.line.dash_style=MSO_LINE_DASH_STYLE.DASH
  nofx(s)
  if e.get("arrow"):
-  ang=math.degrees(math.atan2(e["y2"]-e["y1"],e["x2"]-e["x1"]));z=.105
+  ang=math.degrees(math.atan2(e["y2"]-e["y1"],e["x2"]-e["x1"]));z=e.get("arrow_size",.105)
   q=sl.shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE,Inches(e["x2"]-z/2),Inches(e["y2"]-z/2),Inches(z),Inches(z));q.rotation=ang+90;q.fill.solid();q.fill.fore_color.rgb=c;q.line.color.rgb=c;nofx(q)
 def render(spec,svg,pptx):
  w=spec["canvas"]["width_in"]*DPI;h=spec["canvas"]["height_in"]*DPI;df=spec.get("style",{}).get("font","Times New Roman")
@@ -67,7 +68,8 @@ def render(spec,svg,pptx):
   elif t=="text":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];fs=e.get("size",14)*DPI/72;ls=e["text"].split("\n");a=e.get("align","center");anc={"left":"start","center":"middle","right":"end"}[a];tx=x if a=="left" else x+ww/2 if a=="center" else x+ww;lh=fs*1.18;by=y+hh/2-(len(ls)-1)*lh/2+fs*.35
    sp="".join(f'<tspan x="{tx}" dy="{0 if j==0 else lh}">{escape(v)}</tspan>' for j,v in enumerate(ls))
-   out.append(f'<text x="{tx}" y="{by}" text-anchor="{anc}" dominant-baseline="middle" font-family="{escape("Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" if e.get("font",df)=="Microsoft YaHei" else e.get("font",df))}" font-size="{fs}" fill="{e.get("color","#28343C")}"'+(' font-weight="700"' if e.get("bold") else '')+(' font-style="italic"' if e.get("italic") else '')+f'>{sp}</text>');addtext(sl,e,df)
+   rot=f' transform="rotate({e["rotation"]} {(x+ww/2):.3f} {(y+hh/2):.3f})"' if e.get("rotation") else ''
+   out.append(f'<text x="{tx}" y="{by}" text-anchor="{anc}" dominant-baseline="middle" font-family="{escape("Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" if e.get("font",df)=="Microsoft YaHei" else e.get("font",df))}" font-size="{fs}" fill="{e.get("color","#28343C")}"'+(' font-weight="700"' if e.get("bold") else '')+(' font-style="italic"' if e.get("italic") else '')+rot+f'>{sp}</text>');addtext(sl,e,df)
   elif t=="rect":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];dash=' stroke-dasharray="8 6"' if e.get("dash") else ''
    out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" rx="{e.get("radius",0)*DPI}" fill="{e.get("fill","#FFFFFF")}" stroke="{e.get("stroke","#43525B")}" stroke-width="{e.get("sw",1)*DPI/72}"{dash}/>')
@@ -79,10 +81,27 @@ def render(spec,svg,pptx):
    s=sl.shapes.add_shape(MSO_SHAPE.TRAPEZOID,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb(e["stroke"]);s.line.width=Pt(e.get("sw",1));nofx(s)
   elif t=="line":
    x1,y1,x2,y2=[e[k]*DPI for k in ("x1","y1","x2","y2")];dash=' stroke-dasharray="8 6"' if e.get("dash") else '';ar=' marker-end="url(#ar)"' if e.get("arrow") else ''
-   out.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{e.get("color","#43525B")}" stroke-width="{e.get("sw",1)*DPI/72}"{dash}{ar}/>');addline(sl,e)
+   if e.get("arrow") and e.get("arrow_size"):
+    ar=''
+   out.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{e.get("color","#43525B")}" stroke-width="{e.get("sw",1)*DPI/72}"{dash}{ar}/>')
+   if e.get("arrow") and e.get("arrow_size"):
+    z=e["arrow_size"]*DPI;length=math.hypot(x2-x1,y2-y1)
+    if length:
+     ux,uy=(x2-x1)/length,(y2-y1)/length;px,py=-uy,ux
+     points=f'{x2},{y2} {x2-ux*z+px*z/2},{y2-uy*z+py*z/2} {x2-ux*z-px*z/2},{y2-uy*z-py*z/2}'
+     out.append(f'<polygon points="{points}" fill="{e.get("color","#43525B")}"/>')
+   addline(sl,e)
   elif t=="polyline":
    out.append('<polyline points="'+" ".join(f'{x*DPI},{y*DPI}' for x,y in e["points"])+f'" fill="none" stroke="{e["color"]}" stroke-width="{e.get("sw",1.2)*DPI/72}" stroke-linecap="round" stroke-linejoin="round"/>')
    for a,b in zip(e["points"][:-1],e["points"][1:]):addline(sl,{"x1":a[0],"y1":a[1],"x2":b[0],"y2":b[1],"color":e["color"],"sw":e.get("sw",1.2)})
+  elif t=="polygon":
+   ps=e["points"]
+   out.append('<polygon points="'+" ".join(f'{x*DPI},{y*DPI}' for x,y in ps)+f'" fill="{e.get("fill","#FFFFFF")}" stroke="{e.get("stroke","#43525B")}" stroke-width="{e.get("sw",1)*DPI/72}"/>')
+   # FreeformBuilder truncates vertex coordinates to integers before scaling.
+   # Milliinch coordinates preserve the source polygon instead of a 1-inch box.
+   b=sl.shapes.build_freeform(start_x=round(ps[0][0]*1000),start_y=round(ps[0][1]*1000),scale=Inches(.001))
+   b.add_line_segments([(round(x*1000),round(y*1000)) for x,y in ps[1:]],close=True)
+   s=b.convert_to_shape();s.fill.solid();s.fill.fore_color.rgb=rgb(e.get("fill","#FFFFFF"));s.line.color.rgb=rgb(e.get("stroke","#43525B"));s.line.width=Pt(e.get("sw",1));nofx(s)
   elif t=="ellipse":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];out.append(f'<ellipse cx="{x+ww/2}" cy="{y+hh/2}" rx="{ww/2}" ry="{hh/2}" fill="{e["fill"]}" stroke="{e["stroke"]}" stroke-width="{e.get("sw",1)*DPI/72}"/>')
    s=sl.shapes.add_shape(MSO_SHAPE.OVAL,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb(e["stroke"]);s.line.width=Pt(e.get("sw",1));nofx(s)

@@ -1,0 +1,9 @@
+{
+  "figure_id":"TK01_treekg_technical_route",
+  "claim":"Structured textbook content yields an explicit hierarchical KG; six operator families enrich and integrate it into an expandable Tree-KG.",
+  "required_edges":[
+    ["textbook","segmentation"],["segmentation","summary"],["summary","extraction"],["extraction","explicit_kg"],["explicit_kg","expansion"]
+  ],
+  "required_nodes":["convolution","aggregation","embedding","deduplication","prediction","integration","new_sources","expanded_kg"],
+  "figure_note":"The six operators are a flexible action set, so the figure does not draw a fixed execution path among them."
+}

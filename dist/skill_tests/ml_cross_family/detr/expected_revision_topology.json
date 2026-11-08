@@ -1,0 +1,32 @@
+{
+  "figure_id": "DETR_Figure2_revision",
+  "required_nodes": ["cnn", "image_features", "position_encoding", "position_add", "enc_input_group", "enc_output_group", "transformer_encoder", "transformer_decoder", "ffn_0", "ffn_1", "ffn_2", "ffn_3", "prediction_0", "prediction_1", "prediction_2", "prediction_3"],
+  "required_edges": [
+    ["cnn", "image_features"], ["image_features", "position_add"],
+    ["position_encoding", "position_add"], ["position_add", "enc_input_group"],
+    ["enc_input_token_0", "transformer_encoder"], ["enc_input_token_1", "transformer_encoder"],
+    ["enc_input_token_2", "transformer_encoder"], ["enc_input_token_3", "transformer_encoder"],
+    ["enc_input_token_4", "transformer_encoder"], ["enc_input_token_5", "transformer_encoder"],
+    ["enc_input_token_6", "transformer_encoder"], ["enc_input_token_8", "transformer_encoder"],
+    ["transformer_encoder", "enc_output_token_0"], ["transformer_encoder", "enc_output_token_1"],
+    ["transformer_encoder", "enc_output_token_2"], ["transformer_encoder", "enc_output_token_3"],
+    ["transformer_encoder", "enc_output_token_4"], ["transformer_encoder", "enc_output_token_5"],
+    ["transformer_encoder", "enc_output_token_6"], ["transformer_encoder", "enc_output_token_8"],
+    ["enc_output_group", "transformer_decoder"],
+    ["query_0", "transformer_decoder"], ["query_1", "transformer_decoder"],
+    ["query_2", "transformer_decoder"], ["query_3", "transformer_decoder"],
+    ["transformer_decoder", "decoded_0"], ["transformer_decoder", "decoded_1"],
+    ["transformer_decoder", "decoded_2"], ["transformer_decoder", "decoded_3"],
+    ["decoded_0", "ffn_0"], ["decoded_1", "ffn_1"],
+    ["decoded_2", "ffn_2"], ["decoded_3", "ffn_3"],
+    ["ffn_0", "prediction_0"], ["ffn_1", "prediction_1"],
+    ["ffn_2", "prediction_2"], ["ffn_3", "prediction_3"]
+  ],
+  "critical_labels": {
+    "prediction_0_label": "class,\nbox",
+    "prediction_1_label": "no\nobject",
+    "prediction_2_label": "class,\nbox",
+    "prediction_3_label": "no\nobject",
+    "shared_head_note": "shared FFN across output positions"
+  }
+}

@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>
+<rect width="1600" height="900" fill="#FFFFFF"/>
+<text x="66.0" y="64.43333333333334" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="36.666666666666664" fill="#203343" font-weight="700"><tspan x="66.0" dy="0">GraphRAG｜层级社区如何支持全局问题回答</tspan></text>
+<text x="66.0" y="106.19166666666666" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="18.833333333333332" fill="#536B7A"><tspan x="66.0" dy="0">索引阶段构建图与社区摘要；查询阶段对多个社区分别作答并汇总。</tspan></text>
+<line x1="66.0" y1="135.6" x2="1533.6" y2="135.6" stroke="#A7BCC7" stroke-width="1.6666666666666667"/>
+<text x="69.6" y="164.2" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="20.0" fill="#203343" font-weight="700"><tspan x="69.6" dy="0">A  离线索引</tspan></text>
+<rect x="66.0" y="175.2" width="216.0" height="192.0" rx="7.199999999999999" fill="#E8F1F5" stroke="#B7CBD2" stroke-width="1.6666666666666667"/>
+<text x="174.0" y="335.65" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="23.0" fill="#203343" font-weight="700"><tspan x="174.0" dy="0">源文档</tspan></text>
+<text x="174.0" y="360.02500000000003" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.5" fill="#536B7A"><tspan x="174.0" dy="0">原始语料</tspan></text>
+<rect x="350.4" y="175.2" width="216.0" height="192.0" rx="7.199999999999999" fill="#E8F1F5" stroke="#B7CBD2" stroke-width="1.6666666666666667"/>
+<text x="458.4" y="335.65" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="23.0" fill="#203343" font-weight="700"><tspan x="458.4" dy="0">文本块</tspan></text>
+<text x="458.4" y="360.02500000000003" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.5" fill="#536B7A"><tspan x="458.4" dy="0">切分 / 保留来源</tspan></text>
+<rect x="634.8" y="175.2" width="216.0" height="192.0" rx="7.199999999999999" fill="#E8F1F5" stroke="#B7CBD2" stroke-width="1.6666666666666667"/>
+<text x="742.8000000000001" y="335.65" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="23.0" fill="#203343" font-weight="700"><tspan x="742.8000000000001" dy="0">实体关系图</tspan></text>
+<text x="742.8000000000001" y="360.02500000000003" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.5" fill="#536B7A"><tspan x="742.8000000000001" dy="0">LLM 抽取与摘要</tspan></text>
+<rect x="919.2" y="175.2" width="216.0" height="192.0" rx="7.199999999999999" fill="#E8F1F5" stroke="#B7CBD2" stroke-width="1.6666666666666667"/>
+<text x="1027.2" y="335.65" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="23.0" fill="#203343" font-weight="700"><tspan x="1027.2" dy="0">层级社区</tspan></text>
+<text x="1027.2" y="360.02500000000003" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.5" fill="#536B7A"><tspan x="1027.2" dy="0">图社区检测</tspan></text>
+<rect x="1203.6" y="175.2" width="330.0" height="192.0" rx="7.199999999999999" fill="#E8F1F5" stroke="#B7CBD2" stroke-width="1.6666666666666667"/>
+<text x="1368.6" y="335.65" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="23.0" fill="#203343" font-weight="700"><tspan x="1368.6" dy="0">社区报告</tspan></text>
+<text x="1368.6" y="360.02500000000003" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.5" fill="#536B7A"><tspan x="1368.6" dy="0">逐社区生成摘要</tspan></text>
+<line x1="282.0" y1="254.4" x2="342.0" y2="254.4" stroke="#47677A" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<line x1="566.4" y1="254.4" x2="626.4" y2="254.4" stroke="#47677A" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<line x1="850.8" y1="254.4" x2="910.8" y2="254.4" stroke="#47677A" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<line x1="1135.2" y1="254.4" x2="1195.2" y2="254.4" stroke="#47677A" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<rect x="112.8" y="219.60000000000002" width="86.39999999999999" height="75.6" rx="0.0" fill="#FFFFFF" stroke="#6E8B9A" stroke-width="1.1666666666666667"/>
+<line x1="124.80000000000001" y1="234.00000000000003" x2="180.0" y2="234.00000000000003" stroke="#91A8B3" stroke-width="1.0833333333333333"/>
+<line x1="124.80000000000001" y1="246.00000000000003" x2="180.0" y2="246.00000000000003" stroke="#91A8B3" stroke-width="1.0833333333333333"/>
+<line x1="124.80000000000001" y1="258.00000000000006" x2="180.0" y2="258.00000000000006" stroke="#91A8B3" stroke-width="1.0833333333333333"/>
+<rect x="124.80000000000001" y="212.4" width="86.39999999999999" height="75.6" rx="0.0" fill="#FFFFFF" stroke="#6E8B9A" stroke-width="1.1666666666666667"/>
+<line x1="136.8" y1="226.8" x2="192.0" y2="226.8" stroke="#91A8B3" stroke-width="1.0833333333333333"/>
+<line x1="136.8" y1="238.8" x2="192.0" y2="238.8" stroke="#91A8B3" stroke-width="1.0833333333333333"/>
+<line x1="136.8" y1="250.80000000000004" x2="192.0" y2="250.80000000000004" stroke="#91A8B3" stroke-width="1.0833333333333333"/>
+<rect x="136.79999999999998" y="205.2" width="86.39999999999999" height="75.6" rx="0.0" fill="#FFFFFF" stroke="#6E8B9A" stroke-width="1.1666666666666667"/>
+<line x1="148.8" y1="219.60000000000002" x2="204.0" y2="219.60000000000002" stroke="#91A8B3" stroke-width="1.0833333333333333"/>
+<line x1="148.8" y1="231.60000000000002" x2="204.0" y2="231.60000000000002" stroke="#91A8B3" stroke-width="1.0833333333333333"/>
+<line x1="148.8" y1="243.60000000000002" x2="204.0" y2="243.60000000000002" stroke="#91A8B3" stroke-width="1.0833333333333333"/>
+<rect x="397.2" y="210.0" width="122.4" height="16.8" rx="0.0" fill="#FFFFFF" stroke="#6E8B9A" stroke-width="1.1666666666666667"/>
+<rect x="397.2" y="234.0" width="122.4" height="16.8" rx="0.0" fill="#FFFFFF" stroke="#6E8B9A" stroke-width="1.1666666666666667"/>
+<rect x="397.2" y="258.0" width="122.4" height="16.8" rx="0.0" fill="#FFFFFF" stroke="#6E8B9A" stroke-width="1.1666666666666667"/>
+<line x1="691.2" y1="224.4" x2="745.2" y2="212.4" stroke="#638D92" stroke-width="1.6666666666666667"/>
+<line x1="745.2" y1="212.4" x2="796.8000000000001" y2="235.2" stroke="#638D92" stroke-width="1.6666666666666667"/>
+<line x1="691.2" y1="224.4" x2="714.0" y2="272.4" stroke="#638D92" stroke-width="1.6666666666666667"/>
+<line x1="745.2" y1="212.4" x2="714.0" y2="272.4" stroke="#638D92" stroke-width="1.6666666666666667"/>
+<line x1="796.8000000000001" y1="235.2" x2="783.6" y2="286.79999999999995" stroke="#638D92" stroke-width="1.6666666666666667"/>
+<line x1="714.0" y1="272.4" x2="783.6" y2="286.79999999999995" stroke="#638D92" stroke-width="1.6666666666666667"/>
+<ellipse cx="691.2" cy="224.4" rx="8.4" ry="8.4" fill="#4E9A8B" stroke="#2D7066" stroke-width="0.8333333333333334"/>
+<ellipse cx="745.1999999999999" cy="212.4" rx="8.4" ry="8.4" fill="#4E9A8B" stroke="#2D7066" stroke-width="0.8333333333333334"/>
+<ellipse cx="796.8000000000001" cy="235.2" rx="8.4" ry="8.4" fill="#4E9A8B" stroke="#2D7066" stroke-width="0.8333333333333334"/>
+<ellipse cx="714.0" cy="272.4" rx="8.4" ry="8.4" fill="#4E9A8B" stroke="#2D7066" stroke-width="0.8333333333333334"/>
+<ellipse cx="783.6" cy="286.79999999999995" rx="8.4" ry="8.4" fill="#4E9A8B" stroke="#2D7066" stroke-width="0.8333333333333334"/>
+<rect x="963.5999999999999" y="201.6" width="122.4" height="96.0" rx="19.2" fill="#FFFFFF" stroke="#729C93" stroke-width="1.3333333333333333"/>
+<rect x="974.3999999999999" y="212.4" width="43.199999999999996" height="67.2" rx="15.600000000000001" fill="#ECF8F4" stroke="#85ACA3" stroke-width="1.1666666666666667"/>
+<rect x="1028.4" y="212.4" width="43.199999999999996" height="67.2" rx="15.600000000000001" fill="#ECF8F4" stroke="#85ACA3" stroke-width="1.1666666666666667"/>
+<ellipse cx="989.3999999999999" cy="234.6" rx="5.3999999999999995" ry="5.3999999999999995" fill="#4E9A8B" stroke="#2D7066" stroke-width="0.6666666666666666"/>
+<ellipse cx="998.9999999999999" cy="255.00000000000003" rx="5.3999999999999995" ry="5.3999999999999995" fill="#4E9A8B" stroke="#2D7066" stroke-width="0.6666666666666666"/>
+<ellipse cx="1043.4" cy="235.79999999999998" rx="5.3999999999999995" ry="5.3999999999999995" fill="#4E9A8B" stroke="#2D7066" stroke-width="0.6666666666666666"/>
+<ellipse cx="1053.0000000000002" cy="255.00000000000003" rx="5.3999999999999995" ry="5.3999999999999995" fill="#4E9A8B" stroke="#2D7066" stroke-width="0.6666666666666666"/>
+<rect x="1278.0" y="220.8" width="138.0" height="72.0" rx="0.0" fill="#FFFFFF" stroke="#7899A4" stroke-width="1.1666666666666667"/>
+<line x1="1293.6" y1="238.8" x2="1392.0" y2="238.8" stroke="#91A8B3" stroke-width="1.0"/>
+<line x1="1293.6" y1="250.79999999999998" x2="1392.0" y2="250.79999999999998" stroke="#91A8B3" stroke-width="1.0"/>
+<line x1="1293.6" y1="262.8" x2="1392.0" y2="262.8" stroke="#91A8B3" stroke-width="1.0"/>
+<rect x="1292.3999999999999" y="214.8" width="138.0" height="72.0" rx="0.0" fill="#FFFFFF" stroke="#7899A4" stroke-width="1.1666666666666667"/>
+<line x1="1307.9999999999998" y1="232.79999999999998" x2="1406.3999999999999" y2="232.79999999999998" stroke="#91A8B3" stroke-width="1.0"/>
+<line x1="1307.9999999999998" y1="244.8" x2="1406.3999999999999" y2="244.8" stroke="#91A8B3" stroke-width="1.0"/>
+<line x1="1307.9999999999998" y1="256.8" x2="1406.3999999999999" y2="256.8" stroke="#91A8B3" stroke-width="1.0"/>
+<rect x="1306.8000000000002" y="208.8" width="138.0" height="72.0" rx="0.0" fill="#FFFFFF" stroke="#7899A4" stroke-width="1.1666666666666667"/>
+<line x1="1322.3999999999999" y1="226.79999999999998" x2="1420.8" y2="226.79999999999998" stroke="#91A8B3" stroke-width="1.0"/>
+<line x1="1322.3999999999999" y1="238.8" x2="1420.8" y2="238.8" stroke="#91A8B3" stroke-width="1.0"/>
+<line x1="1322.3999999999999" y1="250.79999999999998" x2="1420.8" y2="250.79999999999998" stroke="#91A8B3" stroke-width="1.0"/>
+<line x1="1364.3999999999999" y1="367.2" x2="1364.3999999999999" y2="406.8" stroke="#47677A" stroke-width="2.5833333333333335"/>
+<line x1="1364.3999999999999" y1="406.8" x2="468.0" y2="406.8" stroke="#47677A" stroke-width="2.5833333333333335"/>
+<line x1="468.0" y1="406.8" x2="468.0" y2="538.8000000000001" stroke="#47677A" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<text x="906.0" y="428.0" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.0" fill="#536B7A"><tspan x="906.0" dy="0">索引产物供查询复用</tspan></text>
+<text x="69.6" y="482.2" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="20.0" fill="#203343" font-weight="700"><tspan x="69.6" dy="0">B  在线全局查询</tspan></text>
+<rect x="66.0" y="546.0" width="187.20000000000002" height="134.4" rx="7.199999999999999" fill="#DDF1EB" stroke="#88B6AA" stroke-width="1.6666666666666667"/>
+<text x="159.6" y="617.475" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="22.5" fill="#203343" font-weight="700"><tspan x="159.6" dy="0">用户问题</tspan></text>
+<rect x="330.0" y="538.8000000000001" width="276.0" height="148.8" rx="7.199999999999999" fill="#DDF1EB" stroke="#88B6AA" stroke-width="1.6666666666666667"/>
+<text x="468.0" y="652.1" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="22.0" fill="#203343" font-weight="700"><tspan x="468.0" dy="0">社区报告 1 … N</tspan></text>
+<rect x="381.6" y="564.0" width="40.800000000000004" height="44.4" rx="0.0" fill="#FFFFFF" stroke="#5A988A" stroke-width="1.25"/>
+<rect x="423.6" y="564.0" width="40.800000000000004" height="44.4" rx="0.0" fill="#FFFFFF" stroke="#5A988A" stroke-width="1.25"/>
+<rect x="465.59999999999997" y="564.0" width="40.800000000000004" height="44.4" rx="0.0" fill="#FFFFFF" stroke="#5A988A" stroke-width="1.25"/>
+<line x1="253.2" y1="613.2" x2="321.6" y2="613.2" stroke="#47677A" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<rect x="678.0" y="538.8000000000001" width="290.4" height="148.8" rx="7.199999999999999" fill="#DDF1EB" stroke="#88B6AA" stroke-width="1.6666666666666667"/>
+<text x="823.2" y="652.1" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="22.0" fill="#203343" font-weight="700"><tspan x="823.2" dy="0">并行的分社区回答</tspan></text>
+<rect x="729.6" y="564.0" width="38.4" height="44.4" rx="0.0" fill="#FFFFFF" stroke="#5A988A" stroke-width="1.25"/>
+<rect x="774.0" y="564.0" width="38.4" height="44.4" rx="0.0" fill="#FFFFFF" stroke="#5A988A" stroke-width="1.25"/>
+<rect x="818.4000000000001" y="564.0" width="38.4" height="44.4" rx="0.0" fill="#FFFFFF" stroke="#5A988A" stroke-width="1.25"/>
+<line x1="606.0" y1="613.2" x2="669.6" y2="613.2" stroke="#47677A" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<rect x="1040.4" y="546.0" width="162.0" height="134.4" rx="7.199999999999999" fill="#DDF1EB" stroke="#88B6AA" stroke-width="1.6666666666666667"/>
+<text x="1120.8" y="613.275" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="22.5" fill="#203343" font-weight="700"><tspan x="1120.8" dy="0">归并</tspan></text>
+<text x="1120.8" y="647.4083333333333" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="17.166666666666668" fill="#536B7A"><tspan x="1120.8" dy="0">Reduce</tspan></text>
+<line x1="968.4000000000001" y1="613.2" x2="1032.0" y2="613.2" stroke="#47677A" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<rect x="1275.6000000000001" y="546.0" width="258.0" height="134.4" rx="7.199999999999999" fill="#F8EDD4" stroke="#BD9C5E" stroke-width="1.6666666666666667"/>
+<text x="1404.6" y="621.35" text-anchor="middle" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="25.0" fill="#203343" font-weight="700"><tspan x="1404.6" dy="0">全局回答</tspan></text>
+<line x1="1202.3999999999999" y1="613.2" x2="1267.2" y2="613.2" stroke="#47677A" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<line x1="66.0" y1="723.6" x2="1533.6" y2="723.6" stroke="#A7BCC7" stroke-width="1.4166666666666667"/>
+<text x="69.6" y="778.6916666666666" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="16.833333333333332" fill="#536B7A"><tspan x="69.6" dy="0">图中节点与社区为示意；核心关系依据 Edge 等的 Figure 1 与方法章节。局部检索属于另一查询模式，此图聚焦全局回答。</tspan></text>
+<text x="69.6" y="832.3416666666666" text-anchor="start" dominant-baseline="middle" font-family="Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" font-size="15.833333333333334" fill="#536B7A"><tspan x="69.6" dy="0">来源：Edge et al., From Local to Global (2025), Fig. 1；Microsoft GraphRAG 官方文档。</tspan></text>
+</svg>

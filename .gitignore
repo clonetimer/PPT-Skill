@@ -1,3 +1,22 @@
 __pycache__/
 *.py[cod]
 .testtmp/
+
+# Local paper evidence and extracted source artwork are not redistributed.
+dist/skill_tests/**/paper.pdf
+dist/skill_tests/**/paper.txt
+dist/skill_tests/**/critic_paper.txt
+dist/skill_tests/**/source*.pdf
+dist/skill_tests/**/source*.png
+dist/skill_tests/**/source.txt
+dist/skill_tests/**/*page*.png
+dist/skill_tests/**/critic_*.png
+dist/skill_tests/**/*_critic_last.png
+dist/skill_tests/ml_fidelity/critic_sources/
+dist/skill_tests/spacecraft/nasa_1974_design_summary.pdf
+dist/skill_tests/spacecraft/nasa_1974_design_summary.txt
+# DETR exports contain a source-paper result photograph, for local comparison.
+dist/skill_tests/ml_cross_family/detr/*.png
+dist/skill_tests/ml_cross_family/detr/*.pdf
+dist/skill_tests/ml_cross_family/detr/*.pptx
+dist/skill_tests/ml_cross_family/detr/*.svg

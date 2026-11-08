@@ -1,0 +1,22 @@
+{
+  "panel_2.9": {
+    "result": "ValueError",
+    "elements": 0,
+    "message": "Residual variant needs 2+ valid layer bars"
+  },
+  "panel_10": {
+    "result": "ValueError",
+    "elements": 0,
+    "message": "Residual variant needs 2+ valid layer bars"
+  },
+  "matrix_short": {
+    "result": "ValueError",
+    "elements": 0,
+    "message": "Matrix cells too small for editable labels"
+  },
+  "invalid_index": {
+    "result": "ValueError",
+    "elements": 0,
+    "message": "No reviewed subscript glyph for 'q'"
+  }
+}

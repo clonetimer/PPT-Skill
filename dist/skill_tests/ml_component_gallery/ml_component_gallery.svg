@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<text x="66.0" y="81.25" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="35.0" fill="#23313B" font-weight="700"><tspan x="66.0" dy="0">Editable ML Figure Components</tspan></text>
+<text x="66.0" y="122.23333333333332" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="16.666666666666668" fill="#66727A"><tspan x="66.0" dy="0">Parameter variation demo · scientific relationships are illustrative, not from a paper</tspan></text>
+<text x="78.0" y="196.56666666666666" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="23.333333333333332" fill="#23313B" font-weight="700"><tspan x="78.0" dy="0">01   Feature-map state and crop + concat</tspan></text>
+<rect x="141.6" y="258.0" width="22.8" height="192.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="153.0" y="232.95833333333331" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#66727A"><tspan x="153.0" dy="0">48</tspan></text>
+<text x="122.4" y="486.89166666666665" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#66727A" transform="rotate(-90 122.400 482.400)"><tspan x="122.4" dy="0">80×80</tspan></text>
+<rect x="450.0" y="270.0" width="15.600000000000001" height="144.0" rx="0.0" fill="#FFFFFF" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="457.8" y="244.95833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#66727A"><tspan x="457.8" dy="0">96</tspan></text>
+<text x="430.79999999999995" y="382.4916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#66727A" transform="rotate(-90 430.800 378.000)"><tspan x="430.79999999999995" dy="0">72×72</tspan></text>
+<rect x="469.8" y="270.0" width="15.600000000000001" height="144.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<line x1="164.39999999999998" y1="354.0" x2="442.8" y2="342.0" stroke="#A6A9AB" stroke-width="3.3333333333333335" marker-end="url(#ar)"/>
+<line x1="420.0" y1="471.6" x2="477.6" y2="414.0" stroke="#15933A" stroke-width="3.3333333333333335" marker-end="url(#ar)"/>
+<text x="213.6" y="299.8333333333333" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="16.666666666666668" fill="#66727A"><tspan x="213.6" dy="0">copy / crop</tspan></text>
+<text x="273.59999999999997" y="491.83333333333337" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="16.666666666666668" fill="#15933A"><tspan x="273.59999999999997" dy="0">upsample</tspan></text>
+<text x="558.0" y="344.2333333333333" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="16.666666666666668" fill="#66727A"><tspan x="558.0" dy="0">separate ports</tspan></text>
+<text x="960.0" y="196.56666666666666" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="23.333333333333332" fill="#23313B" font-weight="700"><tspan x="960.0" dy="0">02   Branch and additive merge</tspan></text>
+<ellipse cx="1342.8" cy="406.8" rx="40.800000000000004" ry="40.800000000000004" fill="#FFFFFF" stroke="#23313B" stroke-width="2.25"/>
+<text x="1342.7993999999999" y="420.5835333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="41.666666666666664" fill="#222222"><tspan x="1342.7993999999999" dy="0">+</tspan></text>
+<rect x="1173.6" y="247.20000000000002" width="258.0" height="66.0" rx="0.0" fill="#FFFFFF" stroke="#23313B" stroke-width="1.6666666666666667"/>
+<text x="1302.0" y="283.6" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="20.0" fill="#222222"><tspan x="1302.0" dy="0">transformation</tspan></text>
+<text x="1082.4" y="237.95" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="25.0" fill="#23313B"><tspan x="1082.4" dy="0">x</tspan></text>
+<line x1="1101.6" y1="244.8" x2="1101.6" y2="261.6" stroke="#23313B" stroke-width="2.1666666666666665"/>
+<line x1="1101.6" y1="261.6" x2="1173.6" y2="261.6" stroke="#23313B" stroke-width="2.1666666666666665" marker-end="url(#ar)"/>
+<line x1="1342.8" y1="313.2" x2="1342.8" y2="366.0" stroke="#23313B" stroke-width="2.3333333333333335" marker-end="url(#ar)"/>
+<line x1="1101.6" y1="261.6" x2="1101.6" y2="406.8" stroke="#23313B" stroke-width="2.1666666666666665"/>
+<line x1="1101.6" y1="406.8" x2="1302.0" y2="406.79999999999995" stroke="#23313B" stroke-width="2.1666666666666665" marker-end="url(#ar)"/>
+<text x="1034.4" y="373.61666666666673" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#66727A"><tspan x="1034.4" dy="0">identity</tspan></text>
+<line x1="1342.8" y1="447.6" x2="1342.8" y2="489.6" stroke="#23313B" stroke-width="2.3333333333333335" marker-end="url(#ar)"/>
+<text x="1404.0" y="415.0333333333333" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="16.666666666666668" fill="#66727A"><tspan x="1404.0" dy="0">add, then activate</tspan></text>
+<text x="78.0" y="566.1666666666666" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="23.333333333333332" fill="#23313B" font-weight="700"><tspan x="78.0" dy="0">03   Tapered encoders and N×N pairing</tspan></text>
+<polygon points="99.6,609.6 248.39999999999998,633.6 248.39999999999998,723.6 99.6,747.6" fill="#E4D8EB" stroke="#9974A8" stroke-width="1.6666666666666667"/>
+<text x="174.0" y="674.5999999999999" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="16.666666666666668" fill="#222222"><tspan x="174.0" dy="0">Text</tspan><tspan x="174.0" dy="19.666666666666668">Encoder</tspan></text>
+<polygon points="99.6,834.0 248.39999999999998,858.0 248.39999999999998,947.9999999999999 99.6,972.0" fill="#D9ECD7" stroke="#8DBB83" stroke-width="1.6666666666666667"/>
+<text x="174.0" y="899.0000000000001" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="16.666666666666668" fill="#222222"><tspan x="174.0" dy="0">Image</tspan><tspan x="174.0" dy="19.666666666666668">Encoder</tspan></text>
+<rect x="504.0" y="660.0" width="206.4" height="51.6" rx="0.0" fill="#E4D8EB" stroke="#9974A8" stroke-width="1.3333333333333333"/>
+<text x="529.8" y="697.6166666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#222222"><tspan x="529.8" dy="0">T₁</tspan></text>
+<line x1="555.6" y1="660.0" x2="555.6" y2="711.5999999999999" stroke="#9974A8" stroke-width="0.9166666666666666"/>
+<text x="581.4" y="697.6166666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#222222"><tspan x="581.4" dy="0">T₂</tspan></text>
+<line x1="607.2" y1="660.0" x2="607.2" y2="711.5999999999999" stroke="#9974A8" stroke-width="0.9166666666666666"/>
+<text x="633.0" y="697.6166666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#222222"><tspan x="633.0" dy="0">···</tspan></text>
+<line x1="658.8000000000001" y1="660.0" x2="658.8000000000001" y2="711.5999999999999" stroke="#9974A8" stroke-width="0.9166666666666666"/>
+<text x="684.6" y="697.6166666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#222222"><tspan x="684.6" dy="0">Tₙ</tspan></text>
+<rect x="440.4" y="726.0" width="51.6" height="206.4" rx="0.0" fill="#D9ECD7" stroke="#8DBB83" stroke-width="1.3333333333333333"/>
+<text x="466.2" y="763.6166666666666" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#222222"><tspan x="466.2" dy="0">I₁</tspan></text>
+<line x1="440.4" y1="777.5999999999999" x2="491.99999999999994" y2="777.5999999999999" stroke="#8DBB83" stroke-width="0.9166666666666666"/>
+<text x="466.2" y="815.2166666666666" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#222222"><tspan x="466.2" dy="0">I₂</tspan></text>
+<line x1="440.4" y1="829.2" x2="491.99999999999994" y2="829.2" stroke="#8DBB83" stroke-width="0.9166666666666666"/>
+<text x="466.2" y="866.8166666666666" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#222222"><tspan x="466.2" dy="0">⋮</tspan></text>
+<line x1="440.4" y1="880.8" x2="491.99999999999994" y2="880.8" stroke="#8DBB83" stroke-width="0.9166666666666666"/>
+<text x="466.2" y="918.4166666666666" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#222222"><tspan x="466.2" dy="0">Iₙ</tspan></text>
+<rect x="504.0" y="726.0" width="206.4" height="206.4" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="1.1666666666666667"/>
+<rect x="504.0" y="726.0" width="51.6" height="51.6" rx="0.0" fill="#D8E7FB" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="529.8" y="764.5583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="529.8" dy="0">I₁·T₁</tspan></text>
+<rect x="555.6" y="726.0" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="581.4" y="764.5583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="581.4" dy="0">I₁·T₂</tspan></text>
+<rect x="607.2" y="726.0" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="633.0000000000001" y="764.5583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="633.0000000000001" dy="0">···</tspan></text>
+<rect x="658.8000000000001" y="726.0" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="684.6" y="764.5583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="684.6" dy="0">I₁·Tₙ</tspan></text>
+<rect x="504.0" y="777.5999999999999" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="529.8" y="816.1583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="529.8" dy="0">I₂·T₁</tspan></text>
+<rect x="555.6" y="777.5999999999999" width="51.6" height="51.6" rx="0.0" fill="#D8E7FB" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="581.4" y="816.1583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="581.4" dy="0">I₂·T₂</tspan></text>
+<rect x="607.2" y="777.5999999999999" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="633.0000000000001" y="816.1583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="633.0000000000001" dy="0">···</tspan></text>
+<rect x="658.8000000000001" y="777.5999999999999" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="684.6" y="816.1583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="684.6" dy="0">I₂·Tₙ</tspan></text>
+<rect x="504.0" y="829.2" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="529.8" y="867.7583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="529.8" dy="0">⋮</tspan></text>
+<rect x="555.6" y="829.2" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="581.4" y="867.7583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="581.4" dy="0">⋮</tspan></text>
+<rect x="607.2" y="829.2" width="51.6" height="51.6" rx="0.0" fill="#D8E7FB" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="633.0000000000001" y="867.7583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="633.0000000000001" dy="0">⋱</tspan></text>
+<rect x="658.8000000000001" y="829.2" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="684.6" y="867.7583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="684.6" dy="0">⋮</tspan></text>
+<rect x="504.0" y="880.8" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="529.8" y="919.3583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="529.8" dy="0">Iₙ·T₁</tspan></text>
+<rect x="555.6" y="880.8" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="581.4" y="919.3583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="581.4" dy="0">Iₙ·T₂</tspan></text>
+<rect x="607.2" y="880.8" width="51.6" height="51.6" rx="0.0" fill="#ffffff" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="633.0000000000001" y="919.3583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="633.0000000000001" dy="0">···</tspan></text>
+<rect x="658.8000000000001" y="880.8" width="51.6" height="51.6" rx="0.0" fill="#D8E7FB" stroke="#969696" stroke-width="0.9166666666666666"/>
+<text x="684.6" y="919.3583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#222222"><tspan x="684.6" dy="0">Iₙ·Tₙ</tspan></text>
+<line x1="248.39999999999998" y1="678.6" x2="248.39999999999998" y2="639.6" stroke="#23313B" stroke-width="1.25"/>
+<line x1="248.39999999999998" y1="639.6" x2="684.6" y2="639.6" stroke="#23313B" stroke-width="1.25"/>
+<line x1="529.8" y1="639.6" x2="529.8" y2="660.0" stroke="#23313B" stroke-width="1.25" marker-end="url(#ar)"/>
+<line x1="581.4000000000001" y1="639.6" x2="581.4000000000001" y2="660.0" stroke="#23313B" stroke-width="1.25" marker-end="url(#ar)"/>
+<line x1="633.0" y1="639.6" x2="633.0" y2="660.0" stroke="#23313B" stroke-width="1.25" stroke-dasharray="8 6"/>
+<line x1="684.6" y1="639.6" x2="684.6" y2="660.0" stroke="#23313B" stroke-width="1.25" marker-end="url(#ar)"/>
+<line x1="248.39999999999998" y1="903.0" x2="411.6" y2="903.0" stroke="#23313B" stroke-width="1.25"/>
+<line x1="411.6" y1="751.8" x2="411.6" y2="906.5999999999999" stroke="#23313B" stroke-width="1.25"/>
+<line x1="411.6" y1="751.8" x2="440.4" y2="751.8" stroke="#23313B" stroke-width="1.25" marker-end="url(#ar)"/>
+<line x1="411.6" y1="803.4000000000001" x2="440.4" y2="803.4000000000001" stroke="#23313B" stroke-width="1.25" marker-end="url(#ar)"/>
+<line x1="411.6" y1="855.0" x2="440.4" y2="855.0" stroke="#23313B" stroke-width="1.25" stroke-dasharray="8 6"/>
+<line x1="411.6" y1="906.5999999999999" x2="440.4" y2="906.5999999999999" stroke="#23313B" stroke-width="1.25" marker-end="url(#ar)"/>
+<text x="750.0" y="812.8166666666666" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="18.333333333333332" fill="#66727A"><tspan x="750.0" dy="0">4 shown members; diagonal positives</tspan></text>
+<text x="750.0" y="860.8333333333334" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="16.666666666666668" fill="#66727A"><tspan x="750.0" dy="0">Member ports remain distinct from the group</tspan></text>
+</svg>

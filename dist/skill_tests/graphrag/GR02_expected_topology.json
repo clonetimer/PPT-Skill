@@ -1,0 +1,17 @@
+{
+  "figure_id": "GR02_graphrag_method",
+  "claim": "GraphRAG turns source text into a hierarchical community index and uses community reports to produce parallel partial answers before a global answer.",
+  "source": "From Local to Global, Figure 1 and Section 3.1; Microsoft GraphRAG indexing and global-search documentation",
+  "critical_edges": [
+    ["documents", "text_units"],
+    ["text_units", "entity_graph"],
+    ["entity_graph", "communities"],
+    ["communities", "community_reports"],
+    ["community_reports", "query_reports"],
+    ["question", "query_reports"],
+    ["query_reports", "partial_answers"],
+    ["partial_answers", "reduce"],
+    ["reduce", "global_answer"]
+  ],
+  "excluded": ["Local search is a different query mode and is outside this focused method figure.", "Optional claim extraction and implementation-specific ranking are not represented."]
+}

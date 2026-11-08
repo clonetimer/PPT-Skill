@@ -1,0 +1,13 @@
+{
+  "figure_id": "MLC01_clip_overview",
+  "required_nodes": ["caption_batch", "train_text_encoder", "train_text_vectors", "image_batch", "train_image_encoder", "train_image_vectors", "train_matrix", "class_labels", "prompt", "class_text_encoder", "class_vectors", "query_image", "query_image_encoder", "query_vector", "score_row", "prediction"],
+  "required_edges": [
+    ["caption_batch", "train_text_encoder"], ["train_text_encoder", "train_text_vectors"],
+    ["image_batch", "train_image_encoder"], ["train_image_encoder", "train_image_vectors"],
+    ["train_text_vectors", "train_matrix"], ["train_image_vectors", "train_matrix"],
+    ["class_labels", "prompt"], ["prompt", "class_text_encoder"],
+    ["class_text_encoder", "class_vectors"], ["class_vectors", "score_row"],
+    ["query_image", "query_image_encoder"], ["query_image_encoder", "query_vector"],
+    ["query_vector", "score_row"], ["score_row", "prediction"]
+  ]
+}

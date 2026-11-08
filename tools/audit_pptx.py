@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Audit PowerPoint bounds, text intersections, SVG pictures, and theme effects."""
 from __future__ import annotations
-import argparse, json, zipfile, xml.etree.ElementTree as ET
+import argparse, json, math, zipfile, xml.etree.ElementTree as ET
 from collections import Counter
 from pathlib import Path
 from pptx import Presentation
@@ -16,8 +16,15 @@ def walk(shapes):
         if s.shape_type==MSO_SHAPE_TYPE.GROUP: yield from walk(s.shapes)
 
 def overlaps(a,b):
-    iw=max(0,min(a.left+a.width,b.left+b.width)-max(a.left,b.left))
-    ih=max(0,min(a.top+a.height,b.top+b.height)-max(a.top,b.top))
+    def bounds(s):
+        angle=math.radians(s.rotation)
+        w=abs(math.cos(angle))*s.width+abs(math.sin(angle))*s.height
+        h=abs(math.sin(angle))*s.width+abs(math.cos(angle))*s.height
+        cx=s.left+s.width/2;cy=s.top+s.height/2
+        return cx-w/2,cy-h/2,cx+w/2,cy+h/2
+    ax1,ay1,ax2,ay2=bounds(a);bx1,by1,bx2,by2=bounds(b)
+    iw=max(0,min(ax2,bx2)-max(ax1,bx1))
+    ih=max(0,min(ay2,by2)-max(ay1,by1))
     return iw>Inches(.03) and ih>Inches(.03)
 
 def audit(path):

@@ -1,0 +1,11 @@
+{
+  "figure_id":"MLU01_unet_architecture",
+  "required_nodes":["input","enc0","enc1","enc2","enc3","pool0","pool1","pool2","bottleneck","dec3","dec2","dec1","dec0","output","copy3","copy2","copy1","copy0","up3","up2","up1","up0"],
+  "required_edges":[
+    ["input","enc0"],["enc0","pool0"],["enc1","pool1"],["enc2","pool2"],["enc3","bottleneck"],
+    ["bottleneck","up3"],["dec3","up2"],["dec2","up1"],["dec1","up0"],["dec0","output"],
+    ["enc3","copy3"],["enc2","copy2"],["enc1","copy1"],["enc0","copy0"]
+  ],
+  "critical_dimensions":{"input":"572×572","bottleneck":["32×32","30×30","28×28"],"first_decoder":["56×56","54×54","52×52"],"output":"388×388"},
+  "source_note":"Figure 1 uses valid convolution: copied maps are cropped and concatenated, not added."
+}

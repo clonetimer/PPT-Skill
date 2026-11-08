@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-08",
+  "phase": "before_sample_build_or_component_edit",
+  "frozen_files_sha256": {
+    "tools/ml_figure_components.py": "dda85bec3a179254b529fc028bc8db664bafe7e1251e610d77c1a09c90f46f21",
+    "tools/render_figure_spec.py": "f55c0ec841b054cb3849c593246a1b45a96bd10a853f1bacab256a98fec2cba0",
+    "tools/scientific_ir.py": "1a90fa2ce979af58365b2e89e90c5ca5900669eb8ebbe1668dec6dd93d17b304",
+    "specs/ml_source_grammar_patterns_v76.json": "1be3a7a132beb38fe66383ca67d5d6c5adaaa42eb93e731dcaf73e77a3d3dcf4",
+    "SKILL.md": "20a29ec6c38c58328dc0c9b4581d189fdc4a7136b95c6cf2047b3a30b678cd64"
+  },
+  "samples": [
+    {"paper": "Graph Attention Networks", "url": "https://arxiv.org/pdf/1710.10903", "target": "Figure 1, PDF page 4", "family": "graph-neighborhood attention"},
+    {"paper": "End-to-End Object Detection with Transformers", "url": "https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123460205.pdf", "target": "Figure 2, PDF page 6", "family": "image-to-set prediction"}
+  ],
+  "scoring": {
+    "dimensions": ["scientific_semantics", "source_composition", "visual_grammar", "label_readability", "routing_occlusion", "evidence_editability"],
+    "maximum_each": 4,
+    "pass": "semantics=4, each other dimension >=3, total >=21, no hard scientific omission"
+  },
+  "sequence": [
+    "record source-visible anchors and required relations before drawing",
+    "build first outputs using the frozen components and base primitives without editing frozen files",
+    "export PNG/PDF and record first-pass score, elapsed work time and corrections",
+    "only then change shared components or SKILL.md; preserve the first-pass artifacts"
+  ]
+}

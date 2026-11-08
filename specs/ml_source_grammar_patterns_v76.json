@@ -1,0 +1,41 @@
+{
+  "version": "7.6.0-dev",
+  "purpose": "Source-grounded grammar presets for machine-learning paper figures; no fixed coordinates, colors or typography.",
+  "patterns": {
+    "feature_map_architecture": {
+      "use_when": "Feature-map dimensions, channels, skip paths or concatenation carry the method claim.",
+      "components": ["feature_map_strip", "crop_concat_pair"],
+      "source_contract": ["ordered states with spatial dimensions and channels", "operator input and output state", "copy/crop and upsample ports", "source figure's size-to-height encoding"],
+      "hard_checks": ["pooling state before channel-changing convolution is present", "copied and upsampled components remain distinct", "arrows enter the correct component", "all size labels have a clear owner and no line through text"],
+      "trial": "dist/skill_tests/ml_fidelity/unet/expected_topology.json"
+    },
+    "residual_branch_add": {
+      "use_when": "A shortcut, residual transformation and additive merge define the mechanism.",
+      "components": ["addition_junction", "residual_variant"],
+      "source_contract": ["fork before the first main-path operator", "main-path operator order", "identity/projection shortcut type", "merge operator and post-merge activation", "internal anchor distance ratios"],
+      "hard_checks": ["shortcut starts at the actual input", "merge is addition rather than concatenation", "activation placement matches the paper version", "long empty spans do not distort the source composition"],
+      "trial": "dist/skill_tests/ml_fidelity/resnet/expected_topology.json"
+    },
+    "contrastive_multimodal_matrix": {
+      "use_when": "Paired image/text batches, pairwise similarity and zero-shot class synthesis share a figure.",
+      "components": ["encoder_wedge", "similarity_matrix", "vector_fanout"],
+      "source_contract": ["separate image and text batches", "vector-group ports and displayed member ports", "matrix row/column orientation", "matched diagonal", "class-vector group reused by score row"],
+      "hard_checks": ["each displayed vector is reached from its encoder", "matrix is N by N with image rows and text columns", "positive pairs mark the diagonal", "class vectors align with corresponding scores", "chosen score connects to the predicted label"],
+      "trial": "dist/skill_tests/ml_fidelity/clip/expected_topology.json"
+    },
+    "graph_neighborhood_multihead": {
+      "use_when": "The source shows multiple independent attention heads on a graph neighborhood.",
+      "components": ["multihead_neighbor_bundle", "multihead_self_loop"],
+      "source_contract": ["center and neighbor identities", "explicit self contribution", "per-head edge multiplicity", "attention-score activation and normalization order", "head aggregation operation"],
+      "hard_checks": ["each source-required neighbor and self loop has every head strand", "head paths terminate at node boundaries", "math labels are legible in the exported PDF", "multiple head arrowheads do not merge into a black block"],
+      "trial": "dist/skill_tests/ml_cross_family/gat/expected_revision_topology.json"
+    },
+    "image_to_set_prediction": {
+      "use_when": "A source image becomes a token sequence and parallel learned queries produce a set of predictions.",
+      "components": ["addition_junction", "token_strip"],
+      "source_contract": ["distinct image-feature and positional-encoding sources", "input and output token groups with member ports", "encoder-memory to decoder path", "query-to-output-position correspondence", "shared per-position prediction head and no-object outcomes"],
+      "hard_checks": ["external connectors attach to visible token groups, not only one member", "input tokens enter the encoder and output tokens leave it", "each decoder output position reaches its prediction head", "queries are parallel rather than autoregressive", "raster result examples are distinguished from editable method structure"],
+      "trial": "dist/skill_tests/ml_cross_family/detr/expected_revision_topology.json"
+    }
+  }
+}

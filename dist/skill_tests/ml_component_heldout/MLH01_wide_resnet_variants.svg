@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="624" viewBox="0 0 1920 624">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>
+<rect width="1920" height="624" fill="#FFFFFF"/>
+<polygon points="79.19999999999999,45.6 144.0,45.6 144.0,434.40000000000003 169.2,434.40000000000003 111.6,470.4 53.99999999999999,434.40000000000003 79.19999999999999,434.40000000000003" fill="#D1D1D1" stroke="#D1D1D1" stroke-width="0.5"/>
+<text x="111.6" y="53.18333333333334" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.666666666666668" fill="#222222"><tspan x="111.6" dy="0">xₗ</tspan></text>
+<line x1="111.6" y1="64.80000000000001" x2="111.6" y2="385.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="111.6" y1="85.19999999999999" x2="283.2" y2="175.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="206.39999999999998" y="175.2" width="153.6" height="33.6" rx="0.0" fill="#F0BD96" stroke="#65727B" stroke-width="1.25"/>
+<text x="283.2" y="197.83333333333331" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#222222"><tspan x="283.2" dy="0">conv3×3</tspan></text>
+<line x1="283.2" y1="208.8" x2="283.2" y2="247.20000000000002" stroke="#202020" stroke-width="1.4166666666666667" marker-end="url(#ar)"/>
+<rect x="206.39999999999998" y="247.20000000000002" width="153.6" height="33.6" rx="0.0" fill="#F0BD96" stroke="#65727B" stroke-width="1.25"/>
+<text x="283.2" y="269.83333333333337" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#222222"><tspan x="283.2" dy="0">conv3×3</tspan></text>
+<ellipse cx="111.6" cy="406.2" rx="21.0" ry="21.0" fill="#FFFFFF" stroke="#202020" stroke-width="2.25"/>
+<text x="111.6" y="413.3711333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="21.666666666666668" fill="#222222"><tspan x="111.6" dy="0">+</tspan></text>
+<line x1="283.2" y1="280.79999999999995" x2="132.6" y2="406.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="111.6" y1="427.2" x2="111.6" y2="470.4" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="111.6" y="500.7833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.666666666666668" fill="#222222"><tspan x="111.6" dy="0">xₗ₊₁</tspan></text>
+<text x="243.6" y="559.55" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#222222"><tspan x="243.6" dy="0">(a) basic</tspan></text>
+<polygon points="541.1999999999999,45.6 605.9999999999999,45.6 605.9999999999999,434.40000000000003 631.1999999999999,434.40000000000003 573.5999999999999,470.4 515.9999999999999,434.40000000000003 541.1999999999999,434.40000000000003" fill="#D1D1D1" stroke="#D1D1D1" stroke-width="0.5"/>
+<text x="573.5999999999999" y="53.18333333333334" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.666666666666668" fill="#222222"><tspan x="573.5999999999999" dy="0">xₗ</tspan></text>
+<line x1="573.5999999999999" y1="64.80000000000001" x2="573.5999999999999" y2="385.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="573.5999999999999" y1="85.19999999999999" x2="745.2" y2="175.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="618.0" y="175.2" width="254.4" height="33.6" rx="0.0" fill="#8DCFE4" stroke="#65727B" stroke-width="1.25"/>
+<text x="745.2" y="197.83333333333331" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#222222"><tspan x="745.2" dy="0">conv1×1</tspan></text>
+<line x1="745.2" y1="208.8" x2="745.2" y2="232.79999999999998" stroke="#202020" stroke-width="1.4166666666666667" marker-end="url(#ar)"/>
+<rect x="668.4000000000001" y="232.79999999999998" width="153.6" height="33.6" rx="0.0" fill="#F0BD96" stroke="#65727B" stroke-width="1.25"/>
+<text x="745.2000000000002" y="255.4333333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#222222"><tspan x="745.2000000000002" dy="0">conv3×3</tspan></text>
+<line x1="745.2" y1="266.4" x2="745.2" y2="290.4" stroke="#202020" stroke-width="1.4166666666666667" marker-end="url(#ar)"/>
+<rect x="618.0" y="290.4" width="254.4" height="33.6" rx="0.0" fill="#8DCFE4" stroke="#65727B" stroke-width="1.25"/>
+<text x="745.2" y="313.03333333333336" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#222222"><tspan x="745.2" dy="0">conv1×1</tspan></text>
+<ellipse cx="573.5999999999999" cy="406.2" rx="21.0" ry="21.0" fill="#FFFFFF" stroke="#202020" stroke-width="2.25"/>
+<text x="573.6" y="413.3711333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="21.666666666666668" fill="#222222"><tspan x="573.6" dy="0">+</tspan></text>
+<line x1="745.2" y1="324.0" x2="594.5999999999999" y2="406.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="573.5999999999999" y1="427.2" x2="573.5999999999999" y2="470.4" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="573.5999999999999" y="500.7833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.666666666666668" fill="#222222"><tspan x="573.5999999999999" dy="0">xₗ₊₁</tspan></text>
+<text x="705.6" y="559.55" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#222222"><tspan x="705.6" dy="0">(b) bottleneck</tspan></text>
+<polygon points="1003.2000000000002,45.6 1068.0,45.6 1068.0,434.40000000000003 1093.2,434.40000000000003 1035.6000000000001,470.4 978.0,434.40000000000003 1003.2000000000002,434.40000000000003" fill="#D1D1D1" stroke="#D1D1D1" stroke-width="0.5"/>
+<text x="1035.6000000000001" y="53.18333333333334" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.666666666666668" fill="#222222"><tspan x="1035.6000000000001" dy="0">xₗ</tspan></text>
+<line x1="1035.6000000000001" y1="64.80000000000001" x2="1035.6000000000001" y2="385.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="1035.6000000000001" y1="85.19999999999999" x2="1207.2" y2="175.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="1070.4" y="175.2" width="273.59999999999997" height="33.6" rx="0.0" fill="#F0BD96" stroke="#65727B" stroke-width="1.25"/>
+<text x="1207.2" y="197.83333333333331" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#222222"><tspan x="1207.2" dy="0">conv3×3</tspan></text>
+<line x1="1207.2" y1="208.8" x2="1207.2" y2="247.20000000000002" stroke="#202020" stroke-width="1.4166666666666667" marker-end="url(#ar)"/>
+<rect x="1070.4" y="247.20000000000002" width="273.59999999999997" height="33.6" rx="0.0" fill="#F0BD96" stroke="#65727B" stroke-width="1.25"/>
+<text x="1207.2" y="269.83333333333337" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#222222"><tspan x="1207.2" dy="0">conv3×3</tspan></text>
+<ellipse cx="1035.6" cy="406.2" rx="21.0" ry="21.0" fill="#FFFFFF" stroke="#202020" stroke-width="2.25"/>
+<text x="1035.6" y="413.3711333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="21.666666666666668" fill="#222222"><tspan x="1035.6" dy="0">+</tspan></text>
+<line x1="1207.2" y1="280.79999999999995" x2="1056.6" y2="406.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="1035.6000000000001" y1="427.2" x2="1035.6000000000001" y2="470.4" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="1035.6000000000001" y="500.7833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.666666666666668" fill="#222222"><tspan x="1035.6000000000001" dy="0">xₗ₊₁</tspan></text>
+<text x="1167.6" y="559.55" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#222222"><tspan x="1167.6" dy="0">(c) basic-wide</tspan></text>
+<polygon points="1465.2,45.6 1530.0,45.6 1530.0,434.40000000000003 1555.2,434.40000000000003 1497.6000000000001,470.4 1440.0,434.40000000000003 1465.2,434.40000000000003" fill="#D1D1D1" stroke="#D1D1D1" stroke-width="0.5"/>
+<text x="1497.6000000000001" y="53.18333333333334" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.666666666666668" fill="#222222"><tspan x="1497.6000000000001" dy="0">xₗ</tspan></text>
+<line x1="1497.6000000000001" y1="64.80000000000001" x2="1497.6000000000001" y2="385.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="1497.6000000000001" y1="85.19999999999999" x2="1669.2" y2="175.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="1532.3999999999999" y="175.2" width="273.59999999999997" height="33.6" rx="0.0" fill="#F0BD96" stroke="#65727B" stroke-width="1.25"/>
+<text x="1669.1999999999998" y="197.83333333333331" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#222222"><tspan x="1669.1999999999998" dy="0">conv3×3</tspan></text>
+<line x1="1669.2" y1="208.8" x2="1669.2" y2="232.79999999999998" stroke="#202020" stroke-width="1.4166666666666667" marker-end="url(#ar)"/>
+<rect x="1532.3999999999999" y="232.79999999999998" width="273.59999999999997" height="33.6" rx="0.0" fill="#E59DA5" stroke="#65727B" stroke-width="1.25"/>
+<text x="1669.1999999999998" y="255.4333333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#222222"><tspan x="1669.1999999999998" dy="0">dropout</tspan></text>
+<line x1="1669.2" y1="266.4" x2="1669.2" y2="290.4" stroke="#202020" stroke-width="1.4166666666666667" marker-end="url(#ar)"/>
+<rect x="1532.3999999999999" y="290.4" width="273.59999999999997" height="33.6" rx="0.0" fill="#F0BD96" stroke="#65727B" stroke-width="1.25"/>
+<text x="1669.1999999999998" y="313.03333333333336" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#222222"><tspan x="1669.1999999999998" dy="0">conv3×3</tspan></text>
+<ellipse cx="1497.6" cy="406.2" rx="21.0" ry="21.0" fill="#FFFFFF" stroke="#202020" stroke-width="2.25"/>
+<text x="1497.6" y="413.3711333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="21.666666666666668" fill="#222222"><tspan x="1497.6" dy="0">+</tspan></text>
+<line x1="1669.2" y1="324.0" x2="1518.6" y2="406.2" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="1497.6000000000001" y1="427.2" x2="1497.6000000000001" y2="470.4" stroke="#202020" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="1497.6" y="500.7833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="21.666666666666668" fill="#222222"><tspan x="1497.6" dy="0">xₗ₊₁</tspan></text>
+<text x="1629.6" y="559.55" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="25.0" fill="#222222"><tspan x="1629.6" dy="0">(d) wide-dropout</tspan></text>
+<text x="66.0" y="610.6333333333334" text-anchor="start" dominant-baseline="middle" font-family="Times New Roman" font-size="16.666666666666668" fill="#555555"><tspan x="66.0" dy="0">BN and ReLU precede each convolution (omitted in the source figure).</tspan></text>
+</svg>

@@ -1,0 +1,46 @@
+{
+  "drop_blue_self": "REJECTED",
+  "drop_purple_neighbor": "REJECTED",
+  "wrong_color": "REJECTED",
+  "broken_strand": "REJECTED",
+  "missing_arrow": "REJECTED",
+  "missing_input_group": "REJECTED",
+  "missing_output_group": "REJECTED",
+  "gat_png_sha256": "8e58b73c4808df55635b7ff49e976575fc5aa427f96325e334ed4783b48912da",
+  "gat_pdf_sha256": "a88bfd2fb93064686b1116a5ed42bdae8a7640eb19f2e48bb796079670217ed8",
+  "gat_pptx_sha256": "2ca59e0e69faafbe154acc9f46f20aab9f5cd16fe6d3951f481c47fb6e1bc429",
+  "gat_json_sha256": "f2b68643fde7751d108987e64179b302ada4a346a25c0614303490d54903c8df",
+  "gat_pptx": {
+    "p:sp": 68,
+    "p:cxnSp": 334,
+    "p:pic": 0,
+    "a:stCxn": 0,
+    "a:endCxn": 0
+  },
+  "gat_media": {},
+  "detr_png_sha256": "970a3ee61e687b339a11390fc91900b0d1fc77089d9fb2542db9af2c87af94e2",
+  "detr_pdf_sha256": "d29d282f7310596f8f6319461d17c630b463ae4c419e3cbb1418665a3b60b27c",
+  "detr_pptx_sha256": "a36bd69c413704d82bc193fa02f9df404592fde93269b6154152651abd8dab63",
+  "detr_json_sha256": "08ec801c37791d395ad3165d2e53deec270d96322abb02402676b64d997c5749",
+  "detr_pptx": {
+    "p:sp": 106,
+    "p:cxnSp": 48,
+    "p:pic": 1,
+    "a:stCxn": 0,
+    "a:endCxn": 0
+  },
+  "detr_media": {
+    "ppt/media/image1.png": "9bedea6da7951c01881482aba10bf412a01cc4e15177abd163249efdba6b8b87"
+  },
+  "detr_evidence": [
+    {
+      "id": "source_1",
+      "source": "dist/skill_tests/ml_cross_family/detr/paper.pdf",
+      "source_file_sha256": "cf016cbc2c80a6bc43ae0058d1824fba77630ddb7e4ac7224e6d0905a51356f8",
+      "source_locator": "Figure 2, PDF page 6; Section 3.2; SHA-256 cf016cbc2c80a6bc43ae0058d1824fba77630ddb7e4ac7224e6d0905a51356f8",
+      "status": "source_visible_redraw",
+      "scope": "Paper figure and caption; critical topology and visual grammar",
+      "reuse": "New editable scholarly redraw; original paper figure is not embedded."
+    }
+  ]
+}

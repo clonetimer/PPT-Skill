@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1104" viewBox="0 0 1920 1104">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>
+<rect width="1920" height="1104" fill="#FFFFFF"/>
+<rect x="104.4" y="114.0" width="7.800000000000001" height="288.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="108.3" y="88.95833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="108.3" dy="0">1</tspan></text>
+<text x="85.2" y="438.89166666666665" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 85.200 434.400)"><tspan x="85.2" dy="0">572×572</tspan></text>
+<text x="188.39999999999998" y="258.5833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="1.6666666666666667" fill="#222222"><tspan x="188.39999999999998" dy="0"></tspan></text>
+<rect x="157.20000000000002" y="114.0" width="12.6" height="288.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="163.50000000000003" y="88.95833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="163.50000000000003" dy="0">64</tspan></text>
+<text x="138.0" y="438.89166666666665" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 138.000 434.400)"><tspan x="138.0" dy="0">570×570</tspan></text>
+<rect x="194.4" y="114.0" width="12.6" height="288.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="200.70000000000002" y="88.95833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="200.70000000000002" dy="0">64</tspan></text>
+<text x="175.20000000000002" y="438.89166666666665" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 175.200 434.400)"><tspan x="175.20000000000002" dy="0">568×568</tspan></text>
+<line x1="174.0" y1="194.64" x2="189.60000000000002" y2="194.64" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="205.56" y1="135.6" x2="205.56" y2="380.3999999999999" stroke="#38669A" stroke-width="1.1666666666666667" stroke-dasharray="8 6"/>
+<text x="343.20000000000005" y="528.5833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="1.6666666666666667" fill="#222222"><tspan x="343.20000000000005" dy="0"></tspan></text>
+<rect x="312.0" y="436.8" width="15.600000000000001" height="182.4" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="319.8" y="411.7583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="319.8" dy="0">128</tspan></text>
+<text x="292.79999999999995" y="656.0916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 292.800 651.600)"><tspan x="292.79999999999995" dy="0">282×282</tspan></text>
+<rect x="349.20000000000005" y="436.8" width="15.600000000000001" height="182.4" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="357.0" y="411.7583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="357.0" dy="0">128</tspan></text>
+<text x="330.0" y="656.0916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 330.000 651.600)"><tspan x="330.0" dy="0">280×280</tspan></text>
+<line x1="331.8" y1="487.87199999999996" x2="344.40000000000003" y2="487.87199999999996" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="363.36" y1="458.40000000000003" x2="363.36" y2="597.6" stroke="#38669A" stroke-width="1.1666666666666667" stroke-dasharray="8 6"/>
+<text x="500.40000000000003" y="701.3833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="1.6666666666666667" fill="#222222"><tspan x="500.40000000000003" dy="0"></tspan></text>
+<rect x="469.20000000000005" y="644.4" width="18.6" height="112.8" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="478.50000000000006" y="619.3583333333335" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="478.50000000000006" dy="0">256</tspan></text>
+<text x="450.0" y="794.0916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 450.000 789.600)"><tspan x="450.0" dy="0">138×138</tspan></text>
+<rect x="506.4" y="644.4" width="18.6" height="112.8" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="515.6999999999998" y="619.3583333333335" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="515.6999999999998" dy="0">256</tspan></text>
+<text x="487.19999999999993" y="794.0916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 487.200 789.600)"><tspan x="487.19999999999993" dy="0">136×136</tspan></text>
+<line x1="492.00000000000006" y1="675.984" x2="501.59999999999997" y2="675.984" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="523.5600000000001" y1="666.0" x2="523.5600000000001" y2="735.6000000000001" stroke="#38669A" stroke-width="1.1666666666666667" stroke-dasharray="8 6"/>
+<text x="652.8000000000001" y="820.7833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="1.6666666666666667" fill="#222222"><tspan x="652.8000000000001" dy="0"></tspan></text>
+<rect x="621.5999999999999" y="786.0" width="21.599999999999998" height="68.39999999999999" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="632.3999999999999" y="760.9583333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="632.3999999999999" dy="0">512</tspan></text>
+<text x="602.4" y="891.2916666666666" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 602.400 886.800)"><tspan x="602.4" dy="0">66×66</tspan></text>
+<rect x="658.8" y="786.0" width="21.599999999999998" height="68.39999999999999" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="669.5999999999999" y="760.9583333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="669.5999999999999" dy="0">512</tspan></text>
+<text x="639.5999999999999" y="891.2916666666666" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 639.600 886.800)"><tspan x="639.5999999999999" dy="0">64×64</tspan></text>
+<line x1="647.4" y1="805.152" x2="653.9999999999999" y2="805.152" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="678.9599999999999" y1="807.5999999999999" x2="678.9599999999999" y2="832.8000000000001" stroke="#38669A" stroke-width="1.1666666666666667" stroke-dasharray="8 6"/>
+<text x="791.4" y="910.1833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="1.6666666666666667" fill="#222222"><tspan x="791.4" dy="0"></tspan></text>
+<rect x="727.1999999999999" y="883.2" width="24.0" height="44.4" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="739.1999999999998" y="858.1583333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="739.1999999999998" dy="0">512</tspan></text>
+<text x="708.0" y="964.4916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 708.000 960.000)"><tspan x="708.0" dy="0">32×32</tspan></text>
+<rect x="770.4" y="883.2" width="30.0" height="44.4" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="785.3999999999999" y="858.1583333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="785.3999999999999" dy="0">1024</tspan></text>
+<text x="751.2" y="964.4916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 751.200 960.000)"><tspan x="751.2" dy="0">30×30</tspan></text>
+<rect x="825.6" y="883.2" width="30.0" height="44.4" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="840.5999999999999" y="858.1583333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="840.5999999999999" dy="0">1024</tspan></text>
+<text x="806.4" y="964.4916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 806.400 960.000)"><tspan x="806.4" dy="0">28×28</tspan></text>
+<line x1="753.5999999999999" y1="895.2" x2="765.6" y2="895.2" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="802.8" y1="895.2" x2="820.8" y2="895.2" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<rect x="271.2" y="436.8" width="9.6" height="182.4" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="276.0" y="411.7583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="276.0" dy="0">64</tspan></text>
+<text x="252.0" y="656.0916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 252.000 651.600)"><tspan x="252.0" dy="0">284×284</tspan></text>
+<line x1="207.0" y1="401.99999999999994" x2="207.0" y2="422.4" stroke="#930600" stroke-width="2.5833333333333335"/>
+<line x1="207.0" y1="422.4" x2="276.0" y2="422.4" stroke="#930600" stroke-width="2.5833333333333335"/>
+<line x1="276.0" y1="422.4" x2="276.0" y2="436.8" stroke="#930600" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<line x1="283.2" y1="487.87199999999996" x2="307.8" y2="487.87199999999996" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<rect x="428.4" y="644.4" width="9.6" height="112.8" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="433.2" y="619.3583333333335" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="433.2" dy="0">128</tspan></text>
+<text x="409.19999999999993" y="794.0916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 409.200 789.600)"><tspan x="409.19999999999993" dy="0">140×140</tspan></text>
+<line x1="364.8" y1="619.2" x2="364.8" y2="639.6" stroke="#930600" stroke-width="2.5833333333333335"/>
+<line x1="364.8" y1="639.6" x2="433.2" y2="639.6" stroke="#930600" stroke-width="2.5833333333333335"/>
+<line x1="433.2" y1="639.6" x2="433.2" y2="644.4" stroke="#930600" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<line x1="440.4" y1="675.984" x2="465.0" y2="675.984" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<rect x="580.8" y="786.0" width="9.6" height="68.39999999999999" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="585.5999999999999" y="760.9583333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="585.5999999999999" dy="0">256</tspan></text>
+<text x="561.6" y="891.2916666666666" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 561.600 886.800)"><tspan x="561.6" dy="0">68×68</tspan></text>
+<line x1="525.0" y1="757.2" x2="525.0" y2="777.6" stroke="#930600" stroke-width="2.5833333333333335"/>
+<line x1="525.0" y1="777.6" x2="585.6" y2="777.6" stroke="#930600" stroke-width="2.5833333333333335"/>
+<line x1="585.6" y1="777.6" x2="585.6" y2="786.0" stroke="#930600" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<line x1="592.8" y1="805.152" x2="617.4" y2="805.152" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="680.3999999999999" y1="854.4" x2="680.3999999999999" y2="874.8" stroke="#930600" stroke-width="2.5833333333333335"/>
+<line x1="680.3999999999999" y1="874.8" x2="732.0" y2="874.8" stroke="#930600" stroke-width="2.5833333333333335"/>
+<line x1="732.0" y1="874.8" x2="732.0" y2="883.2" stroke="#930600" stroke-width="2.5833333333333335" marker-end="url(#ar)"/>
+<text x="962.4000000000001" y="820.7833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="1.6666666666666667" fill="#222222"><tspan x="962.4000000000001" dy="0"></tspan></text>
+<rect x="913.2" y="790.2" width="9.6" height="60.0" rx="0.0" fill="#FFFFFF" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="918.0" y="765.1583333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="918.0" dy="0">1024</tspan></text>
+<text x="894.0" y="839.6916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 894.000 835.200)"><tspan x="894.0" dy="0">56×56</tspan></text>
+<rect x="925.2" y="790.2" width="9.6" height="60.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<rect x="956.4000000000001" y="790.2" width="15.600000000000001" height="60.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="964.1999999999999" y="765.1583333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="964.1999999999999" dy="0">512</tspan></text>
+<text x="980.4" y="887.0916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 980.400 882.600)"><tspan x="980.4" dy="0">54×54</tspan></text>
+<rect x="993.6000000000001" y="790.2" width="15.600000000000001" height="60.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1001.4000000000001" y="765.1583333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1001.4000000000001" dy="0">512</tspan></text>
+<text x="1017.6" y="887.0916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1017.600 882.600)"><tspan x="1017.6" dy="0">52×52</tspan></text>
+<line x1="936.0000000000001" y1="807.0" x2="951.6" y2="807.0" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="973.1999999999999" y1="807.0" x2="988.8000000000001" y2="807.0" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<text x="1122.0" y="701.3833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="1.6666666666666667" fill="#222222"><tspan x="1122.0" dy="0"></tspan></text>
+<rect x="1072.8" y="657.6" width="9.6" height="86.39999999999999" rx="0.0" fill="#FFFFFF" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1077.6" y="632.5583333333335" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1077.6" dy="0">512</tspan></text>
+<text x="1053.6" y="726.8916666666668" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1053.600 722.400)"><tspan x="1053.6" dy="0">104×104</tspan></text>
+<rect x="1084.8" y="657.6" width="9.6" height="86.39999999999999" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<rect x="1115.9999999999998" y="657.6" width="15.600000000000001" height="86.39999999999999" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1123.7999999999997" y="632.5583333333335" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1123.7999999999997" dy="0">256</tspan></text>
+<text x="1140.0" y="780.8916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1140.000 776.400)"><tspan x="1140.0" dy="0">102×102</tspan></text>
+<rect x="1153.1999999999998" y="657.6" width="15.600000000000001" height="86.39999999999999" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1160.9999999999998" y="632.5583333333335" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1160.9999999999998" dy="0">256</tspan></text>
+<text x="1177.2" y="780.8916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1177.200 776.400)"><tspan x="1177.2" dy="0">100×100</tspan></text>
+<line x1="1095.6" y1="681.792" x2="1111.2" y2="681.792" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="1132.8" y1="681.792" x2="1148.4" y2="681.792" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<text x="1281.6" y="528.5833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="1.6666666666666667" fill="#222222"><tspan x="1281.6" dy="0"></tspan></text>
+<rect x="1232.3999999999999" y="463.2" width="9.6" height="129.60000000000002" rx="0.0" fill="#FFFFFF" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1237.1999999999998" y="438.1583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1237.1999999999998" dy="0">256</tspan></text>
+<text x="1213.2" y="564.8916666666668" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1213.200 560.400)"><tspan x="1213.2" dy="0">200×200</tspan></text>
+<rect x="1244.3999999999999" y="463.2" width="9.6" height="129.60000000000002" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<rect x="1275.6" y="463.2" width="15.600000000000001" height="129.60000000000002" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1283.3999999999999" y="438.1583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1283.3999999999999" dy="0">128</tspan></text>
+<text x="1299.6" y="629.6916666666666" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1299.600 625.200)"><tspan x="1299.6" dy="0">198×198</tspan></text>
+<rect x="1312.8" y="463.2" width="15.600000000000001" height="129.60000000000002" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1320.6" y="438.1583333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1320.6" dy="0">128</tspan></text>
+<text x="1336.8" y="629.6916666666666" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1336.800 625.200)"><tspan x="1336.8" dy="0">196×196</tspan></text>
+<line x1="1255.1999999999998" y1="499.488" x2="1270.8" y2="499.488" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="1292.3999999999999" y1="499.488" x2="1308.0" y2="499.488" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<text x="1441.1999999999998" y="258.5833333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="1.6666666666666667" fill="#222222"><tspan x="1441.1999999999998" dy="0"></tspan></text>
+<rect x="1392.0" y="159.0" width="9.6" height="198.0" rx="0.0" fill="#FFFFFF" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1396.7999999999997" y="133.95833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1396.7999999999997" dy="0">128</tspan></text>
+<text x="1372.8000000000002" y="311.9916666666667" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1372.800 307.500)"><tspan x="1372.8000000000002" dy="0">392×392</tspan></text>
+<rect x="1404.0" y="159.0" width="9.6" height="198.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<rect x="1435.1999999999998" y="159.0" width="15.600000000000001" height="198.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1442.9999999999998" y="133.95833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1442.9999999999998" dy="0">64</tspan></text>
+<text x="1459.2" y="393.89166666666665" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1459.200 389.400)"><tspan x="1459.2" dy="0">390×390</tspan></text>
+<rect x="1472.3999999999999" y="159.0" width="15.600000000000001" height="198.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1480.1999999999998" y="133.95833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1480.1999999999998" dy="0">64</tspan></text>
+<text x="1496.4" y="393.89166666666665" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1496.400 389.400)"><tspan x="1496.4" dy="0">388×388</tspan></text>
+<line x1="1414.8" y1="214.44" x2="1430.4" y2="214.44" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="1452.0" y1="214.44" x2="1467.6000000000001" y2="214.44" stroke="#081681" stroke-width="4.166666666666667" marker-end="url(#ar)"/>
+<line x1="683.4" y1="805.2" x2="897.6" y2="805.2" stroke="#B6B8BA" stroke-width="5.0"/>
+<line x1="897.6" y1="805.2" x2="911.4000000000001" y2="805.2" stroke="#B6B8BA" stroke-width="5.0" marker-end="url(#ar)"/>
+<line x1="528.0" y1="675.6" x2="1057.1999999999998" y2="675.6" stroke="#B6B8BA" stroke-width="5.0"/>
+<line x1="1057.1999999999998" y1="675.6" x2="1070.9999999999998" y2="675.6" stroke="#B6B8BA" stroke-width="5.0" marker-end="url(#ar)"/>
+<line x1="367.8" y1="488.40000000000003" x2="1216.8" y2="488.40000000000003" stroke="#B6B8BA" stroke-width="5.0"/>
+<line x1="1216.8" y1="488.40000000000003" x2="1230.6" y2="488.40000000000003" stroke="#B6B8BA" stroke-width="5.0" marker-end="url(#ar)"/>
+<line x1="210.0" y1="194.4" x2="1376.3999999999999" y2="194.4" stroke="#B6B8BA" stroke-width="5.0"/>
+<line x1="1376.3999999999999" y1="194.4" x2="1390.1999999999998" y2="194.4" stroke="#B6B8BA" stroke-width="5.0" marker-end="url(#ar)"/>
+<line x1="855.6" y1="895.2" x2="930.0" y2="895.2" stroke="#068C15" stroke-width="3.6666666666666665"/>
+<line x1="930.0" y1="895.2" x2="930.0" y2="850.2" stroke="#068C15" stroke-width="3.6666666666666665" marker-end="url(#ar)"/>
+<line x1="1009.2" y1="805.2" x2="1089.6" y2="805.2" stroke="#068C15" stroke-width="3.6666666666666665"/>
+<line x1="1089.6" y1="805.2" x2="1089.6" y2="744.0" stroke="#068C15" stroke-width="3.6666666666666665" marker-end="url(#ar)"/>
+<line x1="1168.8" y1="675.6" x2="1249.2" y2="675.6" stroke="#068C15" stroke-width="3.6666666666666665"/>
+<line x1="1249.2" y1="675.6" x2="1249.2" y2="592.8000000000001" stroke="#068C15" stroke-width="3.6666666666666665" marker-end="url(#ar)"/>
+<line x1="1328.4" y1="488.40000000000003" x2="1408.8" y2="488.40000000000003" stroke="#068C15" stroke-width="3.6666666666666665"/>
+<line x1="1408.8" y1="488.40000000000003" x2="1408.8" y2="357.0" stroke="#068C15" stroke-width="3.6666666666666665" marker-end="url(#ar)"/>
+<rect x="1519.2" y="159.0" width="8.16" height="198.0" rx="0.0" fill="#74A0CE" stroke="#38669A" stroke-width="1.0833333333333333"/>
+<text x="1523.28" y="133.95833333333334" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14.166666666666666" fill="#767676"><tspan x="1523.28" dy="0">2</tspan></text>
+<text x="1543.2" y="393.89166666666665" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="12.833333333333334" fill="#767676" transform="rotate(-90 1543.200 389.400)"><tspan x="1543.2" dy="0">388×388</tspan></text>
+<line x1="114.0" y1="194.4" x2="151.2" y2="194.4" stroke="#081681" stroke-width="2.3333333333333335" marker-end="url(#ar)"/>
+<line x1="1488.0" y1="194.4" x2="1515.6000000000001" y2="194.4" stroke="#008F91" stroke-width="3.0" marker-end="url(#ar)"/>
+<text x="85.2" y="172.45" text-anchor="end" dominant-baseline="middle" font-family="Arial" font-size="25.0" fill="#222222"><tspan x="85.2" dy="0">input</tspan><tspan x="85.2" dy="29.5">image</tspan><tspan x="85.2" dy="29.5">tile</tspan></text>
+<text x="1542.0" y="173.83333333333331" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="23.333333333333332" fill="#222222"><tspan x="1542.0" dy="0">output</tspan><tspan x="1542.0" dy="27.53333333333333">segmentation</tspan><tspan x="1542.0" dy="27.53333333333333">map</tspan></text>
+<line x1="1516.8000000000002" y1="666.0" x2="1564.8" y2="666.0" stroke="#081681" stroke-width="3.8333333333333335" marker-end="url(#ar)"/>
+<text x="1575.6000000000001" y="672.9833333333333" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="21.666666666666668" fill="#081681"><tspan x="1575.6000000000001" dy="0">conv 3×3, ReLU</tspan></text>
+<line x1="1516.8000000000002" y1="726.0" x2="1564.8" y2="726.0" stroke="#B6B8BA" stroke-width="3.8333333333333335" marker-end="url(#ar)"/>
+<text x="1575.6000000000001" y="732.9833333333333" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="21.666666666666668" fill="#B6B8BA"><tspan x="1575.6000000000001" dy="0">copy and crop</tspan></text>
+<line x1="1540.8" y1="765.6" x2="1540.8" y2="806.4" stroke="#930600" stroke-width="3.8333333333333335" marker-end="url(#ar)"/>
+<text x="1575.6000000000001" y="792.9833333333333" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="21.666666666666668" fill="#930600"><tspan x="1575.6000000000001" dy="0">max pool 2×2</tspan></text>
+<line x1="1540.8" y1="866.4" x2="1540.8" y2="825.6" stroke="#068C15" stroke-width="3.8333333333333335" marker-end="url(#ar)"/>
+<text x="1575.6000000000001" y="852.9833333333333" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="21.666666666666668" fill="#068C15"><tspan x="1575.6000000000001" dy="0">up-conv 2×2</tspan></text>
+<line x1="1516.8000000000002" y1="906.0" x2="1564.8" y2="906.0" stroke="#008F91" stroke-width="3.8333333333333335" marker-end="url(#ar)"/>
+<text x="1575.6000000000001" y="912.9833333333333" text-anchor="start" dominant-baseline="middle" font-family="Arial" font-size="21.666666666666668" fill="#008F91"><tspan x="1575.6000000000001" dy="0">conv 1×1</tspan></text>
+</svg>

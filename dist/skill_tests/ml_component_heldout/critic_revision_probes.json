@@ -1,0 +1,60 @@
+{
+  "original": "PASS",
+  "dropout_changed_to_conv": "REJECTED AssertionError",
+  "panel_2.9": {
+    "bounds": [
+      0,
+      0,
+      2.9,
+      4.05
+    ],
+    "layer_boxes": [
+      [
+        0.8899999999999999,
+        1.2,
+        2.04,
+        0.28
+      ],
+      [
+        0.8899999999999999,
+        1.8,
+        2.04,
+        0.28
+      ]
+    ],
+    "body_outside_bounds": true
+  },
+  "panel_10": {
+    "bounds": [
+      0,
+      0,
+      10,
+      4.05
+    ],
+    "layer_boxes": [
+      [
+        -2.59,
+        1.2,
+        9,
+        0.28
+      ],
+      [
+        -2.59,
+        1.8,
+        9,
+        0.28
+      ]
+    ],
+    "body_outside_bounds": true
+  },
+  "invalid_index_after_write": {
+    "exception": "ValueError",
+    "written_elements": 3
+  },
+  "accepted_matrix_cell_height_0.2": "header text extends to y+0.39, cell label to y+0.38; cell bottom is y+0.2",
+  "hashes": {
+    "png": "f4d6e50ab70ed18bc354552fdadbc30f3603b6635048583469bcb483b67d4996",
+    "pdf": "5d2738f3f02d1d4744fa08ddb317bc4b9efadb6c9bf748e70fbf7a9ba9a6cea4",
+    "pptx": "27c0fba0bbeeef5a7b1a60b1d1bc54e86505eba7bda17146efd5291697ed3a8d"
+  }
+}

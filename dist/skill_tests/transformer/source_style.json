@@ -1,0 +1,13 @@
+{
+  "source": "Vaswani et al., Attention Is All You Need, arXiv:1706.03762v7, PDF pp. 3-4, Figures 1-2",
+  "status": "source-visible style and structural anchors; editable structural redraw, not pixel replica",
+  "anchors": [
+    {"dimension": "composition", "evidence": "Figure 1, PDF p. 3", "observation": "bottom-up encoder and decoder towers, decoder taller, output probabilities at top", "decision": "preserve vertical towers and upward reading direction"},
+    {"dimension": "operator grammar", "evidence": "Figure 1, PDF p. 3", "observation": "embedding pink, attention warm peach, FFN cyan, Add & Norm yellow, Linear lavender, Softmax green", "decision": "use operator-specific fills and varying widths instead of uniform cards"},
+    {"dimension": "residual and repetition", "evidence": "Figure 1, PDF p. 3", "observation": "residual paths loop around each sublayer; stacked gray outlines and N× denote repeated layers", "decision": "draw explicit bypass loops and shallow layer silhouettes"},
+    {"dimension": "position", "evidence": "Figure 1, PDF p. 3", "observation": "positional encoding is a waveform entering a circled plus at each embedding stream", "decision": "render sine-like vector trace and separate plus nodes"},
+    {"dimension": "attention operands", "evidence": "Figure 2 left, PDF p. 4", "observation": "Q and K converge at first MatMul; V bypasses scale/mask/softmax and enters last MatMul", "decision": "preserve three operand paths and two distinct MatMul nodes"},
+    {"dimension": "multi-head depth", "evidence": "Figure 2 right, PDF p. 4", "observation": "three Linear projections and the attention unit repeat in a shallow h-layer stack before Concat and output Linear", "decision": "show independent Q/K/V projections and translucent h-stack silhouettes"},
+    {"dimension": "line and type", "evidence": "Figures 1-2, PDF pp. 3-4", "observation": "black fine connectors, compact sans labels, white background, minimal ornamental framing", "decision": "use dark fine connectors and no page-wide card panels or presentation banner"}
+  ]
+}

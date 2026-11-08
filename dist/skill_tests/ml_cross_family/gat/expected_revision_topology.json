@@ -1,0 +1,29 @@
+{
+  "figure_id": "GAT_Figure1_revision",
+  "required_nodes": ["attention_a", "alpha_ij", "node_1", "node_2", "node_3", "node_4", "node_5", "node_6", "output_h1"],
+  "required_edges": [
+    ["input_0", "attention_a"], ["input_1", "attention_a"],
+    ["input_2", "attention_a"], ["input_3", "attention_a"],
+    ["input_4", "attention_a"], ["input_5", "attention_a"],
+    ["input_6", "attention_a"], ["input_7", "attention_a"],
+    ["attention_a", "alpha_ij"],
+    ["node_1", "node_1"],
+    ["node_2", "node_1"], ["node_3", "node_1"],
+    ["node_4", "node_1"], ["node_5", "node_1"],
+    ["node_6", "node_1"], ["node_1", "output_h1"]
+  ],
+  "critical_labels": {
+    "activation_label": "LeakyReLU",
+    "self_attention_label": "α₁₁",
+    "aggregation_label": "concat/avg"
+  },
+  "head_bundles": {
+    "heads_1_1": {"source":"node_1","target":"node_1","colors":["#2459BB","#149937","#9F20D6"]},
+    "heads_2_1": {"source":"node_2","target":"node_1","colors":["#2459BB","#149937","#9F20D6"]},
+    "heads_3_1": {"source":"node_3","target":"node_1","colors":["#2459BB","#149937","#9F20D6"]},
+    "heads_4_1": {"source":"node_4","target":"node_1","colors":["#2459BB","#149937","#9F20D6"]},
+    "heads_5_1": {"source":"node_5","target":"node_1","colors":["#2459BB","#149937","#9F20D6"]},
+    "heads_6_1": {"source":"node_6","target":"node_1","colors":["#2459BB","#149937","#9F20D6"]},
+    "heads_to_output": {"source":"node_1","target":"output_h1","colors":["#2459BB","#149937","#9F20D6"]}
+  }
+}
