@@ -128,6 +128,12 @@ def classify_release(*, route: str, candidate: dict | None = None,
                 "blockers": [], "pending_approvals": [],
                 "route": route, "approvals": approvals}
 
+    # A clean machine run is TECHNICAL_PASS even before the human approval
+    # workflow starts. Pending evidence is explicit; this is never FULL_ACCEPTED.
+    if not approvals:
+        return {"status": "TECHNICAL_PASS", "full_accepted": False,
+                "blockers": [], "pending_approvals": pending, "route": route}
+
     if "office_host" in pending:
         status = "NEEDS_OFFICE_HOST_REVIEW"
     elif "rights_review" in pending:
