@@ -22,7 +22,7 @@ def aabb(shape):
     return (cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2)
 
 
-def intersects(a, b, threshold=2.16):
+def intersects(a, b, threshold=2.16 * 12700):
     iw = max(0, min(a[2], b[2]) - max(a[0], b[0]))
     ih = max(0, min(a[3], b[3]) - max(a[1], b[1]))
     return iw > threshold and ih > threshold
