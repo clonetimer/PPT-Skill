@@ -4,6 +4,8 @@ from __future__ import annotations
 import csv
 import json
 import math
+from zipfile import ZipFile
+from lxml import etree
 from pathlib import Path
 import sys
 from tempfile import TemporaryDirectory
@@ -14,7 +16,8 @@ from pptx.dml.color import RGBColor
 from pptx.util import Inches, Pt
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from audit_source_grounded_radar import DEFAULT_SERIES, read_source_table, source_axis, audit_radar
+from audit_source_grounded_radar import DEFAULT_SERIES, read_source_table, source_axis, audit_radar, shape_stroke
+from correct_source_grounded_radar import corrected_candidate
 
 ROOT = Path(__file__).resolve().parents[1]
 CSV = ROOT / "tests/fixtures/mmgraph_f2_table3.csv"
@@ -52,6 +55,53 @@ def make_synthetic_radar(out: Path):
 
 
 class RadarSourceConsistencyTests(unittest.TestCase):
+    def test_non_destructive_audit_and_single_vertex_correction(self):
+        """Reject a hidden source audit bug that adds blue outlines to thousands
+        of unrelated shapes whenever a corrected PPTX is saved.
+        """
+        def shape_nodes(path):
+            with ZipFile(path) as package:
+                xml = package.read("ppt/slides/slide1.xml")
+            root = etree.fromstring(xml)
+            ns = {"p": "http://schemas.openxmlformats.org/presentationml/2006/main"}
+            return [etree.tostring(node) for node in root.xpath("//p:spTree/*", namespaces=ns)]
+        with TemporaryDirectory() as folder:
+            root = Path(folder)
+            source = root / "source.pptx"
+            corrected = root / "corrected.pptx"
+            make_synthetic_radar(source)
+            deck = Presentation(source)
+            deck.slides[0].shapes.add_textbox(
+                Inches(.2), Inches(.2), Inches(1.5), Inches(.3)
+            ).text = "UNRELATED TEXT MUST STAY UNCHANGED"
+            deck.save(source)
+            before = shape_nodes(source)
+            test_deck = Presentation(source)
+            tree_before = bytes(test_deck.slides[0].shapes._spTree.xml, "utf-8")
+            for shape in test_deck.slides[0].shapes:
+                shape_stroke(shape)
+            self.assertEqual(
+                tree_before,
+                bytes(test_deck.slides[0].shapes._spTree.xml, "utf-8"),
+                "A supposedly read-only audit must not insert <a:ln> nodes",
+            )
+            with CSV.open(encoding="utf-8") as handle:
+                data = list(csv.DictReader(handle))
+            next(row for row in data if row["dataset"] == "We-Math2.0")["grpo_qwen"] = "30.00"
+            modified = root / "modified.csv"
+            with modified.open("w", newline="", encoding="utf-8") as handle:
+                writer = csv.DictWriter(handle, fieldnames=list(data[0]))
+                writer.writeheader()
+                writer.writerows(data)
+            result = corrected_candidate(source, modified, MANIFEST, corrected)
+            after = shape_nodes(corrected)
+            self.assertEqual(result["output_status"], "PASS")
+            self.assertEqual(result["correction_count"], 1)
+            self.assertEqual(len(before), len(after))
+            changed = [i for i, (a, b) in enumerate(zip(before, after)) if a != b]
+            self.assertEqual(len(changed), 1, f"Unrelated PPTX objects changed: {changed}")
+
+
     def test_all_18_axes_9_models_pass_with_source_values(self):
         with TemporaryDirectory() as folder:
             candidate = Path(folder)/"synthetic.pptx"
