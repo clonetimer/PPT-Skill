@@ -501,6 +501,10 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) ->
             "source_image_events": source_image_stats["source_paint_events"],
             "off_page_image_events": source_image_stats["off_page_image_events"],
             "image_assets": manifest_events(images),
+            "reconstruction_class": (
+                "source_picture_only" if picture_count and not (native_count or text_count)
+                else "mixed_native_picture" if picture_count else "native_only"
+            ),
         }
     finally:
         document.close()
