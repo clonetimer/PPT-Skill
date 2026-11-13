@@ -28,6 +28,7 @@ jobs:
           python tools/test_pdf_figure_import.py
           python tools/test_audit_imported_pdf_figure.py
           python tools/test_office2016_compat.py
+          python tools/test_figure_first_pass_gate.py
       - name: Build B01/F07
         run: python tools/build_v71_examples.py
       - name: Render independent-paper generalization trials
