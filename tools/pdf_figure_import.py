@@ -309,6 +309,12 @@ def _source_font(name):
         return "Times New Roman"
     if name.startswith("Helvetica"):
         return "Arial"
+    if name.casefold().replace(" ", "") == "comicsansms":
+        return "Comic Sans MS"
+    if re.fullmatch(r"font[0-9a-f]{8,}", name, flags=re.IGNORECASE):
+        # Some PDF producers expose an internal font resource identifier
+        # instead of a usable family name. Use a deterministic Office font.
+        return "Arial"
     if name.startswith(("Latin Modern Math", "LatinModernMath")):
         return "Cambria Math"
     return name.replace("-Bold", "").replace("-Italic", "").replace(" Regular", "")
