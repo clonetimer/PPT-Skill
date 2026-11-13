@@ -20,6 +20,30 @@ from pdf_figure_import import convert_pdf_page, _source_font, _normalize_pdf_tex
 
 
 class NativeFigureImportTests(unittest.TestCase):
+    def test_radar_circle_imports_as_editable_native_oval(self):
+        """Prevent missing outer rings in a previously unseen radar diagram."""
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            pdf_path, pptx_path = root / "polar.pdf", root / "polar.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=300, height=200)
+            shape = page.new_shape()
+            shape.draw_circle(fitz.Point(120, 100), 45)
+            shape.finish(color=(0.3, 0.4, 0.6), width=0.5)
+            shape.commit()
+            doc.save(pdf_path)
+            doc.close()
+            with fitz.open(pdf_path) as source:
+                source_drawings = source[0].get_drawings()
+                self.assertEqual([p[0] for p in source_drawings[0]["items"]], ["c"] * 4)
+            report = convert_pdf_page(pdf_path, pptx_path)
+            self.assertEqual(report["native_shapes"], 1)
+            slide = Presentation(pptx_path).slides[0]
+            ovals = [s for s in slide.shapes if s.shape_type == MSO_SHAPE_TYPE.AUTO_SHAPE]
+            self.assertEqual(len(ovals), 1)
+            self.assertEqual(len([s for s in slide.shapes if s.shape_type == MSO_SHAPE_TYPE.PICTURE]), 0)
+
+
     def test_image_is_placed_at_its_original_paint_order(self):
         """Later paper thumbnails must not be hidden below earlier vector panels."""
         with TemporaryDirectory() as temp:
