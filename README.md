@@ -47,6 +47,11 @@ Original author PDFs, paper figures, embedded photos and project-specific PPTX
 reconstructions are not redistributed in this public repository; check original
 permissions before sharing them.
 
+Independent-paper generalization is also covered by the
+[Mamba and Swin figure trials](docs/GENERALIZATION_TRIALS_2026-11-13.md). CI
+renders both from FigureSpecs and checks source-derived topology before
+auditing their native PowerPoint objects.
+
 ## V7.6 development — Evidence-linked scientific figures
 
 The current workflow links FigureSpec elements to evidence, checks C01's critical drawn arrows against its declared relationships, and builds six Iris charts, Wine scatter and distribution plots, and one image-and-quantification panel from public source assets. The chart contract declares axis domains, zero policy and reasons for truncated ranges. SVG and editable PPTX come from the same FigureSpec; PowerPoint-exported PDFs are included as inspected previews. See [the research-figure upgrade plan](docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md) for scope and remaining gates.
