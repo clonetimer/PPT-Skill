@@ -16,6 +16,7 @@ import json
 import math
 from pathlib import Path
 import re
+import time
 
 import fitz
 from PIL import Image
@@ -31,6 +32,11 @@ from pptx.util import Inches, Pt
 from render_figure_spec import clean_theme, nofx
 from pdf_ellipse_recognition import ellipse_bounds
 from pdf_source_assets import collect_image_events, manifest_events
+from pdf_import_budget import (
+    preflight_drawing_budget, assert_budget,
+    DEFAULT_MAX_DRAWINGS, DEFAULT_MAX_SOURCE_SEGMENTS,
+    DEFAULT_MAX_VERTICES, DEFAULT_MAX_SECONDS,
+)
 
 
 def _color(value):
@@ -425,8 +431,13 @@ def _add_recovered_image(slide, event, warnings):
     return 1
 
 
-def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) -> dict:
+def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
+                     max_drawings: int = DEFAULT_MAX_DRAWINGS,
+                     max_source_segments: int = DEFAULT_MAX_SOURCE_SEGMENTS,
+                     max_vertices: int = DEFAULT_MAX_VERTICES,
+                     max_seconds: float = DEFAULT_MAX_SECONDS) -> dict:
     pdf_path, pptx_path = Path(pdf_path), Path(pptx_path)
+    clock_start = time.monotonic()
     document = fitz.open(pdf_path)
     try:
         page = document[page_index]
@@ -436,6 +447,12 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) ->
         slide = deck.slides.add_slide(deck.slide_layouts[6])
         slide.background.fill.solid()
         slide.background.fill.fore_color.rgb = RGBColor(255, 255, 255)
+        extended = page.get_drawings(extended=True)
+        resource_profile = preflight_drawing_budget(
+            extended, clock_start=clock_start, max_drawings=max_drawings,
+            max_source_segments=max_source_segments, max_vertices=max_vertices,
+            max_seconds=max_seconds,
+        )
         warnings = []
         page_blocks = page.get_text("dict")["blocks"]
 
@@ -448,7 +465,8 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) ->
         next_image = next(picture_events, None)
         picture_count = native_count = 0
         clip_stack = []
-        for drawing in page.get_drawings(extended=True):
+        for drawing in extended:
+            assert_budget(clock_start, max_seconds)
             current_seqno = drawing.get("seqno")
             if current_seqno is not None:
                 while next_image is not None and next_image.seqno < current_seqno:
@@ -479,6 +497,7 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) ->
                     text_count += int(_add_text(slide, span, line))
                     font_counts[_source_font(span["font"])] += 1
 
+        assert_budget(clock_start, max_seconds)
         if source_image_stats["unresolved_visible_events"]:
             raise ValueError(
                 f"UNRESOLVED_SOURCE_IMAGES: {source_image_stats['unresolved_visible_events']}"
@@ -486,6 +505,7 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) ->
         if not any((native_count, text_count, picture_count)):
             raise ValueError("NO_VISIBLE_SOURCE_CONTENT")
 
+        resource_profile["elapsed_seconds"] = round(time.monotonic() - clock_start, 6)
         pptx_path.parent.mkdir(parents=True, exist_ok=True)
         deck.save(pptx_path)
         clean_theme(pptx_path)
@@ -501,6 +521,7 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) ->
             "source_image_events": source_image_stats["source_paint_events"],
             "off_page_image_events": source_image_stats["off_page_image_events"],
             "image_assets": manifest_events(images),
+            "resource_profile": resource_profile,
             "reconstruction_class": (
                 "source_picture_only" if picture_count and not (native_count or text_count)
                 else "mixed_native_picture" if picture_count else "native_only"
