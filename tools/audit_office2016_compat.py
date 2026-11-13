@@ -40,18 +40,20 @@ def audit_pptx(path: Path) -> dict:
     ole_or_controls: list[str] = []
     unsupported_media: list[str] = []
 
+    zip_integrity = "FAIL"
     try:
         with zipfile.ZipFile(path) as package:
             names = package.namelist()
             bad_member = package.testzip()
-            if bad_member:
-                failures.append(f"corrupt ZIP member: {bad_member}")
             required = {
                 "[Content_Types].xml",
                 "ppt/presentation.xml",
                 "ppt/_rels/presentation.xml.rels",
             }
             missing = sorted(required - set(names))
+            zip_integrity = "PASS" if bad_member is None and not missing else "FAIL"
+            if bad_member:
+                failures.append(f"corrupt ZIP member: {bad_member}")
             if missing:
                 failures.append(f"missing required package parts: {', '.join(missing)}")
 
@@ -98,7 +100,7 @@ def audit_pptx(path: Path) -> dict:
                 if name.startswith("ppt/slides/") or name.startswith("ppt/slideMasters/"):
                     for node in root.iter(A_NS + "latin"):
                         family = node.attrib.get("typeface", "").strip()
-                        if family and family not in ("+", "-"):
+                        if family and family not in ("+", "-", "+mj-lt", "+mn-lt"):
                             fonts.add(family)
 
     except (OSError, zipfile.BadZipFile) as exc:
@@ -127,7 +129,7 @@ def audit_pptx(path: Path) -> dict:
     return {
         "status": "PASS" if not failures else "FAIL",
         "path": str(path),
-        "zip_integrity": "PASS" if not failures or not any("corrupt ZIP" in x for x in failures) else "FAIL",
+        "zip_integrity": zip_integrity,
         "media_extensions": sorted({Path(n).suffix.lower() for n in media_files}),
         "media_count": len(media_files),
         "fonts": sorted(fonts),
