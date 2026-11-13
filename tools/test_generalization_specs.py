@@ -31,10 +31,8 @@ class GeneralizationTopologyTests(unittest.TestCase):
     def test_mamba_selective_ssm_keeps_source_critical_nodes_and_routes(self):
         spec = _spec("Mamba_Figure1.json")
         text = _texts(spec)
-        required = {
-            "hₜ₋₁", "hₜ", "A", "Bₜ", "Cₜ", "Δₜ", "xₜ", "yₜ",
-            "Project", "Selection Mechanism", "GPU SRAM", "GPU HBM",
-        }
+        fixture = json.loads((TRIALS / "expected_topology.json").read_text(encoding="utf-8"))
+        required = set(fixture["Mamba_Figure1"]["required_labels"])
         self.assertTrue(required.issubset(text), f"missing labels: {sorted(required - text)}")
 
         channels = [
