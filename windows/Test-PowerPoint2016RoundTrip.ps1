@@ -1,18 +1,18 @@
 #requires -Version 5.1
 <#
 .SYNOPSIS
-  Perform a native Windows PowerPoint 2016 round-trip and object-count check.
+  Run a real Windows PowerPoint open/save/export/reopen structural round trip.
 .DESCRIPTION
-  Open -> save a new PPTX -> export PDF/PNG -> reopen -> compare object/text
-  snapshots. Does not claim that Office 365 is Office 2016 because both may
-  report Version 16.0. A human must inspect exported PDF/PNG at final size.
-.EXAMPLE
-  powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-PowerPoint2016RoundTrip.ps1 -InputDirectory C:\PPT-Figures -OutputDirectory C:\PPT-Figures\office2016_qa
+  This script must run on the target Windows machine with desktop PowerPoint.
+  It never overwrites an input. Version 16.0 alone does not distinguish Office
+  2016 from Microsoft 365. Use -ConfirmOffice2016Installation only after
+  checking File > Account/About PowerPoint on the target host.
 #>
 param(
     [Parameter(Mandatory=$true)][string]$InputDirectory,
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
-    [switch]$RequireOffice2016
+    [switch]$RequireOffice2016,
+    [switch]$ConfirmOffice2016Installation
 )
 $ErrorActionPreference = 'Stop'
 $inputRoot = [IO.Path]::GetFullPath($InputDirectory)
@@ -22,9 +22,52 @@ if (!(Test-Path -LiteralPath $inputRoot -PathType Container)) {
 }
 New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
 
-function Get-SlideSnapshot($deck) {
+function Get-Office2016Evidence {
+    param($PowerPointApp, [bool]$ManualConfirmation)
+    $version = [string]$PowerPointApp.Version
+    $productReleaseIds = ''
+    $displayNames = @()
+    try {
+        $c2r = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Office\ClickToRun\Configuration' -ErrorAction Stop
+        $productReleaseIds = [string]$c2r.ProductReleaseIds
+    } catch {}
+    foreach ($key in @(
+        'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
+        'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
+    )) {
+        try {
+            $displayNames += @(Get-ItemProperty $key -ErrorAction SilentlyContinue |
+                Where-Object { $_.DisplayName -match 'Microsoft Office|Microsoft 365|Office 20\d\d' } |
+                ForEach-Object { [string]$_.DisplayName })
+        } catch {}
+    }
+    $displayNames = @($displayNames | Sort-Object -Unique)
+    $matching2016 = @($displayNames | Where-Object {
+        $_ -match '(?i)(Microsoft\s+)?Office.*2016|2016.*Office'
+    })
+    $releaseId2016 = $productReleaseIds -match '(?i)Office2016'
+    $manual = $ManualConfirmation -and ($version -match '^16\.')
+    $identified = ($version -match '^16\.') -and (
+        $matching2016.Count -gt 0 -or $releaseId2016 -or $manual
+    )
+    $method = if ($matching2016.Count -gt 0) { 'Windows uninstall DisplayName' }
+              elseif ($releaseId2016) { 'ClickToRun ProductReleaseIds' }
+              elseif ($manual) { 'user-confirmed File > Account/About PowerPoint' }
+              else { 'unconfirmed; version 16.0 is not sufficient' }
+    return [pscustomobject]@{
+        version = $version
+        product_release_ids = $productReleaseIds
+        office_display_names = $displayNames
+        office2016_display_name_matches = $matching2016
+        identified_office2016 = [bool]$identified
+        identity_method = $method
+    }
+}
+
+function Get-SlideSnapshot {
+    param($Deck)
     $slides = @()
-    foreach ($slide in $deck.Slides) {
+    foreach ($slide in $Deck.Slides) {
         $texts = @()
         $fontNames = @()
         $types = @{}
@@ -46,9 +89,15 @@ function Get-SlideSnapshot($deck) {
             texts = @($texts | Sort-Object)
             font_families = @($fontNames | Sort-Object -Unique)
             type_counts = $types
+            slide_width_points = [double]$Deck.PageSetup.SlideWidth
+            slide_height_points = [double]$Deck.PageSetup.SlideHeight
         }
     }
     return ,$slides
+}
+
+function Test-SequenceEqual($Left, $Right) {
+    return (@(Compare-Object -ReferenceObject @($Left) -DifferenceObject @($Right)).Count -eq 0)
 }
 
 $reports = @()
@@ -56,16 +105,9 @@ $app = $null
 try {
     $app = New-Object -ComObject PowerPoint.Application
     $app.Visible = -1
-    $version = [string]$app.Version
-    $product = ''
-    try {
-        $reg = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Office\ClickToRun\Configuration' -ErrorAction Stop
-        $product = [string]$reg.ProductReleaseIds
-    } catch {}
-    # Version 16.0 alone is not proof of a 2016 installation.
-    $isOffice2016 = ($version -match '^16\.') -and ($product -match '2016')
-    if ($RequireOffice2016 -and !$isOffice2016) {
-        throw "Office 2016 not established (Version=$version; ProductReleaseIds=$product)"
+    $office = Get-Office2016Evidence -PowerPointApp $app -ManualConfirmation:$ConfirmOffice2016Installation.IsPresent
+    if ($RequireOffice2016 -and !$office.identified_office2016) {
+        throw "Office 2016 not established. Version=$($office.version); ProductReleaseIds=$($office.product_release_ids). Check File > Account/About PowerPoint, then rerun with -ConfirmOffice2016Installation."
     }
     $inputs = @(Get-ChildItem -LiteralPath $inputRoot -Filter '*.pptx' -File | Sort-Object Name)
     if ($inputs.Count -eq 0) { throw 'No *.pptx inputs found' }
@@ -78,6 +120,9 @@ try {
             $preview = Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.png')
             if ([IO.Path]::GetFullPath($source.FullName) -eq [IO.Path]::GetFullPath($pptx)) {
                 throw 'Refusing to overwrite original'
+            }
+            foreach ($existing in @($pptx,$pdf,$preview)) {
+                if (Test-Path -LiteralPath $existing) { Remove-Item -LiteralPath $existing -Force }
             }
             $deck = $app.Presentations.Open($source.FullName, $false, $false, $false)
             $before = @(Get-SlideSnapshot $deck)
@@ -92,16 +137,25 @@ try {
             $reopened = $app.Presentations.Open($pptx, $true, $false, $false)
             $after = @(Get-SlideSnapshot $reopened)
             $reopened.Close(); $reopened = $null
+
             $same = ($before.Count -eq $after.Count)
+            $differences = @()
             if ($same) {
                 for ($i=0; $i -lt $before.Count; $i++) {
-                    if ($before[$i].shape_count -ne $after[$i].shape_count -or
-                        $before[$i].text_count -ne $after[$i].text_count -or
-                        (Compare-Object -ReferenceObject $before[$i].texts -DifferenceObject $after[$i].texts)) {
-                        $same = $false; break
+                    $b = $before[$i]; $a = $after[$i]
+                    if ($b.shape_count -ne $a.shape_count) { $differences += "slide $($i+1): shape count" }
+                    if ($b.text_count -ne $a.text_count) { $differences += "slide $($i+1): text count" }
+                    if (!(Test-SequenceEqual $b.texts $a.texts)) { $differences += "slide $($i+1): text content" }
+                    if (!(Test-SequenceEqual $b.font_families $a.font_families)) { $differences += "slide $($i+1): font families" }
+                    if (($b.type_counts | ConvertTo-Json -Compress) -ne ($a.type_counts | ConvertTo-Json -Compress)) {
+                        $differences += "slide $($i+1): shape-type counts"
+                    }
+                    if ($b.slide_width_points -ne $a.slide_width_points -or
+                        $b.slide_height_points -ne $a.slide_height_points) {
+                        $differences += "slide $($i+1): slide dimensions"
                     }
                 }
-            }
+            } else { $differences += 'slide count' }
             $filesPresent = (Test-Path -LiteralPath $pptx) -and
                             (Test-Path -LiteralPath $pdf) -and
                             (Test-Path -LiteralPath $preview)
@@ -112,13 +166,12 @@ try {
                 output_pdf = $pdf
                 output_png = $preview
                 output_sha256 = (Get-FileHash -LiteralPath $pptx -Algorithm SHA256).Hash.ToLowerInvariant()
-                office_version = $version
-                product_release_ids = $product
-                identified_office2016 = $isOffice2016
-                roundtrip_structure_same = $same
+                office = $office
+                roundtrip_structure_same = [bool]($same -and $differences.Count -eq 0)
+                roundtrip_differences = $differences
                 all_output_files_exist = $filesPresent
                 requires_manual_visual_check = $true
-                status = $(if ($same -and $filesPresent) {'STRUCTURE_PASS'} else {'FAIL'})
+                status = $(if ($same -and $differences.Count -eq 0 -and $filesPresent) {'STRUCTURE_PASS'} else {'FAIL'})
                 before = $before
                 after = $after
             }
@@ -134,6 +187,6 @@ try {
     }
 }
 $reportPath = Join-Path $outputRoot 'office2016_roundtrip_report.json'
-$reports | ConvertTo-Json -Depth 9 | Set-Content -LiteralPath $reportPath -Encoding UTF8
+$reports | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $reportPath -Encoding UTF8
 Write-Host "Report: $reportPath"
 if (@($reports | Where-Object {$_.status -ne 'STRUCTURE_PASS'}).Count -gt 0) { exit 1 }
