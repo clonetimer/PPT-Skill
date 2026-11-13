@@ -54,11 +54,16 @@ def source_axis(axis: dict, source: dict) -> dict:
 
 
 def shape_stroke(shape) -> str | None:
-    try:
-        if shape.line.color.type is not None and shape.line.color.rgb is not None:
-            return str(shape.line.color.rgb).upper()
-    except Exception:
-        pass
+    """Read OOXML stroke color without creating missing PowerPoint line nodes.
+
+    Accessing shape.line.color may materialize <a:ln> on shapes without an
+    explicit stroke. If the deck is subsequently saved, thousands of previously
+    unaffected text/icons can acquire theme-colored outlines. An audit function
+    must be non-destructive even when reused inside a correction pipeline.
+    """
+    nodes = shape._element.xpath("./p:spPr/a:ln/a:solidFill/a:srgbClr")
+    if nodes:
+        return (nodes[0].get("val") or "").upper() or None
     return None
 
 
