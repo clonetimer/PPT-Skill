@@ -70,7 +70,7 @@ def audit_figure(source_pdf: Path, candidate_pptx: Path, *, page_index: int = 0)
     slide = deck.slides[0]
     vector_shapes = [
         shape for shape in slide.shapes
-        if shape.shape_type in (MSO_SHAPE_TYPE.FREEFORM, MSO_SHAPE_TYPE.LINE)
+        if shape.shape_type in (MSO_SHAPE_TYPE.FREEFORM, MSO_SHAPE_TYPE.LINE, MSO_SHAPE_TYPE.AUTO_SHAPE)
     ]
     picture_shapes = [
         shape for shape in slide.shapes if shape.shape_type == MSO_SHAPE_TYPE.PICTURE
