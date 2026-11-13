@@ -52,6 +52,13 @@ Produce technically accurate, readable academic-defense presentations. Select vi
    2016 deliveries, also run the native Windows COM round-trip in
    windows/Test-PowerPoint2016RoundTrip.ps1; Linux/LibreOffice and OOXML
    preflight are not substitutes.
+   For source-visible PDF imports, run tools/audit_text_geometry.py against
+   the original PDF and candidate PPTX. Its source-aware collision check must
+   report zero introduced text overlaps and zero newly introduced text
+   overflow; source-authored overlap and source-crop clipping are recorded
+   separately. Verify exact text codepoints and font mapping. An unmapped
+   control/private-use glyph is a hard review blocker, not a guessed operator.
+   See docs/P0_TEXT_GEOMETRY_AND_GLYPH_AUDIT_2026-11-13.md.
 6. Run the schema, scientific, geometry, accessibility, cross-format and render-record checks named below. Resolve every machine-detectable failure before review.
    For node-link figures, audit line intersections with node interiors and text after rendering (`python tools/audit_figure_occlusion.py path/to/FigureSpec.json` is a preflight). Text-box-only overlap checks miss connectors that cross labels or pass through filled nodes. Inspect the actual PDF/PNG at delivery size and reroute any remaining ambiguous crossings.
    For a multi-figure deck, repeat structural and visual checks on the final combined PPTX/PDF: assembly can reintroduce theme effects or change rendering even when each source figure passed. In model-mechanism diagrams, trace residual paths, masked inputs and multi-input operators to their actual sources; a labeled box alone does not establish the dependency.
