@@ -14,10 +14,10 @@ Date: 2026-11-13. Branch: `feat/mmgraph-agent-figure-fidelity-20261113`.
 | Figure | Original PDF paths | Native PPTX vectors | Editable text spans | Independent pictures | Source/PPTX SSIM | Assessment |
 |---|---:|---:|---:|---:|---:|---|
 | F1, challenges vs proposals | 216 | 215 | 94/94 | 17/17 | 0.765 | Structure PASS; strongly source-matched overall |
-| F2, composite performance | 3,563 | 2,670 | 100/100 | 46/46 | 0.720 | Structure PASS; radar traces and several icons visibly differ |
+| F2, composite performance | 3,563 | 2,670 | 100/100 | 46/46 | 0.801 | Structure PASS; source-specific bar and stroke recovery; dense radar details still need review |
 | F3, construction/cache/policy | 318 | 317 | 148/148 | 0/0 | 0.840 | Structure PASS; mathematical glyph substitutions require review |
 
-All three PPTX files contain **zero full-figure pictures**; each source picture is an independent object. F2 includes native replacement bars and hatch marks measured against the author's figure, because the original PDF's clipping/pattern graphics rendered incorrectly in a generic import. Its source-specific recovery script and resulting derivative figures remain in private delivery artifacts, not in this repository.
+All three PPTX files contain **zero full-figure pictures**; each source picture is an independent object. F2 includes native replacement bars and hatch marks measured against the author's figure, because the original PDF's clipping/pattern graphics rendered incorrectly in a generic import. The PDF encoded several local stroke widths too heavily for the PowerPoint equivalent; tuning 233 upper-panel strokes against the source preview improved F2 SSIM from 0.720 to 0.801. Its source-specific recovery scripts and resulting derivative figures remain in private delivery artifacts, not in this repository.
 
 SSIM was computed on source PDF and LibreOffice-PDF-exported PPTX PNGs at matched page/crop dimensions: F1 90 dpi, F2 140 dpi, F3 72 dpi. It compares pixel appearance in that rendering environment; it neither proves every relation is correct nor predicts Office 2016 behavior. The audit checks text and shape preservation independently of this metric.
 
@@ -28,11 +28,11 @@ SSIM was computed on source PDF and LibreOffice-PDF-exported PPTX PNGs at matche
 3. PDF charts used nested clipping paths. Ignoring clips made radar and bar graphics spill across other panels. The importer now preserves the axis-aligned source scissor envelope; truly nonrectangular clips still need exact polygon clipping.
 4. Inserting all source photos before all vectors hid F2 benchmark thumbnails. The importer now respects source image paint order from the PDF bounding-box log.
 5. A source PDF encoded 14 stroke widths as 9,525 pt; those were skipped with explicit warnings because clamping or accepting them could blot out neighboring content.
-6. Original chart hatch/pattern fills did not survive generic clipping. F2 delivery used directly measured native bar/hatch reconstruction. A generalized pattern converter remains a separate project.
+6. Original chart hatch/pattern fills did not survive generic clipping. F2 delivery used directly measured native bar/hatch reconstruction and source-aligned thin-stroke tuning. A generalized pattern/stroke-profile converter remains a separate project.
 
 ## Current acceptance boundary
 
-The three candidate files are useful editable reconstructions, **not a claim of pixel-perfect or Office 2016-verified reproduction**. F2 still differs in the dense radar traces and upper-left icon treatment. F3 has small mathematical text-formula substitutions; MathML/native equation reconstruction was not attempted. For publication, manual scientific and final-size inspection is required before replacing the published originals.
+The three candidate files are useful editable reconstructions, **not a claim of pixel-perfect or Office 2016-verified reproduction**. F2 still differs in some dense radar details and tiny glyphs. F3 has small mathematical text-formula substitutions; MathML/native equation reconstruction was not attempted. For publication, manual scientific and final-size inspection is required before replacing the published originals.
 
 ## Reproduction
 
