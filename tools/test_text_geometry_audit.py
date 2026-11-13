@@ -101,6 +101,13 @@ class TextGeometryAuditTests(unittest.TestCase):
             self.assertEqual(report["introduced_out_of_bounds_count"], 0)
             self.assertEqual(report["status"], "PASS")
 
+    def test_low_visibility_source_footer_is_excluded_from_import_and_audit(self):
+        from pdf_figure_import import _span_visible_fraction
+        span = {"bbox": (6.0, 283.2, 16.0, 293.2)}
+        page_rect = fitz.Rect(0, 0, 505, 284.1)
+        self.assertAlmostEqual(_span_visible_fraction(span, page_rect), .09, delta=.002)
+        self.assertLess(_span_visible_fraction(span, page_rect), .2)
+
     def test_report_records_font_substitution_and_math_codepoints(self):
         with tempfile.TemporaryDirectory() as tmp:
             source, output = Path(tmp)/"math.pdf", Path(tmp)/"math.pptx"
@@ -131,7 +138,9 @@ class TextGeometryAuditTests(unittest.TestCase):
             convert_pdf_page(source, output)
             report = audit_text_geometry(source, output)
             self.assertGreaterEqual(report["suspicious_glyph_count"], 1)
-            self.assertEqual(report["status"], "FAIL")
+            self.assertEqual(report["text_mismatch_count"], 0)
+            self.assertEqual(report["status"], "NEEDS_REVIEW")
+            self.assertEqual(report["glyph_substitution_count"], 1)
 
 
 if __name__ == "__main__":
