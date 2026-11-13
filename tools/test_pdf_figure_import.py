@@ -96,11 +96,13 @@ class NativeFigureImportTests(unittest.TestCase):
             pdf_path, pptx_path = root / "stroke.pdf", root / "stroke.pptx"
             doc = fitz.open()
             page = doc.new_page(width=300, height=150)
+            page.draw_rect(fitz.Rect(30, 40, 90, 100), color=(0.1, 0.4, 0.6))
             page.draw_line((20, 30), (100, 50), color=(.2, .3, .4), width=9525)
             doc.save(pdf_path)
             doc.close()
             report = convert_pdf_page(pdf_path, pptx_path)
             self.assertTrue(pptx_path.exists())
+            self.assertGreater(report["native_shapes"], 0)
             self.assertTrue(any("stroke width" in note for note in report["warnings"]))
 
     def test_compound_filled_paths_retain_cutouts(self):
