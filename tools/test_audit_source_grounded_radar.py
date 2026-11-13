@@ -47,10 +47,20 @@ def make_synthetic_radar(out: Path):
                 [(round(x*10000), round(y*10000)) for x, y in pts[1:]+[first]],
                 close=False,
             )
-            shape = builder.convert_to_shape()
-            shape.fill.background()
-            shape.line.width = Pt(.4)
-            shape.line.color.rgb = RGBColor.from_string(color)
+            # The real F2 export contains two overlaid editable path objects
+            # per radar series; retain that z-order duplication in the fixture.
+            for _copy in range(2):
+                builder = sl.shapes.build_freeform(
+                    round(first[0]*10000), round(first[1]*10000), scale=Inches(1)/10000
+                )
+                builder.add_line_segments(
+                    [(round(x*10000), round(y*10000)) for x, y in pts[1:]+[first]],
+                    close=False,
+                )
+                shape = builder.convert_to_shape()
+                shape.fill.background()
+                shape.line.width = Pt(.4)
+                shape.line.color.rgb = RGBColor.from_string(color)
     deck.save(out)
 
 
@@ -96,10 +106,10 @@ class RadarSourceConsistencyTests(unittest.TestCase):
             result = corrected_candidate(source, modified, MANIFEST, corrected)
             after = shape_nodes(corrected)
             self.assertEqual(result["output_status"], "PASS")
-            self.assertEqual(result["correction_count"], 1)
+            self.assertEqual(result["correction_count"], 2)
             self.assertEqual(len(before), len(after))
             changed = [i for i, (a, b) in enumerate(zip(before, after)) if a != b]
-            self.assertEqual(len(changed), 1, f"Unrelated PPTX objects changed: {changed}")
+            self.assertEqual(len(changed), 2, f"Only the two overlaid target curve paths may change: {changed}")
 
 
     def test_all_18_axes_9_models_pass_with_source_values(self):
