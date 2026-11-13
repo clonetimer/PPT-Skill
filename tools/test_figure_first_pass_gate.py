@@ -127,6 +127,29 @@ class FirstPassFidelityTests(unittest.TestCase):
         self.assertFalse(profile["risk_flags"])
         self.assertEqual(len(profile["sha256"]),64)
 
+    def test_gate_rejects_new_text_overlap_even_when_text_and_shapes_survive(self):
+        from figure_first_pass_gate import evaluate
+        from pdf_figure_import import convert_pdf_page
+        from pptx.enum.shapes import MSO_SHAPE_TYPE
+        source = self.root / "adjacent.pdf"
+        candidate = self.root / "adjacent.pptx"
+        doc = fitz.open()
+        page = doc.new_page(width=240, height=120)
+        page.insert_text((40, 50), "A", fontsize=12, fontname="helv")
+        page.insert_text((48, 50), "B", fontsize=12, fontname="tiro")
+        doc.save(source)
+        doc.close()
+        convert_pdf_page(source, candidate)
+        deck = Presentation(candidate)
+        text_shapes = [s for s in deck.slides[0].shapes
+                       if s.shape_type == MSO_SHAPE_TYPE.TEXT_BOX and s.text.strip()]
+        text_shapes[1].left = text_shapes[0].left
+        deck.save(candidate)
+        report = evaluate(source, candidate)
+        self.assertIn("TEXT_GEOMETRY_FAILURE", report["blockers"])
+        self.assertGreater(report["text_geometry"]["introduced_overlap_count"], 0)
+        self.assertEqual(report["status"], "NEEDS_REVIEW")
+
     def test_holdout_import_if_pipeline_is_present(self):
         try:
             from pdf_figure_import import convert_pdf_page
