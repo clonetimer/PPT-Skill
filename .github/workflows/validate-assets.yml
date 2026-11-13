@@ -26,6 +26,7 @@ jobs:
       - name: Test editable PDF figure recovery and Office portability
         run: |
           python tools/test_pdf_figure_import.py
+          python tools/test_pdf_crop_assets.py
           python tools/test_audit_imported_pdf_figure.py
           python tools/test_office2016_compat.py
           python tools/test_figure_first_pass_gate.py
