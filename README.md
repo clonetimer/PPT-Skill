@@ -1,5 +1,31 @@
 # Academic Defense PPT Skill
 
+## Unified research-figure production entrypoint
+
+For a source-author vector PDF, run the full evidence-linked workflow:
+
+~~~bash
+python tools/reproduce_research_figure.py source.pdf --output dist/figure-recovery --mode import --render-host auto
+~~~
+
+If you already have a manually verified FigureSpec, use --mode figurespec
+and --figure-spec path/to/figure.json. The two routes have DIFFERENT evidence
+classes; importing source paths does not create a semantic FigureSpec.
+The output includes editable PPTX, source preflight, quality report, OOXML
+preflight, rendering comparison where available, and a manifest with SHA-256
+and outstanding review gates. See
+[workflow and real Windows PowerPoint 2016 round-trip](docs/SCIENTIFIC_FIGURE_REPRODUCTION_WORKFLOW_VNEXT.md).
+
+For the MMGraph-Agent F2 dense radar charts, source-grounded Table 3 numeric
+geometry is separately audited across 18 axes and nine method curves using
+[the F2 radar audit](docs/MMGRAPH_F2_NUMERIC_AUDIT_2026-11-13.md).
+The source-faithful PPTX and a Table-3-corrected alternative are distinct
+files. Never silently replace author-rendered scientific values.
+
+Three NEW synthetic cross-family PDFs (multi-panel, complex hypergraph,
+statistics) are exercised by tools/test_unseen_figure_families.py in CI;
+they are not evidence of first-shot success on independent real papers.
+
 ## Evidence-first new-figure recovery (first-pass gate)
 
 For an **unseen author-supplied vector PDF**, prefer the new quality-gated
