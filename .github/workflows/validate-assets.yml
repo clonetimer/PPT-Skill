@@ -30,6 +30,12 @@ jobs:
           python tools/test_office2016_compat.py
       - name: Build B01/F07
         run: python tools/build_v71_examples.py
+      - name: Render independent-paper generalization trials
+        run: |
+          python tools/render_figure_spec.py dist/skill_tests/generalization/Mamba_Figure1.json --svg dist/skill_tests/generalization/Mamba_Figure1.svg --pptx dist/skill_tests/generalization/Mamba_Figure1.pptx
+          python tools/render_figure_spec.py dist/skill_tests/generalization/Swin_Figure2.json --svg dist/skill_tests/generalization/Swin_Figure2.svg --pptx dist/skill_tests/generalization/Swin_Figure2.pptx
+          python tools/audit_pptx.py dist/skill_tests/generalization/Mamba_Figure1.pptx --strict
+          python tools/audit_pptx.py dist/skill_tests/generalization/Swin_Figure2.pptx --strict
       - name: Build C01
         run: |
           python tools/build_c01_v73.py
