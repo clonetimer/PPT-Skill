@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "paper": "Swin Transformer: Hierarchical Vision Transformer using Shifted Windows",
+    "source": "https://arxiv.org/abs/2103.14030",
+    "figure": "Figure 2",
+    "evidence": "source-visible redraw",
+    "note": "Preserves the 8×8 patch map, 4×4 regular windows, half-window shift and cross-window membership. Source image thumbnails are replaced with neutral editable patch cells."
+  },
+  "canvas": {
+    "width_in": 12,
+    "height_in": 6.2
+  },
+  "style": {
+    "font": "Arial"
+  },
+  "elements": [
+    {
+      "type": "text",
+      "x": 3.3,
+      "y": 0.2,
+      "w": 5.4,
+      "h": 0.42,
+      "text": "Shifted Window Partitioning",
+      "size": 20,
+      "bold": true,
+      "color": "#222A31"
+    },
+    {
+      "type": "text",
+      "x": 1.1,
+      "y": 0.92,
+      "w": 3.4,
+      "h": 0.3,
+      "text": "Layer l · Regular windows",
+      "size": 14,
+      "bold": true
+    },
+    {
+      "type": "text",
+      "x": 6.45,
+      "y": 0.92,
+      "w": 3.4,
+      "h": 0.3,
+      "text": "Layer l+1 · Shifted windows",
+      "size": 14,
+      "bold": true
+    },
+    {
+      "type": "grid",
+      "x": 1.1,
+      "y": 1.35,
+      "w": 3.36,
+      "h": 3.36,
+      "rows": 8,
+      "cols": 8,
+      "fill": "#F2F4F6",
+      "stroke": "#AEB8C0",
+      "border": "#AEB8C0",
+      "sw": 0.45
+    },
+    {
+      "type": "line",
+      "x1": 1.1,
+      "y1": 1.35,
+      "x2": 1.1,
+      "y2": 4.71,
+      "color": "#C74B4B",
+      "sw": 1.65
+    },
+    {
+      "type": "line",
+      "x1": 2.78,
+      "y1": 1.35,
+      "x2": 2.78,
+      "y2": 4.71,
+      "color": "#C74B4B",
+      "sw": 1.65
+    },
+    {
+      "type": "line",
+      "x1": 4.46,
+      "y1": 1.35,
+      "x2": 4.46,
+      "y2": 4.71,
+      "color": "#C74B4B",
+      "sw": 1.65
+    },
+    {
+      "type": "line",
+      "x1": 1.1,
+      "y1": 1.35,
+      "x2": 4.46,
+      "y2": 1.35,
+      "color": "#C74B4B",
+      "sw": 1.65
+    },
+    {
+      "type": "line",
+      "x1": 1.1,
+      "y1": 3.03,
+      "x2": 4.46,
+      "y2": 3.03,
+      "color": "#C74B4B",
+      "sw": 1.65
+    },
+    {
+      "type": "line",
+      "x1": 1.1,
+      "y1": 4.71,
+      "x2": 4.46,
+      "y2": 4.71,
+      "color": "#C74B4B",
+      "sw": 1.65
+    },
+    {
+      "type": "line",
+      "x1": 4.65,
+      "y1": 3.02,
+      "x2": 5.75,
+      "y2": 3.02,
+      "color": "#C74B4B",
+      "sw": 1.6,
+      "arrow": true,
+      "arrow_size": 0.16
+    },
+    {
+      "type": "text",
+      "x": 4.55,
+      "y": 3.25,
+      "w": 1.35,
+      "h": 0.48,
+      "text": "Shift by\n(2, 2)",
+      "size": 9,
+      "bold": true,
+      "color": "#A53C3C"
+    },
+    {
+      "type": "grid",
+      "x": 6.45,
+      "y": 1.35,
+      "w": 3.36,
+      "h": 3.36,
+      "rows": 8,
+      "cols": 8,
+      "fill": "#F2F4F6",
+      "stroke": "#AEB8C0",
+      "border": "#AEB8C0",
+      "sw": 0.45
+    },
+    {
+      "type": "line",
+      "x1": 6.45,
+      "y1": 1.35,
+      "x2": 6.45,
+      "y2": 4.71,
+      "color": "#C74B4B",
+      "sw": 1.5
+    },
+    {
+      "type": "line",
+      "x1": 7.29,
+      "y1": 1.35,
+      "x2": 7.29,
+      "y2": 4.71,
+      "color": "#C74B4B",
+      "sw": 1.5
+    },
+    {
+      "type": "line",
+      "x1": 8.97,
+      "y1": 1.35,
+      "x2": 8.97,
+      "y2": 4.71,
+      "color": "#C74B4B",
+      "sw": 1.5
+    },
+    {
+      "type": "line",
+      "x1": 9.81,
+      "y1": 1.35,
+      "x2": 9.81,
+      "y2": 4.71,
+      "color": "#C74B4B",
+      "sw": 1.5
+    },
+    {
+      "type": "line",
+      "x1": 6.45,
+      "y1": 1.35,
+      "x2": 9.81,
+      "y2": 1.35,
+      "color": "#C74B4B",
+      "sw": 1.5
+    },
+    {
+      "type": "line",
+      "x1": 6.45,
+      "y1": 2.19,
+      "x2": 9.81,
+      "y2": 2.19,
+      "color": "#C74B4B",
+      "sw": 1.5
+    },
+    {
+      "type": "line",
+      "x1": 6.45,
+      "y1": 3.87,
+      "x2": 9.81,
+      "y2": 3.87,
+      "color": "#C74B4B",
+      "sw": 1.5
+    },
+    {
+      "type": "line",
+      "x1": 6.45,
+      "y1": 4.71,
+      "x2": 9.81,
+      "y2": 4.71,
+      "color": "#C74B4B",
+      "sw": 1.5
+    },
+    {
+      "type": "rect",
+      "x": 10.25,
+      "y": 2.05,
+      "w": 0.55,
+      "h": 0.55,
+      "fill": "#FFFFFF",
+      "stroke": "#C74B4B",
+      "sw": 1.7
+    },
+    {
+      "type": "text",
+      "x": 10.9,
+      "y": 2.08,
+      "w": 1,
+      "h": 0.55,
+      "text": "Local window\nfor self-attention",
+      "size": 8,
+      "align": "left"
+    },
+    {
+      "type": "rect",
+      "x": 10.25,
+      "y": 2.9,
+      "w": 0.22,
+      "h": 0.22,
+      "fill": "#F2F4F6",
+      "stroke": "#AEB8C0",
+      "sw": 0.6
+    },
+    {
+      "type": "text",
+      "x": 10.58,
+      "y": 2.88,
+      "w": 0.85,
+      "h": 0.24,
+      "text": "A patch",
+      "size": 8,
+      "align": "left"
+    },
+    {
+      "type": "text",
+      "x": 1.15,
+      "y": 5.05,
+      "w": 9.8,
+      "h": 0.38,
+      "text": "Each window attends locally. Shifting the next layer's partition changes patch membership, connecting regions that belonged to different windows in the preceding layer.",
+      "size": 10,
+      "color": "#46535B",
+      "align": "left"
+    },
+    {
+      "type": "text",
+      "x": 1.15,
+      "y": 5.55,
+      "w": 9.8,
+      "h": 0.24,
+      "text": "Illustration setting: 8×8 patches, window size M=4, shift=(⌊M/2⌋, ⌊M/2⌋).",
+      "size": 9,
+      "color": "#65717A",
+      "align": "left"
+    }
+  ]
+}
