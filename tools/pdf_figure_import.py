@@ -328,20 +328,22 @@ def _add_drawing(slide, drawing, page_rect, warnings, clip_rect=None):
 
 def _source_font(name):
     name = re.sub(r"^[A-Z]{6}\+", "", name)
+    compact = re.sub(r"[^a-z0-9]", "", name.casefold())
     if name.startswith("Georgia"):
         return "Georgia"
-    if name.startswith("Times"):
+    if name.startswith("Times") or compact.startswith(("texgyretermes", "linlibertine")):
         return "Times New Roman"
-    if name.startswith("Helvetica"):
+    if name.startswith("Helvetica") or compact == "unnamedt3":
         return "Arial"
-    if name.casefold().replace(" ", "") == "comicsansms":
+    if compact == "comicsansms":
         return "Comic Sans MS"
-    if re.fullmatch(r"font[0-9a-f]{8,}", name, flags=re.IGNORECASE):
-        # Some PDF producers expose an internal font resource identifier
-        # instead of a usable family name. Use a deterministic Office font.
-        return "Arial"
-    if name.startswith(("Latin Modern Math", "LatinModernMath")):
+    if compact.startswith(("calis", "calistomt")):
+        return "Calisto MT"
+    if compact.startswith(("latinmodernmath", "stix", "xitsmath", "cmmi", "cmsy", "cmr")):
         return "Cambria Math"
+    if re.fullmatch(r"font[0-9a-f]{8,}", name, flags=re.IGNORECASE):
+        # Opaque PDF resource IDs are not usable Windows font family names.
+        return "Arial"
     return name.replace("-Bold", "").replace("-Italic", "").replace(" Regular", "")
 
 
@@ -351,44 +353,59 @@ def _normalize_pdf_text(text):
     return text.replace("\u00ad", "-").replace("\u00a0", " ")
 
 
+def _span_local_geometry(span, line):
+    """Recover the oriented PDF glyph quad instead of rotating its AABB twice."""
+    direction = line.get("dir", (1.0, 0.0))
+    try:
+        quad = fitz.recover_quad(direction, span)
+        width = quad.ul.distance_to(quad.ur)
+        height = quad.ul.distance_to(quad.ll)
+        center = fitz.Point(
+            (quad.ul.x + quad.ur.x + quad.ll.x + quad.lr.x) / 4,
+            (quad.ul.y + quad.ur.y + quad.ll.y + quad.lr.y) / 4,
+        )
+    except (AttributeError, TypeError, ValueError):
+        bbox = fitz.Rect(span["bbox"])
+        width, height = bbox.width, bbox.height
+        center = fitz.Point((bbox.x0 + bbox.x1) / 2, (bbox.y0 + bbox.y1) / 2)
+    size = float(span["size"])
+    # Minimal padding avoids PowerPoint clipping while not expanding adjacent
+    # source spans into new collisions. The source glyph quad remains the anchor.
+    pad_x = max(.05, size * .01)
+    pad_y = max(.05, size * .01)
+    width += 2 * pad_x
+    height += 2 * pad_y
+    return center.x - width / 2, center.y - height / 2, width, height
+
+
 def _add_text(slide, span, line):
     content = _normalize_pdf_text(span.get("text", ""))
     if not content.strip():
         return False
-    bbox = fitz.Rect(span["bbox"])
-    size = float(span["size"])
-    # PDF font bbox is glyph-tight. Keep a slightly wider box for Office text metrics.
-    x = max(0.0, bbox.x0 - .35)
-    y = max(0.0, bbox.y0 - size * .12)
-    w = max(2.0, bbox.width + size * .55)
-    h = max(size * 1.35, bbox.height + size * .35)
-    s = slide.shapes.add_textbox(_pt_in(x), _pt_in(y), _pt_in(w), _pt_in(h))
-    f = s.text_frame
-    f.clear()
-    f.word_wrap = False
-    f.margin_left = 0
-    f.margin_right = 0
-    f.margin_top = 0
-    f.margin_bottom = 0
-    f.vertical_anchor = MSO_ANCHOR.TOP
-    p = f.paragraphs[0]
-    p.space_after = Pt(0)
-    p.space_before = Pt(0)
-    r = p.add_run()
-    r.text = content
-    r.font.name = _source_font(span["font"])
-    r.font.size = Pt(size)
-    r.font.bold = bool(span.get("flags", 0) & 16) or "Bold" in span["font"]
-    r.font.italic = bool(span.get("flags", 0) & 2) or "Italic" in span["font"]
-    r.font.color.rgb = _color(span.get("color") and (
-        (span["color"] >> 16 & 255) / 255,
-        (span["color"] >> 8 & 255) / 255,
-        (span["color"] & 255) / 255,
-    ) or (0, 0, 0))
+    x, y, w, h = _span_local_geometry(span, line)
+    shape = slide.shapes.add_textbox(_pt_in(x), _pt_in(y), _pt_in(w), _pt_in(h))
+    frame = shape.text_frame
+    frame.clear()
+    frame.word_wrap = False
+    frame.margin_left = frame.margin_right = 0
+    frame.margin_top = frame.margin_bottom = 0
+    frame.vertical_anchor = MSO_ANCHOR.TOP
+    paragraph = frame.paragraphs[0]
+    paragraph.space_after = paragraph.space_before = Pt(0)
+    run = paragraph.add_run()
+    run.text = content
+    run.font.name = _source_font(span["font"])
+    run.font.size = Pt(float(span["size"]))
+    run.font.bold = bool(span.get("flags", 0) & 16) or "Bold" in span["font"]
+    run.font.italic = bool(span.get("flags", 0) & 2) or "Italic" in span["font"]
+    color = span.get("color")
+    run.font.color.rgb = _color(((color >> 16 & 255) / 255,
+                                 (color >> 8 & 255) / 255,
+                                 (color & 255) / 255) if color is not None else (0, 0, 0))
     direction = line.get("dir", (1, 0))
     if abs(direction[0] - 1) > .001 or abs(direction[1]) > .001:
-        s.rotation = math.degrees(math.atan2(-direction[1], direction[0]))
-    nofx(s)
+        shape.rotation = math.degrees(math.atan2(-direction[1], direction[0]))
+    nofx(shape)
     return True
 
 
