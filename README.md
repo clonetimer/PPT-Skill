@@ -52,6 +52,21 @@ Run `python tools/test_figure_first_pass_gate.py` for automated regression
 coverage; held-out synthetic tests are not a measured independent-paper
 first-attempt success rate.
 
+For a source-visible PDF import, the gate now also runs a source-aware text
+geometry and glyph audit. You can inspect it independently:
+
+```bash
+python tools/audit_text_geometry.py source.pdf out/source_editable.pptx \
+  --report out/text_geometry.json
+```
+
+It distinguishes overlaps already present in the PDF from collisions newly
+introduced by PPTX text-box geometry, reports inherited crop-edge text
+separately from new overflow, verifies source/candidate text and font mapping,
+and flags math/control glyphs that cannot be safely mapped. This audit is
+read-only and is included in `figure_first_pass_gate.evaluate()`. See
+[the P0-03 implementation and source-crop evidence](docs/P0_TEXT_GEOMETRY_AND_GLYPH_AUDIT_2026-11-13.md).
+
 ## Author-PDF figure recovery (experimental)
 
 `tools/pdf_figure_import.py` imports an author-provided **vector PDF figure** into
