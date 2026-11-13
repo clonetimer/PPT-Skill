@@ -1,0 +1,481 @@
+#!/usr/bin/env python3
+"""Import author-provided vector PDF figures as native, editable PPTX objects.
+
+The source PDF is an input, not an artifact bundled with the public Skill.
+Curves are sampled into freeform vertices; mathematical typography and
+multi-contour fills require visual review after export.
+"""
+
+from __future__ import annotations
+
+import argparse
+from collections import Counter
+import hashlib
+from io import BytesIO
+import json
+import math
+from pathlib import Path
+import re
+
+import fitz
+from PIL import Image
+from pptx import Presentation
+from pptx.dml.color import RGBColor
+from pptx.enum.shapes import MSO_CONNECTOR
+from pptx.enum.text import MSO_ANCHOR
+from pptx.enum.dml import MSO_LINE_DASH_STYLE
+from pptx.oxml.ns import qn
+from pptx.oxml.xmlchemy import OxmlElement
+from pptx.util import Inches, Pt
+
+from render_figure_spec import clean_theme, nofx
+
+
+def _color(value):
+    if value is None:
+        return None
+    return RGBColor(*(max(0, min(255, round(c * 255))) for c in value[:3]))
+
+
+def _pt_in(value):
+    return Inches(float(value) / 72.0)
+
+
+def _apply_opacity(shape, opacity, *, stroke=False):
+    if opacity is None or abs(opacity - 1) < 1e-6:
+        return
+    node = shape._element.spPr
+    if stroke:
+        node = node.find(qn("a:ln"))
+    solid = node.find(qn("a:solidFill")) if node is not None else None
+    rgb_node = solid.find(qn("a:srgbClr")) if solid is not None else None
+    if rgb_node is not None:
+        alpha = OxmlElement("a:alpha")
+        alpha.set("val", str(round(max(0, min(1, opacity)) * 100000)))
+        rgb_node.append(alpha)
+
+
+def _near(p, q, tolerance=0.035):
+    return math.dist((p.x, p.y), (q.x, q.y)) < tolerance
+
+
+def _bezier_points(p0, p1, p2, p3):
+    """Bound curve approximation by source segment length, capped at 24."""
+    rough = math.dist(p0, p1) + math.dist(p1, p2) + math.dist(p2, p3)
+    steps = max(6, min(24, math.ceil(rough / 8)))
+    return [
+        fitz.Point(
+            (1-t)**3*p0.x + 3*(1-t)**2*t*p1.x + 3*(1-t)*t*t*p2.x + t**3*p3.x,
+            (1-t)**3*p0.y + 3*(1-t)**2*t*p1.y + 3*(1-t)*t*t*p2.y + t**3*p3.y,
+        )
+        for t in (k / steps for k in range(1, steps + 1))
+    ]
+
+
+def _subpaths(items):
+    paths = []
+    current = []
+
+    def append_segment(start, end_points):
+        nonlocal current
+        if current and not _near(current[-1], start):
+            paths.append(current)
+            current = []
+        if not current:
+            current.append(start)
+        current.extend(end_points)
+
+    for item in items:
+        opcode = item[0]
+        if opcode == "l":
+            append_segment(item[1], [item[2]])
+        elif opcode == "c":
+            append_segment(item[1], _bezier_points(*item[1:5]))
+        elif opcode == "re":
+            r = item[1]
+            if current:
+                paths.append(current)
+                current = []
+            paths.append([
+                fitz.Point(r.x0, r.y0), fitz.Point(r.x1, r.y0),
+                fitz.Point(r.x1, r.y1), fitz.Point(r.x0, r.y1),
+                fitz.Point(r.x0, r.y0),
+            ])
+        elif opcode == "qu":
+            q = item[1]
+            if current:
+                paths.append(current)
+                current = []
+            paths.append([q.ul, q.ur, q.lr, q.ll, q.ul])
+        else:
+            raise ValueError(f"PDF drawing opcode not supported: {opcode}")
+    if current:
+        paths.append(current)
+    return paths
+
+
+def _clip_line_segment(a, b, rectangle):
+    """Liang–Barsky clip of a line segment to a rectangular PDF scissor."""
+    dx, dy = b.x - a.x, b.y - a.y
+    lower, upper = 0.0, 1.0
+    for p, q in (
+        (-dx, a.x - rectangle.x0), (dx, rectangle.x1 - a.x),
+        (-dy, a.y - rectangle.y0), (dy, rectangle.y1 - a.y),
+    ):
+        if abs(p) < 1e-12:
+            if q < 0:
+                return None
+        else:
+            t = q / p
+            if p < 0:
+                lower = max(lower, t)
+            else:
+                upper = min(upper, t)
+            if lower > upper:
+                return None
+    return (
+        fitz.Point(a.x + lower * dx, a.y + lower * dy),
+        fitz.Point(a.x + upper * dx, a.y + upper * dy),
+    )
+
+
+def _clip_polyline(points, rectangle):
+    paths, current = [], []
+    for a, b in zip(points, points[1:]):
+        section = _clip_line_segment(a, b, rectangle)
+        if section is None:
+            if current:
+                paths.append(current)
+                current = []
+            continue
+        first, last = section
+        if current and not _near(current[-1], first):
+            paths.append(current)
+            current = []
+        if not current:
+            current.append(first)
+        current.append(last)
+    if current:
+        paths.append(current)
+    return paths
+
+
+def _clip_polygon(points, rectangle):
+    """Clip a possibly concave filled contour against a convex rectangle."""
+    vertices = points[:-1] if len(points) > 1 and _near(points[0], points[-1]) else points[:]
+    for axis, value, keep_greater in (
+        (0, rectangle.x0, True), (0, rectangle.x1, False),
+        (1, rectangle.y0, True), (1, rectangle.y1, False),
+    ):
+        if not vertices:
+            break
+        output = []
+
+        def coord(p):
+            return p.x if axis == 0 else p.y
+
+        def inside(p):
+            return coord(p) >= value - 1e-6 if keep_greater else coord(p) <= value + 1e-6
+
+        def intersection(p, q):
+            denominator = coord(q) - coord(p)
+            t = (value - coord(p)) / denominator if abs(denominator) > 1e-12 else 0
+            t = max(0, min(1, t))
+            return fitz.Point(p.x + t * (q.x - p.x), p.y + t * (q.y - p.y))
+
+        previous = vertices[-1]
+        for current in vertices:
+            if inside(current):
+                if not inside(previous):
+                    output.append(intersection(previous, current))
+                output.append(current)
+            elif inside(previous):
+                output.append(intersection(previous, current))
+            previous = current
+        vertices = output
+    if len(vertices) < 3:
+        return []
+    vertices.append(vertices[0])
+    return [vertices]
+
+
+def _clip_paths(paths, drawing, rectangle):
+    clipped = []
+    filled = drawing["type"] in ("f", "fs")
+    for points in paths:
+        if len(points) < 2:
+            continue
+        clipped.extend(
+            _clip_polygon(points, rectangle) if filled else _clip_polyline(points, rectangle)
+        )
+    return clipped
+
+
+def _shape_from_paths(slide, paths, drawing, page_rect):
+    # The source PDFs sometimes paint a bleed-area white background.
+    # Page clipping is represented by the slide background, not an overflow.
+    if not paths:
+        return None
+    bounded_paths = []
+    for points in paths:
+        bounded = [
+            fitz.Point(max(0, min(page_rect.width, p.x)), max(0, min(page_rect.height, p.y)))
+            for p in points
+        ]
+        if len(bounded) > 1 and not all(_near(bounded[0], p) for p in bounded):
+            bounded_paths.append(bounded)
+    if not bounded_paths:
+        return None
+    start = bounded_paths[0][0]
+    builder = slide.shapes.build_freeform(
+        start_x=round(start.x / 72 * 10000),
+        start_y=round(start.y / 72 * 10000),
+        # Float scale avoids quantizing 91.44 EMUs/unit to 91 EMUs/unit.
+        # Quantization drift becomes several PDF points across a wide figure.
+        scale=Inches(1) / 10000,
+    )
+    filled = drawing["type"] in ("f", "fs") and drawing.get("fill") is not None
+    for index, bounded in enumerate(bounded_paths):
+        if index:
+            builder.move_to(round(bounded[0].x / 72 * 10000), round(bounded[0].y / 72 * 10000))
+        closed = _near(bounded[-1], bounded[0]) or filled
+        builder.add_line_segments(
+            [(round(p.x / 72 * 10000), round(p.y / 72 * 10000)) for p in bounded[1:]],
+            close=closed,
+        )
+    shape = builder.convert_to_shape()
+    if filled:
+        shape.fill.solid()
+        shape.fill.fore_color.rgb = _color(drawing["fill"])
+        _apply_opacity(shape, drawing.get("fill_opacity"))
+    else:
+        shape.fill.background()
+    if drawing["type"] in ("s", "fs") and drawing.get("color") is not None:
+        shape.line.color.rgb = _color(drawing["color"])
+        shape.line.width = Pt(max(.1, drawing.get("width") or .7))
+        _apply_opacity(shape, drawing.get("stroke_opacity"), stroke=True)
+        if drawing.get("dashes") not in (None, "[] 0", "[] 0.0"):
+            shape.line.dash_style = MSO_LINE_DASH_STYLE.DASH
+    else:
+        shape.line.fill.background()
+    nofx(shape)
+    return shape
+
+
+def _add_straight_line(slide, points, drawing):
+    p0, p1 = points
+    s = slide.shapes.add_connector(
+        MSO_CONNECTOR.STRAIGHT,
+        _pt_in(p0.x), _pt_in(p0.y), _pt_in(p1.x), _pt_in(p1.y),
+    )
+    s.line.color.rgb = _color(drawing.get("color") or (0, 0, 0))
+    s.line.width = Pt(max(.1, drawing.get("width") or .7))
+    _apply_opacity(s, drawing.get("stroke_opacity"), stroke=True)
+    if drawing.get("dashes") not in (None, "[] 0", "[] 0.0"):
+        s.line.dash_style = MSO_LINE_DASH_STYLE.DASH
+    nofx(s)
+    return s
+
+
+def _add_drawing(slide, drawing, page_rect, warnings, clip_rect=None):
+    # Matplotlib/PGF PDF backends sometimes encode non-rendering or clipped
+    # stroke widths of thousands of points. pptx rejects > 1584 pt, and
+    # clamping would paint an enormous unrelated blot over nearby content.
+    if drawing["type"] in ("s", "fs") and (drawing.get("width") or 0) > 1584:
+        warnings.append(
+            f"unrepresentable PDF stroke width {drawing['width']:g} pt omitted at {drawing['rect']}"
+        )
+        return 0
+    if drawing["type"] == "f" and drawing["rect"].contains(page_rect) and drawing.get("fill") == (1, 1, 1):
+        return 0  # already represented by the white page background
+    pieces = _subpaths(drawing["items"])
+    if clip_rect is not None and not clip_rect.contains(drawing["rect"]):
+        pieces = _clip_paths(pieces, drawing, clip_rect)
+        if not pieces:
+            return 0
+    if len(pieces) > 30 and drawing["type"] in ("f", "fs"):
+        warnings.append(f"filled drawing has {len(pieces)} disjoint contours; inspect holes and dashed geometry")
+    if len(pieces) == 1 and len(pieces[0]) == 2 and drawing["type"] == "s":
+        _add_straight_line(slide, pieces[0], drawing)
+        return 1
+    return int(_shape_from_paths(slide, pieces, drawing, page_rect) is not None)
+
+
+def _source_font(name):
+    name = re.sub(r"^[A-Z]{6}\+", "", name)
+    if name.startswith("Georgia"):
+        return "Georgia"
+    if name.startswith("Times"):
+        return "Times New Roman"
+    if name.startswith("Helvetica"):
+        return "Arial"
+    if name.startswith(("Latin Modern Math", "LatinModernMath")):
+        return "Cambria Math"
+    return name.replace("-Bold", "").replace("-Italic", "").replace(" Regular", "")
+
+
+def _normalize_pdf_text(text):
+    # PyMuPDF decodes discretionary PDF hyphens as U+00AD. PowerPoint drops
+    # them unless at a wrap point, erasing visible source names like Zero-API.
+    return text.replace("\u00ad", "-").replace("\u00a0", " ")
+
+
+def _add_text(slide, span, line):
+    content = _normalize_pdf_text(span.get("text", ""))
+    if not content.strip():
+        return False
+    bbox = fitz.Rect(span["bbox"])
+    size = float(span["size"])
+    # PDF font bbox is glyph-tight. Keep a slightly wider box for Office text metrics.
+    x = max(0.0, bbox.x0 - .35)
+    y = max(0.0, bbox.y0 - size * .12)
+    w = max(2.0, bbox.width + size * .55)
+    h = max(size * 1.35, bbox.height + size * .35)
+    s = slide.shapes.add_textbox(_pt_in(x), _pt_in(y), _pt_in(w), _pt_in(h))
+    f = s.text_frame
+    f.clear()
+    f.word_wrap = False
+    f.margin_left = 0
+    f.margin_right = 0
+    f.margin_top = 0
+    f.margin_bottom = 0
+    f.vertical_anchor = MSO_ANCHOR.TOP
+    p = f.paragraphs[0]
+    p.space_after = Pt(0)
+    p.space_before = Pt(0)
+    r = p.add_run()
+    r.text = content
+    r.font.name = _source_font(span["font"])
+    r.font.size = Pt(size)
+    r.font.bold = bool(span.get("flags", 0) & 16) or "Bold" in span["font"]
+    r.font.italic = bool(span.get("flags", 0) & 2) or "Italic" in span["font"]
+    r.font.color.rgb = _color(span.get("color") and (
+        (span["color"] >> 16 & 255) / 255,
+        (span["color"] >> 8 & 255) / 255,
+        (span["color"] & 255) / 255,
+    ) or (0, 0, 0))
+    direction = line.get("dir", (1, 0))
+    if abs(direction[0] - 1) > .001 or abs(direction[1]) > .001:
+        s.rotation = math.degrees(math.atan2(-direction[1], direction[0]))
+    nofx(s)
+    return True
+
+
+def _image_block_bytes(block):
+    if not block.get("mask"):
+        return block["image"]
+    # The PDF image and its soft mask are separate byte streams. Keep the
+    # author's original transparency instead of painting a solid icon box.
+    base = Image.open(BytesIO(block["image"])).convert("RGBA")
+    alpha = Image.open(BytesIO(block["mask"])).convert("L")
+    base.putalpha(alpha)
+    result = BytesIO()
+    base.save(result, format="PNG")
+    return result.getvalue()
+
+
+def _add_image(slide, block, warnings):
+    bbox = fitz.Rect(block["bbox"])
+    if bbox.is_empty:
+        return False
+    transform = block.get("transform", ())
+    if len(transform) == 6 and (abs(transform[1]) > .01 or abs(transform[2]) > .01):
+        warnings.append("a rotated or skewed raster asset was placed using its bounding box")
+    slide.shapes.add_picture(
+        BytesIO(_image_block_bytes(block)),
+        _pt_in(bbox.x0), _pt_in(bbox.y0),
+        width=_pt_in(bbox.width), height=_pt_in(bbox.height),
+    )
+    return True
+
+
+def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) -> dict:
+    pdf_path, pptx_path = Path(pdf_path), Path(pptx_path)
+    document = fitz.open(pdf_path)
+    try:
+        page = document[page_index]
+        width_pt, height_pt = float(page.rect.width), float(page.rect.height)
+        deck = Presentation()
+        deck.slide_width, deck.slide_height = _pt_in(width_pt), _pt_in(height_pt)
+        slide = deck.slides.add_slide(deck.slide_layouts[6])
+        slide.background.fill.solid()
+        slide.background.fill.fore_color.rgb = RGBColor(255, 255, 255)
+        warnings = []
+        page_blocks = page.get_text("dict")["blocks"]
+        image_blocks = [block for block in page_blocks if block["type"] == 1]
+        image_seqnos = [
+            index for index, entry in enumerate(page.get_bboxlog())
+            if entry[0] == "fill-image"
+        ]
+        if len(image_seqnos) != len(image_blocks):
+            warnings.append(
+                f"image paint-order ambiguity: {len(image_blocks)} blocks but "
+                f"{len(image_seqnos)} fill-image events"
+            )
+        picture_events = sorted(zip(image_seqnos, image_blocks), key=lambda pair: pair[0])
+        image_index, picture_count = 0, 0
+        native_count = 0
+        clip_stack = []
+        for drawing in page.get_drawings(extended=True):
+            current_seqno = drawing.get("seqno")
+            if current_seqno is not None:
+                while (image_index < len(picture_events)
+                       and picture_events[image_index][0] < current_seqno):
+                    picture_count += int(_add_image(slide, picture_events[image_index][1], warnings))
+                    image_index += 1
+            level = drawing.get("level", 0)
+            clip_stack = [(depth, rect) for depth, rect in clip_stack if depth < level]
+            if drawing["type"] == "clip":
+                scissor = drawing.get("scissor")
+                if scissor is not None:
+                    clip_stack.append((level, fitz.Rect(scissor)))
+                continue
+            if drawing["type"] == "group":
+                continue
+            clip_region = fitz.Rect(page.rect)
+            for _, rect in clip_stack:
+                clip_region &= rect
+            if not clip_region.is_empty:
+                native_count += _add_drawing(slide, drawing, page.rect, warnings, clip_region)
+        for _, image_block in picture_events[image_index:]:
+            picture_count += int(_add_image(slide, image_block, warnings))
+        for image_block in image_blocks[len(picture_events):]:
+            picture_count += int(_add_image(slide, image_block, warnings))
+        text_count, font_counts = 0, Counter()
+        for block in page_blocks:
+            for line in block.get("lines", []):
+                for span in line["spans"]:
+                    text_count += int(_add_text(slide, span, line))
+                    font_counts[_source_font(span["font"])] += 1
+        pptx_path.parent.mkdir(parents=True, exist_ok=True)
+        deck.save(pptx_path)
+        clean_theme(pptx_path)
+        return {
+            "page_size_pt": [width_pt, height_pt],
+            "source_sha256": hashlib.sha256(pdf_path.read_bytes()).hexdigest(),
+            "native_shapes": native_count,
+            "text_shapes": text_count,
+            "picture_shapes": picture_count,
+            "source_fonts": dict(font_counts),
+            "warnings": warnings,
+        }
+    finally:
+        document.close()
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("source_pdf", type=Path)
+    parser.add_argument("output_pptx", type=Path)
+    parser.add_argument("--page", type=int, default=1, help="1-based source PDF page")
+    parser.add_argument("--report", type=Path, help="Optional JSON audit summary")
+    args = parser.parse_args()
+    report = convert_pdf_page(args.source_pdf, args.output_pptx, page_index=args.page - 1)
+    if args.report:
+        args.report.parent.mkdir(parents=True, exist_ok=True)
+        args.report.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(json.dumps(report, indent=2, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,5 +1,37 @@
 # Academic Defense PPT Skill
 
+## Author-PDF figure recovery (experimental)
+
+`tools/pdf_figure_import.py` imports an author-provided **vector PDF figure** into
+one PowerPoint slide. It preserves page dimensions, individual editable paths,
+connectors, visible label text and separately placed photographs/icons. Unlike
+placing a full-page screenshot on a slide, its output can be edited object by
+object. PDF compound paths are kept together so letterforms and icon cutouts do
+not become solid rectangles. Fill and stroke opacity, PDF soft hyphens and
+inline images are handled explicitly.
+
+For example, with a PDF you have permission to modify:
+
+```bash
+python -m pip install PyMuPDF python-pptx Pillow
+python tools/pdf_figure_import.py path/to/Figure.pdf path/to/Figure_editable.pptx \
+  --report path/to/Figure_import.json
+python tools/audit_imported_pdf_figure.py path/to/Figure.pdf \
+  path/to/Figure_editable.pptx --report path/to/Figure_audit.json
+```
+
+The audit checks exact source labels, picture count, editability ratio and
+full-figure-image flattening. Run its regression tests using
+`python tools/test_pdf_figure_import.py` and
+`python tools/test_audit_imported_pdf_figure.py` (tests also need `reportlab`).
+**A passing audit is structural, not pixel-accurate proof.** Complex PDF
+mathematical fonts, native PowerPoint font substitutions, gradient/raster
+effects, unusual stroke widths and final-size readability still require a
+side-by-side preview in the target PowerPoint version. Original author PDFs,
+paper figures, embedded photos and project-specific PPTX reconstructions are
+not redistributed in this public repository; check original permissions before
+sharing them.
+
 ## V7.6 development — Evidence-linked scientific figures
 
 The current workflow links FigureSpec elements to evidence, checks C01's critical drawn arrows against its declared relationships, and builds six Iris charts, Wine scatter and distribution plots, and one image-and-quantification panel from public source assets. The chart contract declares axis domains, zero policy and reasons for truncated ranges. SVG and editable PPTX come from the same FigureSpec; PowerPoint-exported PDFs are included as inspected previews. See [the research-figure upgrade plan](docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md) for scope and remaining gates.
