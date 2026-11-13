@@ -30,6 +30,7 @@ from pptx.util import Inches, Pt
 
 from render_figure_spec import clean_theme, nofx
 from pdf_ellipse_recognition import ellipse_bounds
+from pdf_source_assets import collect_image_events, manifest_events
 
 
 def _color(value):
@@ -413,6 +414,17 @@ def _add_image(slide, block, warnings):
     return True
 
 
+def _add_recovered_image(slide, event, warnings):
+    if len(event.transform) == 6 and (abs(event.transform[1]) > .01 or abs(event.transform[2]) > .01):
+        warnings.append(f"image paint event {event.seqno}: source transform requires visual verification")
+    b = event.visible_bbox
+    slide.shapes.add_picture(
+        BytesIO(event.png), _pt_in(b.x0), _pt_in(b.y0),
+        width=_pt_in(b.width), height=_pt_in(b.height),
+    )
+    return 1
+
+
 def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) -> dict:
     pdf_path, pptx_path = Path(pdf_path), Path(pptx_path)
     document = fitz.open(pdf_path)
@@ -426,27 +438,22 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) ->
         slide.background.fill.fore_color.rgb = RGBColor(255, 255, 255)
         warnings = []
         page_blocks = page.get_text("dict")["blocks"]
-        image_blocks = [block for block in page_blocks if block["type"] == 1]
-        image_seqnos = [
-            index for index, entry in enumerate(page.get_bboxlog())
-            if entry[0] == "fill-image"
-        ]
-        if len(image_seqnos) != len(image_blocks):
-            warnings.append(
-                f"image paint-order ambiguity: {len(image_blocks)} blocks but "
-                f"{len(image_seqnos)} fill-image events"
-            )
-        picture_events = sorted(zip(image_seqnos, image_blocks), key=lambda pair: pair[0])
-        image_index, picture_count = 0, 0
-        native_count = 0
+
+        images, source_image_stats = collect_image_events(
+            page, document,
+            image_blocks=[b for b in page_blocks if b["type"] == 1],
+        )
+        warnings.extend(source_image_stats["warnings"])
+        picture_events = iter(images)
+        next_image = next(picture_events, None)
+        picture_count = native_count = 0
         clip_stack = []
         for drawing in page.get_drawings(extended=True):
             current_seqno = drawing.get("seqno")
             if current_seqno is not None:
-                while (image_index < len(picture_events)
-                       and picture_events[image_index][0] < current_seqno):
-                    picture_count += int(_add_image(slide, picture_events[image_index][1], warnings))
-                    image_index += 1
+                while next_image is not None and next_image.seqno < current_seqno:
+                    picture_count += _add_recovered_image(slide, next_image, warnings)
+                    next_image = next(picture_events, None)
             level = drawing.get("level", 0)
             clip_stack = [(depth, rect) for depth, rect in clip_stack if depth < level]
             if drawing["type"] == "clip":
@@ -461,16 +468,24 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) ->
                 clip_region &= rect
             if not clip_region.is_empty:
                 native_count += _add_drawing(slide, drawing, page.rect, warnings, clip_region)
-        for _, image_block in picture_events[image_index:]:
-            picture_count += int(_add_image(slide, image_block, warnings))
-        for image_block in image_blocks[len(picture_events):]:
-            picture_count += int(_add_image(slide, image_block, warnings))
+        while next_image is not None:
+            picture_count += _add_recovered_image(slide, next_image, warnings)
+            next_image = next(picture_events, None)
+
         text_count, font_counts = 0, Counter()
         for block in page_blocks:
             for line in block.get("lines", []):
                 for span in line["spans"]:
                     text_count += int(_add_text(slide, span, line))
                     font_counts[_source_font(span["font"])] += 1
+
+        if source_image_stats["unresolved_visible_events"]:
+            raise ValueError(
+                f"UNRESOLVED_SOURCE_IMAGES: {source_image_stats['unresolved_visible_events']}"
+            )
+        if not any((native_count, text_count, picture_count)):
+            raise ValueError("NO_VISIBLE_SOURCE_CONTENT")
+
         pptx_path.parent.mkdir(parents=True, exist_ok=True)
         deck.save(pptx_path)
         clean_theme(pptx_path)
@@ -482,6 +497,10 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0) ->
             "picture_shapes": picture_count,
             "source_fonts": dict(font_counts),
             "warnings": warnings,
+            "recovered_image_xrefs": source_image_stats["recovered_xrefs"],
+            "source_image_events": source_image_stats["source_paint_events"],
+            "off_page_image_events": source_image_stats["off_page_image_events"],
+            "image_assets": manifest_events(images),
         }
     finally:
         document.close()
