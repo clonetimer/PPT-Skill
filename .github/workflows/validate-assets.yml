@@ -132,4 +132,6 @@ jobs:
             examples/I01_*.svg
             dist/I01_*.pptx
             dist/DECK01_c01_defense.pptx
+            dist/skill_tests/generalization/*.svg
+            dist/skill_tests/generalization/*.pptx
           if-no-files-found: error
