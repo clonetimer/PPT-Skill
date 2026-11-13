@@ -139,3 +139,22 @@ jobs:
             dist/skill_tests/generalization/*.svg
             dist/skill_tests/generalization/*.pptx
           if-no-files-found: error
+
+  windows-script-parser:
+    name: Check Office 2016 PowerShell syntax (no Office runtime)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse Office 2016 round-trip automation
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $parseErrors = $null
+          $script = (Resolve-Path 'windows/Test-PowerPoint2016RoundTrip.ps1').Path
+          [System.Management.Automation.Language.Parser]::ParseFile($script, [ref]$tokens, [ref]$parseErrors) | Out-Null
+          if ($parseErrors.Count -gt 0) {
+            $parseErrors | Format-List
+            throw "PowerShell syntax errors: $($parseErrors.Count)"
+          }
+          Write-Host 'Windows script syntax: PASS. Real PowerPoint 2016 COM is NOT tested in CI.'
+
