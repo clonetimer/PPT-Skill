@@ -73,6 +73,7 @@ class ImageRecoveryTests(unittest.TestCase):
             pics = [s for s in slide.slides[0].shapes if s.shape_type == MSO_SHAPE_TYPE.PICTURE]
             self.assertEqual(len(pics), 1)
             self.assertEqual(report["picture_shapes"], 1)
+            self.assertEqual(report["reconstruction_class"], "source_picture_only")
             self.assertTrue(all(0 <= s.left and 0 <= s.top and
                                 s.left+s.width <= slide.slide_width and
                                 s.top+s.height <= slide.slide_height for s in pics))
