@@ -23,6 +23,7 @@ from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 from pdf_ellipse_recognition import ellipse_bounds
+from audit_text_geometry import audit_text_geometry
 
 
 def _bad_glyphs(s: str) -> list[str]:
@@ -181,9 +182,14 @@ def evaluate(source: Path, candidate: Path, *, exported_pdf: Path | None = None,
     cand = candidate_profile(candidate)
     from audit_imported_pdf_figure import audit_figure
     struct = audit_figure(source,candidate)
+    text_geometry = audit_text_geometry(source, candidate)
     blockers = []
     if struct["status"] != "PASS":
         blockers.append("SOURCE_STRUCTURE_MISMATCH")
+    if text_geometry["status"] == "FAIL":
+        blockers.append("TEXT_GEOMETRY_FAILURE")
+    elif text_geometry["status"] == "NEEDS_REVIEW":
+        blockers.append("TEXT_GLYPH_REVIEW")
     if cand["full_page_pictures"]:
         blockers.append("FLATTENED_FULL_FIGURE")
     if cand["out_of_bounds"]:
@@ -193,10 +199,12 @@ def evaluate(source: Path, candidate: Path, *, exported_pdf: Path | None = None,
     visual = compare_rendered_pages(source,exported_pdf,preview=preview) if exported_pdf else None
     if visual is not None and visual["requires_visual_review"]:
         blockers.append("VISUAL_DISCREPANCY")
-    status = "FAIL" if struct["status"] != "PASS" or cand["full_page_pictures"] or cand["out_of_bounds"] else \
+    status = "FAIL" if (struct["status"] != "PASS" or cand["full_page_pictures"] or
+                         cand["out_of_bounds"] or text_geometry["status"] == "FAIL") else \
              "NEEDS_REVIEW" if blockers or visual is None else "TECHNICAL_PASS"
-    return dict(status=status,source=src,candidate=cand,structure=struct,visual=visual,
-                blockers=blockers,scientific_release_approval=False,office2016_host_verified=False)
+    return dict(status=status,source=src,candidate=cand,structure=struct,
+                text_geometry=text_geometry,visual=visual,blockers=blockers,
+                scientific_release_approval=False,office2016_host_verified=False)
 
 
 def main():
