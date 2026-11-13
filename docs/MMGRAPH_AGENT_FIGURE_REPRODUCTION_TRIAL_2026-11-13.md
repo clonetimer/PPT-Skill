@@ -25,11 +25,13 @@ SSIM was computed on source PDF and LibreOffice-PDF-exported PPTX PNGs at matche
 
 ## Post-import correction pass (2026-11-13)
 
-### F2: radar outer rings
+### F2: radar outer rings and font fallback
 
-The first imported PPTX render showed gaps in the two black outer radar-chart rings. The repair replaced those two malformed custom freeforms with native PowerPoint oval outlines, preserving their source bounding boxes, 0.8 pt stroke width, and original z-order. The radar data series, grid, numeric labels, dataset thumbnails and legend were not redrawn or flattened. The two ovals remain independently editable.
+The first imported PPTX render showed gaps in the two black outer radar-chart rings. The repair replaced those two malformed custom freeforms with native PowerPoint oval outlines, preserving their source bounding boxes and original z-order. A first 0.8 pt black stroke looked too heavy in the supplied reference comparison; the final private candidate uses a restrained `#909090` outline at `0.35 pt`. The two ovals remain independently editable. Radar data series, grid, numeric labels, dataset thumbnails and legend remain separate objects.
 
-The ring defect is corrected in the private delivery candidate. Fine-grained differences in dense radar-series paths and small labels remain subject to source-PDF comparison; no final pixel-fidelity claim is made.
+Six section-title spans exposed an opaque PDF resource name (`font000000002fa1185d`) rather than a usable family name. Those headings were mapped to Arial. The PDF family alias `ComicSansMS` is normalized to the Windows family name `Comic Sans MS`; other recognized fonts remain unchanged. This avoids a machine-specific font lookup for the affected labels.
+
+The ring and heading-font corrections are in the private delivery candidate. Fine-grained differences in dense radar-series paths and small labels remain subject to source-PDF comparison; no final pixel-fidelity claim is made.
 
 ### F3: mathematical glyph recovery
 
@@ -57,9 +59,13 @@ The corrections are recorded in the private delivery package's `F3_MATH_REPAIR_M
 6. Original chart hatch/pattern fills did not survive generic clipping. F2 delivery used directly measured native bar/hatch reconstruction and source-aligned thin-stroke tuning. A generalized pattern/stroke-profile converter remains a separate project.
 7. Two radar outer-ring freeforms did not render as closed circles in the first PPTX export. The post-import repair replaces only those two paths with native editable ovals; this regression is covered by the private artifact audit.
 
+## Office 2016 preflight
+
+The generic importer now maps the PDF alias `ComicSansMS` to `Comic Sans MS` and maps opaque PDF font-resource identifiers to Arial. The conservative `tools/audit_office2016_compat.py` preflight checks PPTX ZIP integrity, media formats, OLE/ActiveX, external non-hyperlink relationships and font families. Its synthetic regression suite is part of CI. This is a package-level preflight only; no claim is made that LibreOffice export equals an actual PowerPoint 2016 open/save/export cycle.
+
 ## Current acceptance boundary
 
-The three candidate files are editable reconstructions, **not a claim of pixel-perfect or Office 2016-verified reproduction**. F2's outer rings are fixed, while some dense radar-series paths and tiny labels still need final source-PDF comparison. F3's mathematical labels are source-grounded and corrected, but its post-repair SSIM has not been recomputed. Manual scientific and final-size inspection remains required before publication use.
+The three candidate files are editable reconstructions, **not a claim of pixel-perfect or Office 2016-verified reproduction**. F2's outer rings and PDF font aliases are corrected, while some dense radar-series paths and tiny labels still need final source-PDF comparison. F3's mathematical labels are source-grounded and corrected, but its post-repair SSIM has not been recomputed. Manual scientific and final-size inspection remains required before publication use.
 
 The private delivery bundle contains the three PPTX files, PDF/PNG previews, the merged three-page review PDF, a structural audit, and the F3 formula correction map. The original figure files and derivative slides are intentionally not committed to this public repository.
 
