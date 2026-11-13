@@ -34,6 +34,7 @@ jobs:
         run: |
           python tools/render_figure_spec.py dist/skill_tests/generalization/Mamba_Figure1.json --svg dist/skill_tests/generalization/Mamba_Figure1.svg --pptx dist/skill_tests/generalization/Mamba_Figure1.pptx
           python tools/render_figure_spec.py dist/skill_tests/generalization/Swin_Figure2.json --svg dist/skill_tests/generalization/Swin_Figure2.svg --pptx dist/skill_tests/generalization/Swin_Figure2.pptx
+          python tools/test_generalization_specs.py
           python tools/audit_pptx.py dist/skill_tests/generalization/Mamba_Figure1.pptx --strict
           python tools/audit_pptx.py dist/skill_tests/generalization/Swin_Figure2.pptx --strict
       - name: Build C01
