@@ -27,10 +27,25 @@ full-figure-image flattening. Run its regression tests using
 **A passing audit is structural, not pixel-accurate proof.** Complex PDF
 mathematical fonts, native PowerPoint font substitutions, gradient/raster
 effects, unusual stroke widths and final-size readability still require a
-side-by-side preview in the target PowerPoint version. Original author PDFs,
-paper figures, embedded photos and project-specific PPTX reconstructions are
-not redistributed in this public repository; check original permissions before
-sharing them.
+side-by-side preview in the target PowerPoint version. The importer normalizes
+known Windows font aliases (for example `ComicSansMS` → `Comic Sans MS`) and
+maps opaque PDF font-resource identifiers to Arial instead of leaking an
+unavailable internal name into PowerPoint.
+
+Run the conservative Office 2016 OOXML preflight on a candidate deck:
+
+```bash
+python tools/audit_office2016_compat.py path/to/Figure_editable.pptx --json office2016_preflight.json
+python tools/test_office2016_compat.py
+```
+
+This preflight flags SVG/WebP/video/3D media, OLE/ActiveX parts and external
+non-hyperlink relationships, and reports font families that may be substituted.
+It is **not** an Office 2016 runtime certification: open, save and export the
+deck in the target PowerPoint 2016 installation before claiming compatibility.
+Original author PDFs, paper figures, embedded photos and project-specific PPTX
+reconstructions are not redistributed in this public repository; check original
+permissions before sharing them.
 
 ## V7.6 development — Evidence-linked scientific figures
 
