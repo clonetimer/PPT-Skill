@@ -120,5 +120,19 @@ class TextGeometryAuditTests(unittest.TestCase):
             self.assertTrue(report["font_mappings"])
 
 
+    def test_unmapped_control_glyph_is_flagged_for_manual_review(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp)/"unmapped.pdf", Path(tmp)/"unmapped.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=240, height=120)
+            page.insert_text((30, 60), "A\x00B", fontsize=12, fontname="helv")
+            doc.save(source)
+            doc.close()
+            convert_pdf_page(source, output)
+            report = audit_text_geometry(source, output)
+            self.assertGreaterEqual(report["suspicious_glyph_count"], 1)
+            self.assertEqual(report["status"], "FAIL")
+
+
 if __name__ == "__main__":
     unittest.main()
