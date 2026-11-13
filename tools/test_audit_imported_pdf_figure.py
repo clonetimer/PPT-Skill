@@ -28,13 +28,14 @@ class FigureAuditTests(unittest.TestCase):
             pdf.clipPath(clip, stroke=0, fill=0)
             pdf.setFillColorRGB(.2, .4, .7)
             pdf.rect(200, 120, 40, 40, fill=1, stroke=0)
+            pdf.rect(85, 45, 20, 20, fill=1, stroke=0)
             pdf.showPage()
             pdf.save()
             convert_pdf_page(source, result)
             report = audit_figure(source, result)
             self.assertEqual(report["status"], "PASS")
-            self.assertEqual(report["visible_source_drawings"], 0)
-            self.assertEqual(report["native_vectors"], 0)
+            self.assertEqual(report["visible_source_drawings"], 1)
+            self.assertEqual(report["native_vectors"], 1)
 
     def setUp(self):
         self.temp = TemporaryDirectory()
