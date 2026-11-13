@@ -82,7 +82,7 @@ try {
             $deck = $app.Presentations.Open($source.FullName, $false, $false, $false)
             $before = @(Get-SlideSnapshot $deck)
             $deck.SaveAs($pptx, 24) # ppSaveAsOpenXMLPresentation
-            $deck.SaveAs($pdf, 32)  # ppSaveAsPDF
+            $deck.ExportAsFixedFormat($pdf, 2) # ppFixedFormatTypePDF
             if ($deck.Slides.Count -ge 1) {
                 $w = 1600
                 $h = [int][Math]::Round($w * $deck.PageSetup.SlideHeight / $deck.PageSetup.SlideWidth)
