@@ -38,6 +38,20 @@ Produce technically accurate, readable academic-defense presentations. Select vi
    For a never-before-used author PDF, first run `tools/figure_first_pass_gate.py` to freeze the source profile and perform structural and local visual-difference QA. Use `--auto-export` where LibreOffice is available or `--exported-pdf` to use a PowerPoint-rendered PDF. A `NEEDS_REVIEW` result blocks a high-fidelity claim. See `docs/FIRST_PASS_FIGURE_FIDELITY_GATE.md` for strict ellipse recognition, mathematical font/raster/clip risk checks and blind first-attempt benchmarking. The quality gate does not determine scientific topology; FigureContract/source-derived edges remain mandatory.
    When the author supplies an original **vector PDF** and exact source composition is the priority, an alternate path is `python tools/pdf_figure_import.py source.pdf editable.pptx --report import.json`. It preserves individually editable vector paths and text plus independent source images. Then run `python tools/audit_imported_pdf_figure.py source.pdf editable.pptx`; inspect the PowerPoint-exported PNG beside the original, particularly clip-dependent plots, custom math fonts, color/alpha, tiny labels and unusually thick strokes. Structural audit PASS does not establish visual fidelity; stop or manually rebuild affected panels when the side-by-side review fails. This alternate route does not make its PDF-derived objects into a semantic FigureSpec automatically.
    Before delivery to a Windows/Office 2016 user, run `python tools/audit_office2016_compat.py candidate.pptx --json office2016_preflight.json`. This conservative OOXML preflight flags SVG/WebP/video/3D media, OLE/ActiveX and external non-hyperlink relationships, and reports font families likely to substitute. Normalize known PDF font aliases to installed Windows families. The preflight is not runtime certification: open, save and export the actual deck in the target PowerPoint 2016 installation before claiming compatibility.
+   For a fully logged single-entrypoint run from an original vector PDF,
+   call python tools/reproduce_research_figure.py source.pdf --output outdir
+   --mode import --render-host auto. With a source-grounded FigureSpec, use
+   --mode figurespec --figure-spec figure_specs/path.json instead; this is a
+   distinct evidence route and its scientific topology must be verified.
+   For quantitative paper diagrams, freeze original tables/units/aggregation
+   rules independently and validate actual native plotted coordinates,
+   not merely text labels or raster similarity; see
+   docs/MMGRAPH_F2_NUMERIC_AUDIT_2026-11-13.md. A mismatch in source graphic
+   versus paper table must be reported, preserving a source-visible copy
+   alongside any independently named data-corrected alternative. For Office
+   2016 deliveries, also run the native Windows COM round-trip in
+   windows/Test-PowerPoint2016RoundTrip.ps1; Linux/LibreOffice and OOXML
+   preflight are not substitutes.
 6. Run the schema, scientific, geometry, accessibility, cross-format and render-record checks named below. Resolve every machine-detectable failure before review.
    For node-link figures, audit line intersections with node interiors and text after rendering (`python tools/audit_figure_occlusion.py path/to/FigureSpec.json` is a preflight). Text-box-only overlap checks miss connectors that cross labels or pass through filled nodes. Inspect the actual PDF/PNG at delivery size and reroute any remaining ambiguous crossings.
    For a multi-figure deck, repeat structural and visual checks on the final combined PPTX/PDF: assembly can reintroduce theme effects or change rendering even when each source figure passed. In model-mechanism diagrams, trace residual paths, masked inputs and multi-input operators to their actual sources; a labeled box alone does not establish the dependency.
