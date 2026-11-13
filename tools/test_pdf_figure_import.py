@@ -148,6 +148,14 @@ class NativeFigureImportTests(unittest.TestCase):
         """Substituting an unknown PDF math font garbles scientific symbols."""
         self.assertEqual(_source_font("LatinModernMath-Regular"), "Cambria Math")
 
+    def test_comic_sans_pdf_alias_maps_to_windows_family_name(self):
+        """PDF subset names omit spaces, while Windows exposes the spaced family."""
+        self.assertEqual(_source_font("ComicSansMS"), "Comic Sans MS")
+
+    def test_anonymous_pdf_font_resource_uses_deterministic_office_fallback(self):
+        """Opaque PDF resource IDs must not leak into PowerPoint font metadata."""
+        self.assertEqual(_source_font("font000000002fa1185d"), "Arial")
+
     def test_preserves_editable_vectors_text_photo_and_dimensions(self):
         """A vector path must not turn into a full-page picture or disappear."""
         with TemporaryDirectory() as temp:
