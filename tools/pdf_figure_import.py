@@ -21,7 +21,7 @@ import fitz
 from PIL import Image
 from pptx import Presentation
 from pptx.dml.color import RGBColor
-from pptx.enum.shapes import MSO_CONNECTOR
+from pptx.enum.shapes import MSO_CONNECTOR, MSO_SHAPE
 from pptx.enum.text import MSO_ANCHOR
 from pptx.enum.dml import MSO_LINE_DASH_STYLE
 from pptx.oxml.ns import qn
@@ -29,6 +29,7 @@ from pptx.oxml.xmlchemy import OxmlElement
 from pptx.util import Inches, Pt
 
 from render_figure_spec import clean_theme, nofx
+from pdf_ellipse_recognition import ellipse_bounds
 
 
 def _color(value):
@@ -288,6 +289,23 @@ def _add_drawing(slide, drawing, page_rect, warnings, clip_rect=None):
         return 0
     if drawing["type"] == "f" and drawing["rect"].contains(page_rect) and drawing.get("fill") == (1, 1, 1):
         return 0  # already represented by the white page background
+    # Source-canonical circles and ellipses are safer as native PowerPoint
+    # ovals than as sampled open Bézier freeforms. Never reshape clipped or
+    # noncanonical loops (e.g., hypergraph enclosures) into perfect circles.
+    bounds = ellipse_bounds(drawing)
+    if bounds is not None and (clip_rect is None or clip_rect.contains(drawing["rect"])):
+        x, y, w, h = bounds
+        shape = slide.shapes.add_shape(
+            MSO_SHAPE.OVAL, _pt_in(x), _pt_in(y), _pt_in(w), _pt_in(h),
+        )
+        shape.fill.background()
+        shape.line.color.rgb = _color(drawing["color"])
+        shape.line.width = Pt(max(.1, drawing.get("width") or .7))
+        _apply_opacity(shape, drawing.get("stroke_opacity"), stroke=True)
+        if drawing.get("dashes") not in (None, "[] 0", "[] 0.0"):
+            shape.line.dash_style = MSO_LINE_DASH_STYLE.DASH
+        nofx(shape)
+        return 1
     pieces = _subpaths(drawing["items"])
     if clip_rect is not None and not clip_rect.contains(drawing["rect"]):
         pieces = _clip_paths(pieces, drawing, clip_rect)
