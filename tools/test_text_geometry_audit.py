@@ -108,6 +108,13 @@ class TextGeometryAuditTests(unittest.TestCase):
         self.assertAlmostEqual(_span_visible_fraction(span, page_rect), .09, delta=.002)
         self.assertLess(_span_visible_fraction(span, page_rect), .2)
 
+    def test_low_visibility_source_footer_is_excluded_from_import_and_audit(self):
+        from pdf_figure_import import _span_visible_fraction
+        span = {"bbox": (6.0, 283.2, 16.0, 293.2)}
+        page_rect = fitz.Rect(0, 0, 505, 284.1)
+        self.assertAlmostEqual(_span_visible_fraction(span, page_rect), .09, delta=.002)
+        self.assertLess(_span_visible_fraction(span, page_rect), .2)
+
     def test_report_records_font_substitution_and_math_codepoints(self):
         with tempfile.TemporaryDirectory() as tmp:
             source, output = Path(tmp)/"math.pdf", Path(tmp)/"math.pptx"
