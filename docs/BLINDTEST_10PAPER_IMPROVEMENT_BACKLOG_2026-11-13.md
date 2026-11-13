@@ -1,6 +1,6 @@
 # Ten-paper blind-test improvement backlog (2026-11-13)
 
-> Status: planned, except **P0-00 evidence freeze committed**. This is the engineering follow-up to the user's genuine 10-paper trial, **not a claim that the improvements have been implemented**.
+> Status: **P0-00 through P0-03 implemented and CI-verified**; P0-04 remains next. The ten-paper baseline itself remains unchanged. This is the engineering follow-up to the user's genuine 10-paper trial, **not a claim that the improvements have been implemented**.
 >
 > Frozen source/first-pass metadata: [`tests/fixtures/blind10_first_pass_frozen_2026-11-13.json`](../tests/fixtures/blind10_first_pass_frozen_2026-11-13.json). Source PDFs and author imagery are user-provided; they are **not** redistributed in this public repository.
 
@@ -20,9 +20,9 @@
 | ID | Priority | Problem → Deliverable | Impact | Dependencies |
 |---|---|---|---|---|
 | **P0-00** | P0 · completed | Freeze provenance, scores, first-pass artifact hashes and immutable rubric in public metadata only | Protects valid comparison | none |
-| **P0-01** | P0 · next | Crop-aware extraction of image XRefs, transforms, paint order and clipping; no blank-slide “success” | 4/10 direct imports blank | P0-00 |
-| **P0-02** | P0 | Dense PDF resource budget / graceful abort / bounded segment conversion | 1/10 direct imports timeout | P0-00 |
-| **P0-03** | P0 | Source-aware text geometry, glyph/fallback integrity and overlap repair with provenance | up to 55 overlaps in imported output | P0-01 |
+| **P0-01** | P0 · completed | Crop-aware extraction of image XRefs, transforms, paint order and clipping; no blank-slide “success” | 4/10 direct imports blank | P0-00 |
+| **P0-02** | P0 · completed | Dense PDF resource budget / graceful abort / bounded segment conversion | 1/10 direct imports timeout | P0-00 |
+| **P0-03** | P0 · completed with one source-glyph blocker documented | Source-aware text geometry, glyph/fallback integrity and overlap repair with provenance | up to 55 overlaps in imported output | P0-01 |
 | **P0-04** | P0 | Fail-closed zero-content/partial/hybrid validity and per-route QA statuses | prevents false first-pass passes | P0-01, P0-02 |
 | **P1-01** | P1 | Extract source panel geometry / order / visual grammar into source-layout evidence before FigureSpec drafting | 10/10 visual=2 | P0-04 |
 | **P1-02** | P1 | Evidence-based `vector/mixed/raster` route selection, non-flattening hybrid composition | vector fidelity plus local images | P0-01, P1-01 |
@@ -52,6 +52,18 @@
 **Files:** `tools/pdf_figure_import.py`, `tools/audit_pptx.py`; new `tools/audit_text_geometry.py` and `tools/test_pdf_text_geometry.py`.
 - **Test first:** rotated tiny labels, source overlapping annotations, math glyphs (Greek/sub/superscript), fallback fonts, crop-edge labels; verify line/color reads never mutate unrelated OOXML shape attributes.
 - **Done:** exclude intentional/source-overlapping glyph boxes from hard collision counts; zero **new unintentional** label intersections and no text clipped at page edges in target five completed import cases. Keep before/after bbox and font substitution evidence; do not fix readability by silently shrinking fonts.
+
+### P0-03 implementation record (2026-11-13)
+
+- The importer now derives text-box geometry from \`fitz.recover_quad()\` and the source baseline direction; it no longer rotates the already axis-aligned PDF text bbox a second time. Horizontal/vertical padding was reduced from the previous 0.55/1.35 font-size expansion to 1% on each local axis.
+- Font aliases now map Calisto MT, TeX Gyre Termes, Linux Libertine, STIX/Computer Modern math and anonymous T3 resources to deterministic Office families.
+- New \`tools/audit_text_geometry.py\` distinguishes source-authored overlap and crop clipping from newly introduced candidate collisions/overflow, verifies text content and font mapping, and reports math/suspicious Unicode. The audit is integrated into \`figure_first_pass_gate.evaluate()\`; introduced overlap, text corruption, candidate font mismatch or new overflow is a hard failure.
+- Real crop results: EvoOntology 285 spans (0 introduced overlap; 16 source-inherited out-of-bounds spans; **1 unmapped U+0000 glyph → FAIL**); PoG 86 spans (0 introduced overlap; 3 inherited crop-edge spans → PASS); SkillSmith 114 spans (0 introduced overlap; 4 source-existing overlaps → PASS); UCFNet 93 spans (0 introduced overlap, 9 math glyph occurrences round-tripped → PASS).
+- Legacy bounding-box overlap counts fell from 3→0 (Evo), 27→1 (PoG), 21→4 (SkillSmith), and 55→0 (UCFNet). Remaining PoG/SkillSmith pairs match source-authored overlaps, not new importer collisions.
+- Synthetic TDD coverage: adjacent spans, rotated text quad, font aliases, Greek/subscript/superscript round-trip, source-intentional overlap, candidate-only collision, corrupted text, inherited crop clipping, introduced overflow and unmapped control glyph.
+- [CI #147 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43463658973). It includes 4 importer geometry tests and 7 source-aware audit tests; full repository workflow passed.
+- **Open source-specific blocker:** EvoOntology's source PDF exposes U+0000 between “Revenue” and “Operating Cost”; the source rendering shows a small hollow square. PowerPoint escapes U+0000 as \`_x0000_\`. The gate correctly fails this figure instead of guessing an operator. Do not count it as accepted until an evidence-backed glyph mapping is recorded.
+- The ten-paper first-pass result remains **0/10 strict acceptance**. These repaired crops are regression evidence, not a fresh blind cohort.
 
 ### P0-04 — Strict route-aware release gate
 **Files:** `tools/reproduce_research_figure.py`, `tools/figure_first_pass_gate.py`; new `tools/test_reproduction_release_gate.py`.
