@@ -148,7 +148,7 @@ class FirstPassFidelityTests(unittest.TestCase):
         report = evaluate(source, candidate)
         self.assertIn("TEXT_GEOMETRY_FAILURE", report["blockers"])
         self.assertGreater(report["text_geometry"]["introduced_overlap_count"], 0)
-        self.assertEqual(report["status"], "NEEDS_REVIEW")
+        self.assertEqual(report["status"], "FAIL")
 
     def test_holdout_import_if_pipeline_is_present(self):
         try:
