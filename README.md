@@ -1,5 +1,31 @@
 # Academic Defense PPT Skill
 
+## Evidence-first new-figure recovery (first-pass gate)
+
+For an **unseen author-supplied vector PDF**, prefer the new quality-gated
+entrypoint over a bare object-count check:
+
+```bash
+python tools/figure_first_pass_gate.py source.pdf \
+  --pptx out/source_editable.pptx \
+  --report out/first_pass.json --auto-export \
+  --preview out/source_vs_candidate_vs_diff.png
+```
+
+This preflights mathematical Unicode/font issues, clipping and very thick
+strokes, raster-only diagrams, dense figure panels and tiny labels. Canonical
+four-Bezier ellipses are imported as native editable PowerPoint ovals rather
+than fragile sampled freeforms. After PDF export it reports both whole-figure
+and spatial-tile similarity, and identifies concrete regions for review.
+Statuses are `TECHNICAL_PASS`, `NEEDS_REVIEW` and `FAIL` — none certify
+scientific correctness or Office 2016 runtime compatibility. When no PDF
+exporter is available, visual acceptance is explicitly pending.
+
+See [first-pass quality gate and frozen held-out evaluation](docs/FIRST_PASS_FIGURE_FIDELITY_GATE.md).
+Run `python tools/test_figure_first_pass_gate.py` for automated regression
+coverage; held-out synthetic tests are not a measured independent-paper
+first-attempt success rate.
+
 ## Author-PDF figure recovery (experimental)
 
 `tools/pdf_figure_import.py` imports an author-provided **vector PDF figure** into
