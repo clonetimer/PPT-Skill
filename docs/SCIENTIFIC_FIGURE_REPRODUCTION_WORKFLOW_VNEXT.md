@@ -23,10 +23,10 @@ Outputs include candidate_editable.pptx, source_preflight.json, quality_report.j
 On a Windows computer with PowerPoint 2016, put the PPTX files in a dedicated input folder and run:
 
 ~~~powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\windows\Test-PowerPoint2016RoundTrip.ps1 -InputDirectory 'C:\PPT-Figures\input' -OutputDirectory 'C:\PPT-Figures\office2016_qa' -RequireOffice2016
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\windows\Test-PowerPoint2016RoundTrip.ps1 -InputDirectory 'C:\PPT-Figures\input' -OutputDirectory 'C:\PPT-Figures\office2016_qa' -RequireOffice2016 -ConfirmOffice2016Installation
 ~~~
 
-The script opens the files, saves new PPTX copies, exports PDFs/PNGs, reopens saved files, compares slide object counts/text, records font families and SHA-256 values. Version 16.0 alone does not establish Office 2016 because Microsoft 365 also uses it. MSI installations without an identifiable product marker require manual About PowerPoint inspection.
+The script opens the files, saves new PPTX copies, exports PDFs/PNGs, reopens saved files, and compares slide object counts, shape-type counts, text, font families and page dimensions. It records source/output SHA-256 values and product identity evidence. Version 16.0 alone does not establish Office 2016 because Microsoft 365 also uses it. If the registry does not identify the installed SKU, first verify File > Account/About PowerPoint, then pass `-ConfirmOffice2016Installation`; the report records that this identity was user-confirmed.
 
 STRUCTURE_PASS means only COM open/save/reopen structural preservation. It does not certify glyph rendering, line clipping, image crop, readability or scientific accuracy; manually compare the exported PNG/PDF to the source figure.
 
