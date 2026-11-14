@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Default extraction uses `vision_backend="none"`; no model dependency or download is required for existing workflows.
-- Optional layout model: `PP-DocLayoutV2`; optional OCR models: `PP-OCRv6_small_det` and `PP-OCRv6_small_rec`.
+- Optional layout model: `PP-DocLayoutV3`; optional OCR models: `PP-OCRv6_small_det` and `PP-OCRv6_small_rec`.
 - Use ONNX Runtime where supported; do not commit model weights.
 - All model coordinates must map to the exact selected crop in PDF points using actual raster dimensions.
 - Every model-derived region, OCR marker, hierarchy, and ownership assignment remains review-only.
@@ -70,7 +70,7 @@
 - Create: `tools/test_source_layout_vision_backend.py`
 
 **Interfaces:**
-- `run_paddleocr_backend(image_path, *, layout_model="PP-DocLayoutV2", ocr_det_model="PP-OCRv6_small_det", ocr_rec_model="PP-OCRv6_small_rec") -> dict`
+- `run_paddleocr_backend(image_path, *, layout_model="PP-DocLayoutV3", ocr_det_model="PP-OCRv6_small_det", ocr_rec_model="PP-OCRv6_small_rec") -> dict`
 - The function imports PaddleOCR lazily and returns normalized raw detections plus model/runtime provenance.
 
 - [ ] **Step 1: Write tests for missing dependency, missing model/runtime, and normalized backend output.**

@@ -47,12 +47,12 @@ class PaddleOCRBackendTests(unittest.TestCase):
         with patch.dict(sys.modules, {"paddleocr": fake}):
             result = run_paddleocr_backend(
                 Path("figure.png"),
-                layout_model="PP-DocLayoutV2",
+                layout_model="PP-DocLayoutV3",
                 ocr_det_model="PP-OCRv6_small_det",
                 ocr_rec_model="PP-OCRv6_small_rec",
             )
 
-        self.assertEqual(calls["layout_init"]["model_name"], "PP-DocLayoutV2")
+        self.assertEqual(calls["layout_init"]["model_name"], "PP-DocLayoutV3")
         self.assertEqual(calls["layout_init"]["engine"], "onnxruntime")
         self.assertFalse(calls["layout_predict"]["layout_nms"])
         self.assertEqual(calls["layout_predict"]["layout_merge_bboxes_mode"], "union")
@@ -63,7 +63,7 @@ class PaddleOCRBackendTests(unittest.TestCase):
         self.assertEqual(calls["ocr_predict"]["input"], "figure.png")
         self.assertEqual(result["backend"], "paddleocr")
         self.assertEqual(result["engine"], "onnxruntime")
-        self.assertEqual(result["layout_model"], "PP-DocLayoutV2")
+        self.assertEqual(result["layout_model"], "PP-DocLayoutV3")
         self.assertEqual(result["paddleocr_version"], "3.7.0")
         self.assertIn("layout_result", result)
         self.assertIn("ocr_result", result)

@@ -9,12 +9,19 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import tempfile
 
 import fitz
 import numpy as np
 from PIL import Image
 
 from pdf_source_assets import collect_image_events
+from source_layout_vision import (
+    fuse_visual_evidence,
+    normalize_layout_detections,
+    normalize_ocr_detections,
+    run_paddleocr_backend,
+)
 
 
 def _hex_rgb(value):
@@ -277,12 +284,101 @@ def _geometric_panel_candidates(rectangle_candidates, region):
     return candidates + interstitial, groups
 
 
+
+def _extract_visual_evidence(page, region, backend, dpi, max_side, layout_elements, image_assets):
+    empty = {
+        "backend": "none",
+        "status": "NOT_REQUESTED",
+        "engine": None,
+        "paddleocr_version": None,
+        "layout_model": None,
+        "ocr_detection_model": None,
+        "ocr_recognition_model": None,
+        "requested_dpi": None,
+        "effective_dpi": None,
+        "raster_size_px": None,
+        "warnings": [],
+    }
+    empty_fusion = {
+        "visual_region_candidates": [],
+        "ocr_panel_markers": [],
+        "panel_hypotheses": [],
+        "visual_alignment_groups": [],
+        "source_object_ownership": [],
+    }
+    if backend == "none":
+        return empty_fusion, empty
+    if backend != "paddleocr":
+        raise ValueError(f"UNSUPPORTED_VISION_BACKEND: {backend}")
+    if (isinstance(dpi, bool) or not isinstance(dpi, int) or not 36 <= dpi <= 600
+        or isinstance(max_side, bool) or not isinstance(max_side, int)
+        or not 256 <= max_side <= 8192):
+        raise ValueError("INVALID_VISION_RASTER_LIMITS: dpi must be 36..600 and max-side 256..8192")
+
+    scale = dpi / 72.0
+    max_region_dimension = max(float(region.width), float(region.height))
+    if max_region_dimension <= 0:
+        raise ValueError("INVALID_VISION_RASTER_LIMITS: selected figure region is empty")
+    if max_region_dimension * scale > max_side:
+        scale = max_side / max_region_dimension
+    pixmap = page.get_pixmap(
+        matrix=fitz.Matrix(scale, scale),
+        clip=region,
+        alpha=False,
+    )
+    with tempfile.TemporaryDirectory(prefix="ppt-skill-vision-") as folder:
+        image_path = Path(folder) / "selected_figure_region.png"
+        pixmap.save(str(image_path))
+        raw = run_paddleocr_backend(image_path)
+
+    raster_size = (int(pixmap.width), int(pixmap.height))
+    region_pt = _bbox(region)
+    layout_candidates = normalize_layout_detections(
+        raw.get("layout_result"), raster_size, region_pt
+    )
+    ocr_markers = normalize_ocr_detections(
+        raw.get("ocr_result"), raster_size, region_pt
+    )
+    fused = fuse_visual_evidence(
+        layout_candidates, ocr_markers, layout_elements, image_assets, region_pt
+    )
+    warnings = []
+    if not layout_candidates:
+        warnings.append("NO_VISUAL_REGION_PROPOSALS")
+    if not ocr_markers:
+        warnings.append("NO_PANEL_MARKER_OCR")
+    metadata = {
+        "backend": raw.get("backend", "paddleocr"),
+        "status": "COMPLETED",
+        "engine": raw.get("engine", "onnxruntime"),
+        "paddleocr_version": raw.get("paddleocr_version", "unknown"),
+        "layout_model": raw.get("layout_model", "PP-DocLayoutV3"),
+        "ocr_detection_model": raw.get("ocr_detection_model", "PP-OCRv6_small_det"),
+        "ocr_recognition_model": raw.get("ocr_recognition_model", "PP-OCRv6_small_rec"),
+        "requested_dpi": dpi,
+        "effective_dpi": round(scale * 72.0, 3),
+        "raster_size_px": [int(pixmap.width), int(pixmap.height)],
+        "warnings": warnings,
+    }
+    return fused, metadata
+
+
 def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
-                          figure_region: tuple[float, float, float, float] | None = None) -> dict:
+                          figure_region: tuple[float, float, float, float] | None = None,
+                          vision_backend: str = "none", vision_dpi: int = 180,
+                          vision_max_side: int = 3000) -> dict:
     """Extract observable PDF geometry; inferred panels and graph edges remain candidates."""
     from source_figure_crop import validate_figure_region
     if page_index < 0:
         raise ValueError("INVALID_SOURCE_PAGE_INDEX: zero-based page index must be non-negative")
+    if vision_backend not in {"none", "paddleocr"}:
+        raise ValueError(f"UNSUPPORTED_VISION_BACKEND: {vision_backend}")
+    if vision_backend == "paddleocr" and (
+        isinstance(vision_dpi, bool) or not isinstance(vision_dpi, int) or not 36 <= vision_dpi <= 600
+        or isinstance(vision_max_side, bool) or not isinstance(vision_max_side, int)
+        or not 256 <= vision_max_side <= 8192
+    ):
+        raise ValueError("INVALID_VISION_RASTER_LIMITS: dpi must be 36..600 and max-side 256..8192")
     source_pdf = Path(source_pdf)
     with fitz.open(source_pdf) as document:
         page = document[page_index]
@@ -555,8 +651,13 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 "confidence_basis": "PDF image paint event with recoverable XRef",
             })
 
+        visual_fusion, visual_evidence = _extract_visual_evidence(
+            page, region, vision_backend, vision_dpi, vision_max_side,
+            layout_elements, image_assets,
+        )
+
         return {
-            "schema_version": "1.0.0",
+            "schema_version": "1.1.0",
             "source": {
                 "filename": source_pdf.name,
                 "sha256": hashlib.sha256(source_pdf.read_bytes()).hexdigest(),
@@ -595,12 +696,19 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 "unlabeled_panel_candidates": unlabeled_panel_candidates,
                 "alignment_groups": alignment_groups,
                 "raster_gutter_candidates": raster_gutter_candidates,
+                "visual_evidence_status": visual_evidence["status"],
+                "visual_region_candidates": visual_fusion["visual_region_candidates"],
+                "ocr_panel_markers": visual_fusion["ocr_panel_markers"],
+                "panel_hypotheses": visual_fusion["panel_hypotheses"],
+                "visual_alignment_groups": visual_fusion["visual_alignment_groups"],
+                "source_object_ownership": visual_fusion["source_object_ownership"],
             },
             "layout_elements": layout_elements,
             "stroke_segment_candidates": stroke_segment_candidates,
             "clipping_regions": clipping_regions,
             "image_assets": image_assets,
             "image_extraction": image_stats,
+            "visual_evidence": visual_evidence,
             "style_profile": {
                 "palette": [{"color": color, "occurrences": count}
                             for color, count in palette.most_common(12)],
@@ -609,7 +717,7 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 "stroke_widths_pt": sorted(stroke_widths),
                 "dash_patterns": dict(dash_patterns),
             },
-            "warnings": image_stats.get("warnings", []),
+            "warnings": image_stats.get("warnings", []) + visual_evidence.get("warnings", []),
             "requires_human_review": True,
         }
 
@@ -619,12 +727,19 @@ def main():
     parser.add_argument("source_pdf", type=Path)
     parser.add_argument("--page", type=int, default=1, help="1-based PDF page number")
     parser.add_argument("--region", type=float, nargs=4, metavar=("X0", "Y0", "X1", "Y1"))
+    parser.add_argument("--vision-backend", choices=("none", "paddleocr"), default="none")
+    parser.add_argument("--vision-dpi", type=int, default=180)
+    parser.add_argument("--vision-max-side", type=int, default=3000)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.page < 1:
         parser.error("--page must be a 1-based positive page number")
-    layout = extract_source_layout(args.source_pdf, page_index=args.page - 1,
-                                   figure_region=tuple(args.region) if args.region else None)
+    layout = extract_source_layout(
+        args.source_pdf, page_index=args.page - 1,
+        figure_region=tuple(args.region) if args.region else None,
+        vision_backend=args.vision_backend, vision_dpi=args.vision_dpi,
+        vision_max_side=args.vision_max_side,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(layout, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({
@@ -635,6 +750,9 @@ def main():
         "unlabeled_panel_candidates": len(layout["panel_detection"]["unlabeled_panel_candidates"]),
         "alignment_groups": len(layout["panel_detection"]["alignment_groups"]),
         "raster_gutter_candidates": len(layout["panel_detection"]["raster_gutter_candidates"]),
+        "visual_evidence_status": layout["visual_evidence"]["status"],
+        "visual_region_candidates": len(layout["panel_detection"]["visual_region_candidates"]),
+        "ocr_panel_markers": len(layout["panel_detection"]["ocr_panel_markers"]),
         "output": str(args.output),
     }, ensure_ascii=False))
 

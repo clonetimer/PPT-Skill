@@ -34,7 +34,7 @@ def fake_backend(image_path):
         "backend": "paddleocr",
         "engine": "onnxruntime",
         "paddleocr_version": "3.7.0",
-        "layout_model": "PP-DocLayoutV2",
+        "layout_model": "PP-DocLayoutV3",
         "ocr_detection_model": "PP-OCRv6_small_det",
         "ocr_recognition_model": "PP-OCRv6_small_rec",
         "layout_result": {
@@ -89,7 +89,7 @@ class SourceLayoutVisionIntegrationTests(unittest.TestCase):
         self.assertEqual(layout["schema_version"], "1.1.0")
         self.assertEqual(layout["visual_evidence"]["status"], "COMPLETED")
         self.assertEqual(layout["visual_evidence"]["raster_size_px"], [400, 300])
-        self.assertEqual(layout["visual_evidence"]["layout_model"], "PP-DocLayoutV2")
+        self.assertEqual(layout["visual_evidence"]["layout_model"], "PP-DocLayoutV3")
         self.assertEqual(len(detection["visual_region_candidates"]), 2)
         self.assertEqual([item["label"] for item in detection["panel_hypotheses"]], ["a", "b"])
         self.assertEqual(

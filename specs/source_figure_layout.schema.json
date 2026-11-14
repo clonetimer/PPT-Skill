@@ -21,7 +21,11 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "1.0.0"
+      "type": "string",
+      "enum": [
+        "1.0.0",
+        "1.1.0"
+      ]
     },
     "source": {
       "type": "object",
@@ -166,6 +170,42 @@
             "CANDIDATES_FOUND",
             "NO_DOMINANT_IMAGE_GUTTERS"
           ]
+        },
+        "visual_evidence_status": {
+          "enum": [
+            "NOT_REQUESTED",
+            "COMPLETED"
+          ]
+        },
+        "visual_region_candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/visualRegionCandidate"
+          }
+        },
+        "ocr_panel_markers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ocrPanelMarker"
+          }
+        },
+        "panel_hypotheses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/panelHypothesis"
+          }
+        },
+        "visual_alignment_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/visualAlignmentGroup"
+          }
+        },
+        "source_object_ownership": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceObjectOwnership"
+          }
         }
       }
     },
@@ -231,6 +271,98 @@
     },
     "requires_human_review": {
       "const": true
+    },
+    "visual_evidence": {
+      "type": "object",
+      "required": [
+        "backend",
+        "status",
+        "engine",
+        "paddleocr_version",
+        "layout_model",
+        "ocr_detection_model",
+        "ocr_recognition_model",
+        "requested_dpi",
+        "effective_dpi",
+        "raster_size_px",
+        "warnings"
+      ],
+      "properties": {
+        "backend": {
+          "enum": [
+            "none",
+            "paddleocr"
+          ]
+        },
+        "status": {
+          "enum": [
+            "NOT_REQUESTED",
+            "COMPLETED"
+          ]
+        },
+        "engine": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "paddleocr_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "layout_model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ocr_detection_model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ocr_recognition_model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requested_dpi": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "effective_dpi": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "raster_size_px": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "$defs": {
@@ -659,6 +791,408 @@
         },
         "review_status": {
           "const": "needs_human_review"
+        }
+      }
+    },
+    "visualRegionCandidate": {
+      "type": "object",
+      "required": [
+        "id",
+        "candidate_type",
+        "model_label",
+        "model_score",
+        "bbox_pt",
+        "bbox_normalized",
+        "parent_candidate_id",
+        "depth",
+        "source_object_ids",
+        "owned_source_object_ids",
+        "source_object_count",
+        "ownership_coverage",
+        "confidence_score",
+        "confidence",
+        "confidence_basis",
+        "review_status",
+        "needs_human_review",
+        "evidence_source"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "candidate_type": {
+          "enum": [
+            "visual_region",
+            "nested_visual_region"
+          ]
+        },
+        "model_label": {
+          "type": "string"
+        },
+        "model_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "parent_candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_object_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "owned_source_object_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_object_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ownership_coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        },
+        "review_status": {
+          "const": "needs_human_review"
+        },
+        "needs_human_review": {
+          "const": true
+        },
+        "evidence_source": {
+          "type": "string"
+        }
+      }
+    },
+    "ocrPanelMarker": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "text",
+        "marker_style",
+        "ocr_score",
+        "bbox_pt",
+        "bbox_normalized",
+        "candidate_type",
+        "confidence",
+        "confidence_basis",
+        "needs_human_review",
+        "anchor_status",
+        "matched_region_candidate_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1
+        },
+        "text": {
+          "type": "string"
+        },
+        "marker_style": {
+          "enum": [
+            "parenthesized",
+            "punctuated",
+            "bare"
+          ]
+        },
+        "ocr_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "candidate_type": {
+          "const": "ocr_panel_marker"
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        },
+        "needs_human_review": {
+          "const": true
+        },
+        "anchor_status": {
+          "enum": [
+            "UNRESOLVED",
+            "ANCHORED_CANDIDATE"
+          ]
+        },
+        "matched_region_candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "panelHypothesis": {
+      "type": "object",
+      "required": [
+        "id",
+        "candidate_id",
+        "candidate_type",
+        "region_candidate_id",
+        "marker_candidate_id",
+        "label",
+        "marker_text",
+        "bbox_pt",
+        "bbox_normalized",
+        "confidence_score",
+        "confidence",
+        "confidence_basis",
+        "needs_human_review",
+        "review_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "candidate_id": {
+          "type": "string"
+        },
+        "candidate_type": {
+          "const": "label_anchored_visual_region"
+        },
+        "region_candidate_id": {
+          "type": "string"
+        },
+        "marker_candidate_id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "marker_text": {
+          "type": "string"
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "confidence_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        },
+        "needs_human_review": {
+          "const": true
+        },
+        "review_status": {
+          "const": "needs_human_review"
+        }
+      }
+    },
+    "visualAlignmentGroup": {
+      "type": "object",
+      "required": [
+        "id",
+        "candidate_type",
+        "axis",
+        "parent_candidate_id",
+        "member_candidate_ids",
+        "bbox_pt",
+        "confidence_score",
+        "confidence",
+        "needs_human_review",
+        "confidence_basis"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "candidate_type": {
+          "const": "visual_alignment_group"
+        },
+        "axis": {
+          "enum": [
+            "horizontal_row",
+            "vertical_stack"
+          ]
+        },
+        "parent_candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "member_candidate_ids": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "confidence_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "needs_human_review": {
+          "const": true
+        },
+        "confidence_basis": {
+          "type": "string"
+        }
+      }
+    },
+    "sourceObjectOwnership": {
+      "type": "object",
+      "required": [
+        "source_object_id",
+        "candidate_id",
+        "source_order",
+        "overlap_ratio",
+        "status",
+        "ownership_scope",
+        "reason"
+      ],
+      "properties": {
+        "source_object_id": {
+          "type": "string"
+        },
+        "candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_order": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "overlap_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "status": {
+          "enum": [
+            "ASSIGNED",
+            "CONTAINER_ONLY",
+            "UNRESOLVED"
+          ]
+        },
+        "ownership_scope": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "region",
+            "container",
+            null
+          ]
+        },
+        "reason": {
+          "type": "string"
         }
       }
     }

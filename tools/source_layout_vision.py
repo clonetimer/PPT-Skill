@@ -595,7 +595,7 @@ def _load_paddleocr_models(
 def run_paddleocr_backend(
     image_path: str | Path,
     *,
-    layout_model: str = "PP-DocLayoutV2",
+    layout_model: str = "PP-DocLayoutV3",
     ocr_det_model: str = "PP-OCRv6_small_det",
     ocr_rec_model: str = "PP-OCRv6_small_rec",
 ) -> dict:
