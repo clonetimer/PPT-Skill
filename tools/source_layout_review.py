@@ -340,5 +340,40 @@ def main():
             raise SystemExit(1)
 
 
+
+
+# Extend the legacy review index additively; model evidence remains review-only.
+_legacy_candidate_index = _candidate_index
+
+
+def _candidate_index(layout):
+    base = _legacy_candidate_index(layout)
+    detection = layout.get("panel_detection", {})
+    visual_items = []
+    for field in ("visual_region_candidates", "panel_hypotheses", "visual_alignment_groups"):
+        for source in detection.get(field, []):
+            item = dict(source)
+            candidate_id = item.get("id")
+            if not candidate_id:
+                continue
+            # Keep the review decision key distinct from the source-region link.
+            if item.get("region_candidate_id"):
+                item["source_region_candidate_id"] = item["region_candidate_id"]
+            item["candidate_id"] = candidate_id
+            visual_items.append(item)
+
+    if isinstance(base, dict):
+        result = dict(base)
+        for item in visual_items:
+            result[item["candidate_id"]] = item
+        return result
+    result = list(base)
+    existing = {
+        item.get("candidate_id", item.get("id"))
+        for item in result if isinstance(item, dict)
+    }
+    result.extend(item for item in visual_items if item["candidate_id"] not in existing)
+    return result
+
 if __name__ == "__main__":
     main()
