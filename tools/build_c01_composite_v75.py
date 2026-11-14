@@ -32,29 +32,40 @@ def add_input_graph_icon(spec: dict) -> None:
     input_box.update(semantic_id="input", semantic_role="scientific_object")
     label = next(e for e in elements if e.get("id") == "el_0067")
     label.update(x=0.75, y=5.29, w=0.43, h=0.27, align="left", semantic_id="input_label")
+
+    # Four compact band-subgraph rows make the total-graph input structure visible.
+    x_positions = [0.08, 0.50, 0.92]
+    y_positions = [0.08, 0.36, 0.64, 0.92]
+    nodes = [[x, y] for y in y_positions for x in x_positions]
+    edges = []
+    for row in range(4):
+        offset = row * 3
+        edges.extend(((offset, offset + 1), (offset + 1, offset + 2)))
     graph = {
         "type": "graph", "x": 1.23, "y": 5.25, "w": 0.36, "h": 0.31,
-        "nodes": [[0.08, 0.20], [0.50, 0.05], [0.92, 0.20],
-                  [0.15, 0.80], [0.50, 0.95], [0.85, 0.80]],
-        "edges": [[0, 1], [1, 2], [3, 4], [4, 5]],
-        "fill": "#7896A6", "r": 0.025, "edge": "#43525B", "sw": 0.55,
+        "nodes": nodes, "edges": edges,
+        "fill": "#7896A6", "r": 0.020, "edge": "#43525B", "sw": 0.50,
         "id": "el_0120", "semantic_id": "input_graph_schematic",
         "semantic_role": "schematic_graph", "evidence_ref": "source_1",
     }
     label_index = elements.index(label)
-    elements.insert(label_index + 1, graph)
-    # Dashed inter-subgraph links echo the source's connected band-group structure.
-    for i, (a, b) in enumerate(((0, 3), (1, 4), (2, 5)), start=0):
-        x1 = graph["x"] + graph["nodes"][a][0] * graph["w"]
-        y1 = graph["y"] + graph["nodes"][a][1] * graph["h"]
-        x2 = graph["x"] + graph["nodes"][b][0] * graph["w"]
-        y2 = graph["y"] + graph["nodes"][b][1] * graph["h"]
-        elements.insert(label_index + 2 + i, {
-            "type": "line", "x1": x1, "y1": y1, "x2": x2, "y2": y2,
-            "color": "#7896A6", "sw": 0.55, "dash": True,
-            "id": f"el_{121+i:04d}",
-            "semantic_role": "connector", "evidence_ref": "source_1",
-        })
+    # Draw cross-band connectors first so editable node glyphs remain in the foreground.
+    for gap in range(3):
+        for column in range(3):
+            a = gap * 3 + column
+            b = (gap + 1) * 3 + column
+            x1 = graph["x"] + nodes[a][0] * graph["w"]
+            y1 = graph["y"] + nodes[a][1] * graph["h"]
+            x2 = graph["x"] + nodes[b][0] * graph["w"]
+            y2 = graph["y"] + nodes[b][1] * graph["h"]
+            connector_id = 121 + gap * 3 + column
+            elements.insert(label_index + 1 + gap * 3 + column, {
+                "type": "line", "x1": x1, "y1": y1, "x2": x2, "y2": y2,
+                "color": "#7896A6", "sw": 0.55, "dash": True,
+                "id": f"el_{connector_id:04d}",
+                "semantic_role": "connector", "evidence_ref": "source_1",
+            })
+    elements.insert(label_index + 10, graph)
 
 
 def add_class_output(spec: dict) -> None:
@@ -65,7 +76,7 @@ def add_class_output(spec: dict) -> None:
     group = {
         "type": "rect", "x": 8.89, "y": 5.00, "w": 0.15, "h": 0.85,
         "fill": "#FFFFFF", "stroke": "#FFFFFF", "sw": 0.1,
-        "radius": 0, "dash": False, "id": "el_0124",
+        "radius": 0, "dash": False, "id": "el_0130",
         "semantic_id": "class_output", "semantic_role": "scientific_object",
         "evidence_ref": "source_1",
     }
@@ -82,7 +93,7 @@ def add_class_output(spec: dict) -> None:
             "type": "rect", "x": 8.90, "y": 5.02 + i * 0.17, "w": 0.13, "h": 0.13,
             "fill": "#DCA16C" if i == 1 else "#FFFFFF",
             "stroke": "#43525B", "sw": 0.65, "radius": 0, "dash": False,
-            "id": f"el_{125+i:04d}",
+            "id": f"el_{131+i:04d}",
             "semantic_role": "layout_shape", "evidence_ref": "source_1",
         }
         squares.append(square)
@@ -148,7 +159,10 @@ def annotate_accessibility(path: Path) -> dict:
         "shape_count": len(slide.shapes),
         "alt_text_count": len(slide.shapes),
         "alt_text_coverage": 1.0,
-        "input_graph_icon": "schematic two-group graph with dashed inter-group links",
+        "input_graph_icon": "12 nodes across four band-subgraph rows with nine dashed inter-band connectors",
+        "input_graph_nodes": 12,
+        "input_graph_band_subgraphs": 4,
+        "input_graph_interband_links": 9,
         "class_output_squares": 5,
         "orange_highlight_index": 2,
         "panel_description": PANEL_ALT,
@@ -159,7 +173,7 @@ def build_spec() -> dict:
     spec = copy.deepcopy(make_spec())
     add_input_graph_icon(spec)
     add_class_output(spec)
-    spec["id"] = "C01_composite_defense_slide_v75"
+    spec["id"] = "C01_composite_defense_slide"
     spec["version"] = "7.5.0"
     spec["evidence_status"] = "source-visible two-panel structural redraw with schematic substitutions"
     return spec
