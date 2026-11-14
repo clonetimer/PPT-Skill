@@ -217,6 +217,8 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
             self.assertEqual(manifest["source_route_recommendation"]["recommended_reconstruction_class"],
                              "native_only")
             self.assertTrue((output / "source_layout_review_audit.json").exists())
+            self.assertIsNone(manifest["source_layout_constraints"])
+            self.assertFalse((output / "source_layout_constraints.json").exists())
 
     def test_pipeline_consumes_only_human_accepted_source_layout_facts(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -245,6 +247,11 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
             self.assertEqual(len(manifest["accepted_source_layout_facts"]["panels"]), 1)
             self.assertEqual(manifest["accepted_source_layout_facts"]["panels"][0]["candidate_id"],
                              candidates[0]["id"])
+            self.assertEqual(manifest["source_layout_constraints"]["constraint_count"], 1)
+            self.assertTrue((output / "source_layout_constraints.json").exists())
+            constraints = json.loads((output / "source_layout_constraints.json").read_text())
+            self.assertEqual(constraints["constraints"][0]["constraint_type"], "panel_boundary")
+            self.assertEqual(constraints["semantic_edge_authorization"], "none")
 
     def test_invalid_layout_review_fails_before_candidate_generation(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -264,6 +271,7 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
             self.assertEqual(result["status"], "STRUCTURE_FAIL")
             self.assertIn("SOURCE_LAYOUT_REVIEW_INVALID", result["error"])
             self.assertFalse((output / "candidate_editable.pptx").exists())
+            self.assertFalse((output / "source_layout_constraints.json").exists())
 
     def test_import_without_visual_export_is_not_technical_pass(self):
         with tempfile.TemporaryDirectory() as folder:
