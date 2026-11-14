@@ -40,7 +40,8 @@ class LocalRepairLoopTests(unittest.TestCase):
    self.assertEqual(report["accepted_rounds"],0)
    self.assertEqual(report["rejected_rounds"],1)
    self.assertEqual(report["first_pass_sha256"],report["final_sha256"])
-   self.assertFalse((out/"round_01.pptx").exists())
+   self.assertTrue((out/"round_01.pptx").exists())
+   self.assertEqual(report["repair_history"][0]["candidate_status"],"REJECTED_BUT_PRESERVED_FOR_AUDIT")
  def test_unknown_source_object_fails_closed(self):
   with tempfile.TemporaryDirectory() as d:
    root=Path(d);source,manifest,plan=make_inputs(root)

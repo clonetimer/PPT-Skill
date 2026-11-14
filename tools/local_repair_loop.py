@@ -96,6 +96,17 @@ def run_repair_loop(source_pptx,plan_path,manifest_path,output_dir,max_rounds=3)
   if not metrics.get("source_order",{}).get("exact_order_match",True):
    regression.append("SOURCE_ORDER_REGRESSION")
   if metrics["status"]=="FAIL":regression.extend(metrics.get("blockers",[]))
+  before_text=previous_metrics.get("text_fidelity",{}).get("character_error_rate")
+  after_text=metrics.get("text_fidelity",{}).get("character_error_rate")
+  if before_text is not None and after_text is not None and after_text>before_text+1e-9:
+   regression.append("TEXT_CER_REGRESSION")
+  before_iou=previous_metrics.get("geometry_fidelity",{}).get("mean_bbox_iou")
+  after_iou=metrics.get("geometry_fidelity",{}).get("mean_bbox_iou")
+  if before_iou is not None and after_iou is not None and after_iou+1e-9<before_iou:
+   regression.append("GEOMETRY_IOU_REGRESSION")
+  before_classes=len(previous_metrics.get("object_preservation",{}).get("class_mismatches",[]))
+  after_classes=len(metrics.get("object_preservation",{}).get("class_mismatches",[]))
+  if after_classes>before_classes:regression.append("OBJECT_CLASS_REGRESSION")
   accepted_round=not regression
   record={"round":index,"candidate":candidate.name,"candidate_sha256":sha(candidate),
    "base_sha256":sha(accepted),"applied_operations":applied,"object_diff":changes,
@@ -105,8 +116,7 @@ def run_repair_loop(source_pptx,plan_path,manifest_path,output_dir,max_rounds=3)
   if accepted_round:
    accepted=candidate;previous_metrics=metrics
   else:
-   candidate.unlink(missing_ok=True)
-   record["candidate"]="REJECTED_AND_REMOVED"
+   record["candidate_status"]="REJECTED_BUT_PRESERVED_FOR_AUDIT"
    break
  report={"schema_version":"1.0.0","status":"COMPLETED" if history else "NO_REPAIR_ROUNDS",
   "first_pass_path":str(immutable),"first_pass_sha256":sha(immutable),
