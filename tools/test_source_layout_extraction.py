@@ -107,7 +107,7 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             layout = extract_source_layout(source)
             self.assertGreater(len(layout["stroke_segment_candidates"]), 0)
             self.assertTrue(all(edge["directedness"] == "undetermined"
-                                for edge in layout["edge_candidates"]))
+                                for edge in layout["stroke_segment_candidates"]))
             self.assertTrue(all(edge["confidence"] in ("low", "medium")
                                 for edge in layout["edge_candidates"]))
 
