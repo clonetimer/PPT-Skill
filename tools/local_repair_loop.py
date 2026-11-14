@@ -45,7 +45,13 @@ def apply_operation(shape,op):
   shape.rotation=float(op["rotation_degrees"])%360
  elif kind=="set_text":
   if not shape.has_text_frame:raise ValueError("TARGET_HAS_NO_TEXT_FRAME")
-  shape.text=str(op["text"])
+  if "expected_text" not in op:raise ValueError("TEXT_REPAIR_REQUIRES_PRECONDITION")
+  paragraphs=list(shape.text_frame.paragraphs)
+  runs=[run for paragraph in paragraphs for run in paragraph.runs]
+  if len(paragraphs)!=1 or len(runs)!=1:
+   raise ValueError("MULTIRUN_TEXT_REPAIR_REQUIRES_MANUAL_REVIEW")
+  # Change only the text payload. Replacing shape.text would destroy font and run styling.
+  runs[0].text=str(op["text"])
 def run_repair_loop(source_pptx,plan_path,manifest_path,output_dir,max_rounds=3):
  source_pptx,plan_path,manifest_path,output_dir=map(Path,(source_pptx,plan_path,manifest_path,output_dir))
  plan=json.loads(plan_path.read_text(encoding="utf-8"))
@@ -64,6 +70,7 @@ def run_repair_loop(source_pptx,plan_path,manifest_path,output_dir,max_rounds=3)
  previous_metrics=evaluate_reconstruction_quality(manifest_path,accepted)
  for index,round_spec in enumerate(rounds,1):
   candidate=output_dir/f"round_{index:02d}.pptx"
+  if candidate.exists():raise ValueError("REPAIR_ROUND_ARTIFACT_IMMUTABLE")
   shutil.copy2(accepted,candidate)
   before=snapshot(accepted)
   prs=Presentation(candidate)
@@ -87,6 +94,11 @@ def run_repair_loop(source_pptx,plan_path,manifest_path,output_dir,max_rounds=3)
   changes=diff(before,after)
   metrics=evaluate_reconstruction_quality(manifest_path,candidate)
   regression=[]
+  targeted_ids={item["source_object_id"] for item in applied}
+  if any(change["id"] not in targeted_ids for change in changes):
+   regression.append("UNPLANNED_OBJECT_MUTATION")
+  if not changes:
+   regression.append("NO_VERIFIABLE_OBJECT_CHANGE")
   if metrics["object_preservation"]["source_object_recall"] < previous_metrics["object_preservation"]["source_object_recall"]:
    regression.append("OBJECT_RECALL_REGRESSION")
   if metrics["object_preservation"]["duplicate_object_ids"]:

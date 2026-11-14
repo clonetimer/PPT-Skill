@@ -49,4 +49,37 @@ class LocalRepairLoopTests(unittest.TestCase):
    with patch("reconstruction_quality_metrics.evaluate_reconstruction_quality",return_value={"status":"NEEDS_REVIEW","object_preservation":{"source_object_recall":1,"duplicate_object_ids":[],"missing_object_ids":[]},"blockers":[]}):
     with self.assertRaisesRegex(ValueError,"UNKNOWN_REPAIR_SOURCE_OBJECT"):
      run_repair_loop(source,plan,manifest,root/"rounds")
+ def test_text_repair_preserves_existing_font_run(self):
+  from pptx.util import Pt
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d);source,manifest,plan=make_inputs(root)
+   prs=Presentation(source)
+   shape=prs.slides[0].shapes[0]
+   shape.text_frame.paragraphs[0].runs[0].font.size=Pt(15)
+   shape.text_frame.paragraphs[0].runs[0].font.bold=True
+   from local_repair_loop import apply_operation
+   apply_operation(shape,{"operation":"set_text","expected_text":"Label","text":"Label revised"})
+   self.assertEqual(shape.text,"Label revised")
+   run=shape.text_frame.paragraphs[0].runs[0]
+   self.assertAlmostEqual(run.font.size.pt,15,places=1)
+   self.assertTrue(run.font.bold)
+ def test_text_repair_with_multiple_format_runs_fails_closed(self):
+  from local_repair_loop import apply_operation
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d);source,manifest,plan=make_inputs(root)
+   prs=Presentation(source);shape=prs.slides[0].shapes[0]
+   shape.text_frame.paragraphs[0].add_run().text=" second"
+   with self.assertRaisesRegex(ValueError,"MULTIRUN_TEXT_REPAIR_REQUIRES_MANUAL_REVIEW"):
+    apply_operation(shape,{"operation":"set_text","expected_text":"Label second","text":"replaced"})
+ def test_existing_repair_round_is_not_overwritten(self):
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d);source,manifest,plan=make_inputs(root);out=root/"rounds"
+   fake={"status":"NEEDS_REVIEW","object_preservation":{"source_object_recall":1.0,"duplicate_object_ids":[],"missing_object_ids":[]},"blockers":[]}
+   with patch("reconstruction_quality_metrics.evaluate_reconstruction_quality",return_value=fake):
+    first=run_repair_loop(source,plan,manifest,out)
+    previous=(out/"round_01.pptx").read_bytes()
+    with self.assertRaisesRegex(ValueError,"REPAIR_ROUND_ARTIFACT_IMMUTABLE"):
+     run_repair_loop(source,plan,manifest,out)
+   self.assertEqual((out/"round_01.pptx").read_bytes(),previous)
+
 if __name__=="__main__":unittest.main()
