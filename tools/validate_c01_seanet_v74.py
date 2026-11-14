@@ -9,6 +9,8 @@ from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.util import Inches
 
+from scientific_ir import validate_expected_topology
+
 ROOT = Path(__file__).resolve().parents[1]
 SPEC_PATH = ROOT / "figure_specs/c01/C01_SEANet_graph_level_v74.json"
 PPTX_PATH = ROOT / "dist/C01_SEANet_graph_level_v74.pptx"
@@ -24,6 +26,8 @@ def _descr(shape):
 def validate():
     spec = json.loads(SPEC_PATH.read_text(encoding="utf-8"))
     elements = spec["elements"]
+    topology = json.loads((ROOT / "specs/c01_standalone_expected_topology_v76.json").read_text(encoding="utf-8"))
+    validate_expected_topology(spec, topology)
     ids = [e["id"] for e in elements]
     if len(ids) != len(set(ids)):
         raise AssertionError("DUPLICATE_FIGURESPEC_ELEMENT_IDS")
