@@ -11,6 +11,7 @@ from pathlib import Path
 import jsonschema
 
 from extract_source_layout import extract_source_layout
+from audit_source_crop_manifest import audit_source_crop_manifest
 
 
 def run_benchmark(source_dir: Path, manifest_path: Path, output_dir: Path) -> dict:
@@ -21,6 +22,10 @@ def run_benchmark(source_dir: Path, manifest_path: Path, output_dir: Path) -> di
     schema_path = Path(__file__).resolve().parents[1] / "specs" / "source_figure_layout.schema.json"
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
     jsonschema.Draft202012Validator.check_schema(schema)
+    crop_audit = audit_source_crop_manifest(source_dir, manifest_path)
+    if crop_audit["status"] != "PASS":
+        raise ValueError("SOURCE_CROP_MANIFEST_AUDIT_FAIL: " +
+                         json.dumps(crop_audit["failures"], ensure_ascii=False))
     output_dir.mkdir(parents=True, exist_ok=True)
 
     rows = []
@@ -73,6 +78,11 @@ def run_benchmark(source_dir: Path, manifest_path: Path, output_dir: Path) -> di
         "outputs_schema_validated": len(rows),
         "strict_blind_test_pass_rate": "not measured by source-layout extraction",
         "human_review_required": True,
+        "crop_manifest_audit": {
+            "status": crop_audit["status"],
+            "passed": crop_audit["passed"],
+            "failed": crop_audit["failed"],
+        },
         "rows": rows,
     }
     summary_path = output_dir / "source_layout_benchmark_summary.json"
