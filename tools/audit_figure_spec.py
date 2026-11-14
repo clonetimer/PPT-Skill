@@ -75,10 +75,11 @@ def audit_figure_spec_semantics(spec_path: Path) -> dict:
         blockers.append("MALFORMED_SEMANTIC_LINK")
     missing = sorted(declared - represented)
     extra = sorted(represented - declared)
-    if missing:
-        blockers.append("DECLARED_EDGE_NOT_RENDERED")
-    if extra:
-        blockers.append("UNDECLARED_EDGE_RENDERED")
+    if declared:
+        if missing:
+            blockers.append("DECLARED_EDGE_NOT_RENDERED")
+        if extra:
+            blockers.append("UNDECLARED_EDGE_RENDERED")
 
     if not declared:
         # With no declared edge contract, existing visual connector strings
