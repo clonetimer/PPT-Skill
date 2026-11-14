@@ -89,13 +89,8 @@ def make_evidence_page(slide, slide_spec):
                  "28343C", name=f"s03_card_{index+1}_metric")
         add_text(slide, block["descriptor"], x+1.05, y+.72, width-1.25, .76, 12,
                  color="43525B", name=f"s03_card_{index+1}_descriptor")
-        divider = slide.shapes.add_shape(
-            MSO_SHAPE.LINE, Inches(x+.20), Inches(y+1.62),
-            Inches(width-.40), Inches(0)
-        )
-        divider.name = f"s03_card_{index+1}_divider"
-        divider.line.color.rgb = RGBColor.from_string("D7E0E4")
-        divider.line.width = Pt(1)
+        add_rect(slide, x+.20, y+1.62, width-.40, .012,
+                 "D7E0E4", "D7E0E4", f"s03_card_{index+1}_divider")
         for item_index, item in enumerate(block["items"]):
             add_text(slide, f"•  {item}", x+.22, y+1.83+item_index*.48,
                      width-.44, .40, 12, color="28343C",
