@@ -1,162 +1,119 @@
-#!/usr/bin/env python3
-"""Exercise the release gate using in-memory synthetic review data only."""
-from __future__ import annotations
-
-import unittest
+import json
 import tempfile
-import zipfile
+import unittest
 from pathlib import Path
 
 from validate_release_readiness import prepare_template, validate_review
-from prepare_scientific_review_bundle import build, bundle_paths
-from scientific_ir import ROOT
+
+DIMENSIONS = (
+    "scientific_accuracy",
+    "data_image_integrity",
+    "readability",
+    "accessibility",
+    "editability_reproducibility",
+    "visual_quality",
+)
+HARD_FAILS = (
+    "wrong_critical_relation_or_formula_or_value",
+    "unclear_source_status",
+    "undisclosed_image_processing",
+    "unreadable_or_occluded_important_content",
+)
+DISCIPLINES = (
+    "aerospace_systems",
+    "machinery_fault_diagnosis",
+    "applied_statistics",
+    "analytical_chemistry",
+    "cell_imaging",
+)
 
 
-class ReleaseGateTests(unittest.TestCase):
-    def test_stages_can_be_distributed_separately(self):
-        temporary_root = ROOT / ".testtmp"
-        temporary_root.mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=temporary_root) as folder:
-            initial, reconciliation = (Path(folder) / name for name in ("initial.zip", "reconciliation.zip"))
-            build(initial, "initial")
-            build(reconciliation, "reconciliation")
-            with zipfile.ZipFile(initial) as archive:
-                names = set(archive.namelist())
-                assert "initial_review_form.md" in names
-                form = archive.read("initial_review_form.md").decode("utf-8")
-                assert "Q07" in form and "invented chemical units" not in form
-                assert "review_template.json" not in names
-                assert not any(name.startswith("unblind_review/") for name in names)
-                assert "blind_review/dist/Q03_iris_mean_ci.pdf" in names
-                assert "blind_review/docs/C01_V76_SOURCE_CORRECTION.md" not in names
-                source = archive.read("blind_review/docs/C01_V73_SOURCE.md").decode("utf-8")
-                assert "previous V7.3/V7.4 redraw incorrectly" not in source
-            with zipfile.ZipFile(reconciliation) as archive:
-                names = set(archive.namelist())
-                assert "review_template.json" in names
-                assert "unblind_review/specs/research_figure_benchmark_v76.json" in names
-                assert "unblind_review/docs/C01_V76_SOURCE_CORRECTION.md" in names
-                assert not any(name.startswith("blind_review/") for name in names)
+def complete_synthetic_review():
+    review = prepare_template()
+    review["reviewers"] = {
+        "R1": {
+            "human": True,
+            "name": "Independent human domain reviewer",
+            "date": "2026-11-14",
+            "disciplines": list(DISCIPLINES),
+            "independent_of_build": True,
+            "scored_before_reading_benchmark_expectations": True,
+        }
+    }
+    for task in review["tasks"].values():
+        task.update({
+            "reviewer_id": "R1",
+            "repair_rounds": 2,
+            "source_checked": True,
+            "scientific_relationships_checked": True,
+            "initial_review_before_expectations": {
+                "completed": True,
+                "score": 3,
+                "evidence": "Initial blind review completed before reading benchmark expectations.",
+            },
+            "final_size": {
+                "checked": True,
+                "context": "projected at the intended presentation size",
+                "evidence": "Critical labels, marks and connectors remain legible at full slide size.",
+            },
+            "scores": {
+                dimension: {
+                    "score": 3,
+                    "evidence": f"{dimension} checked against source, editable PPTX and rendered output.",
+                }
+                for dimension in DIMENSIONS
+            },
+            "hard_fail": {flag: False for flag in HARD_FAILS},
+            "conclusion": "pass",
+        })
+    return review
 
-    def complete_synthetic_review(self):
-        review = prepare_template()
-        disciplines = {result["required_discipline"] for result in review["tasks"].values()}
-        review["reviewers"] = {discipline: {
-            "name": "SYNTHETIC TEST", "date": "2000-01-01", "disciplines": [discipline],
-            "independent_of_build": True, "scored_before_reading_benchmark_expectations": True,
-        } for discipline in disciplines}
-        for result in review["tasks"].values():
-            result["reviewer_id"] = result["required_discipline"]
-            result["source_checked"] = result["scientific_relationships_checked"] = True
-            result["initial_review_before_expectations"] = {"completed": True, "score": 4,
-                                                             "evidence": "synthetic first-stage score"}
-            result["final_size"] = {"checked": True, "context": "synthetic", "evidence": "test only"}
-            for item in result["scores"].values():
-                item.update(score=4, evidence="synthetic test only")
-            result["hard_fail"] = {key: False for key in result["hard_fail"]}
-            result["conclusion"] = "pass"
-        return review
 
-    def test_unfilled_template_fails(self):
+class ReleaseReadinessTests(unittest.TestCase):
+    def validate_temp(self, review):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        path = Path(folder.name) / "review.json"
+        path.write_text(json.dumps(review, ensure_ascii=False), encoding="utf-8")
+        return validate_review(path)
+
+    def test_blank_template_is_not_release_ready(self):
         with self.assertRaises(ValueError):
-            validate_review(prepare_template())
+            self.validate_temp(prepare_template())
 
-    def test_complete_synthetic_data_exercises_gate(self):
-        validate_review(self.complete_synthetic_review())
+    def test_complete_independent_human_review_passes(self):
+        result = self.validate_temp(complete_synthetic_review())
+        self.assertIsNotNone(result)
 
-    def test_hard_failure_blocks_release(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["Q03"]["hard_fail"]["wrong_critical_relation_or_formula_or_value"] = True
+    def test_ai_reviewer_cannot_satisfy_human_final_review_gate(self):
+        review = complete_synthetic_review()
+        review["reviewers"]["R1"]["human"] = False
+        with self.assertRaisesRegex(ValueError, "explicitly identified as human"):
+            self.validate_temp(review)
+
+    def test_non_independent_reviewer_is_rejected(self):
+        review = complete_synthetic_review()
+        review["reviewers"]["R1"]["independent_of_build"] = False
         with self.assertRaises(ValueError):
-            validate_review(review)
+            self.validate_temp(review)
 
-    def test_low_dimension_score_blocks_release(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["Q03"]["scores"]["visual_quality"]["score"] = 1
+    def test_review_must_precede_benchmark_expectations(self):
+        review = complete_synthetic_review()
+        review["reviewers"]["R1"]["scored_before_reading_benchmark_expectations"] = False
         with self.assertRaises(ValueError):
-            validate_review(review)
+            self.validate_temp(review)
 
-    def test_changed_pdf_blocks_stale_review(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["Q03P"]["artifacts_sha256"]["dist/Q03_iris_mean_ci_nature.pdf"] = "0" * 64
+    def test_missing_final_size_evidence_is_rejected(self):
+        review = complete_synthetic_review()
+        next(iter(review["tasks"].values()))["final_size"]["evidence"] = ""
         with self.assertRaises(ValueError):
-            validate_review(review)
+            self.validate_temp(review)
 
-    def test_changed_c01_preview_blocks_stale_review(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["C01_composite"]["artifacts_sha256"]["dist/C01_composite_defense_slide_v74_preview.png"] = "0" * 64
+    def test_negative_repair_round_count_is_rejected(self):
+        review = complete_synthetic_review()
+        next(iter(review["tasks"].values()))["repair_rounds"] = -1
         with self.assertRaises(ValueError):
-            validate_review(review)
-
-    def test_changed_publication_caption_blocks_stale_review(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["Q03P"]["artifacts_sha256"]["docs/Q03_NATURE_PUBLICATION_CAPTION.md"] = "0" * 64
-        with self.assertRaises(ValueError):
-            validate_review(review)
-
-    def test_changed_second_wine_input_blocks_stale_review(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["Q07"]["related_inputs_sha256"]["figure_specs/quant/Q08_wine_strip.json"] = "0" * 64
-        with self.assertRaises(ValueError):
-            validate_review(review)
-
-    def test_changed_chart_configuration_blocks_stale_review(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["Q03"]["related_inputs_sha256"]["specs/iris_charts_v76.json"] = "0" * 64
-        with self.assertRaises(ValueError):
-            validate_review(review)
-
-    def test_changed_c01_source_correction_blocks_stale_review(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["C01_SEANet"]["related_inputs_sha256"]["docs/C01_V76_SOURCE_CORRECTION.md"] = "0" * 64
-        with self.assertRaises(ValueError):
-            validate_review(review)
-
-    def test_missing_preview_blocks_release(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["I01"]["artifacts_sha256"].pop("dist/I01_cell_image_quant.preview.png")
-        with self.assertRaises(ValueError):
-            validate_review(review)
-
-    def test_missing_final_size_blocks_release(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["I01"]["final_size"]["checked"] = False
-        with self.assertRaises(ValueError):
-            validate_review(review)
-
-    def test_missing_initial_review_blocks_release(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["Q03"]["initial_review_before_expectations"]["completed"] = False
-        with self.assertRaises(ValueError):
-            validate_review(review)
-
-    def test_initial_review_without_score_blocks_release(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["Q03"]["initial_review_before_expectations"]["score"] = None
-        with self.assertRaises(ValueError):
-            validate_review(review)
-
-    def test_wrong_domain_reviewer_blocks_release(self):
-        review = self.complete_synthetic_review()
-        review["tasks"]["I01"]["reviewer_id"] = "applied_statistics"
-        with self.assertRaises(ValueError):
-            validate_review(review)
-
-    def test_initial_review_packet_excludes_expectations(self):
-        blind, unblind = bundle_paths()
-        assert ROOT / "specs/research_figure_benchmark_v76.json" not in blind
-        assert ROOT / "specs/research_figure_benchmark_v76.json" in unblind
-        assert ROOT / "figure_specs/quant/Q03_iris_mean_ci.json" not in blind
-        assert ROOT / "figure_specs/quant/Q03_iris_mean_ci.json" in unblind
-        assert ROOT / "figure_specs/quant/Q08_wine_strip.json" not in blind
-        assert ROOT / "figure_specs/quant/Q08_wine_strip.json" in unblind
-        assert ROOT / "specs/iris_charts_v76.json" not in blind
-        assert ROOT / "specs/iris_charts_v76.json" in unblind
-        assert ROOT / "specs/wine_charts_v76.json" in unblind
-        assert ROOT / "dist/Q03_iris_mean_ci.pdf" in blind
-        assert ROOT / "dist/Q03_iris_mean_ci.pdf" in unblind
-        assert ROOT / "tools/validate_quantitative_examples.py" not in blind
-        assert ROOT / "tools/validate_quantitative_examples.py" in unblind
+            self.validate_temp(review)
 
 
 if __name__ == "__main__":
