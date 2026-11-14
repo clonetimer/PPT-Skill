@@ -6,7 +6,7 @@
   "required": [
     "schema_version", "source", "page", "figure_region_pt", "figure_region_source",
     "coordinate_system", "panel_detection", "layout_elements",
-    "edge_candidates", "clipping_regions", "image_assets",
+    "stroke_segment_candidates", "clipping_regions", "image_assets",
     "style_profile", "warnings", "requires_human_review"
   ],
   "properties": {
@@ -55,7 +55,7 @@
       }
     },
     "layout_elements": {"type": "array", "items": {"$ref": "#/$defs/layoutElement"}},
-    "edge_candidates": {"type": "array", "items": {"$ref": "#/$defs/edgeCandidate"}},
+    "stroke_segment_candidates": {"type": "array", "items": {"$ref": "#/$defs/edgeCandidate"}},
     "clipping_regions": {"type": "array"},
     "image_assets": {"type": "array", "items": {"$ref": "#/$defs/imageAsset"}},
     "style_profile": {
