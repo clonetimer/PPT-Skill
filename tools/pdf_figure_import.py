@@ -333,9 +333,9 @@ def _source_font(name):
         return "Georgia"
     if name.startswith("Times") or compact.startswith(("texgyretermes", "linlibertine")):
         return "Times New Roman"
-    if name.startswith("Helvetica") or compact == "unnamedt3":
+    if name.startswith(("Helvetica", "Arial")) or compact in ("unnamedt3", "arialmt"):
         return "Arial"
-    if compact == "comicsansms":
+    if compact.startswith("comicsansms"):
         return "Comic Sans MS"
     if compact.startswith(("calis", "calistomt")):
         return "Calisto MT"
