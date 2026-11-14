@@ -20,6 +20,7 @@ from reproduction_release_gate import classify_release
 from extract_source_layout import extract_source_layout
 from source_layout_review import validate_source_layout_review, recommend_source_route
 from source_layout_constraints import compile_reviewed_layout_constraints
+from apply_reviewed_geometry import apply_reviewed_geometry
 
 
 def sha256(path: Path) -> str:
@@ -43,6 +44,7 @@ def _clear_previous_outputs(destination: Path) -> None:
     for name in (
         "candidate_editable.pptx", "candidate.svg", "source_preflight.json", "source_layout.json",
         "source_layout_review_audit.json", "source_layout_constraints.json",
+        "reviewed_figure_spec.json", "source_geometry_application_audit.json",
         "import_report.json", "semantic_audit.json", "structure_audit.json",
         "text_geometry_audit.json", "visual_audit.json",
         "office2016_ooxml_preflight.json", "quality_report.json",
@@ -66,7 +68,8 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
                  max_seconds: float = 60.0,
                  page_index: int = 0,
                  figure_region: tuple[float, float, float, float] | None = None,
-                 source_layout_review: Path | None = None) -> dict:
+                 source_layout_review: Path | None = None,
+                 source_layout_bindings: Path | None = None) -> dict:
     source_pdf = Path(source_pdf).resolve()
     destination = Path(destination).resolve()
     if not source_pdf.is_file():
@@ -86,6 +89,7 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
     _clear_previous_outputs(destination)
     figure_spec = Path(figure_spec).resolve() if figure_spec else None
     source_layout_review = Path(source_layout_review).resolve() if source_layout_review else None
+    source_layout_bindings = Path(source_layout_bindings).resolve() if source_layout_bindings else None
     candidate = destination / "candidate_editable.pptx"
     source_info = {}
     source_layout = {}
@@ -93,6 +97,7 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
     source_route_recommendation = None
     source_layout_review_audit = None
     source_layout_constraints = None
+    source_layout_geometry_application = None
     source_layout_review_error = None
     import_report = {}
     semantic_audit = None
@@ -156,16 +161,29 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
                 )
                 _write_json(destination / "import_report.json", import_report)
             else:
+                figure_spec_for_render = figure_spec
+                if source_layout_bindings is not None:
+                    if source_layout_constraints is None:
+                        raise ValueError("REVIEWED_SOURCE_LAYOUT_BINDINGS_REQUIRED")
+                    source_layout_geometry_application = apply_reviewed_geometry(
+                        figure_spec,
+                        destination / "source_layout_constraints.json",
+                        source_layout_bindings,
+                        destination / "reviewed_figure_spec.json",
+                    )
+                    _write_json(destination / "source_geometry_application_audit.json",
+                                source_layout_geometry_application)
+                    figure_spec_for_render = destination / "reviewed_figure_spec.json"
                 renderer = Path(__file__).with_name("render_figure_spec.py")
                 command = [
-                    sys.executable, str(renderer), str(figure_spec),
+                    sys.executable, str(renderer), str(figure_spec_for_render),
                     "--svg", str(destination / "candidate.svg"),
                     "--pptx", str(candidate),
                 ]
                 subprocess.run(command, check=True, capture_output=True, text=True, timeout=180)
-                semantic_audit = audit_figure_spec_semantics(figure_spec)
+                semantic_audit = audit_figure_spec_semantics(figure_spec_for_render)
                 _write_json(destination / "semantic_audit.json", semantic_audit)
-                output_audits = audit_figurespec_output(figure_spec, candidate)
+                output_audits = audit_figurespec_output(figure_spec_for_render, candidate)
                 structure = output_audits["structure"]
                 text_geometry = output_audits["text_geometry"]
                 _write_json(destination / "structure_audit.json", structure)
@@ -304,6 +322,16 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             "region_constraint_count": source_layout_constraints["region_constraint_count"],
             "scope": "human-reviewed geometric evidence only; not semantic approval",
         } if source_layout_constraints else None),
+        "source_layout_bindings": ({
+            "path": str(source_layout_bindings),
+            "sha256": sha256(source_layout_bindings),
+        } if source_layout_bindings and source_layout_bindings.is_file() else None),
+        "source_layout_geometry_application": ({
+            "path": str(destination / "reviewed_figure_spec.json"),
+            "sha256": sha256(destination / "reviewed_figure_spec.json"),
+            "bound_element_count": source_layout_geometry_application["bound_element_count"],
+            "scientific_relations_verified": False,
+        } if source_layout_geometry_application else None),
         "source_layout_review_error": source_layout_review_error,
         "candidate": ({
             "path": str(candidate), "sha256": sha256(candidate),
@@ -365,6 +393,8 @@ def main():
                         help="optional figure crop in PDF points")
     parser.add_argument("--source-layout-review", type=Path,
                         help="optional human-reviewed SourceLayout decisions JSON")
+    parser.add_argument("--source-layout-bindings", type=Path,
+                        help="explicit geometry binding map for a reviewed FigureSpec")
     args = parser.parse_args()
     approvals = json.loads(args.approvals_json.read_text(encoding="utf-8")) if args.approvals_json else None
     result = run_pipeline(
@@ -379,6 +409,7 @@ def main():
         page_index=args.page - 1,
         figure_region=tuple(args.region) if args.region else None,
         source_layout_review=args.source_layout_review,
+        source_layout_bindings=args.source_layout_bindings,
     )
     print(json.dumps({
         "status": result["status"],
