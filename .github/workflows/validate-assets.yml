@@ -34,6 +34,7 @@ jobs:
           python tools/test_reproduction_pipeline.py
           python tools/test_figure_spec_release_audit.py
           python tools/test_source_layout_extraction.py
+          python tools/test_source_layout_vision.py
           python tools/test_source_crop_manifest.py
           python tools/test_source_layout_benchmark.py
           python tools/test_source_layout_review.py
@@ -172,4 +173,3 @@ jobs:
             throw "PowerShell syntax errors: $($parseErrors.Count)"
           }
           Write-Host 'Windows script syntax: PASS. Real PowerPoint 2016 COM is NOT tested in CI.'
-
