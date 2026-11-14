@@ -11,6 +11,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 from build_c01_v74 import make_spec
 from render_figure_spec import render
+from scientific_ir import CONTRACTS
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = ROOT / "figure_specs/c01/C01_composite_defense_slide_v75.json"
@@ -177,6 +178,16 @@ def build_spec() -> dict:
     add_input_graph_icon(spec)
     add_class_output(spec)
     spec["id"] = "C01_composite_defense_slide_v75"
+    contract = CONTRACTS[spec["id"]]
+    spec["figure_contract"] = {k: contract[k] for k in ("claim", "archetype", "output_mode", "unverified")}
+    evidence = spec["evidence_records"][0]
+    evidence.update({
+        "source": contract["source"],
+        "source_locator": contract["source_locator"],
+        "status": contract["evidence_status"],
+        "scope": contract["evidence_scope"],
+        "reuse": contract.get("reuse", "derivative_redraw_only"),
+    })
     spec["version"] = "7.5.0"
     spec["evidence_status"] = "source-visible two-panel structural redraw with schematic substitutions"
     return spec
