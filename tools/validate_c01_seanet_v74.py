@@ -34,7 +34,9 @@ def validate():
         raise AssertionError("BOTH_POOLING_MODULES_AND_SHADOWS_MUST_BE_FREEFORM_POLYGONS")
     if any(by_id[x]["type"] != "polygon" for x in ("el_0012", "el_0013", "el_0020", "el_0021")):
         raise AssertionError("POOLING_GEOMETRY_NOT_SOURCE_ALIGNED")
-    outputs = [e for e in elements if e["id"] in {f"el_{i:04d}" for i in range(58, 63)}]
+    outputs = [e for e in elements if e["id"] in {f"el_{i:04d}" for i in range(59, 64)}]
+    if by_id["el_0058"].get("semantic_id") != "class_output":
+        raise AssertionError("FIVE_SQUARE_OUTPUT_GROUP_SEMANTIC_TARGET_MISSING")
     if len(outputs) != 5:
         raise AssertionError("FIVE_CLASS_OUTPUT_SQUARES_REQUIRED")
     if sum(e["fill"] == "#DCA16C" for e in outputs) != 1 or outputs[1]["fill"] != "#DCA16C":
