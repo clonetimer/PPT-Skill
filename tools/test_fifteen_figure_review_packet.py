@@ -3,7 +3,7 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.enum.text import PP_ALIGN
 from pptx.util import Inches
-from fifteen_figure_review_packet import compare,TASKS,build_packet
+from fifteen_figure_review_packet import compare,TASKS,build_packet,TASK_FILENAMES,TASK_FINAL_FILENAMES
 
 def deck(path,text="Label"):
     prs=Presentation()
@@ -30,10 +30,24 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertGreater(result["changed_objects"],0)
 
     def test_exact_task_filenames_do_not_confuse_q03_with_nature_variant(self):
-        from fifteen_figure_review_packet import TASK_FILENAMES
         self.assertEqual(TASK_FILENAMES["Q03"],"Q03_iris_mean_ci.pptx")
         self.assertEqual(TASK_FILENAMES["Q03P"],"Q03_iris_mean_ci_nature.pptx")
+        self.assertEqual(TASK_FILENAMES["C01_SEANet"],"C01_SEANet_graph_level_v73.pptx")
+        self.assertEqual(TASK_FINAL_FILENAMES["C01_SEANet"],"C01_SEANet_graph_level_v74.pptx")
         self.assertEqual(len(TASK_FILENAMES),15)
+
+
+    def test_c01_seanet_v73_initial_is_compared_with_v74_final(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);initial=root/"initial";final=root/"final";out=root/"out"
+            initial.mkdir();final.mkdir()
+            deck(initial/"C01_SEANet_graph_level_v73.pptx","initial")
+            deck(final/"C01_SEANet_graph_level_v74.pptx","repaired")
+            result=build_packet(initial,final,out)
+        row=next(x for x in result["tasks"] if x["task_id"]=="C01_SEANet")
+        self.assertEqual(row["status"],"REPAIR_COMPARISON_READY")
+        self.assertEqual(row["initial"],"C01_SEANet_graph_level_v73.pptx")
+        self.assertEqual(row["final"],"C01_SEANet_graph_level_v74.pptx")
 
     def test_packet_tracks_all_fifteen_without_fabricating_reviews(self):
         with tempfile.TemporaryDirectory() as folder:
