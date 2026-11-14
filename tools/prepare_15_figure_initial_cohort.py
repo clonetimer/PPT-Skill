@@ -18,6 +18,7 @@ def prepare(initial_dir:Path,output_dir:Path,overrides:dict|None=None)->dict:
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument("initial_dir",type=Path)
     p.add_argument("--output-dir",type=Path,required=True);p.add_argument("--c01-seanet-initial",type=Path,required=True)
-    a=p.parse_args();r=prepare(a.initial_dir,a.output_dir,{"C01_SEANet":a.c01_seanet_initial})
+    p.add_argument("--deck01-initial",type=Path,required=True)
+    a=p.parse_args();r=prepare(a.initial_dir,a.output_dir,{"C01_SEANet":a.c01_seanet_initial,"DECK01":a.deck01_initial})
     print(f"Prepared {r['population']} initial figures; override={r['override_tasks']}")
 if __name__=="__main__":main()
