@@ -17,7 +17,8 @@ LEGACY = [
     ("B01_engineering_fdir", "figure_specs/B01_engineering_fdir.json", "examples/B01_engineering_fdir_v71.svg", "dist/B01_engineering_fdir_v71.pptx", None),
     ("F07_telemetry_embedding", "figure_specs/F07_telemetry_embedding.json", "examples/F07_telemetry_embedding_v71.svg", "dist/F07_telemetry_embedding_v71.pptx", None),
     ("C01_FBG_construction", "figure_specs/c01/C01_FBG_construction.json", "examples/C01_FBG_construction_v73.svg", "dist/C01_FBG_construction_v73.pptx", None),
-    ("C01_SEANet_graph_level", "figure_specs/c01/C01_SEANet_graph_level.json", "examples/C01_SEANet_graph_level_v73.svg", "dist/C01_SEANet_graph_level_v73.pptx", None),
+    ("C01_SEANet_graph_level_v73", "figure_specs/c01/C01_SEANet_graph_level.json", "examples/C01_SEANet_graph_level_v73.svg", "dist/C01_SEANet_graph_level_v73.pptx", None),
+    ("C01_SEANet_graph_level_v74", "figure_specs/c01/C01_SEANet_graph_level_v74.json", "examples/C01_SEANet_graph_level_v74.svg", "dist/C01_SEANet_graph_level_v74.pptx", "dist/C01_SEANet_graph_level_v74.pdf"),
     ("C01_composite_defense_slide", "figure_specs/c01/C01_composite_defense_slide.json", "examples/C01_composite_defense_slide_v74.svg", "dist/C01_composite_defense_slide_v74.pptx", "dist/C01_composite_defense_slide_v74_preview.pdf"),
 ]
 
