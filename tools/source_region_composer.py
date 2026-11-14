@@ -197,6 +197,7 @@ def build_source_composition_manifest(
                 "source_image_sha256": (source_obj.get("image_metadata") or {}).get("sha256"),
                 "source_image_transform": (source_obj.get("image_metadata") or {}).get("transform"),
                 "source_image_xref": (source_obj.get("image_metadata") or {}).get("xref"),
+                "source_image_pixel_size": (source_obj.get("image_metadata") or {}).get("pixel_size"),
             })
             unit_object_refs.setdefault(object_id, []).append(unit_id)
         objects.sort(key=lambda item: (

@@ -627,12 +627,15 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
             panel_candidate = containing[0]["id"] if len(containing) == 1 else None
             image_gutters = _raster_gutters(event, image_index, region)
             raster_gutter_candidates.extend(image_gutters)
+            with Image.open(BytesIO(event.png)) as source_image:
+                image_pixel_size = list(source_image.size)
             image_assets.append({
                 "id": f"image_{event.seqno}",
                 "source_order": event.seqno,
                 "xref": event.xref,
                 "source_kind": "xref" if event.source_kind == "xref-fallback" else "image_block",
                 "sha256": hashlib.sha256(event.png).hexdigest(),
+                "pixel_size": image_pixel_size,
                 "bbox_pt": _bbox(visible),
                 "bbox_normalized": _normalized(visible, region),
                 "transform": list(event.transform),

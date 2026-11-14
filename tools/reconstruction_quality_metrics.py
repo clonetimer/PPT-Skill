@@ -181,6 +181,10 @@ def evaluate_reconstruction_quality(manifest_path: Path,pptx_path: Path,visual_r
                      "MISMATCH" if source_hash and actual_hash else "NOT_COMPARABLE")
         transform_status=("MATCH" if source_transform is not None and source_transform==actual_transform else
                           "MISMATCH" if source_transform is not None and actual_transform is not None else "NOT_COMPARABLE")
+        source_pixels=item.get("source_image_pixel_size")
+        output_pixels=actual[0].get("source_image_pixel_size")
+        pixel_size_status=("MATCH" if source_pixels and source_pixels==output_pixels else
+                           "MISMATCH" if source_pixels and output_pixels else "NOT_COMPARABLE")
         image_rows.append({
             "source_object_id":object_id,
             "source_image_sha256":source_hash,
@@ -189,10 +193,11 @@ def evaluate_reconstruction_quality(manifest_path: Path,pptx_path: Path,visual_r
             "source_transform":source_transform,
             "output_transform":actual_transform,
             "transform_status":transform_status,
-            "source_pixel_size":None,
-            "output_pixel_size":actual[0].get("source_image_pixel_size"),
-            "status":"COMPARED" if hash_status=="MATCH" and transform_status=="MATCH" else
-                     "FAIL" if "MISMATCH" in (hash_status,transform_status) else "NOT_COMPARABLE",
+            "source_pixel_size":source_pixels,
+            "output_pixel_size":output_pixels,
+            "pixel_size_status":pixel_size_status,
+            "status":"COMPARED" if hash_status=="MATCH" and transform_status=="MATCH" and pixel_size_status=="MATCH" else
+                     "FAIL" if "MISMATCH" in (hash_status,transform_status,pixel_size_status) else "NOT_COMPARABLE",
         })
     image_failures=[row["source_object_id"] for row in image_rows if row["status"]=="FAIL"]
 

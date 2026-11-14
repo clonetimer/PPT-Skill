@@ -26,8 +26,8 @@ def make_layout(include_shared=False):
         "figure_region_pt": [0.0, 0.0, 400.0, 300.0],
         "layout_elements": elements,
         "image_assets": [
-            {"id": "image_a", "source_order": 1, "bbox_pt": [10, 10, 160, 140]},
-            {"id": "image_b", "source_order": 2, "bbox_pt": [210, 10, 390, 140]},
+            {"id": "image_a", "source_order": 1, "bbox_pt": [10, 10, 160, 140], "sha256": "hash-a", "transform": [150, 0, 0, 130, 10, 10], "pixel_size": [300, 260]},
+            {"id": "image_b", "source_order": 2, "bbox_pt": [210, 10, 390, 140], "sha256": "hash-b", "transform": [180, 0, 0, 130, 210, 10], "pixel_size": [360, 260]},
         ],
         "panel_detection": {
             "unlabeled_panel_candidates": [
@@ -68,6 +68,11 @@ class SourceRegionComposerTests(unittest.TestCase):
         self.assertEqual(treatments["image_b"], "picture_asset")
         self.assertEqual(treatments["vector_b"], "editable_vector")
         self.assertEqual(treatments["text_b"], "editable_text")
+        text_object = next(x for x in panel_b["objects"] if x["source_object_id"] == "text_b")
+        self.assertEqual(text_object["text"], "Panel B")
+        image_object = next(x for x in panel_b["objects"] if x["source_object_id"] == "image_b")
+        self.assertEqual(image_object["source_image_sha256"], "hash-b")
+        self.assertEqual(image_object["source_image_pixel_size"], [360, 260])
         self.assertFalse(result["policy"]["mixed_content_flattening_allowed"])
 
     def test_shared_boundary_object_is_listed_once_and_blocks_execution(self):
