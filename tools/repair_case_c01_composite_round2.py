@@ -14,6 +14,7 @@ from pathlib import Path
 from PIL import Image
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
+from pptx.util import Inches
 
 from build_c01_v74 import make_spec as make_v74_spec
 from build_c01_composite_v75 import (
