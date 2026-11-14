@@ -106,7 +106,13 @@
       "tools/repair_case_c01_composite_round2.py",
       "tools/test_repair_case_c01_composite_round2.py",
       "tools/final_delivery_success.py",
-      "tools/test_final_delivery_success.py"
+      "tools/test_final_delivery_success.py",
+      "tools/build_deck_benchmark_v75.py",
+      "tools/validate_deck_spec_v76.py",
+      "tools/repair_case_artifacts.py",
+      "tools/test_repair_case_artifacts.py",
+      "tools/repair_case_deck01_round1.py",
+      "tools/test_repair_case_deck01_round1.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -125,7 +131,8 @@
       "docs/Q03_NATURE_PUBLICATION_CAPTION.md",
       "docs/P2_C01_SEANet_STAGE1_SCOPE_RECONCILIATION_2026-11-15.md",
       "docs/C01_COMPOSITE_V75_QA.md",
-      "docs/FINAL_DELIVERY_SUCCESS_METRICS_V76.md"
+      "docs/FINAL_DELIVERY_SUCCESS_METRICS_V76.md",
+      "docs/LOCAL_REPAIR_CASE_TEMPLATE_V76.md"
     ],
     "generated_outputs": [
       "dist/C01_FBG_construction_v73.pptx",
@@ -165,11 +172,18 @@
       "dist/C01_composite_defense_slide_v75_preview.pdf",
       "dist/C01_composite_defense_slide_v75_preview.png",
       "dist/C01_composite_defense_slide_v75_build.json",
-      "dist/C01_composite_defense_slide_v75_validation.json"
+      "dist/C01_composite_defense_slide_v75_validation.json",
+      "dist/DECK01_c01_defense_v76.pptx",
+      "dist/DECK01_c01_defense_v76.pdf",
+      "dist/DECK01_c01_defense_v76_slide_1.png",
+      "dist/DECK01_c01_defense_v76_slide_2.png",
+      "dist/DECK01_c01_defense_v76_slide_3.png"
     ],
     "planning_specs": [
       "specs/deck_spec_v75.example.json",
-      "specs/deck_spec_v75.schema.json"
+      "specs/deck_spec_v75.schema.json",
+      "specs/deck_spec_v76.example.json",
+      "specs/deck_spec_v76.schema.json"
     ],
     "scientific_contracts": [
       "specs/figure_contracts_v76.json",
