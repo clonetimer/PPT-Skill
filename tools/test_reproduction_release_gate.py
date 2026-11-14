@@ -54,7 +54,8 @@ class ReproductionReleaseGateTests(unittest.TestCase):
     def test_missing_render_export_requires_visual_review(self):
         result = classify_release(
             route="import",
-            candidate={"shape_count": 80, "native_vectors": 60, "text_objects": 20, "full_page_pictures": 0},
+            candidate={"shape_count": 80, "native_vectors": 60, "text_objects": 20, "picture_objects": 0, "full_page_pictures": 0},
+            import_report={"reconstruction_class": "native_only"},
             structure={"status": "PASS"},
             text_geometry={"status": "PASS"},
             visual=None,
@@ -68,8 +69,9 @@ class ReproductionReleaseGateTests(unittest.TestCase):
             candidate={"shape_count": 50, "native_vectors": 40, "text_objects": 10, "full_page_pictures": 0},
             structure={"status": "PASS"},
             text_geometry=None,
-            visual={"requires_visual_review": False, "global_similarity": 0.99},
+            visual={"status": "PASS", "requires_visual_review": False, "evidence_type": "candidate_render", "renderer": "LibreOffice", "global_similarity": 0.99},
             office={"status": "PASS"},
+            text_geometry={"status": "PASS"},
             semantic_audit={"status": "FAIL", "missing_edges": ["encoder_to_fusion"]},
         )
         self.assertEqual(result["status"], "NEEDS_SCIENTIFIC_REVIEW")
@@ -78,10 +80,11 @@ class ReproductionReleaseGateTests(unittest.TestCase):
     def test_technical_pass_is_not_full_acceptance_without_human_and_host_evidence(self):
         result = classify_release(
             route="import",
-            candidate={"shape_count": 50, "native_vectors": 40, "text_objects": 10, "full_page_pictures": 0},
+            candidate={"shape_count": 50, "native_vectors": 40, "text_objects": 10, "picture_objects": 0, "full_page_pictures": 0},
+            import_report={"reconstruction_class": "native_only"},
             structure={"status": "PASS"},
             text_geometry={"status": "PASS"},
-            visual={"requires_visual_review": False},
+            visual={"status": "PASS", "requires_visual_review": False, "evidence_type": "source_comparison", "renderer": "LibreOffice"},
             office={"status": "PASS"},
             semantic_audit={"status": "PASS"},
         )
@@ -91,9 +94,10 @@ class ReproductionReleaseGateTests(unittest.TestCase):
     def test_full_acceptance_requires_all_explicit_approvals(self):
         result = classify_release(
             route="figurespec",
-            candidate={"shape_count": 50, "native_vectors": 40, "text_objects": 10, "full_page_pictures": 0},
+            candidate={"shape_count": 50, "native_vectors": 40, "text_objects": 10, "picture_objects": 0, "full_page_pictures": 0},
             structure={"status": "PASS"},
-            visual={"requires_visual_review": False},
+            text_geometry={"status": "PASS"},
+            visual={"status": "PASS", "requires_visual_review": False, "evidence_type": "candidate_render", "renderer": "LibreOffice"},
             office={"status": "PASS"},
             semantic_audit={"status": "PASS"},
             approvals={
@@ -148,7 +152,7 @@ class StrictRouteEvidenceTests(unittest.TestCase):
         args["import_report"] = {}
         result = classify_release(**args)
         self.assertEqual(result["status"], "UNSUPPORTED_SOURCE")
-        self.assertIn("RECONSTRUCTION_CLASS_MISSING", result["blockers"])
+        self.assertIn("RECONSTRUCTION_CLASS_MISSING_OR_UNKNOWN", result["blockers"])
 
     def test_picture_only_has_explicit_status_when_non_native_output_allowed(self):
         args = self._import_evidence(reconstruction_class="source_picture_only", pictures=1, vectors=0)
