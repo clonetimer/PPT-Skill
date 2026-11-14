@@ -43,6 +43,8 @@ def annotate_accessibility(path: Path) -> dict:
             alt = "Text label: " + shape.text.replace("\n", "; ")
         elif shape.shape_type == MSO_SHAPE_TYPE.LINE:
             alt = "Editable connector or graph edge in the SEANet graph-level diagnosis excerpt."
+        elif shape.left > 12 * 914400 and abs(shape.width - int(0.18 * 914400)) < 500 and shape.height > 914400:
+            alt = "Invisible semantic grouping boundary for the five independent class-output squares."
         elif shape.width > 10 * 914400 and shape.height > 5 * 914400:
             alt = PANEL_ALT
         else:
