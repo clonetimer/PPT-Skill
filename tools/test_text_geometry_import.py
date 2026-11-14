@@ -88,7 +88,7 @@ class TextGeometryImportTests(unittest.TestCase):
         self.assertEqual(_source_font("ComicSansMS-Bold"), "Comic Sans MS")
 
     def test_pdf_null_glyph_uses_visible_placeholder_and_is_not_emitted_as_control(self):
-        self.assertEqual(_normalize_pdf_text("Revenue\\x00Operating Cost"), "Revenue□Operating Cost")
+        self.assertEqual(_normalize_pdf_text("Revenue\x00Operating Cost"), "Revenue□Operating Cost")
 
     def test_text_with_only_nine_percent_visible_at_crop_edge_is_omitted(self):
         span = {"bbox": (6.0, 283.2, 16.0, 293.2)}
