@@ -20,7 +20,7 @@ def make_layout():
             {"id": "img_2", "kind": "image", "source_order": 2, "bbox_pt": [210, 10, 390, 140]},
             {"id": "vec_2", "kind": "filled_path", "source_order": 3, "bbox_pt": [220, 20, 380, 140]},
             {"id": "txt_2", "kind": "text_span", "source_order": None, "bbox_pt": [240, 40, 300, 60]},
-            {"id": "crossing", "kind": "stroke_path", "source_order": 4, "bbox_pt": [180, 30, 230, 50]},
+            {"id": "crossing", "kind": "stroke_path", "source_order": 4, "bbox_pt": [180, 30, 195, 50]},
         ],
         "image_assets": [
             {"id": "img_1", "source_order": 1, "bbox_pt": [10, 10, 160, 140]},
