@@ -1,7 +1,7 @@
 {
-  "figure_id": "C01_composite_defense_slide_v75",
+  "figure_id": "C01_composite_defense_slide",
   "source": "docs/C01_V73_SOURCE.md",
-  "review_status": "source-visible two-panel redraw with total-graph input, five class outputs, exact adjacency unknown; domain and final-size review pending",
+  "review_status": "source-visible two-panel redraw with total-graph input, four stacked input band-subgraphs, five class outputs, exact adjacency unknown; domain and final-size review pending",
   "critical_labels": {
     "gcn_1": "GCN",
     "pooling_1": "pooling",
@@ -97,6 +97,8 @@
     ]
   ],
   "required_nodes": [
+    "input",
+    "input_graph_schematic",
     "gcn_1",
     "pooling_1",
     "gcn_2",
@@ -114,9 +116,6 @@
     "band_3",
     "band_4",
     "class_output",
-    "class_output_label",
-    "input_graph_schematic",
-    "input",
-    "input_label"
+    "class_output_label"
   ]
 }
