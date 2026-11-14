@@ -175,7 +175,7 @@ jobs:
       - name: Upload C01-SEANet multi-round repair evidence
         uses: actions/upload-artifact@v4
         with:
-          name: ppt-skill-c01-seanet-first-repair
+          name: ppt-skill-c01-seanet-round2
           path: |
             dist/repair_cases/C01_SEANet/*
             dist/accepted_repairs/C01_SEANet_graph_level_v74.pptx
@@ -211,10 +211,14 @@ jobs:
             dist/C01_SEANet_graph_level_v74.pptx
             dist/C01_SEANet_graph_level_v74.pdf
             dist/C01_SEANet_graph_level_v74.preview.png
+            dist/C01_SEANet_graph_level_v74_build.json
+            dist/C01_SEANet_graph_level_v74_validation.json
             examples/C01_composite_defense_slide_v75.svg
             dist/C01_composite_defense_slide_v75.pptx
             dist/C01_composite_defense_slide_v75_preview.pdf
             dist/C01_composite_defense_slide_v75_preview.png
+            dist/C01_composite_defense_slide_v75_build.json
+            dist/C01_composite_defense_slide_v75_validation.json
             examples/C01_composite_defense_slide_v74.svg
             dist/C01_composite_defense_slide_v74.pptx
             examples/Q*.svg
