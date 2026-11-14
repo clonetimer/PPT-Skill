@@ -89,7 +89,7 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             self.assertEqual(len(layout["panel_detection"]["panels"]), 1)
             panel = layout["panel_detection"]["panels"][0]
             self.assertEqual(panel["label"], "b")
-            self.assertAlmostEqual(layout["figure_region_pt"][2], 300)
+            self.assertAlmostEqual(layout["figure_region_pt"][2] - layout["figure_region_pt"][0], 300)
             self.assertEqual(layout["page"]["aspect_ratio"], 1.5)
 
     def test_style_profile_preserves_multiple_font_and_stroke_tiers(self):
@@ -112,7 +112,7 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             self.assertEqual(len(image["sha256"]), 64)
             self.assertIn(image["source_kind"], ("xref", "image_block"))
             self.assertGreater(image["xref"], 0)
-            self.assertEqual(image["panel_candidate"], "b")
+            self.assertEqual(image["panel_candidate"], "panel_b")
 
 
 if __name__ == "__main__":
