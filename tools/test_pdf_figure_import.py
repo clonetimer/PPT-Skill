@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from io import BytesIO
+import json
 import hashlib
 import os
 from pathlib import Path
@@ -423,6 +424,19 @@ class NativeFigureImportTests(unittest.TestCase):
             self.assertTrue(any("Cache Layer" in s for s in editable_text))
             self.assertTrue(all(p.width < deck.slide_width / 2 for p in pics))
             self.assertEqual(len(report["source_sha256"]), 64)
+            metadata = []
+            for shape in shapes:
+                descriptions = shape._element.xpath(".//p:cNvPr/@descr")
+                self.assertEqual(len(descriptions), 1)
+                item = json.loads(descriptions[0])
+                self.assertEqual(item["source_object_id"], shape.name)
+                self.assertEqual(item["provenance"], "source_pdf_import")
+                metadata.append(item)
+            ids = [item["source_object_id"] for item in metadata]
+            self.assertEqual(len(ids), len(set(ids)))
+            self.assertTrue(any(item["object_class"] == "vector" for item in metadata))
+            self.assertTrue(any(item["object_class"] == "text" for item in metadata))
+            self.assertTrue(any(item["object_class"] == "image" for item in metadata))
 
 
 if __name__ == "__main__":

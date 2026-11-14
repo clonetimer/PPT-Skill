@@ -320,3 +320,15 @@ python tools/source_region_composer.py .\qa\source_layout.json .\qa\review.json 
 ```
 
 The manifest keeps vector paths, editable text spans, and raster images separate, preserves source paint order, and identifies objects crossing multiple reviewed regions. It is a planning/audit artifact only; it does not execute reconstruction or modify a FigureSpec. The existing `pdf_figure_import.py` remains the PDF-to-PPTX importer.
+
+
+### Imported PPTX provenance audit (P1-01D2)
+
+After importing the PDF with the existing native importer, annotate each imported shape with its stable SourceLayout object ID and audit it against the composition manifest:
+
+```powershell
+python tools/pdf_figure_import.py .\paper.pdf .\qa\imported_figure.pptx --page 4 --report .\qa\import_report.json
+python tools/audit_source_composition_pptx.py .\qa\source_composition_manifest.json .\qa\imported_figure.pptx --output .\qa\source_composition_pptx_audit.json
+```
+
+The audit checks object presence, uniqueness, expected object class, and source paint order. A pass does not establish visual fidelity, scientific correctness, or actual Office 2016 rendering.
