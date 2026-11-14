@@ -74,6 +74,8 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
         raise ValueError("mode must be import or figurespec")
     if mode == "figurespec" and (figure_spec is None or not Path(figure_spec).is_file()):
         raise ValueError("FigureSpec mode requires an existing --figure-spec")
+    if source_layout_review is not None and not Path(source_layout_review).is_file():
+        raise FileNotFoundError(f"SourceLayout review file missing: {source_layout_review}")
     if render_host not in ("auto", "none"):
         raise ValueError("render_host must be auto or none")
     if min(max_drawings, max_source_segments, max_vertices) <= 0 or max_seconds <= 0:
