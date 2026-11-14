@@ -18,7 +18,7 @@ OUTPUTS = {
     "I01": "dist/I01_cell_image_quant.pptx",
     "Q07": "dist/Q07_wine_scatter.pptx",
     "Q03P": "dist/Q03_iris_mean_ci_nature.pptx",
-    "DECK01": "dist/DECK01_c01_defense.pptx",
+    "DECK01": "dist/DECK01_c01_defense_v76.pptx",
 }
 
 
