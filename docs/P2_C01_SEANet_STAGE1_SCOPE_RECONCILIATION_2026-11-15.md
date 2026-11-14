@@ -30,6 +30,18 @@ This scope decision is grounded in `specs/research_figure_benchmark_v76.json`, `
 
 The original Stage 1 score and flags are not retroactively edited. In particular, the submitted `critical_scientific_error=true` and `undisclosed_image_processing=true` remain part of the historical record; a later reviewer must reassess them against the clarified task scope and repaired output rather than silently rewriting Stage 1.
 
+
+## Round 02 contract correction
+
+The first complete CI pass exposed a label-contract regression: the draft v7.4 repair had changed the source-critical output label from `fault class` to `Graph (fault) classification`. The standalone topology contract explicitly requires `fault class`; visual clarification must not silently rewrite a source-critical label. The label is restored, and the standalone topology validator is now called directly by `validate_c01_seanet_v74.py`, so this class of regression is caught by the focused repair test before the broader FigureSpec suite.
+
+The subsequent repair test also caught an object-ID collision in the five-square output stack. The final v7.4 spec now reserves:
+- `el_0058` for the invisible semantic grouping boundary carrying `semantic_id=class_output`;
+- `el_0059` through `el_0063` for the five visible, independently editable squares;
+- `el_0064` for the source citation and DOI.
+
+The five squares remain separate native PowerPoint shapes; the semantic grouping boundary only supplies the source topology's `Dense → class_output` endpoint. The citation is retained as a separate editable text object. These ID assignments are covered by the v7.4 validator and object-level diff.
+
 ## Repair-round and acceptance policy
 
 - Preserve the original first-pass PPTX and the already executed alignment-only round as immutable evidence.
