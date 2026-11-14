@@ -86,6 +86,18 @@ class SourceLayoutReviewTests(unittest.TestCase):
             self.assertEqual(audit["accepted_panel_count"], 0)
             self.assertEqual(audit["pending_count"], 4)
 
+    def test_template_conforms_to_review_json_schema(self):
+        import jsonschema
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            layout_path = write_layout(root)
+            review_path = root / "review.json"
+            create_source_layout_review_template(layout_path, review_path)
+            schema_path = Path(__file__).resolve().parents[1] / "specs" / "source_layout_review.schema.json"
+            schema = json.loads(schema_path.read_text(encoding="utf-8"))
+            jsonschema.Draft202012Validator.check_schema(schema)
+            jsonschema.validate(json.loads(review_path.read_text()), schema)
+
     def test_human_can_accept_a_source_enclosure_as_a_panel_with_locator(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
