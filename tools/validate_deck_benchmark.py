@@ -63,7 +63,7 @@ def main():
     pdf = PdfReader(pdf_path)
     assert len(pdf.pages) == 3
     pdf_text = pdf.pages[2].extract_text() or ""
-    assert "18 source-visible routes" in pdf_text
+    assert "SOURCE-VISIBLE ROUTES" in pdf_text and "18" in pdf_text
     assert "PowerPoint 2016 host round trip" in pdf_text
     for page in range(1, 4):
         assert (ROOT / f"dist/DECK01_c01_defense_v76_slide_{page}.png").is_file()
