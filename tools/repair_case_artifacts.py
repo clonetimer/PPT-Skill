@@ -14,6 +14,7 @@ from pathlib import Path
 
 from PIL import Image
 from pptx import Presentation
+from pypdf import PdfReader
 
 
 def sha256_file(path: Path) -> str:
@@ -123,6 +124,11 @@ def render_pptx(pptx_path: Path, output_dir: Path, stem: str, dpi: int = 120):
     """Render a PPTX to PDF/PNG without polluting the evidence directory with LO profiles."""
     pptx_path, output_dir = Path(pptx_path), Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    source_pdf = output_dir / f"{pptx_path.stem}.pdf"
+    pdf_path = output_dir / f"{stem}.pdf"
+    source_pdf.unlink(missing_ok=True)
+    if pdf_path != source_pdf:
+        pdf_path.unlink(missing_ok=True)
     with tempfile.TemporaryDirectory(prefix=f"ppt-skill-lo-{stem}-") as profile_root:
         result = subprocess.run(
             [
@@ -133,19 +139,34 @@ def render_pptx(pptx_path: Path, output_dir: Path, stem: str, dpi: int = 120):
             ],
             capture_output=True, text=True,
         )
-    pdf_path = output_dir / f"{stem}.pdf"
-    if result.returncode != 0 or not pdf_path.is_file():
-        raise RuntimeError("LIBREOFFICE_RENDER_FAILED:" + result.stdout + result.stderr)
+    if not source_pdf.is_file() or source_pdf.stat().st_size < 5:
+        raise RuntimeError(
+            "LIBREOFFICE_RENDER_FAILED:"
+            f"returncode={result.returncode}; stdout={result.stdout}; stderr={result.stderr}; "
+            f"output_dir_files={[p.name for p in output_dir.iterdir()]}"
+        )
+    if source_pdf != pdf_path:
+        source_pdf.replace(pdf_path)
+    try:
+        if len(PdfReader(pdf_path).pages) < 1:
+            raise ValueError("PDF_HAS_NO_PAGES")
+    except Exception as exc:
+        raise RuntimeError(f"LIBREOFFICE_CREATED_INVALID_PDF:{pdf_path}:{exc}") from exc
+
     prefix = output_dir / stem
+    for stale in output_dir.glob(f"{stem}-*.png"):
+        stale.unlink()
     result = subprocess.run(
         ["pdftoppm", "-png", "-r", str(dpi), str(pdf_path), str(prefix)],
         capture_output=True, text=True,
     )
-    if result.returncode != 0:
-        raise RuntimeError("PDF_TO_PNG_FAILED:" + result.stdout + result.stderr)
     pages = sorted(output_dir.glob(f"{stem}-*.png"))
-    if not pages:
-        raise RuntimeError("PDF_RENDER_CREATED_NO_PAGES")
+    if result.returncode != 0 or not pages:
+        raise RuntimeError(
+            "PDF_TO_PNG_FAILED:"
+            f"returncode={result.returncode}; stdout={result.stdout}; stderr={result.stderr}; "
+            f"output_dir_files={[p.name for p in output_dir.iterdir()]}"
+        )
     return pdf_path, pages
 
 
