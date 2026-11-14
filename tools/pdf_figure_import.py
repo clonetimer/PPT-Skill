@@ -440,7 +440,7 @@ def _annotate_source_shape(shape, source_object_id, source_order, object_class):
         "object_class": object_class,
         "provenance": "source_pdf_import",
     }, sort_keys=True, separators=(",", ":"))
-    nonvisual_nodes = shape._element.xpath(".//p:cNvPr")
+    nonvisual_nodes = [node for node in shape._element.iter() if node.tag.endswith("}cNvPr")]
     if not nonvisual_nodes:
         raise ValueError("UNSUPPORTED_SHAPE_PROVENANCE_CONTAINER")
     nonvisual_nodes[0].set("descr", metadata)
