@@ -123,10 +123,14 @@ def annotate_accessibility(path: Path) -> dict:
     )
     if len(output_squares) != 5:
         raise ValueError("C01_COMPOSITE_V75_EXPECTS_FIVE_OUTPUT_SQUARES")
+    square_indices_by_top = {shape.top: index + 1 for index, shape in enumerate(output_squares)}
     for index, shape in enumerate(slide.shapes):
         shape.name = f"C01_composite_v75_obj_{index:03d}"
-        if shape in output_squares:
-            square_index = output_squares.index(shape) + 1
+        if (shape.top in square_indices_by_top
+                and shape.left > int(8.85 * 914400)
+                and abs(shape.width - int(0.13 * 914400)) < 500
+                and abs(shape.height - int(0.13 * 914400)) < 500):
+            square_index = square_indices_by_top[shape.top]
             alt = f"Fault-class output indicator {square_index} of 5" + (
                 "; second class is highlighted orange" if square_index == 2 else ""
             )
