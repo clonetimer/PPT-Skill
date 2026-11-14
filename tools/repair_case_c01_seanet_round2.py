@@ -8,6 +8,7 @@ import json
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 from PIL import Image
@@ -49,27 +50,22 @@ def spec_diff(before_path: Path, after_path: Path) -> list[dict]:
 
 def render_pptx(pptx: Path, output_dir: Path, stem: str) -> tuple[Path, Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
-    profile = output_dir / f"lo-profile-{stem}"
-    profile.mkdir(parents=True, exist_ok=True)
-    cmd = [
-        "libreoffice",
-        "-env:UserInstallation=" + profile.as_uri(),
-        "--headless",
-        "--convert-to",
-        "pdf",
-        "--outdir",
-        str(output_dir),
-        str(pptx),
-    ]
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    with tempfile.TemporaryDirectory(prefix=f"ppt-skill-lo-{stem}-") as profile_root:
+        result = subprocess.run(
+            [
+                "libreoffice",
+                "-env:UserInstallation=" + Path(profile_root).as_uri(),
+                "--headless", "--convert-to", "pdf", "--outdir", str(output_dir), str(pptx),
+            ],
+            capture_output=True, text=True,
+        )
     pdf = output_dir / (pptx.stem + ".pdf")
     if result.returncode != 0 or not pdf.is_file():
         raise RuntimeError("LIBREOFFICE_RENDER_FAILED:" + result.stdout + result.stderr)
     png_stem = output_dir / stem
     result = subprocess.run(
         ["pdftoppm", "-png", "-r", "120", str(pdf), str(png_stem), "-singlefile"],
-        capture_output=True,
-        text=True,
+        capture_output=True, text=True,
     )
     png = output_dir / (stem + ".png")
     if result.returncode != 0 or not png.is_file():
