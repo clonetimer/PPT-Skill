@@ -36,6 +36,8 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertEqual(TASK_FINAL_FILENAMES["C01_SEANet"],"C01_SEANet_graph_level_v74.pptx")
         self.assertEqual(TASK_FILENAMES["C01_composite"],"C01_composite_defense_slide_v74.pptx")
         self.assertEqual(TASK_FINAL_FILENAMES["C01_composite"],"C01_composite_defense_slide_v75.pptx")
+        self.assertEqual(TASK_FILENAMES["DECK01"],"DECK01_c01_defense.pptx")
+        self.assertEqual(TASK_FINAL_FILENAMES["DECK01"],"DECK01_c01_defense_v76.pptx")
         self.assertEqual(len(TASK_FILENAMES),15)
 
 
@@ -68,6 +70,21 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertEqual(row["final"],"C01_composite_defense_slide_v75.pptx")
         self.assertIn("figure_spec_diff",row["diff"])
         self.assertGreater(row["diff"]["figure_spec_diff"]["added"],0)
+
+
+    def test_deck01_v75_initial_is_compared_with_v76_repair_and_deck_spec_diff(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);initial=root/"initial";final=root/"final";out=root/"out"
+            initial.mkdir();final.mkdir()
+            deck(initial/"DECK01_c01_defense.pptx","initial")
+            deck(final/"DECK01_c01_defense_v76.pptx","repaired")
+            result=build_packet(initial,final,out)
+        row=next(x for x in result["tasks"] if x["task_id"]=="DECK01")
+        self.assertEqual(row["status"],"REPAIR_COMPARISON_READY")
+        self.assertEqual(row["initial"],"DECK01_c01_defense.pptx")
+        self.assertEqual(row["final"],"DECK01_c01_defense_v76.pptx")
+        self.assertIn("deck_spec_diff",row["diff"])
+        self.assertGreater(row["diff"]["deck_spec_diff"]["changed_fields"],0)
 
     def test_packet_tracks_all_fifteen_without_fabricating_reviews(self):
         with tempfile.TemporaryDirectory() as folder:
