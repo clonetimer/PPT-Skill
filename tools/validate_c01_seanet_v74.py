@@ -45,7 +45,10 @@ def validate():
         raise AssertionError("FIVE_CLASS_OUTPUT_SQUARES_REQUIRED")
     if sum(e["fill"] == "#DCA16C" for e in outputs) != 1 or outputs[1]["fill"] != "#DCA16C":
         raise AssertionError("SECOND_CLASS_OUTPUT_MUST_BE_HIGHLIGHTED")
-    if "excerpt" not in by_id["el_0043"]["text"].lower() or "C01_FBG_construction" not in by_id["el_0043"]["text"]:
+    if ("excerpt" not in by_id["el_0043"]["text"].lower()
+            or "not the full graphical abstract" not in by_id["el_0043"]["text"].lower()
+            or "C01_FBG_construction" not in by_id["el_0043"]["text"]
+            or "C01_composite" not in by_id["el_0043"]["text"]):
         raise AssertionError("GRAPH_LEVEL_EXCERPT_SCOPE_NOT_DISCLOSED")
     if "10.1016/j.engappai.2026.115273" not in " ".join(e.get("text", "") for e in elements):
         raise AssertionError("SOURCE_DOI_MISSING")
