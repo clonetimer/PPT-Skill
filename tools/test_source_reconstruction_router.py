@@ -16,14 +16,14 @@ def make_layout():
         "source": {"filename": "figure.pdf", "sha256": "a" * 64, "page_index": 0},
         "figure_region_pt": [0.0, 0.0, 400.0, 300.0],
         "layout_elements": [
-            {"id": "img_1", "kind": "image", "source_order": 1, "bbox_pt": [10, 10, 190, 140]},
+            {"id": "img_1", "kind": "image", "source_order": 1, "bbox_pt": [10, 10, 160, 140]},
             {"id": "img_2", "kind": "image", "source_order": 2, "bbox_pt": [210, 10, 390, 140]},
             {"id": "vec_2", "kind": "filled_path", "source_order": 3, "bbox_pt": [220, 20, 380, 140]},
             {"id": "txt_2", "kind": "text_span", "source_order": None, "bbox_pt": [240, 40, 300, 60]},
             {"id": "crossing", "kind": "stroke_path", "source_order": 4, "bbox_pt": [180, 30, 230, 50]},
         ],
         "image_assets": [
-            {"id": "img_1", "source_order": 1, "bbox_pt": [10, 10, 190, 140]},
+            {"id": "img_1", "source_order": 1, "bbox_pt": [10, 10, 160, 140]},
             {"id": "img_2", "source_order": 2, "bbox_pt": [210, 10, 390, 140]},
         ],
         "panel_detection": {
