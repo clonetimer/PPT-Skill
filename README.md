@@ -39,7 +39,7 @@ python tools/extract_source_layout.py source.pdf --page 1 \
 The record contains explicit panel-label candidates and enclosing source
 boundaries, relative coordinates, source text anchors and font tiers, stroke
 and fill palette counts, clipping regions, independent image/XRef hashes, and
-line-segment candidates. It does **not** invent panel divisions when labels
+stroke-segment candidates (not semantic graph edges). It does **not** invent panel divisions when labels
 are absent, nor infer directed graph edges from line geometry alone; such
 relations remain unverified until the source arrowhead/legend/description is
 checked. See [source layout evidence schema](specs/source_figure_layout.schema.json)
