@@ -29,9 +29,9 @@ PANEL_ALT = (
 def add_input_graph_icon(spec: dict) -> None:
     elements = spec["elements"]
     input_box = next(e for e in elements if e.get("id") == "el_0066")
-    input_box.update(semantic_id="input", semantic_role="scientific_object")
+    input_box.update(semantic_id="input_container", semantic_role="scientific_object")
     label = next(e for e in elements if e.get("id") == "el_0067")
-    label.update(x=0.75, y=5.29, w=0.43, h=0.27, align="left", semantic_id="input_label")
+    label.update(x=0.75, y=5.29, w=0.43, h=0.27, align="left", semantic_id="input")
 
     # Four compact band-subgraph rows make the total-graph input structure visible.
     x_positions = [0.08, 0.50, 0.92]
@@ -137,7 +137,7 @@ def annotate_accessibility(path: Path) -> dict:
             alt = PANEL_ALT
         elif shape.left > int(8.85 * 914400) and abs(shape.width - int(0.15 * 914400)) < 500:
             alt = "Semantic grouping boundary for the five independent class-output squares."
-        elif shape.left > int(1.2 * 914400) and shape.top > int(5.2 * 914400) and shape.width < int(0.5 * 914400):
+        elif shape.width < int(0.5 * 914400) and shape.top > int(5.2 * 914400) and shape.left > int(1.2 * 914400):
             alt = "Schematic total-graph input with four stacked band subgraphs, twelve nodes and nine dashed inter-band connectors."
         else:
             alt = "Editable vector object in the complete two-panel FBG-SEANet method overview."
