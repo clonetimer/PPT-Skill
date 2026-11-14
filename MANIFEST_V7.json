@@ -104,7 +104,9 @@
       "tools/build_c01_composite_v75.py",
       "tools/validate_c01_composite_v75.py",
       "tools/repair_case_c01_composite_round2.py",
-      "tools/test_repair_case_c01_composite_round2.py"
+      "tools/test_repair_case_c01_composite_round2.py",
+      "tools/final_delivery_success.py",
+      "tools/test_final_delivery_success.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
