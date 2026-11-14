@@ -21,7 +21,13 @@ def main():
             assert slide_spec["claim"] in slide_text
         assert all(value in slide_text for value in slide_spec["on_slide"])
         assert slide_spec["speaker_notes"] in slide.notes_slide.notes_text_frame.text
-    assert all(value in text[1] for value in ("OCF / notch filter", "Energy-assisted module", "Dense"))
+    assert all(value in text[1] for value in ("OCF / notch filter", "Energy-assisted module", "Dense", "fault class"))
+    squares = [shape for shape in deck.slides[1].shapes
+               if abs(shape.left / 914400 - 8.90) < .01
+               and abs(shape.width / 914400 - .13) < .01
+               and abs(shape.height / 914400 - .13) < .01]
+    assert len(squares) == 5
+    assert squares[1].fill.fore_color.rgb is not None
     assert "schematic" in text[2].lower() and "numerical adjacency" in text[2].lower()
     pdf = PdfReader(ROOT / "dist/DECK01_c01_defense.pdf")
     assert len(pdf.pages) == 3
