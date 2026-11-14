@@ -142,6 +142,7 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             detection = layout["panel_detection"]
             self.assertEqual(detection["panels"], [])
             gutters = detection["raster_gutter_candidates"]
+            self.assertEqual(detection["raster_gutter_candidate_status"], "CANDIDATES_FOUND")
             self.assertTrue(any(item["axis"] == "horizontal" for item in gutters))
             self.assertTrue(all(item["review_status"] == "needs_human_review" for item in gutters))
             self.assertGreaterEqual(layout["image_assets"][0]["raster_gutter_candidate_count"], 1)
