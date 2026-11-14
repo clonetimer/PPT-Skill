@@ -99,6 +99,7 @@ def run_case(
     output_dir: Path,
     accepted_output: Path = ACCEPTED_OUTPUT,
     final_output: Path = FINAL_OUTPUT,
+    publish: bool = True,
 ) -> dict:
     output_dir = Path(output_dir).resolve()
     if output_dir.exists() and any(output_dir.iterdir()):
@@ -144,12 +145,15 @@ def run_case(
     shutil.copy2(round_01, accepted_output)
 
     dist = ROOT / "dist"
-    shutil.copy2(pdf1, dist / "DECK01_c01_defense_v76.pdf")
     final_pages = []
-    for index, page in enumerate(pages1, 1):
-        destination = dist / f"DECK01_c01_defense_v76_slide_{index}.png"
-        shutil.copy2(page, destination)
-        final_pages.append(str(destination.relative_to(ROOT)))
+    if publish:
+        shutil.copy2(pdf1, dist / "DECK01_c01_defense_v76.pdf")
+        for index, page in enumerate(pages1, 1):
+            destination = dist / f"DECK01_c01_defense_v76_slide_{index}.png"
+            shutil.copy2(page, destination)
+            final_pages.append(str(destination.relative_to(ROOT)))
+    else:
+        final_pages = [str(page.relative_to(output_dir)) for page in pages1]
 
     history = {
         "schema_version": "1.0.0",
