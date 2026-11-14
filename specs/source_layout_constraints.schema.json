@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clonetimer/PPT-Skill/specs/source_layout_constraints.schema.json",
+  "title": "Human-reviewed geometric SourceLayout constraints (not scientific assertions)",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "source",
+    "source_layout_sha256",
+    "review_file_sha256",
+    "source_panel_constraint_count",
+    "region_constraint_count",
+    "constraint_count",
+    "semantic_edge_authorization",
+    "constraints",
+    "review_scope"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "status": {
+      "const": "REVIEWED_GEOMETRIC_CONSTRAINTS"
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "filename",
+        "sha256",
+        "page_index",
+        "figure_region_pt"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "page_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "figure_region_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "source_layout_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "review_file_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_panel_constraint_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "region_constraint_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "constraint_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "semantic_edge_authorization": {
+      "const": "none"
+    },
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/constraint"
+      }
+    },
+    "review_scope": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "constraint": {
+      "type": "object",
+      "required": [
+        "id",
+        "source_candidate_id",
+        "source_type",
+        "confidence",
+        "rationale",
+        "evidence_locator",
+        "reviewer",
+        "scientific_relations_verified",
+        "semantic_edges",
+        "use",
+        "constraint_type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_candidate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_type": {
+          "type": "string"
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewer": {
+          "type": "object",
+          "required": [
+            "name",
+            "type"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": {
+              "const": "human"
+            }
+          }
+        },
+        "scientific_relations_verified": {
+          "const": false
+        },
+        "semantic_edges": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "use": {
+          "const": "source_geometry_hint_only"
+        },
+        "constraint_type": {
+          "enum": [
+            "separator_hint",
+            "region_bounds",
+            "panel_boundary"
+          ]
+        },
+        "bbox_pt": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "axis": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        "start_pt": {
+          "type": "number"
+        },
+        "end_pt": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}

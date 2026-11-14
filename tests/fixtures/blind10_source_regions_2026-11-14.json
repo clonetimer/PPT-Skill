@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0.0",
+  "benchmark_id": "ppt-skill-blind10-source-layout-development-replay-2026-11-14",
+  "cohort_role": "DEVELOPMENT_REGRESSION_ONLY",
+  "source_regions_are": "manually inspected figure crop candidates in PDF points, extended to include each selected figure caption; UCFNet selects Figure 2 (the paper's architecture figure), not Figure 1. Caption anchors are recorded for automated crop-containment checks. Crops remain reviewable candidates rather than inferred semantic ground truth.",
+  "sources": [
+    {
+      "figure_id": "01_wind_turbine_causal_framework",
+      "filename": "A_Knowledge-Augmented_Multistage_Reasoning_Approach_for_Wind_Turbine_Fault_Cause_Analysis.pdf",
+      "sha256": "db31d194acd69897fbd27d97835331e21801580c3fbca7a882b08cb16433b799",
+      "page_1based": 3,
+      "region_pt": [
+        303.2,
+        66.7,
+        557.8,
+        364
+      ],
+      "caption_text": "Knowledge-augmented multistage reasoning framework"
+    },
+    {
+      "figure_id": "02_pinn_tool_wear_framework",
+      "filename": "An intelligent tool wear monitoring model based on knowledge-data-driven physical-informed neural network for digital twin milling.pdf",
+      "sha256": "5329df2f6cdf34168a22b35e1088af9f17e46cb10598fbe2e4e659325c1fdc33",
+      "page_1based": 6,
+      "region_pt": [
+        25,
+        35,
+        475,
+        666
+      ],
+      "caption_text": "PINN-based framework for TWM"
+    },
+    {
+      "figure_id": "03_attention_guided_gin_multitask",
+      "filename": "Attention-guided+graph+isomorphism+learning_+A+multi-task+framework+for+fault+diagnosis+and+remaining+useful+life+prediction.pdf",
+      "sha256": "489b449ef9efa52abc67ec08ee1b2af1fcc561b4324241b03f82e30a701062e7",
+      "page_1based": 6,
+      "region_pt": [
+        123.3,
+        55.5,
+        472.2,
+        542
+      ],
+      "caption_text": "detailed representation of the proposed methodology for joint fault diagnostics and RUL prediction"
+    },
+    {
+      "figure_id": "04_agent_distillation_taxonomy",
+      "filename": "DistillingAgenticSystems_2609.36630.pdf",
+      "sha256": "f83358b087e05e5ca23d1e01211ff4c03f0bd31eafbdf58dc8ac9035284b2541",
+      "page_1based": 4,
+      "region_pt": [
+        120.9,
+        65.7,
+        556.2,
+        326
+      ],
+      "caption_text": "From model-centered to agent-centered knowledge transfer"
+    },
+    {
+      "figure_id": "05_evoontology_overview",
+      "filename": "EvoOntology_2609.15779.pdf",
+      "sha256": "33463806a2a201ad38960076414a8780f45133bc8bdb81d5f7339e9ae6780eef",
+      "page_1based": 3,
+      "region_pt": [
+        53,
+        55,
+        558,
+        306
+      ],
+      "caption_text": "Overview of EvoOntology"
+    },
+    {
+      "figure_id": "06_harnessmm_overview",
+      "filename": "HarnessMM_arxiv2610.32813v1.pdf",
+      "sha256": "8d66e8c11f1ed96e420c3db71e94fe75bb1c20e4dba1ae20c941024ff5ab8d0a",
+      "page_1based": 2,
+      "region_pt": [
+        54,
+        54,
+        558,
+        373
+      ],
+      "caption_text": "HarnessMM overview"
+    },
+    {
+      "figure_id": "07_iiot_mult_agent_digital_twin",
+      "filename": "IIoT-enabled digital twin for legacy and smart factory machines with LLM integration.pdf",
+      "sha256": "8c20419c1768c3dab2ee70a428c8fc979d0e50d768a1dcdecf7e62b9c3b0cd88",
+      "page_1based": 5,
+      "region_pt": [
+        45.5,
+        55.4,
+        549.8,
+        373
+      ],
+      "caption_text": "Overview of the multi-agent LLM framework"
+    },
+    {
+      "figure_id": "08_pog_reasoning_architecture",
+      "filename": "PoG_Paths-over-Graph_KG_LLM_Reasoning_WWW2025.pdf",
+      "sha256": "c10d4fff7c6ba2b57df7241218f82c278cd1dadcbcfd8b0f0f717d71a6fd8029",
+      "page_1based": 4,
+      "region_pt": [
+        60,
+        90,
+        550,
+        355
+      ],
+      "caption_text": "Overview of the PoG architecture"
+    },
+    {
+      "figure_id": "09_skillsmith_system_overview",
+      "filename": "SkillSmith Compiling Agent Skills into Boundary-Guided Runtime Interfaces.pdf",
+      "sha256": "cb576e655cb0944dbac274957f85a2115a9368998c22af7dd5e0d817ce5501ee",
+      "page_1based": 4,
+      "region_pt": [
+        108,
+        72,
+        503.8,
+        316
+      ],
+      "caption_text": "SkillSmith system overview"
+    },
+    {
+      "figure_id": "10_ucfnet_architecture",
+      "filename": "UCFNet_Machines2026_10.3390_machines14111285.pdf",
+      "sha256": "12fae733898d6e6d05b67e674d531454ace87e7b6bb733c17e4c2b5ecad133ae",
+      "page_1based": 4,
+      "region_pt": [
+        70,
+        565,
+        535,
+        775
+      ],
+      "caption_text": "Architecture of the proposed UCFNet"
+    }
+  ]
+}

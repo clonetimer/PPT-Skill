@@ -76,5 +76,5 @@
 <rect x="1501.2" y="376.8" width="32.400000000000006" height="81.60000000000001" rx="0.0" fill="#FFFFFF" stroke="#43525B" stroke-width="1.6666666666666667"/>
 <rect x="1506.0" y="406.8" width="22.8" height="20.400000000000002" rx="0.0" fill="#DCA16C" stroke="#43525B" stroke-width="0.8333333333333334"/>
 <line x1="1477.2" y1="417.6" x2="1497.6000000000001" y2="417.6" stroke="#43525B" stroke-width="2.25" marker-end="url(#ar)"/>
-<text x="1492.8" y="508.925" text-anchor="middle" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C"><tspan x="1492.8" dy="0">fault class</tspan></text>
+<text x="1538.4" y="508.925" text-anchor="end" dominant-baseline="middle" font-family="Times New Roman" font-size="17.5" fill="#28343C"><tspan x="1538.4" dy="0">fault class</tspan></text>
 </svg>

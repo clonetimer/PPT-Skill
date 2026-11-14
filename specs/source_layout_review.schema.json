@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clonetimer/PPT-Skill/specs/source_layout_review.schema.json",
+  "title": "Human review decisions for SourceLayout candidates",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "source_layout_sha256",
+    "source",
+    "reviewer",
+    "decisions",
+    "policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "source_layout_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "filename",
+        "sha256",
+        "page_index",
+        "figure_region_pt"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "page_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "figure_region_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "required": [
+        "name",
+        "type"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "human",
+            "assistant_visual_triage"
+          ]
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "candidate_snapshot",
+          "decision",
+          "rationale",
+          "evidence_locator"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": "string"
+          },
+          "candidate_snapshot": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "decision": {
+            "enum": [
+              "pending",
+              "accept_region",
+              "accept_panel",
+              "split_region",
+              "reject",
+              "defer"
+            ]
+          },
+          "split_axis": {
+            "enum": [
+              "horizontal",
+              "vertical"
+            ]
+          },
+          "split_position_pt": {
+            "type": "number"
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "evidence_locator": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "accept_panel_requires_human",
+        "raster_gutter_can_only_be_accepted_as_region",
+        "assistant_triage_cannot_accept_or_reject"
+      ],
+      "properties": {
+        "accept_panel_requires_human": {
+          "const": true
+        },
+        "raster_gutter_can_only_be_accepted_as_region": {
+          "const": true
+        },
+        "assistant_triage_cannot_accept_or_reject": {
+          "const": true
+        }
+      }
+    }
+  }
+}

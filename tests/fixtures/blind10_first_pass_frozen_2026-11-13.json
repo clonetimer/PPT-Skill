@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "dataset_id": "ppt-skill-2026-11-13-ten-paper-first-pass",
+  "tested_at": "2026-11-13",
+  "repository": "clonetimer/PPT-Skill",
+  "frozen_ref": "47f034548aa05d617ad12bfec86efee70d5d2bd8",
+  "population": "ten user-supplied independently sourced papers, one figure each",
+  "run_type": "model-assisted FigureSpec once; NOT automatic PDF-to-FigureSpec",
+  "first_pass_generated": 10,
+  "first_pass_strict_passed": 0,
+  "mean_score_24": 18.2,
+  "strict_gate": {
+    "science_required": 4,
+    "other_dimensions_minimum": 3,
+    "total_minimum": 21,
+    "hard_fail_on_omitted_critical_relationship": true
+  },
+  "scores_are_model_assessed": true,
+  "independent_domain_review_complete": false,
+  "office2016_host_verified": false,
+  "source_distribution": "original uploaded PDFs and derived diagrams retained privately; only hashes and metrics in repository",
+  "after_examination_cohort_role": "DEVELOPMENT_REGRESSION_ONLY; cannot serve as a new blind holdout",
+  "rows": [
+    {
+      "figure_id": "01_wind_turbine_causal_framework",
+      "source_page_1based": 3,
+      "first_pass": {
+        "scores": {
+          "science": 3,
+          "topology": 3,
+          "visual": 2,
+          "readability": 2,
+          "editability": 4,
+          "technical": 3
+        },
+        "total_24": 17,
+        "strict_pass": false,
+        "text_box_overlaps": 2,
+        "out_of_bounds": 0,
+        "global_similarity_triage": 0.0643
+      },
+      "sha256": {
+        "uploaded_pdf": "db31d194acd69897fbd27d97835331e21801580c3fbca7a882b08cb16433b799",
+        "figure_spec": "f934c7a39b00bf8ce18018b6e26791e7873d84e92e8d4fd062008b7a489d3c05",
+        "pptx": "eea2a5036f98148530ef187b132c078497f582085adca2354dd6cef96d847901"
+      }
+    },
+    {
+      "figure_id": "02_pinn_tool_wear_framework",
+      "source_page_1based": 6,
+      "first_pass": {
+        "scores": {
+          "science": 3,
+          "topology": 3,
+          "visual": 2,
+          "readability": 2,
+          "editability": 4,
+          "technical": 4
+        },
+        "total_24": 18,
+        "strict_pass": false,
+        "text_box_overlaps": 0,
+        "out_of_bounds": 0,
+        "global_similarity_triage": 0.0312
+      },
+      "sha256": {
+        "uploaded_pdf": "5329df2f6cdf34168a22b35e1088af9f17e46cb10598fbe2e4e659325c1fdc33",
+        "figure_spec": "ca968073be85322596b5d58b617e615843a7aed735470807b944dad7cdb77a9e",
+        "pptx": "57406940bc189d52c23aad41698d3bbee72fa789e999dfb6a41e259366737bc4"
+      }
+    },
+    {
+      "figure_id": "03_attention_guided_gin_multitask",
+      "source_page_1based": 6,
+      "first_pass": {
+        "scores": {
+          "science": 3,
+          "topology": 3,
+          "visual": 2,
+          "readability": 2,
+          "editability": 4,
+          "technical": 2
+        },
+        "total_24": 16,
+        "strict_pass": false,
+        "text_box_overlaps": 5,
+        "out_of_bounds": 0,
+        "global_similarity_triage": 0.0193
+      },
+      "sha256": {
+        "uploaded_pdf": "489b449ef9efa52abc67ec08ee1b2af1fcc561b4324241b03f82e30a701062e7",
+        "figure_spec": "f7dcde0d4cfa0e5f3cb6d6aa9c92424f613a3aec050232ad395fe9d8735a099b",
+        "pptx": "0531f402f64b8d50eecb32a387a29c32de6512b8928c76f2e47da166bd76405e"
+      }
+    },
+    {
+      "figure_id": "04_agent_distillation_taxonomy",
+      "source_page_1based": 4,
+      "first_pass": {
+        "scores": {
+          "science": 4,
+          "topology": 4,
+          "visual": 2,
+          "readability": 2,
+          "editability": 4,
+          "technical": 4
+        },
+        "total_24": 20,
+        "strict_pass": false,
+        "text_box_overlaps": 0,
+        "out_of_bounds": 0,
+        "global_similarity_triage": 0.063
+      },
+      "sha256": {
+        "uploaded_pdf": "f83358b087e05e5ca23d1e01211ff4c03f0bd31eafbdf58dc8ac9035284b2541",
+        "figure_spec": "51969d639a9d5979e1cc300f70225be0443920404e88f8b6969c54d031b5da7b",
+        "pptx": "388cae32627bc345126ab26475762725aab2fe10bbc5a4d5507da09d1fcc8550"
+      }
+    },
+    {
+      "figure_id": "05_evoontology_overview",
+      "source_page_1based": 3,
+      "first_pass": {
+        "scores": {
+          "science": 4,
+          "topology": 3,
+          "visual": 2,
+          "readability": 2,
+          "editability": 4,
+          "technical": 4
+        },
+        "total_24": 19,
+        "strict_pass": false,
+        "text_box_overlaps": 0,
+        "out_of_bounds": 0,
+        "global_similarity_triage": 0.0517
+      },
+      "sha256": {
+        "uploaded_pdf": "33463806a2a201ad38960076414a8780f45133bc8bdb81d5f7339e9ae6780eef",
+        "figure_spec": "378f598fee2c18c259450bb85f221863c200773839180d1bd7046c0bfb95fb8a",
+        "pptx": "66f787e91b8e004d095b04246073bd34fb1cfcfe595df807e720fbb7b8eee06c"
+      }
+    },
+    {
+      "figure_id": "06_harnessmm_overview",
+      "source_page_1based": 2,
+      "first_pass": {
+        "scores": {
+          "science": 4,
+          "topology": 3,
+          "visual": 2,
+          "readability": 2,
+          "editability": 4,
+          "technical": 3
+        },
+        "total_24": 18,
+        "strict_pass": false,
+        "text_box_overlaps": 0,
+        "out_of_bounds": 1,
+        "global_similarity_triage": 0.0683
+      },
+      "sha256": {
+        "uploaded_pdf": "8d66e8c11f1ed96e420c3db71e94fe75bb1c20e4dba1ae20c941024ff5ab8d0a",
+        "figure_spec": "62f0a479dcd1e10f9efa9f19ffcc6793bd87a12fafec50647cfec76680735cd0",
+        "pptx": "98366fa58b488c492beae001bc36e539bef83f3f90af7912ee213a0db6a3b85b"
+      }
+    },
+    {
+      "figure_id": "07_iiot_mult_agent_digital_twin",
+      "source_page_1based": 5,
+      "first_pass": {
+        "scores": {
+          "science": 3,
+          "topology": 3,
+          "visual": 2,
+          "readability": 2,
+          "editability": 4,
+          "technical": 4
+        },
+        "total_24": 18,
+        "strict_pass": false,
+        "text_box_overlaps": 0,
+        "out_of_bounds": 0,
+        "global_similarity_triage": 0.0177
+      },
+      "sha256": {
+        "uploaded_pdf": "8c20419c1768c3dab2ee70a428c8fc979d0e50d768a1dcdecf7e62b9c3b0cd88",
+        "figure_spec": "c7e813f737e2b06c594dfe5332e4f46d421601861330953618aadee36d8ca02c",
+        "pptx": "42296c74316bae3f220c224050e879fe70fedfdd9fa21293c1b915679d4197f5"
+      }
+    },
+    {
+      "figure_id": "08_pog_reasoning_architecture",
+      "source_page_1based": 4,
+      "first_pass": {
+        "scores": {
+          "science": 3,
+          "topology": 3,
+          "visual": 2,
+          "readability": 2,
+          "editability": 4,
+          "technical": 4
+        },
+        "total_24": 18,
+        "strict_pass": false,
+        "text_box_overlaps": 0,
+        "out_of_bounds": 0,
+        "global_similarity_triage": 0.0507
+      },
+      "sha256": {
+        "uploaded_pdf": "c10d4fff7c6ba2b57df7241218f82c278cd1dadcbcfd8b0f0f717d71a6fd8029",
+        "figure_spec": "fca350ee9555f8fb3e8d457b320a170a0b084e1bd66aa797d08c110b244db027",
+        "pptx": "5405c317be8ad46976ecd76a73808a940ef3cacd39702ae6db1bdcb7f3763fe6"
+      }
+    },
+    {
+      "figure_id": "09_skillsmith_system_overview",
+      "source_page_1based": 4,
+      "first_pass": {
+        "scores": {
+          "science": 4,
+          "topology": 3,
+          "visual": 2,
+          "readability": 2,
+          "editability": 4,
+          "technical": 4
+        },
+        "total_24": 19,
+        "strict_pass": false,
+        "text_box_overlaps": 0,
+        "out_of_bounds": 0,
+        "global_similarity_triage": 0.0092
+      },
+      "sha256": {
+        "uploaded_pdf": "cb576e655cb0944dbac274957f85a2115a9368998c22af7dd5e0d817ce5501ee",
+        "figure_spec": "d543f3c3e658d913e6f89aa623ff3fffd97ddf31f3f683b1db69a7e292a924ac",
+        "pptx": "784a66b182aaf7dea1a4f4c7bbff6b985f92be51434463678d22db5de2a0583d"
+      }
+    },
+    {
+      "figure_id": "10_ucfnet_architecture",
+      "source_page_1based": 4,
+      "first_pass": {
+        "scores": {
+          "science": 4,
+          "topology": 3,
+          "visual": 2,
+          "readability": 2,
+          "editability": 4,
+          "technical": 4
+        },
+        "total_24": 19,
+        "strict_pass": false,
+        "text_box_overlaps": 0,
+        "out_of_bounds": 0,
+        "global_similarity_triage": 0.0267
+      },
+      "sha256": {
+        "uploaded_pdf": "12fae733898d6e6d05b67e674d531454ace87e7b6bb733c17e4c2b5ecad133ae",
+        "figure_spec": "8cf532974d5a45ba47c5821ca291b4a0d0027e63c9bf0abb1e7d48b58c04c2fe",
+        "pptx": "0855f619d97c5b2a14902ac191d4b1185b25926975196fb2f9db9451d184a68b"
+      }
+    }
+  ]
+}
