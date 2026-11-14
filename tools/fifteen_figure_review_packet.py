@@ -33,7 +33,10 @@ def shape_inventory(path):
   for ix,s in enumerate(slide.shapes):
    out.append({"slide":si,"index":ix,"name":s.name,"type":str(s.shape_type),
     "left":s.left,"top":s.top,"width":s.width,"height":s.height,
-    "rotation":float(s.rotation),"text":s.text if s.has_text_frame else None})
+    "rotation":float(s.rotation),"text":s.text if s.has_text_frame else None,
+    "paragraph_alignments":[int(p.alignment) if p.alignment is not None else None for p in s.text_frame.paragraphs] if s.has_text_frame else [],
+    "font_runs":[{"text":r.text,"name":r.font.name,"size_pt":r.font.size.pt if r.font.size else None,
+                  "bold":r.font.bold,"italic":r.font.italic} for p in s.text_frame.paragraphs for r in p.runs] if s.has_text_frame else []})
  return out
 def compare(initial,final):
  a=shape_inventory(initial);b=shape_inventory(final)

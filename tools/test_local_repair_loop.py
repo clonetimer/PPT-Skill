@@ -85,6 +85,7 @@ class LocalRepairLoopTests(unittest.TestCase):
 
  def test_alignment_repair_records_diff_and_preserves_text_style(self):
   from pptx.util import Pt
+  from pptx.util import Pt
   from pptx.enum.text import PP_ALIGN
   from local_repair_loop import apply_operation,snapshot
   with tempfile.TemporaryDirectory() as d:
