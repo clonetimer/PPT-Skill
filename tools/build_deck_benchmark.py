@@ -58,14 +58,14 @@ def add_rect(slide, x, y, w, h, fill, line="D6DEE2", name=""):
 
 
 def make_problem_page(slide, slide_spec):
-    add_text(slide, "01  PROBLEM", .68, .46, 6.4, .35, 12, True, "687780", name="s01_role")
-    add_text(slide, "Why frequency-aware sensor fusion?", .68, 1.10, 12.0, .68, 28, True, name="s01_title")
-    add_text(slide, slide_spec["claim"], .68, 2.04, 11.8, .68, 20, name="s01_claim")
+    add_text(slide, "01  PROBLEM", .68, .46, 6.4, .35, 12, True, "687780", )
+    add_text(slide, "Why frequency-aware sensor fusion?", .68, 1.10, 12.0, .68, 28, True, )
+    add_text(slide, slide_spec["claim"], .68, 2.04, 11.8, .68, 20, )
     for index, point in enumerate(slide_spec["on_slide"]):
         add_text(slide, f"{index+1:02d}  {point}", 1.00, 3.16+index*.73, 10.8, .48, 16,
-                 name=f"s01_point_{index+1}")
+                 )
     add_text(slide, "Lee et al., EAAI 179 (2026), 115273 · DOI 10.1016/j.engappai.2026.115273",
-             .68, 6.82, 12.0, .32, 10, color="687780", name="s01_source")
+             .68, 6.82, 12.0, .32, 10, color="687780", )
 
 
 def make_evidence_page(slide, slide_spec):
