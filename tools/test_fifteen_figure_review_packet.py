@@ -95,6 +95,8 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertEqual(result["population"],15)
         self.assertEqual(result["summary"]["missing"],15)
         self.assertTrue(all(row["final_review_status"]=="pending" for row in result["tasks"]))
+        self.assertTrue(all(row["diagnosis_status"] in {"NO_CONFIRMED_DEFECT","REPAIR_EXECUTED"} for row in result["tasks"]))
+        self.assertTrue(all(row["diagnosis_note"] for row in result["tasks"]))
 
     def test_alignment_only_repair_is_included_in_object_diff(self):
         with tempfile.TemporaryDirectory() as folder:
