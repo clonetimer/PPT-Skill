@@ -24,7 +24,7 @@
 | **P0-02** | P0 · completed | Dense PDF resource budget / graceful abort / bounded segment conversion | 1/10 direct imports timeout | P0-00 |
 | **P0-03** | P0 · completed with one source-glyph blocker documented | Source-aware text geometry, glyph/fallback integrity and overlap repair with provenance | up to 55 overlaps in imported output | P0-01 |
 | **P0-04** | P0 · completed | Fail-closed zero-content/partial/hybrid validity and per-route QA statuses | prevents false first-pass passes | P0-01, P0-02 |
-| **P1-01** | P1 · in progress | Extract source panel geometry / order / visual grammar into source-layout evidence before FigureSpec drafting; initial extractor and pipeline sidecar landed, source-cohort replay and FigureSpec consumption remain | 10/10 visual=2 | P0-04 |
+| **P1-01** | P1 · in progress | Source-layout extractor, corrected ten-paper crops, caption/hash audit and pipeline sidecar landed; unlabeled/nested panel clustering and FigureSpec/route consumption remain | 10/10 visual=2 | P0-04 |
 | **P1-02** | P1 | Evidence-based `vector/mixed/raster` route selection, non-flattening hybrid composition | vector fidelity plus local images | P0-01, P1-01 |
 | **P1-03** | P1 | Native orthogonal/curved connectors, junctions and graph enclosures with source routing fidelity | PoG, EvoOntology, HarnessMM | P1-01 |
 | **P1-04** | P1 | Network/experiment panels: data/tensor lanes, gated dual-stream, multi-panel insets, legends and image-with-vector annotations | PINN, GIN, UCFNet | P1-01 |
@@ -39,9 +39,11 @@
 - Added `tools/extract_source_layout.py` and `specs/source_figure_layout.schema.json`.
 - The unified pipeline now extracts `source_layout.json` before generating either route and stores its hash, panel summary, layout element count, stroke-segment-candidate count and image count in the delivery manifest. It supports 1-based CLI `--page` and PDF-point `--region`.
 - Explicit panel markers and enclosing source rectangles are recorded as candidates; unlabeled figures are not split into invented panels. Lines remain `directedness: undetermined` unless source evidence later resolves them.
-- Regression tests: 8/8 layout extraction, 10/10 end-to-end pipeline; [CI #193 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43553392378).
-- [P1-01 evidence report](P1_01_SOURCE_LAYOUT_EVIDENCE_2026-11-14.md).
-- **Remaining:** replay the ten-paper development cohort, improve nested/unlabeled panel detection, and consume verified SourceLayout evidence in FigureSpec drafting/route selection. Strict blind success remains 0/10.
+- The ten-paper development crop fixture is now hash-locked and includes a caption anchor for each figure. PINN was extended to include the full three-panel Figure 4; UCFNet was corrected to select Figure 2, the actual network architecture.
+- The crop audit checks all ten source hashes, page/crop bounds, caption containment and non-caption figure content. GIN is classified as mixed image/vector (367 drawing records), not image-only.
+- Regression suites: 12/12 source-layout extraction, 5/5 crop-manifest audit, 3/3 hash-locked benchmark; [CI #225 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43555988938).
+- [P1-01 source-layout evidence report](P1_01_SOURCE_LAYOUT_EVIDENCE_2026-11-14.md) and [ten-paper crop replay report](P1_01_TEN_PAPER_SOURCE_LAYOUT_REPLAY_2026-11-14.md).
+- **Remaining:** cluster unlabeled/nested panels, infer repeated-module alignment/spacing with confidence, and consume only reviewed SourceLayout facts in FigureSpec drafting and route selection. Strict blind success remains 0/10.
 
 ### P0-01 — Native crop-aware image and mixed-vector importer
 **Files:** `tools/pdf_figure_import.py`; new `tools/pdf_source_assets.py`; new `tools/test_pdf_crop_assets.py`.
