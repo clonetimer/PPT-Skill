@@ -70,9 +70,37 @@ python tools/source_layout_review.py validate out/source_layout.json \
   out/source_layout_review.json --output out/source_layout_review_audit.json
 ~~~
 
-Only a human reviewer can accept a panel or layout region. Raster gutters can
-be accepted only as layout regions, never as scientific panels. The unified
-reproduction pipeline accepts `--source-layout-review`, verifies the source
+Only a human reviewer can accept a panel or layout region. A source enclosure
+can also be split at a reviewed horizontal/vertical PDF-point coordinate
+(`decision: split_region`), producing **two geometric regions, not two automatic
+scientific panels**. Raster gutters can be accepted only as layout regions.
+Invalid reviews discard *all* acceptances, including otherwise-valid entries.
+
+After validation, compile human-approved geometry into a versioned constraints
+artifact; no uncertain source edge or raster gutter is promoted to a scientific
+relation:
+
+~~~bash
+python tools/source_layout_constraints.py out/source_layout.json \
+  out/source_layout_review.json --output out/source_layout_constraints.json
+~~~
+
+Use an explicit source-constraint-ID to FigureSpec-element-ID bindings JSON
+with both source file hashes, then apply reviewed x/y/w/h bounds to a **new**
+FigureSpec; all other scientific nodes, labels and semantic edges are retained:
+
+~~~bash
+python tools/apply_reviewed_geometry.py figure_specs/original.json \
+  out/source_layout_constraints.json out/layout_bindings.json \
+  --output out/figure_reviewed_geometry.json
+~~~
+
+The unified FigureSpec pipeline also accepts `--source-layout-bindings` and
+records the revised FigureSpec and geometry audit hashes. See the
+[reviewed geometry workflow](docs/P1_01_REVIEWED_GEOMETRY_BINDINGS_2026-11-14.md)
+for invariants and evidence limits.
+
+The unified reproduction pipeline accepts `--source-layout-review`, verifies the source
 and SourceLayout hashes, and records accepted facts in its manifest. Invalid
 or stale review files fail closed. A route recommendation (`native_only`,
 `mixed_native_picture`, `source_picture_only`) is advisory and does not
