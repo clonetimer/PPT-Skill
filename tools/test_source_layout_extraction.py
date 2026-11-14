@@ -109,7 +109,7 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             self.assertTrue(all(edge["directedness"] == "undetermined"
                                 for edge in layout["stroke_segment_candidates"]))
             self.assertTrue(all(edge["confidence"] in ("low", "medium")
-                                for edge in layout["edge_candidates"]))
+                                for edge in layout["stroke_segment_candidates"]))
 
     def test_crop_region_excludes_other_panel_without_changing_source_page_ratio(self):
         with tempfile.TemporaryDirectory() as tmp:
