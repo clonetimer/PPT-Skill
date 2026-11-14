@@ -28,8 +28,10 @@ PANEL_ALT = (
 
 def add_input_graph_icon(spec: dict) -> None:
     elements = spec["elements"]
+    input_box = next(e for e in elements if e.get("id") == "el_0066")
+    input_box.update(semantic_id="input", semantic_role="scientific_object")
     label = next(e for e in elements if e.get("id") == "el_0067")
-    label.update(x=0.75, y=5.29, w=0.43, h=0.27, align="left")
+    label.update(x=0.75, y=5.29, w=0.43, h=0.27, align="left", semantic_id="input_label")
     graph = {
         "type": "graph", "x": 1.23, "y": 5.25, "w": 0.36, "h": 0.31,
         "nodes": [[0.08, 0.20], [0.50, 0.05], [0.92, 0.20],
