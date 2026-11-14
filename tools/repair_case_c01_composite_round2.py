@@ -65,7 +65,7 @@ def annotate_generic(path: Path) -> dict:
         for node in shape._element.iter():
             if node.tag.endswith("}cNvPr"):
                 if shape.has_text_frame and shape.text.strip():
-                    alt = "Text label: " + shape.text.replace("\\n", "; ")
+                    alt = "Text label: " + shape.text.replace("\n", "; ")
                 elif shape.shape_type == MSO_SHAPE_TYPE.LINE:
                     alt = "Editable connector in the two-panel FBG-SEANet method overview."
                 else:
@@ -172,7 +172,7 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
     FINAL_SPEC.parent.mkdir(parents=True, exist_ok=True)
     FINAL_SVG.parent.mkdir(parents=True, exist_ok=True)
     FINAL_PPTX.parent.mkdir(parents=True, exist_ok=True)
-    FINAL_SPEC.write_text(json.dumps(final_spec, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    FINAL_SPEC.write_text(json.dumps(final_spec, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     render(final_spec, FINAL_SVG, FINAL_PPTX)
     final_accessibility = annotate_accessibility(FINAL_PPTX)
     shutil.copy2(FINAL_PPTX, round_02)
@@ -180,17 +180,17 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
     diff_01 = spec_diff(base_spec, round_01_spec)
     diff_02 = spec_diff(round_01_spec, final_spec)
     (output_dir / "round_01_object_diff.json").write_text(
-        json.dumps(diff_01, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8"
+        json.dumps(diff_01, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     (output_dir / "round_02_object_diff.json").write_text(
-        json.dumps(diff_02, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8"
+        json.dumps(diff_02, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
 
     final_quality = validate_v75()
     if final_quality.get("status") != "PASS":
         raise RuntimeError("C01_COMPOSITE_V75_QUALITY_AUDIT_FAILED")
     (output_dir / "round_02_quality_audit.json").write_text(
-        json.dumps(final_quality, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8"
+        json.dumps(final_quality, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     subprocess.run(
         [sys.executable, str(ROOT / "tools/audit_pptx.py"), str(FINAL_PPTX), "--strict"],
@@ -242,7 +242,7 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
         "human_final_review": "PENDING", "office_2016_host_round_trip": "PENDING",
     }
     (output_dir / "repair_history.json").write_text(
-        json.dumps(history, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8"
+        json.dumps(history, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     summary = {
         "case": "C01_composite",
@@ -254,7 +254,7 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
         "human_final_review": "PENDING", "office_2016_host_round_trip": "PENDING",
     }
     (output_dir / "repair_case_summary.json").write_text(
-        json.dumps(summary, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8"
+        json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     return summary
 
