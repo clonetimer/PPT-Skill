@@ -29,9 +29,9 @@ PANEL_ALT = (
 def add_input_graph_icon(spec: dict) -> None:
     elements = spec["elements"]
     input_box = next(e for e in elements if e.get("id") == "el_0066")
-    input_box.update(semantic_id="input_container", semantic_role="scientific_object")
+    input_box.update(semantic_id="input", semantic_role="scientific_object")
     label = next(e for e in elements if e.get("id") == "el_0067")
-    label.update(x=0.75, y=5.29, w=0.43, h=0.27, align="left", semantic_id="input")
+    label.update(x=0.75, y=5.29, w=0.43, h=0.27, align="left", semantic_id="input_label")
 
     # Four compact band-subgraph rows make the total-graph input structure visible.
     x_positions = [0.08, 0.50, 0.92]
