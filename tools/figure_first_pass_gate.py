@@ -99,7 +99,7 @@ def candidate_profile(pptx_path: Path) -> dict:
     out_of_bounds = sum(s.left < -9144 or s.top < -9144 or
                         s.left+s.width > deck.slide_width + 9144 or
                         s.top+s.height > deck.slide_height + 9144 for s in slide.shapes)
-    return dict(native_vectors=len(vector), text_objects=len(texts),
+    return dict(shape_count=len(slide.shapes), native_vectors=len(vector), text_objects=len(texts),
                 picture_objects=len(pics), full_page_pictures=full_page,
                 out_of_bounds=out_of_bounds,
                 slide_pt=[round(deck.slide_width.pt, 3), round(deck.slide_height.pt, 3)])
