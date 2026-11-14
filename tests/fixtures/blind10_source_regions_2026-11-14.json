@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "benchmark_id": "ppt-skill-blind10-source-layout-development-replay-2026-11-14",
   "cohort_role": "DEVELOPMENT_REGRESSION_ONLY",
-  "source_regions_are": "manually inspected figure crop candidates in PDF points, extended to include each selected figure caption; UCFNet selects Figure 2 (the paper's architecture figure), not Figure 1; all crops remain reviewable candidates rather than inferred semantic ground truth",
+  "source_regions_are": "manually inspected figure crop candidates in PDF points, extended to include each selected figure caption; UCFNet selects Figure 2 (the paper's architecture figure), not Figure 1. Caption anchors are recorded for automated crop-containment checks. Crops remain reviewable candidates rather than inferred semantic ground truth.",
   "sources": [
     {
       "figure_id": "01_wind_turbine_causal_framework",
@@ -14,7 +14,8 @@
         66.7,
         557.8,
         364
-      ]
+      ],
+      "caption_text": "Knowledge-augmented multistage reasoning framework"
     },
     {
       "figure_id": "02_pinn_tool_wear_framework",
@@ -26,7 +27,8 @@
         35,
         475,
         666
-      ]
+      ],
+      "caption_text": "PINN-based framework for TWM"
     },
     {
       "figure_id": "03_attention_guided_gin_multitask",
@@ -38,7 +40,8 @@
         55.5,
         472.2,
         542
-      ]
+      ],
+      "caption_text": "detailed representation of the proposed methodology for joint fault diagnostics and RUL prediction"
     },
     {
       "figure_id": "04_agent_distillation_taxonomy",
@@ -50,7 +53,8 @@
         65.7,
         556.2,
         326
-      ]
+      ],
+      "caption_text": "From model-centered to agent-centered knowledge transfer"
     },
     {
       "figure_id": "05_evoontology_overview",
@@ -62,7 +66,8 @@
         55,
         558,
         306
-      ]
+      ],
+      "caption_text": "Overview of EvoOntology"
     },
     {
       "figure_id": "06_harnessmm_overview",
@@ -74,7 +79,8 @@
         54,
         558,
         373
-      ]
+      ],
+      "caption_text": "HarnessMM overview"
     },
     {
       "figure_id": "07_iiot_mult_agent_digital_twin",
@@ -86,7 +92,8 @@
         55.4,
         549.8,
         373
-      ]
+      ],
+      "caption_text": "Overview of the multi-agent LLM framework"
     },
     {
       "figure_id": "08_pog_reasoning_architecture",
@@ -98,7 +105,8 @@
         90,
         550,
         355
-      ]
+      ],
+      "caption_text": "Overview of the PoG architecture"
     },
     {
       "figure_id": "09_skillsmith_system_overview",
@@ -110,7 +118,8 @@
         72,
         503.8,
         316
-      ]
+      ],
+      "caption_text": "SkillSmith system overview"
     },
     {
       "figure_id": "10_ucfnet_architecture",
@@ -122,7 +131,8 @@
         565,
         535,
         775
-      ]
+      ],
+      "caption_text": "Architecture of the proposed UCFNet"
     }
   ]
 }
