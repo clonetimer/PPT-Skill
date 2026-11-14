@@ -50,8 +50,12 @@ def _rect_item(drawing):
 
 
 def _panel_label(text):
-    match = re.fullmatch(r"\(?([A-Za-z])\)?[.)]?", text.strip())
-    return match.group(1).lower() if match else None
+    # Require explicit panel punctuation. A standalone one-letter span is
+    # common in equations and prose and must not be promoted to panel (a).
+    match = re.fullmatch(r"(?:\(([A-Za-z])\)|([A-Za-z])[.)])", text.strip())
+    if not match:
+        return None
+    return (match.group(1) or match.group(2)).lower()
 
 
 def _line_segments(drawing, region):
@@ -333,6 +337,7 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 "aspect_ratio": round(page_rect.width / page_rect.height, 6),
             },
             "figure_region_pt": _bbox(region),
+            "figure_region_source": "explicit_user_crop" if figure_region is not None else "full_page_default",
             "coordinate_system": {
                 "units": "PDF points",
                 "origin": "top-left",
