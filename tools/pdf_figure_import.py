@@ -350,7 +350,24 @@ def _source_font(name):
 def _normalize_pdf_text(text):
     # PyMuPDF decodes discretionary PDF hyphens as U+00AD. PowerPoint drops
     # them unless at a wrap point, erasing visible source names like Zero-API.
-    return text.replace("\u00ad", "-").replace("\u00a0", " ")
+    # NUL/control characters from damaged PDF ToUnicode maps are not valid
+    # PowerPoint text. Keep the location visible and require manual review.
+    return (text.replace("\u00ad", "-").replace("\u00a0", " ")
+            .replace("\x00", "□"))
+
+
+def _span_visible_fraction(span, page_rect):
+    """Fraction of a PDF text span's axis-aligned bounds visible in the page crop."""
+    bbox = fitz.Rect(span["bbox"])
+    if bbox.is_empty or bbox.width <= 0 or bbox.height <= 0:
+        return 0.0
+    visible = bbox & fitz.Rect(page_rect)
+    if visible.is_empty:
+        return 0.0
+    return max(0.0, min(1.0, (visible.width * visible.height) / (bbox.width * bbox.height)))
+
+
+MIN_VISIBLE_TEXT_FRACTION = 0.20
 
 
 def _span_local_geometry(span, line):
@@ -378,7 +395,9 @@ def _span_local_geometry(span, line):
     return center.x - width / 2, center.y - height / 2, width, height
 
 
-def _add_text(slide, span, line):
+def _add_text(slide, span, line, page_rect=None):
+    if page_rect is not None and _span_visible_fraction(span, page_rect) < MIN_VISIBLE_TEXT_FRACTION:
+        return False
     content = _normalize_pdf_text(span.get("text", ""))
     if not content.strip():
         return False
@@ -511,7 +530,7 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
         for block in page_blocks:
             for line in block.get("lines", []):
                 for span in line["spans"]:
-                    text_count += int(_add_text(slide, span, line))
+                    text_count += int(_add_text(slide, span, line, page.rect))
                     font_counts[_source_font(span["font"])] += 1
 
         assert_budget(clock_start, max_seconds)
