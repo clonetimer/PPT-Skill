@@ -72,7 +72,7 @@ A second pass now proposes geometric enclosures and low-ink gutters without decl
 | SkillSmith | 0 | 0 | 0 | One outer figure frame only; compile/runtime split remains a visual-review hypothesis |
 | UCFNet Figure 2 | 0 | 0 | 0 | Internal streams/modules are visible, but no enclosing PDF rectangles or reliable low-ink gutters |
 
-All geometric and raster candidates carry `needs_human_review`, confidence and source evidence. A low-ink gap is not automatically a panel boundary; a rectangle is not automatically a scientific module.
+All geometric and raster candidates carry `needs_human_review`, confidence and source evidence. A low-ink gap is not automatically a panel boundary; a rectangle is not automatically a scientific module. The ten-paper diagnostic finds geometric candidates only in PINN/EvoOntology and low-ink raster gutters only in GIN/HarnessMM/IIoT; none is promoted to a confirmed panel.
 
 Source layout/style profiles also retain font-family counts and font-size tiers, palette counts, stroke-width tiers and clipping regions. Those measurements are preserved in each per-figure JSON output rather than reduced to one universal visual template.
 
@@ -105,7 +105,7 @@ Graph semantics are also conservative:
 - The fixture verifies the ten original SHA-256 values before extraction.
 - The crop auditor checks source hash, page range, crop bounds, caption containment and non-caption visual content.
 - The benchmark validates each emitted SourceLayout JSON against `specs/source_figure_layout.schema.json`, then writes per-figure JSON and JSON/CSV summaries.
-- [CI #225 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43555988938), including the source-layout extraction, crop-manifest and benchmark regression suites.
+- [CI #253 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43557493825), including 17 source-layout extraction tests, 6 crop-manifest audit tests, 3 hash-locked benchmark tests and the full repository validation workflow.
 - The frozen ten-paper strict first-pass result remains **0/10**. This source-layout replay does not measure a fidelity improvement and the ten papers remain development regression data, not a new blind holdout.
 
 ## Next P1-01 increment
