@@ -112,7 +112,9 @@
       "tools/repair_case_artifacts.py",
       "tools/test_repair_case_artifacts.py",
       "tools/repair_case_deck01_round1.py",
-      "tools/test_repair_case_deck01_round1.py"
+      "tools/test_repair_case_deck01_round1.py",
+      "tools/prepare_no_repair_candidates.py",
+      "tools/test_prepare_no_repair_candidates.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -132,7 +134,8 @@
       "docs/P2_C01_SEANet_STAGE1_SCOPE_RECONCILIATION_2026-11-15.md",
       "docs/C01_COMPOSITE_V75_QA.md",
       "docs/FINAL_DELIVERY_SUCCESS_METRICS_V76.md",
-      "docs/LOCAL_REPAIR_CASE_TEMPLATE_V76.md"
+      "docs/LOCAL_REPAIR_CASE_TEMPLATE_V76.md",
+      "docs/15_FIGURE_DIAGNOSTIC_LEDGER_V76.md"
     ],
     "generated_outputs": [
       "dist/C01_FBG_construction_v73.pptx",
@@ -195,7 +198,8 @@
       "specs/chart_spec_v76.schema.json",
       "specs/research_figure_benchmark_v76.json",
       "specs/output_profiles_v76.json",
-      "specs/c01_composite_expected_topology_v75.json"
+      "specs/c01_composite_expected_topology_v75.json",
+      "specs/15_figure_diagnostic_ledger_v76.json"
     ],
     "source_data": [
       "data/README.md",
