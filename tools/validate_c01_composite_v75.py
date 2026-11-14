@@ -38,8 +38,13 @@ def validate():
         raise AssertionError("INPUT_CONTAINER_TOPOLOGY_NODE_MISSING")
     if by_id["el_0067"].get("semantic_id") != "input_label" or by_id["el_0067"].get("text") != "Input":
         raise AssertionError("INPUT_LABEL_SEMANTIC_NODE_MISSING")
-    if by_id["el_0120"]["type"] != "graph" or len(by_id["el_0120"]["nodes"]) != 12:
-        raise AssertionError("INPUT_GRAPH_ICON_MISSING")
+    if (by_id["el_0120"]["type"] != "graph"
+            or len(by_id["el_0120"]["nodes"]) != 12
+            or len(by_id["el_0120"]["edges"]) != 8):
+        raise AssertionError("INPUT_GRAPH_MUST_HAVE_12_NODES_AND_8_WITHIN_BAND_EDGES")
+    node_rows = sorted({round(point[1], 2) for point in by_id["el_0120"]["nodes"]})
+    if len(node_rows) != 4:
+        raise AssertionError("INPUT_GRAPH_MUST_SHOW_FOUR_BAND_SUBGRAPH_ROWS")
     interband = [e for e in elements if e["type"] == "line" and e.get("dash")
                  and e.get("id") in {f"el_{i:04d}" for i in range(121, 130)}]
     if len(interband) != 9:
@@ -96,7 +101,8 @@ def validate():
         "text_overlaps": 0,
         "out_of_bounds": 0,
         "input_graph_icon_nodes": 12,
-        "input_graph_band_subgraphs": 4,
+        "input_graph_band_subgraphs": len(node_rows),
+        "input_graph_within_band_edges": len(by_id["el_0120"]["edges"]),
         "input_graph_interband_links": 9,
         "class_output_squares": 5,
         "orange_highlight_index": 2,
