@@ -9,6 +9,23 @@ from pathlib import Path
 from pptx import Presentation
 
 TASKS=("B01","F07","C01_FBG","C01_SEANet","C01_composite","Q01","Q02","Q03","Q03P","Q04","Q05","Q06","Q07","I01","DECK01")
+TASK_FILENAMES={
+ "B01":"B01_engineering_fdir_v71.pptx",
+ "F07":"F07_telemetry_embedding_v71.pptx",
+ "C01_FBG":"C01_FBG_construction_v73.pptx",
+ "C01_SEANet":"C01_SEANet_graph_level_v73.pptx",
+ "C01_composite":"C01_composite_defense_slide_v74.pptx",
+ "Q01":"Q01_iris_scatter.pptx",
+ "Q02":"Q02_iris_strip.pptx",
+ "Q03":"Q03_iris_mean_ci.pptx",
+ "Q03P":"Q03_iris_mean_ci_nature.pptx",
+ "Q04":"Q04_iris_confusion.pptx",
+ "Q05":"Q05_iris_ablation.pptx",
+ "Q06":"Q06_iris_trend_interval.pptx",
+ "Q07":"Q07_wine_scatter.pptx",
+ "I01":"I01_cell_image_quant.pptx",
+ "DECK01":"DECK01_c01_defense.pptx",
+}
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def shape_inventory(path):
  prs=Presentation(path);out=[]
@@ -35,16 +52,17 @@ def build_packet(initial_dir,final_dir,output_dir):
  initial_dir,final_dir,output_dir=map(Path,(initial_dir,final_dir,output_dir))
  output_dir.mkdir(parents=True,exist_ok=True);rows=[]
  for task in TASKS:
-  candidates=list(initial_dir.glob(task+"*.pptx"))
-  if len(candidates)!=1:
-   rows.append({"task_id":task,"status":"MISSING_OR_AMBIGUOUS_INITIAL","candidates":[p.name for p in candidates]});continue
-  after=list(final_dir.glob(task+"*.pptx"))
-  if len(after)!=1:
-   rows.append({"task_id":task,"status":"NO_FINAL_REPAIR_ARTIFACT","initial":candidates[0].name,"final_review_status":"pending"});continue
-  diff=compare(candidates[0],after[0])
+  filename=TASK_FILENAMES[task]
+  initial=initial_dir/filename
+  final=final_dir/filename
+  base={"task_id":task,"filename":filename,"final_review_status":"pending","final_decision":None}
+  if not initial.is_file():
+   rows.append({**base,"status":"MISSING_INITIAL"});continue
+  if not final.is_file():
+   rows.append({**base,"status":"NO_FINAL_REPAIR_ARTIFACT","initial":filename});continue
+  diff=compare(initial,final)
   status="NO_REPAIR_APPLIED" if diff["byte_identical"] else "REPAIR_COMPARISON_READY"
-  rows.append({"task_id":task,"status":status,"initial":candidates[0].name,"final":after[0].name,
-   "diff":diff,"final_review_status":"pending","final_decision":None})
+  rows.append({**base,"status":status,"initial":filename,"final":filename,"diff":diff})
  packet={"schema_version":"1.0.0","population":len(TASKS),"tasks":rows,
   "summary":{"comparison_ready":sum(x["status"]=="REPAIR_COMPARISON_READY" for x in rows),
    "no_repair_applied":sum(x["status"]=="NO_REPAIR_APPLIED" for x in rows),

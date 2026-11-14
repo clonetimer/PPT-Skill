@@ -15,6 +15,11 @@ class ReviewPacketTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    p=Path(d);a=p/"a.pptx";b=p/"b.pptx";deck(a,"Before");deck(b,"After")
    r=compare(a,b);self.assertFalse(r["byte_identical"]);self.assertGreater(r["changed_objects"],0)
+ def test_exact_task_filenames_do_not_confuse_q03_with_nature_variant(self):
+  from fifteen_figure_review_packet import TASK_FILENAMES
+  self.assertEqual(TASK_FILENAMES["Q03"],"Q03_iris_mean_ci.pptx")
+  self.assertEqual(TASK_FILENAMES["Q03P"],"Q03_iris_mean_ci_nature.pptx")
+  self.assertEqual(len(TASK_FILENAMES),15)
  def test_packet_tracks_all_fifteen_without_fabricating_reviews(self):
   with tempfile.TemporaryDirectory() as d:
    p=Path(d);a=p/"initial";b=p/"final";o=p/"out";a.mkdir();b.mkdir()
