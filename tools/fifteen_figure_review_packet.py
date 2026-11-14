@@ -44,7 +44,7 @@ def shape_inventory(path):
  return out
 def compare(initial,final):
  a=shape_inventory(initial);b=shape_inventory(final)
- def key(x):return (x["slide"],x["name"],x["index"])
+ def key(x):return (x["slide"],x["index"])
  aa={key(x):x for x in a};bb={key(x):x for x in b};changes=[]
  for k in sorted(set(aa)|set(bb)):
   if k not in aa:changes.append({"kind":"added","after":bb[k]})
