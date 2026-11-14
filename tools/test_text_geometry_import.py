@@ -10,7 +10,7 @@ import fitz
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
-from pdf_figure_import import convert_pdf_page, _source_font, _normalize_pdf_text, _span_visible_fraction
+from pdf_figure_import import convert_pdf_page, _source_font, _normalize_pdf_text, _span_visible_fraction, _add_text
 
 
 def aabb(shape):
@@ -95,6 +95,14 @@ class TextGeometryImportTests(unittest.TestCase):
         page_rect = fitz.Rect(0, 0, 505, 284.1)
         self.assertAlmostEqual(_span_visible_fraction(span, page_rect), .09, delta=.002)
         self.assertLess(_span_visible_fraction(span, page_rect), .2)
+        deck = Presentation()
+        slide = deck.slides.add_slide(deck.slide_layouts[6])
+        source_span = {
+            "bbox": span["bbox"], "text": "footer", "size": 10,
+            "font": "Helvetica", "flags": 0, "color": 0
+        }
+        self.assertFalse(_add_text(slide, source_span, {"dir": (1, 0)}, page_rect))
+        self.assertEqual(len(slide.shapes), 0)
 
     def test_math_glyphs_survive_pdf_to_editable_text_roundtrip(self):
         with tempfile.TemporaryDirectory() as tmp:
