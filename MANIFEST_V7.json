@@ -90,7 +90,11 @@
       "tools/local_repair_loop.py",
       "tools/repair_case_c01_seanet.py",
       "tools/prepare_15_figure_initial_cohort.py",
-      "tools/fifteen_figure_review_packet.py"
+      "tools/fifteen_figure_review_packet.py",
+      "tools/test_local_repair_loop.py",
+      "tools/test_repair_case_c01_seanet.py",
+      "tools/test_prepare_15_figure_initial_cohort.py",
+      "tools/test_fifteen_figure_review_packet.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
