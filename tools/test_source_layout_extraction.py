@@ -105,7 +105,7 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             source = Path(tmp) / "edges.pdf"
             make_two_panel_pdf(source)
             layout = extract_source_layout(source)
-            self.assertGreater(len(layout["edge_candidates"]), 0)
+            self.assertGreater(len(layout["stroke_segment_candidates"]), 0)
             self.assertTrue(all(edge["directedness"] == "undetermined"
                                 for edge in layout["edge_candidates"]))
             self.assertTrue(all(edge["confidence"] in ("low", "medium")
