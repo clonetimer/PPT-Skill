@@ -118,7 +118,7 @@ def annotate_accessibility(path: Path) -> dict:
                 "; second class is highlighted orange" if square_index == 2 else ""
             )
         elif shape.has_text_frame and shape.text.strip():
-            alt = "Text label: " + shape.text.replace("\\n", "; ")
+            alt = "Text label: " + shape.text.replace("\n", "; ")
         elif shape.shape_type == MSO_SHAPE_TYPE.LINE:
             alt = "Editable connector in the complete two-panel FBG-SEANet method overview."
         elif shape.width > 10 * 914400 and shape.height > 5 * 914400:
@@ -168,7 +168,7 @@ def main():
     SPEC.parent.mkdir(parents=True, exist_ok=True)
     SVG.parent.mkdir(parents=True, exist_ok=True)
     PPTX.parent.mkdir(parents=True, exist_ok=True)
-    SPEC.write_text(json.dumps(spec, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    SPEC.write_text(json.dumps(spec, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     render(spec, SVG, PPTX)
     accessibility = annotate_accessibility(PPTX)
     report = {
@@ -180,7 +180,7 @@ def main():
         "accessibility": accessibility,
     }
     report_path = ROOT / "dist/C01_composite_defense_slide_v75_build.json"
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
 
 
