@@ -9,14 +9,22 @@ import argparse,hashlib,json,shutil
 from pathlib import Path
 from pptx import Presentation
 from pptx.util import Inches,Pt
+from pptx.enum.text import PP_ALIGN
 
-ALLOWED={"move","rotate","set_text"}
+ALLOWED={"move","rotate","set_text","set_alignment"}
+ALIGNMENTS={"left":PP_ALIGN.LEFT,"center":PP_ALIGN.CENTER,"right":PP_ALIGN.RIGHT,"justify":PP_ALIGN.JUSTIFY}
 def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def metadata(shape):
  nodes=[n for n in shape._element.iter() if n.tag.endswith("}cNvPr")]
  if not nodes or not nodes[0].get("descr"): return {}
  try:return json.loads(nodes[0].get("descr"))
  except Exception:return {}
+
+def alignment_name(paragraph):
+ for name,value in ALIGNMENTS.items():
+  if paragraph.alignment==value:return name
+ return "inherit_or_unset"
+
 def snapshot(path):
  prs=Presentation(path);out={}
  for sh in prs.slides[0].shapes:
@@ -24,7 +32,8 @@ def snapshot(path):
   if not sid: continue
   out[sid]={"name":sh.name,"left":sh.left,"top":sh.top,"width":sh.width,"height":sh.height,
    "rotation":float(sh.rotation),"text":sh.text if sh.has_text_frame else None,
-   "font_sizes":[float(r.font.size.pt) for p in sh.text_frame.paragraphs for r in p.runs if r.font.size] if sh.has_text_frame else []}
+   "font_sizes":[float(r.font.size.pt) for p in sh.text_frame.paragraphs for r in p.runs if r.font.size] if sh.has_text_frame else [],
+   "paragraph_alignments":[alignment_name(p) for p in sh.text_frame.paragraphs] if sh.has_text_frame else []}
  return out
 def diff(before,after):
  changes=[]
@@ -52,6 +61,16 @@ def apply_operation(shape,op):
    raise ValueError("MULTIRUN_TEXT_REPAIR_REQUIRES_MANUAL_REVIEW")
   # Change only the text payload. Replacing shape.text would destroy font and run styling.
   runs[0].text=str(op["text"])
+ elif kind=="set_alignment":
+  if not shape.has_text_frame:raise ValueError("TARGET_HAS_NO_TEXT_FRAME")
+  expected=op.get("expected_alignment")
+  if not expected:raise ValueError("ALIGNMENT_REPAIR_REQUIRES_PRECONDITION")
+  paragraphs=list(shape.text_frame.paragraphs)
+  if not paragraphs or any(alignment_name(p)!=expected for p in paragraphs):
+   raise ValueError("REPAIR_PRECONDITION_ALIGNMENT_MISMATCH")
+  target=op.get("alignment")
+  if target not in ALIGNMENTS:raise ValueError("INVALID_TARGET_ALIGNMENT")
+  for paragraph in paragraphs:paragraph.alignment=ALIGNMENTS[target]
 def run_repair_loop(source_pptx,plan_path,manifest_path,output_dir,max_rounds=3):
  source_pptx,plan_path,manifest_path,output_dir=map(Path,(source_pptx,plan_path,manifest_path,output_dir))
  plan=json.loads(plan_path.read_text(encoding="utf-8"))
@@ -88,6 +107,9 @@ def run_repair_loop(source_pptx,plan_path,manifest_path,output_dir,max_rounds=3)
     raise ValueError("REPAIR_PRECONDITION_TEXT_MISMATCH:"+sid)
    if op.get("expected_rotation") is not None and abs(float(sh.rotation)-float(op["expected_rotation"]))>0.01:
     raise ValueError("REPAIR_PRECONDITION_ROTATION_MISMATCH:"+sid)
+   if op.get("expected_alignment") is not None:
+    if not sh.has_text_frame or any(alignment_name(p)!=op["expected_alignment"] for p in sh.text_frame.paragraphs):
+     raise ValueError("REPAIR_PRECONDITION_ALIGNMENT_MISMATCH:"+sid)
    apply_operation(sh,op);applied.append({"source_object_id":sid,"operation":op["operation"]})
   prs.save(candidate)
   after=snapshot(candidate)

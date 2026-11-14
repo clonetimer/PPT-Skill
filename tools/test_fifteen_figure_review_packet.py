@@ -1,6 +1,7 @@
 import tempfile,unittest
 from pathlib import Path
 from pptx import Presentation
+from pptx.enum.text import PP_ALIGN
 from pptx.util import Inches
 from fifteen_figure_review_packet import compare,TASKS,build_packet
 
@@ -27,4 +28,14 @@ class ReviewPacketTests(unittest.TestCase):
    result=build_packet(a,b,o)
    self.assertEqual(result["population"],15);self.assertEqual(result["summary"]["missing"],15)
    self.assertTrue(all(t["final_review_status"]=="pending" for t in result["tasks"]))
+
+    def test_alignment_only_repair_is_included_in_object_diff(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);initial=root/"initial.pptx";final=root/"final.pptx"
+            deck(initial,"fault class");deck(final,"fault class")
+            p=Presentation(final);p.slides[0].shapes[0].text_frame.paragraphs[0].alignment=PP_ALIGN.RIGHT;p.save(final)
+            result=compare(initial,final)
+        self.assertEqual(result["changed_objects"],1)
+        self.assertEqual(result["object_diff"][0]["fields"]["paragraph_alignments"],{"before":[2],"after":[3]})
+
 if __name__=="__main__":unittest.main()

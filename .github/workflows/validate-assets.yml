@@ -32,6 +32,8 @@ jobs:
           python tools/test_text_geometry_audit.py
           python tools/test_final_delivery_success.py
           python tools/test_local_repair_loop.py
+          python tools/test_repair_case_c01_seanet.py
+          python tools/test_prepare_15_figure_initial_cohort.py
           python tools/test_fifteen_figure_review_packet.py
           python tools/test_reproduction_release_gate.py
           python tools/test_reproduction_pipeline.py
@@ -70,6 +72,9 @@ jobs:
         run: |
           python tools/build_c01_v73.py
           python tools/build_c01_v74.py
+      - name: Execute first real C01-SEANet local repair
+        run: |
+          python tools/repair_case_c01_seanet.py --output-dir dist/repair_cases/C01_SEANet --accepted-output dist/accepted_repairs/C01_SEANet_graph_level_v73.pptx
       - name: Build data and image examples
         run: |
           python tools/build_quantitative_examples.py
@@ -132,19 +137,30 @@ jobs:
           python tools/audit_pptx.py dist/DECK01_c01_defense.pptx --strict
       - name: Compile tools
         run: python -m py_compile tools/*.py
+      - name: Prepare immutable 15-figure initial cohort
+        run: |
+          python tools/prepare_15_figure_initial_cohort.py dist --c01-seanet-initial dist/repair_cases/C01_SEANet/rounds/first_pass.pptx --output-dir dist/initial_pass
       - name: Prepare separate review stages
         run: |
           python tools/prepare_scientific_review_bundle.py --stage initial --output dist/scientific_review_initial_v76.zip
           python tools/prepare_scientific_review_bundle.py --stage reconciliation --output dist/scientific_review_reconciliation_v76.zip
       - name: Prepare 15-figure initial versus repair review
         run: |
-          python tools/fifteen_figure_review_packet.py dist dist/accepted_repairs --output-dir dist/15_figure_repair_review
+          python tools/fifteen_figure_review_packet.py dist/initial_pass dist/accepted_repairs --output-dir dist/15_figure_repair_review
       - name: Upload 15-figure repair-review ledger
         uses: actions/upload-artifact@v4
         with:
           name: ppt-skill-15-figure-repair-review
           path: |
             dist/15_figure_repair_review/*
+          if-no-files-found: error
+      - name: Upload C01-SEANet first repair evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-c01-seanet-first-repair
+          path: |
+            dist/repair_cases/C01_SEANet/*
+            dist/accepted_repairs/C01_SEANet_graph_level_v73.pptx
           if-no-files-found: error
       - name: Upload initial review packet
         uses: actions/upload-artifact@v4

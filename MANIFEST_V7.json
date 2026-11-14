@@ -86,7 +86,11 @@
       "tools/validate_output_profiles.py",
       "tools/test_output_profiles.py",
       "tools/build_deck_benchmark.py",
-      "tools/validate_deck_benchmark.py"
+      "tools/validate_deck_benchmark.py",
+      "tools/local_repair_loop.py",
+      "tools/repair_case_c01_seanet.py",
+      "tools/prepare_15_figure_initial_cohort.py",
+      "tools/fifteen_figure_review_packet.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -138,9 +142,30 @@
       "dist/DECK01_c01_defense_slide_2.png",
       "dist/DECK01_c01_defense_slide_3.png"
     ],
-    "planning_specs": ["specs/deck_spec_v75.example.json", "specs/deck_spec_v75.schema.json"],
-    "scientific_contracts": ["specs/figure_contracts_v76.json", "specs/figure_spec_v76.schema.json", "specs/c01_expected_topology_v76.json", "specs/c01_standalone_expected_topology_v76.json", "specs/iris_charts_v76.json", "specs/wine_charts_v76.json", "specs/chart_spec_v76.schema.json", "specs/research_figure_benchmark_v76.json", "specs/output_profiles_v76.json"],
-    "source_data": ["data/README.md", "data/iris_uci.csv", "data/wine_uci.data", "data/cell_scikit_image_v026.png"]
+    "planning_specs": [
+      "specs/deck_spec_v75.example.json",
+      "specs/deck_spec_v75.schema.json"
+    ],
+    "scientific_contracts": [
+      "specs/figure_contracts_v76.json",
+      "specs/figure_spec_v76.schema.json",
+      "specs/c01_expected_topology_v76.json",
+      "specs/c01_standalone_expected_topology_v76.json",
+      "specs/iris_charts_v76.json",
+      "specs/wine_charts_v76.json",
+      "specs/chart_spec_v76.schema.json",
+      "specs/research_figure_benchmark_v76.json",
+      "specs/output_profiles_v76.json"
+    ],
+    "source_data": [
+      "data/README.md",
+      "data/iris_uci.csv",
+      "data/wine_uci.data",
+      "data/cell_scikit_image_v026.png"
+    ],
+    "repair_fixtures": [
+      "tests/fixtures/C01_SEANet_graph_level_initial_v73.json"
+    ]
   },
   "source_policy": "Do not redistribute the publisher's original graphical abstract; keep only source links and editable derivative redraws."
 }

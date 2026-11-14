@@ -82,4 +82,29 @@ class LocalRepairLoopTests(unittest.TestCase):
      run_repair_loop(source,plan,manifest,out)
    self.assertEqual((out/"round_01.pptx").read_bytes(),previous)
 
+
+ def test_alignment_repair_records_diff_and_preserves_text_style(self):
+  from pptx.enum.text import PP_ALIGN
+  from local_repair_loop import apply_operation,snapshot
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d);source,manifest,plan=make_inputs(root)
+   prs=Presentation(source);shape=prs.slides[0].shapes[0]
+   shape.text_frame.paragraphs[0].alignment=PP_ALIGN.CENTER
+   shape.text_frame.paragraphs[0].runs[0].font.size=Pt(15)
+   before_text=shape.text;before_size=shape.text_frame.paragraphs[0].runs[0].font.size
+   apply_operation(shape,{"operation":"set_alignment","expected_alignment":"center","alignment":"right"})
+   self.assertEqual(shape.text,before_text)
+   self.assertEqual(shape.text_frame.paragraphs[0].alignment,PP_ALIGN.RIGHT)
+   self.assertEqual(shape.text_frame.paragraphs[0].runs[0].font.size,before_size)
+
+ def test_alignment_repair_rejects_stale_precondition(self):
+  from pptx.enum.text import PP_ALIGN
+  from local_repair_loop import apply_operation
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d);source,manifest,plan=make_inputs(root)
+   prs=Presentation(source);shape=prs.slides[0].shapes[0]
+   shape.text_frame.paragraphs[0].alignment=PP_ALIGN.CENTER
+   with self.assertRaisesRegex(ValueError,"REPAIR_PRECONDITION_ALIGNMENT_MISMATCH"):
+    apply_operation(shape,{"operation":"set_alignment","expected_alignment":"left","alignment":"right"})
+
 if __name__=="__main__":unittest.main()
