@@ -630,6 +630,7 @@ def main():
         "stroke_segment_candidates": len(layout["stroke_segment_candidates"]),
         "unlabeled_panel_candidates": len(layout["panel_detection"]["unlabeled_panel_candidates"]),
         "alignment_groups": len(layout["panel_detection"]["alignment_groups"]),
+        "raster_gutter_candidates": len(layout["panel_detection"]["raster_gutter_candidates"]),
         "output": str(args.output),
     }, ensure_ascii=False))
 
