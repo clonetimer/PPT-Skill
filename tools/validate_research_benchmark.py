@@ -10,7 +10,7 @@ OUTPUTS = {
     "B01": "dist/B01_engineering_fdir_v71.pptx",
     "F07": "dist/F07_telemetry_embedding_v71.pptx",
     "C01_FBG": "dist/C01_FBG_construction_v73.pptx",
-    "C01_SEANet": "dist/C01_SEANet_graph_level_v73.pptx",
+    "C01_SEANet": "dist/C01_SEANet_graph_level_v74.pptx",
     "C01_composite": "dist/C01_composite_defense_slide_v74.pptx",
     **{f"Q{i:02d}": f"dist/{stem}.pptx" for i, stem in enumerate((
         "Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q04_iris_confusion",
