@@ -26,8 +26,8 @@ TASK_FILENAMES={
  "I01":"I01_cell_image_quant.pptx",
  "DECK01":"DECK01_c01_defense.pptx",
 }
-TASK_FINAL_FILENAMES={**TASK_FILENAMES,"C01_SEANet":"C01_SEANet_graph_level_v74.pptx"}
-TASK_SPEC_FILENAMES={"C01_SEANet":{"initial":"tests/fixtures/C01_SEANet_graph_level_initial_v73.json","final":"figure_specs/c01/C01_SEANet_graph_level_v74.json"}}
+TASK_FINAL_FILENAMES={**TASK_FILENAMES,"C01_SEANet":"C01_SEANet_graph_level_v74.pptx","C01_composite":"C01_composite_defense_slide_v75.pptx"}
+TASK_SPEC_FILENAMES={"C01_SEANet":{"initial":"tests/fixtures/C01_SEANet_graph_level_initial_v73.json","final":"figure_specs/c01/C01_SEANet_graph_level_v74.json"},"C01_composite":{"initial":"figure_specs/c01/C01_composite_defense_slide.json","final":"figure_specs/c01/C01_composite_defense_slide_v75.json"}}
 ROOT=Path(__file__).resolve().parents[1]
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def shape_inventory(path):
