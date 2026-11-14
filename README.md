@@ -332,3 +332,14 @@ python tools/audit_source_composition_pptx.py .\qa\source_composition_manifest.j
 ```
 
 The audit checks object presence, uniqueness, expected object class, and source paint order. A pass does not establish visual fidelity, scientific correctness, or actual Office 2016 rendering.
+
+
+### Multi-dimensional reconstruction metrics (P1-02)
+
+Evaluate an imported PPTX against its composition manifest without collapsing editability, text fidelity, geometry, visual similarity, and scientific review into one score:
+
+```powershell
+python tools/reconstruction_quality_metrics.py .\qa\source_composition_manifest.json .\qa\imported_figure.pptx --output .\qa\reconstruction_quality_metrics.json
+```
+
+The report includes object recall, missing/duplicate IDs, object class, source order/Kendall tau, text CER, and geometry IoU when the coordinate transform is comparable. Cropped or unknown transforms are marked `NOT_COMPARABLE`. Scientific correctness and Office 2016 host rendering remain independent review gates.

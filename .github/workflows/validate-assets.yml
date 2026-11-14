@@ -44,6 +44,7 @@ jobs:
           python tools/test_source_reconstruction_router.py
           python tools/test_source_region_composer.py
           python tools/test_audit_source_composition_pptx.py
+          python tools/test_reconstruction_quality_metrics.py
           python tools/test_source_layout_split_review.py
           python tools/test_source_layout_constraints.py
           python tools/test_apply_reviewed_geometry.py
