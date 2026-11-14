@@ -124,8 +124,9 @@ def classify_release(*, route: str, candidate: dict | None = None,
             return _result("NEEDS_SCIENTIFIC_REVIEW", route,
                            blockers=["SEMANTIC_RELATION_AUDIT_MISSING"])
         if _status(semantic_audit) != "PASS":
+            detail = semantic_audit.get("blockers") or []
             return _result("NEEDS_SCIENTIFIC_REVIEW", route,
-                           blockers=semantic_audit.get("blockers") or ["SEMANTIC_RELATION_FAILURE"])
+                           blockers=["SEMANTIC_RELATION_FAILURE", *detail])
 
     required_visual_evidence = "source_comparison" if route == "import" else "candidate_render"
     if (visual is None or _status(visual) != "PASS" or
