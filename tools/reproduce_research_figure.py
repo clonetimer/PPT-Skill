@@ -275,12 +275,15 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             "path": str(source_layout_review),
             "sha256": sha256(source_layout_review),
             "audit_path": str(destination / "source_layout_review_audit.json"),
-            "audit_sha256": sha256(destination / "source_layout_review_audit.json"),
-            "status": source_layout_review_audit["status"],
-            "accepted_region_count": source_layout_review_audit["accepted_region_count"],
-            "accepted_panel_count": source_layout_review_audit["accepted_panel_count"],
-            "pending_count": source_layout_review_audit["pending_count"],
-        } if source_layout_review and source_layout_review_audit else None),
+            "audit_sha256": (
+                sha256(destination / "source_layout_review_audit.json")
+                if (destination / "source_layout_review_audit.json").is_file() else None
+            ),
+            "status": source_layout_review_audit["status"] if source_layout_review_audit else "INVALID",
+            "accepted_region_count": source_layout_review_audit["accepted_region_count"] if source_layout_review_audit else 0,
+            "accepted_panel_count": source_layout_review_audit["accepted_panel_count"] if source_layout_review_audit else 0,
+            "pending_count": source_layout_review_audit["pending_count"] if source_layout_review_audit else 0,
+        } if source_layout_review else None),
         "accepted_source_layout_facts": ({
             "regions": source_layout_review_audit["accepted_source_layout_regions"],
             "panels": source_layout_review_audit["accepted_source_panels"],
