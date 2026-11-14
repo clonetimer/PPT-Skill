@@ -84,7 +84,15 @@ def apply_reviewed_geometry(
         if target_id not in by_id:
             raise ValueError(f"UNKNOWN_FIGURESPEC_ELEMENT:{target_id}")
         element=by_id[target_id]
-        if (element.get("type") not in ("rect","roundRect","ellipse","image","group")
+        if (element.get("semantic_id") or element.get("semantic_link")
+            or element.get("semantic_role") not in (
+                "panel_boundary", "decorative_group_boundary",
+                "layout_region", "background_group", "visual_container"
+            )):
+            # Moving science nodes while leaving connectors at old endpoints
+            # visually changes the meaning of the scientific graph.
+            raise ValueError(f"SCIENTIFIC_TOPOLOGY_BINDING_FORBIDDEN:{target_id}")
+        if (element.get("type") not in ("rect","roundRect")
             or any(key not in element for key in ("x","y","w","h"))):
             raise ValueError(f"TARGET_NOT_BOUNDING_BOX_ELEMENT:{target_id}")
         normalized=accepted[source_id]["bbox_normalized"]
