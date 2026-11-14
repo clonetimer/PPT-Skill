@@ -3,7 +3,7 @@ from pathlib import Path
 from unittest.mock import patch
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE
-from pptx.util import Inches
+from pptx.util import Inches,Pt
 from pdf_figure_import import _annotate_source_shape
 from local_repair_loop import run_repair_loop
 
