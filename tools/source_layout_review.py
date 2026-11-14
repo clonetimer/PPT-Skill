@@ -56,7 +56,7 @@ def _candidate_index(layout: dict) -> dict:
 
 def _split_source_region(candidate_id: str, actual: dict, item: dict, region: list) -> list[dict]:
     """Generate two evidence-linked *geometric* regions, never semantic panels."""
-    if actual["candidate_type"] not in ("source_enclosure", "nested_source_enclosure", "visual_region", "nested_visual_region", "label_anchored_visual_region"):
+    if actual["candidate_type"] not in ("source_enclosure", "nested_source_enclosure"):
         raise ValueError("CANDIDATE_CANNOT_BE_SPLIT")
     axis = item.get("split_axis")
     value = item.get("split_position_pt")
@@ -210,8 +210,7 @@ def validate_source_layout_review(layout_path: Path, review_path: Path) -> dict:
         if decision in ("accept_region", "accept_panel", "split_region") and not locator:
             errors.append(f"EVIDENCE_LOCATOR_REQUIRED:{candidate_id}")
         if decision == "accept_panel" and actual["candidate_type"] not in (
-            "source_enclosure", "nested_source_enclosure", "interstitial_band",
-            "visual_region", "nested_visual_region", "label_anchored_visual_region"
+            "source_enclosure", "nested_source_enclosure", "interstitial_band"
         ):
             errors.append(f"CANDIDATE_CANNOT_BE_PROMOTED_TO_PANEL:{candidate_id}")
             continue
