@@ -37,7 +37,8 @@ class FinalDeliverySuccessTests(unittest.TestCase):
   self.assertEqual(r["final_delivery"]["accepted"],0)
   reasons=r["final_delivery"]["invalid_completed_reviews"][0]["reasons"]
   self.assertIn("REVIEWER_NOT_HUMAN",reasons)
-\n def test_pending_reviews_are_not_zero_rate(self):
+
+ def test_pending_reviews_are_not_zero_rate(self):
   t=good_task();t["final_review_status"]="pending"
   r=self.calc([t])
   self.assertIsNone(r["final_delivery"]["rate_among_completed"])
