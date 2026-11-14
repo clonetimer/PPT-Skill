@@ -52,7 +52,7 @@ def validate(path: Path = EXAMPLE):
     assert len(boundary["evidence_blocks"]) == 3
     assert [block["metric"] for block in boundary["evidence_blocks"]] == ["18", "3", "3"]
     assert sum("5  frequency-band panel" in x for x in boundary["evidence_blocks"][0]["items"]) == 1
-    assert any("Office 2016 host round trip" in x for x in boundary["evidence_blocks"][2]["items"])
+    assert any("PowerPoint 2016 host round trip" in x for x in boundary["evidence_blocks"][2]["items"])
     print(f"PASS {Path(path).name}: {len(slides)} slides, 3 evidence-boundary cards")
 
 
