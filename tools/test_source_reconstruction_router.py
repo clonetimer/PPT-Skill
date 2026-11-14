@@ -69,7 +69,7 @@ class ReconstructionRouterTests(unittest.TestCase):
         layout = make_layout()
         layout["layout_elements"] = [
             {"id": "v", "kind": "stroke_path", "source_order": 1, "bbox_pt": [10, 10, 80, 80]},
-            {"id": "t", "kind": "text_span", "source_order": None, "bbox_pt": [100, 10, 180, 30]},
+            {"id": "t", "kind": "text_span", "source_order": None, "bbox_pt": [220, 30, 280, 45]},
         ]
         layout["image_assets"] = []
         with tempfile.TemporaryDirectory() as folder:
