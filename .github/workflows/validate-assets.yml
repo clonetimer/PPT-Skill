@@ -40,6 +40,8 @@ jobs:
           python tools/test_source_crop_manifest.py
           python tools/test_source_layout_benchmark.py
           python tools/test_source_layout_review.py
+          python tools/test_source_layout_visual_review.py
+          python tools/test_source_reconstruction_router.py
           python tools/test_source_layout_split_review.py
           python tools/test_source_layout_constraints.py
           python tools/test_apply_reviewed_geometry.py
