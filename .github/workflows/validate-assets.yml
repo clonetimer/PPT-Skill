@@ -175,3 +175,29 @@ jobs:
             throw "PowerShell syntax errors: $($parseErrors.Count)"
           }
           Write-Host 'Windows script syntax: PASS. Real PowerPoint 2016 COM is NOT tested in CI.'
+
+
+  vision-model-smoke:
+    name: Real PP-DocLayoutV3 and PP-OCRv6 inference (P1-01B)
+    if: github.event_name == 'pull_request' && github.event.pull_request.number == 10
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install base PDF and figure dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install python-pptx jsonschema Pillow numpy pypdf PyMuPDF reportlab
+      - name: Install optional PaddleOCR and ONNX Runtime
+        run: python -m pip install -r requirements-vision.txt
+      - name: Download models and run real inference smoke
+        run: python tools/smoke_paddleocr_backend.py --output dist/vision_backend_smoke.json
+      - name: Upload real-inference evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-paddleocr-real-inference-smoke
+          path: dist/vision_backend_smoke.json
+          if-no-files-found: error
