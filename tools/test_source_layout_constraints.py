@@ -81,6 +81,18 @@ class ReviewedLayoutConstraintsTests(unittest.TestCase):
                 compile_reviewed_layout_constraints(layout, review, output)
             self.assertFalse(output.exists())
 
+    def test_compiled_constraints_validate_against_schema(self):
+        import jsonschema
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            layout, review = _review(root, axis="vertical", location=200)
+            output = root / "constraints.json"
+            result = compile_reviewed_layout_constraints(layout, review, output)
+            schema_path = Path(__file__).resolve().parents[1] / "specs/source_layout_constraints.schema.json"
+            schema = json.loads(schema_path.read_text(encoding="utf-8"))
+            jsonschema.Draft202012Validator.check_schema(schema)
+            jsonschema.validate(result, schema)
+
     def test_output_carries_pdf_and_review_hash_provenance(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
