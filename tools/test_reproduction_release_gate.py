@@ -128,5 +128,102 @@ class ReproductionReleaseGateTests(unittest.TestCase):
             classify_release(route="guess", candidate={"shape_count": 1})
 
 
+class StrictRouteEvidenceTests(unittest.TestCase):
+    def _import_evidence(self, *, reconstruction_class="native_only", pictures=0, vectors=12):
+        return dict(
+            route="import",
+            candidate={"shape_count": vectors + pictures + 4, "native_vectors": vectors,
+                       "text_objects": 4, "picture_objects": pictures, "full_page_pictures": 0},
+            import_report={"reconstruction_class": reconstruction_class,
+                           "unresolved_visible_events": 0},
+            structure={"status": "PASS"},
+            text_geometry={"status": "PASS"},
+            visual={"status": "PASS", "requires_visual_review": False,
+                    "evidence_type": "source_comparison", "renderer": "LibreOffice"},
+            office={"status": "PASS"},
+        )
+
+    def test_import_without_reconstruction_class_is_unsupported(self):
+        args = self._import_evidence()
+        args["import_report"] = {}
+        result = classify_release(**args)
+        self.assertEqual(result["status"], "UNSUPPORTED_SOURCE")
+        self.assertIn("RECONSTRUCTION_CLASS_MISSING", result["blockers"])
+
+    def test_picture_only_has_explicit_status_when_non_native_output_allowed(self):
+        args = self._import_evidence(reconstruction_class="source_picture_only", pictures=1, vectors=0)
+        result = classify_release(**args, require_native=False)
+        self.assertEqual(result["status"], "SOURCE_PICTURE_ONLY")
+        self.assertFalse(result["full_accepted"])
+
+    def test_mixed_native_and_local_picture_is_explicitly_preserved(self):
+        args = self._import_evidence(reconstruction_class="mixed_native_picture", pictures=2, vectors=10)
+        result = classify_release(**args)
+        self.assertEqual(result["status"], "TECHNICAL_PASS")
+        self.assertEqual(result["reconstruction_class"], "mixed_native_picture")
+
+    def test_mixed_class_without_native_vectors_fails(self):
+        args = self._import_evidence(reconstruction_class="mixed_native_picture", pictures=2, vectors=0)
+        result = classify_release(**args)
+        self.assertEqual(result["status"], "STRUCTURE_FAIL")
+
+    def test_missing_text_geometry_fails_closed(self):
+        args = self._import_evidence()
+        args["text_geometry"] = None
+        result = classify_release(**args)
+        self.assertEqual(result["status"], "STRUCTURE_FAIL")
+        self.assertIn("TEXT_GEOMETRY_AUDIT_MISSING", result["blockers"])
+
+    def test_visual_evidence_must_match_source_import_route(self):
+        args = self._import_evidence()
+        args["visual"] = {"status": "PASS", "requires_visual_review": False,
+                          "evidence_type": "candidate_render", "renderer": "LibreOffice"}
+        result = classify_release(**args)
+        self.assertEqual(result["status"], "NEEDS_VISUAL_REVIEW")
+
+    def test_source_math_risk_cannot_become_technical_pass(self):
+        args = self._import_evidence()
+        result = classify_release(**args, source_risks=[{"code": "SUSPICIOUS_UNICODE", "severity": "high"}])
+        self.assertEqual(result["status"], "NEEDS_SCIENTIFIC_REVIEW")
+
+    def test_figurespec_requires_static_semantic_audit_and_candidate_render(self):
+        result = classify_release(
+            route="figurespec",
+            candidate={"shape_count": 30, "native_vectors": 20, "text_objects": 10,
+                       "picture_objects": 0, "full_page_pictures": 0},
+            structure={"status": "PASS"},
+            text_geometry={"status": "PASS"},
+            office={"status": "PASS"},
+            visual={"status": "PASS", "requires_visual_review": False,
+                    "evidence_type": "candidate_render", "renderer": "LibreOffice"},
+            semantic_audit={"status": "NEEDS_REVIEW", "blockers": ["SEMANTIC_RELATION_AUDIT_MISSING"]},
+        )
+        self.assertEqual(result["status"], "NEEDS_SCIENTIFIC_REVIEW")
+
+    def test_figurespec_cannot_use_source_comparison_as_its_render_evidence(self):
+        result = classify_release(
+            route="figurespec",
+            candidate={"shape_count": 30, "native_vectors": 20, "text_objects": 10,
+                       "picture_objects": 0, "full_page_pictures": 0},
+            structure={"status": "PASS"},
+            text_geometry={"status": "PASS"},
+            office={"status": "PASS"},
+            visual={"status": "PASS", "requires_visual_review": False,
+                    "evidence_type": "source_comparison", "renderer": "LibreOffice"},
+            semantic_audit={"status": "PASS"},
+        )
+        self.assertEqual(result["status"], "NEEDS_VISUAL_REVIEW")
+
+    def test_empty_and_unknown_import_route_classifications_fail_closed(self):
+        for value in ("", "mystery", None):
+            args = self._import_evidence()
+            args["import_report"] = {"reconstruction_class": value}
+            with self.subTest(value=value):
+                result = classify_release(**args)
+                self.assertEqual(result["status"], "UNSUPPORTED_SOURCE")
+
+
+
+
 if __name__ == "__main__":
     unittest.main()
