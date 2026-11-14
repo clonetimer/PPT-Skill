@@ -31,7 +31,7 @@ def create_inputs(root):
         "semantic_edges":[["a","b"]],
         "elements":[
             {"id":"panel-a","type":"rect","x":.2,"y":.3,"w":2,"h":.5,
-             "stroke":"#123456","fill":"#FFFFFF","semantic_id":"a"},
+             "stroke":"#123456","fill":"#FFFFFF","semantic_role":"panel_boundary"},
             {"id":"panel-b","type":"rect","x":5,"y":2,"w":1,"h":1,
              "stroke":"#123456","fill":"#EEEEEE","semantic_id":"b"}
         ]
@@ -63,6 +63,22 @@ class GeometryBindingTests(unittest.TestCase):
             self.assertEqual([after["elements"][0][key] for key in ("x","y","w","h")],
                              [.4,.4,7.2,2.2])
             self.assertFalse(after["layout_provenance"]["scientific_relations_verified"])
+
+    def test_scientific_node_cannot_move_without_reconciling_connectors(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            spec,constraints,bindings=create_inputs(root)
+            obj=json.loads(spec.read_text(encoding="utf-8"))
+            obj["elements"][0]["semantic_id"]="a"
+            obj["elements"][0]["semantic_role"]="scientific_object"
+            spec.write_text(json.dumps(obj),encoding="utf-8")
+            payload=json.loads(bindings.read_text())
+            payload["figure_spec_sha256"]=hashlib.sha256(spec.read_bytes()).hexdigest()
+            bindings.write_text(json.dumps(payload))
+            dest=root/"unsafe.json"
+            with self.assertRaisesRegex(ValueError,"SCIENTIFIC_TOPOLOGY_BINDING_FORBIDDEN"):
+                apply_reviewed_geometry(spec,constraints,bindings,dest)
+            self.assertFalse(dest.exists())
 
     def test_unknown_or_unreviewed_constraint_is_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
