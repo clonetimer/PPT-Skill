@@ -9,7 +9,8 @@ from scientific_ir import ROOT, validate_expected_topology, validate_spec
 
 SCHEMA = ROOT / "specs/figure_spec_v76.schema.json"
 TOPOLOGIES = (ROOT / "specs/c01_expected_topology_v76.json",
-              ROOT / "specs/c01_standalone_expected_topology_v76.json")
+              ROOT / "specs/c01_standalone_expected_topology_v76.json",
+              ROOT / "specs/c01_composite_expected_topology_v75.json")
 
 
 def check_all():
