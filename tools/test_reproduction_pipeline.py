@@ -12,6 +12,7 @@ from PIL import Image
 
 from reproduce_research_figure import run_pipeline
 from reproduction_release_gate import classify_release
+from source_layout_review import create_source_layout_review_template
 
 
 def make_picture_pdf(path: Path):
@@ -111,6 +112,8 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
             manifest = json.loads((output / "delivery_manifest.json").read_text())
             self.assertEqual(result["status"], "UNSUPPORTED_SOURCE")
             self.assertEqual(manifest["reconstruction_class"], "source_picture_only")
+            self.assertEqual(manifest["source_route_recommendation"]["recommended_reconstruction_class"],
+                             "source_picture_only")
             self.assertFalse(manifest["final_release_approved"])
 
     def test_resource_limit_is_recorded_and_no_partial_pptx_is_left(self):
@@ -183,6 +186,45 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
             self.assertIn("panel_detection", layout)
             self.assertIn("source_layout", manifest)
             self.assertEqual(manifest["source_layout"]["path"], str(output / "source_layout.json"))
+
+    def test_pipeline_records_pending_human_layout_review_without_promoting_candidates(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source = root / "source.pdf"
+            output = root / "out"
+            review_path = root / "source_layout_review.json"
+            make_vector_pdf(source, drawings=2)
+            run_pipeline(source, output, mode="import", render_host="none")
+            create_source_layout_review_template(output / "source_layout.json", review_path)
+            result = run_pipeline(
+                source, output, mode="import", render_host="none",
+                source_layout_review=review_path,
+            )
+            manifest = json.loads((output / "delivery_manifest.json").read_text())
+            self.assertEqual(result["source_layout_review"]["status"], "REVIEW_PENDING")
+            self.assertEqual(manifest["accepted_source_layout_facts"], {"regions": [], "panels": []})
+            self.assertEqual(manifest["source_route_recommendation"]["recommended_reconstruction_class"],
+                             "native_only")
+            self.assertTrue((output / "source_layout_review_audit.json").exists())
+
+    def test_invalid_layout_review_fails_before_candidate_generation(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source = root / "source.pdf"
+            output = root / "out"
+            review_path = root / "source_layout_review.json"
+            make_vector_pdf(source, drawings=2)
+            run_pipeline(source, output, mode="import", render_host="none")
+            review = create_source_layout_review_template(output / "source_layout.json", review_path)
+            review["source_layout_sha256"] = "0" * 64
+            review_path.write_text(json.dumps(review), encoding="utf-8")
+            result = run_pipeline(
+                source, output, mode="import", render_host="none",
+                source_layout_review=review_path,
+            )
+            self.assertEqual(result["status"], "STRUCTURE_FAIL")
+            self.assertIn("SOURCE_LAYOUT_REVIEW_INVALID", result["error"])
+            self.assertFalse((output / "candidate_editable.pptx").exists())
 
     def test_import_without_visual_export_is_not_technical_pass(self):
         with tempfile.TemporaryDirectory() as folder:
