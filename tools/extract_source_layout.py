@@ -250,8 +250,19 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
             if drawing["type"] == "group":
                 continue
 
-            rect = fitz.Rect(drawing.get("rect", page_rect)) & region
+            source_rect = fitz.Rect(drawing.get("rect", page_rect))
+            # Rect.__and__ can return a zero-height rectangle for a horizontal
+            # line even when that line is completely outside the crop. Check
+            # inclusive source bounds before accepting degenerate intersections.
+            if (source_rect.x1 < region.x0 or source_rect.x0 > region.x1 or
+                source_rect.y1 < region.y0 or source_rect.y0 > region.y1):
+                continue
+            rect = source_rect & region
             for _, clip in clip_stack:
+                if (rect.x1 < clip.x0 or rect.x0 > clip.x1 or
+                    rect.y1 < clip.y0 or rect.y0 > clip.y1):
+                    rect = fitz.Rect(0, 0, 0, 0)
+                    break
                 rect &= clip
             if rect.width < 0 or rect.height < 0 or (rect.width == 0 and rect.height == 0):
                 continue
