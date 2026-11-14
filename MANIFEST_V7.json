@@ -160,7 +160,9 @@
       "examples/C01_composite_defense_slide_v75.svg",
       "dist/C01_composite_defense_slide_v75.pptx",
       "dist/C01_composite_defense_slide_v75_preview.pdf",
-      "dist/C01_composite_defense_slide_v75_preview.png"
+      "dist/C01_composite_defense_slide_v75_preview.png",
+      "dist/C01_composite_defense_slide_v75_build.json",
+      "dist/C01_composite_defense_slide_v75_validation.json"
     ],
     "planning_specs": [
       "specs/deck_spec_v75.example.json",
