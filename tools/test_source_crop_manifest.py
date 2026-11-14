@@ -16,6 +16,7 @@ def make_pdf(path: Path):
     doc = fitz.open()
     page = doc.new_page(width=300, height=200)
     page.draw_rect(fitz.Rect(20, 30, 280, 140), color=(.2, .3, .4), width=1)
+    page.draw_line((40, 100), (260, 100), color=(.4, .2, .1), width=1)
     page.insert_text((30, 165), "Source figure caption", fontsize=9)
     doc.save(path)
     doc.close()
@@ -53,6 +54,7 @@ class SourceCropManifestAuditTests(unittest.TestCase):
             self.assertEqual(result["passed"], 1)
             self.assertEqual(result["rows"][0]["caption"]["anchor"], "Source figure caption")
             self.assertTrue(result["rows"][0]["source_content"]["has_visual_content"])
+            self.assertGreaterEqual(result["rows"][0]["source_content"]["stroke_segment_candidates"], 1)
 
     def test_hash_mismatch_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
