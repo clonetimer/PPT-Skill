@@ -94,11 +94,19 @@ in its delivery manifest.
 
 ## Correctness boundary
 
-Only the explicitly named bounding-box geometry is changed (x/y/w/h).
-Unbound elements, scientific labels, dataset values and semantic edges are
-kept unchanged in the FigureSpec. Unknown target IDs, duplicate mappings,
-unreviewed constraints, changed SHA-256, unsupported shape types, attempted
-in-place overwrite, and source/target aspect ratio drift above 2% are errors.
+Only the explicitly named **decorative panel frame/visual container**
+geometry is changed (x/y/w/h). Moving a scientific node while leaving graph
+edges at their previous coordinates could visually corrupt the topology,
+so any target with a semantic_id, semantic_link, or scientific-object role is
+rejected with SCIENTIFIC_TOPOLOGY_BINDING_FORBIDDEN. Text labels, data, edge
+definitions and other FigureSpec elements remain unchanged. The tool does
+not yet reflow the *contents* of a panel when its border moves: any such
+content adaptation requires an explicit geometry-and-connector-aware repair,
+not a blanket shape translation.
+
+Unknown target IDs, duplicate mappings, unreviewed constraints, changed
+SHA-256, unsupported shape types, attempted in-place overwrite and
+source/target aspect ratio drift above 2% are errors.
 
 The output is still **geometric evidence**, never automatic scientific
 acceptance. A reviewer.type=human field is an attestation in JSON, not an
