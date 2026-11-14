@@ -176,7 +176,7 @@ def build_spec() -> dict:
     spec = copy.deepcopy(make_spec())
     add_input_graph_icon(spec)
     add_class_output(spec)
-    spec["id"] = "C01_composite_defense_slide"
+    spec["id"] = "C01_composite_defense_slide_v75"
     spec["version"] = "7.5.0"
     spec["evidence_status"] = "source-visible two-panel structural redraw with schematic substitutions"
     return spec
