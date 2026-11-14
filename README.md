@@ -26,6 +26,31 @@ Three NEW synthetic cross-family PDFs (multi-panel, complex hypergraph,
 statistics) are exercised by tools/test_unseen_figure_families.py in CI;
 they are not evidence of first-shot success on independent real papers.
 
+## Source-first layout evidence
+
+Before drafting or adapting a FigureSpec from an unfamiliar paper, extract a
+source-observed layout record:
+
+~~~bash
+python tools/extract_source_layout.py source.pdf --page 1 \
+  --region 40 60 980 720 --output out/source_layout.json
+~~~
+
+The record contains explicit panel-label candidates and enclosing source
+boundaries, relative coordinates, source text anchors and font tiers, stroke
+and fill palette counts, clipping regions, independent image/XRef hashes, and
+line-segment candidates. It does **not** invent panel divisions when labels
+are absent, nor infer directed graph edges from line geometry alone; such
+relations remain unverified until the source arrowhead/legend/description is
+checked. See [source layout evidence schema](specs/source_figure_layout.schema.json)
+and [P1-01 implementation notes](docs/P1_01_SOURCE_LAYOUT_EVIDENCE_2026-11-14.md).
+
+The unified `reproduce_research_figure.py` entrypoint also emits
+`source_layout.json` before generating the candidate, records its hash and
+panel/element counts in `delivery_manifest.json`, and accepts a 1-based
+`--page` plus optional PDF-point `--region`. This is an evidence artifact,
+not a semantic FigureSpec or an automatic claim that a line is directed.
+
 ## Evidence-first new-figure recovery (first-pass gate)
 
 For an **unseen author-supplied vector PDF**, prefer the new quality-gated
