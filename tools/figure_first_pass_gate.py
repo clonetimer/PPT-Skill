@@ -117,13 +117,17 @@ def _tile_similarity(a: np.ndarray, b: np.ndarray) -> float:
 
 def compare_rendered_pages(source_pdf: Path, candidate_pdf: Path,
                            *, dpi: int = 110, grid: int = 4,
-                           preview: Path | None = None) -> dict:
+                           preview: Path | None = None,
+                           source_page_index: int = 0,
+                           candidate_page_index: int = 0) -> dict:
     """Compare final PDF-exported appearance; identify weak spatial tiles."""
-    def raster(pdf):
+    def raster(pdf, page_index):
         with fitz.open(pdf) as doc:
-            pix = doc[0].get_pixmap(matrix=fitz.Matrix(dpi/72, dpi/72), alpha=False)
+            if page_index < 0 or page_index >= len(doc):
+                raise IndexError(f"page index {page_index} is outside {pdf.name}")
+            pix = doc[page_index].get_pixmap(matrix=fitz.Matrix(dpi/72, dpi/72), alpha=False)
             return Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
-    src, dst = raster(source_pdf), raster(candidate_pdf)
+    src, dst = raster(source_pdf, source_page_index), raster(candidate_pdf, candidate_page_index)
     if src.size != dst.size:
         if abs(src.width/src.height - dst.width/dst.height) > .003:
             raise ValueError("Source and candidate page aspect ratios differ")
