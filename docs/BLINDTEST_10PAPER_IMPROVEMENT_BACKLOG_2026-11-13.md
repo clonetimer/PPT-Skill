@@ -37,7 +37,7 @@
 ### P1-01 initial implementation record (2026-11-14)
 
 - Added `tools/extract_source_layout.py` and `specs/source_figure_layout.schema.json`.
-- The unified pipeline now extracts `source_layout.json` before generating either route and stores its hash, panel summary, layout element count, edge-candidate count and image count in the delivery manifest. It supports 1-based CLI `--page` and PDF-point `--region`.
+- The unified pipeline now extracts `source_layout.json` before generating either route and stores its hash, panel summary, layout element count, stroke-segment-candidate count and image count in the delivery manifest. It supports 1-based CLI `--page` and PDF-point `--region`.
 - Explicit panel markers and enclosing source rectangles are recorded as candidates; unlabeled figures are not split into invented panels. Lines remain `directedness: undetermined` unless source evidence later resolves them.
 - Regression tests: 8/8 layout extraction, 10/10 end-to-end pipeline; [CI #193 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43553392378).
 - [P1-01 evidence report](P1_01_SOURCE_LAYOUT_EVIDENCE_2026-11-14.md).
