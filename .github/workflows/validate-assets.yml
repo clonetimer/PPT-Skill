@@ -33,6 +33,7 @@ jobs:
           python tools/test_reproduction_release_gate.py
           python tools/test_reproduction_pipeline.py
           python tools/test_figure_spec_release_audit.py
+          python tools/test_source_layout_extraction.py
           python tools/test_audit_imported_pdf_figure.py
           python tools/test_office2016_compat.py
           python tools/test_figure_first_pass_gate.py
