@@ -70,7 +70,6 @@ def add_input_graph_icon(spec: dict) -> None:
 
 def add_class_output(spec: dict) -> None:
     elements = spec["elements"]
-    dense = next(e for e in elements if e.get("semantic_id") == "dense")
     line = next(e for e in elements if e.get("id") == "el_0089")
     label = next(e for e in elements if e.get("id") == "el_0090")
     group = {
@@ -139,7 +138,7 @@ def annotate_accessibility(path: Path) -> dict:
         elif shape.left > int(8.85 * 914400) and abs(shape.width - int(0.15 * 914400)) < 500:
             alt = "Semantic grouping boundary for the five independent class-output squares."
         elif shape.left > int(1.2 * 914400) and shape.top > int(5.2 * 914400) and shape.width < int(0.5 * 914400):
-            alt = "Schematic input graph icon with two node groups and dashed inter-group links."
+            alt = "Schematic total-graph input with four stacked band subgraphs, twelve nodes and nine dashed inter-band connectors."
         else:
             alt = "Editable vector object in the complete two-panel FBG-SEANet method overview."
         node = _c_nv_pr(shape)
@@ -160,6 +159,9 @@ def annotate_accessibility(path: Path) -> dict:
         "alt_text_count": len(slide.shapes),
         "alt_text_coverage": 1.0,
         "input_graph_icon": "12 nodes across four band-subgraph rows with nine dashed inter-band connectors",
+        "input_graph_nodes": 12,
+        "input_graph_band_subgraphs": 4,
+        "input_graph_interband_links": 9,
         "input_graph_nodes": 12,
         "input_graph_band_subgraphs": 4,
         "input_graph_interband_links": 9,
