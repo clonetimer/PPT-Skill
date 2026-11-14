@@ -27,6 +27,8 @@ TASK_FILENAMES={
  "DECK01":"DECK01_c01_defense.pptx",
 }
 TASK_FINAL_FILENAMES={**TASK_FILENAMES,"C01_SEANet":"C01_SEANet_graph_level_v74.pptx"}
+TASK_SPEC_FILENAMES={"C01_SEANet":{"initial":"tests/fixtures/C01_SEANet_graph_level_initial_v73.json","final":"figure_specs/c01/C01_SEANet_graph_level_v74.json"}}
+ROOT=Path(__file__).resolve().parents[1]
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def shape_inventory(path):
  prs=Presentation(path);out=[]
@@ -52,6 +54,25 @@ def compare(initial,final):
  return {"initial_sha256":sha(initial),"final_sha256":sha(final),
   "byte_identical":sha(initial)==sha(final),"initial_shape_count":len(a),"final_shape_count":len(b),
   "object_diff":changes,"changed_objects":len(changes)}
+def compare_specs(initial_path,final_path):
+ a=json.loads(Path(initial_path).read_text(encoding="utf-8"))
+ b=json.loads(Path(final_path).read_text(encoding="utf-8"))
+ aa={x["id"]:x for x in a["elements"]};bb={x["id"]:x for x in b["elements"]};changes=[]
+ for object_id in sorted(set(aa)|set(bb)):
+  if object_id not in aa:changes.append({"id":object_id,"kind":"added","after":bb[object_id]})
+  elif object_id not in bb:changes.append({"id":object_id,"kind":"removed","before":aa[object_id]})
+  else:
+   fields={key:{"before":aa[object_id].get(key),"after":bb[object_id].get(key)}
+           for key in sorted(set(aa[object_id])|set(bb[object_id]))
+           if aa[object_id].get(key)!=bb[object_id].get(key)}
+   if fields:changes.append({"id":object_id,"kind":"modified","fields":fields})
+ return {"initial_sha256":sha(initial_path),"final_sha256":sha(final_path),
+         "initial_elements":len(aa),"final_elements":len(bb),
+         "added":sum(x["kind"]=="added" for x in changes),
+         "removed":sum(x["kind"]=="removed" for x in changes),
+         "modified":sum(x["kind"]=="modified" for x in changes),
+         "changes":changes}
+
 def build_packet(initial_dir,final_dir,output_dir):
  initial_dir,final_dir,output_dir=map(Path,(initial_dir,final_dir,output_dir))
  output_dir.mkdir(parents=True,exist_ok=True);rows=[]
@@ -66,6 +87,9 @@ def build_packet(initial_dir,final_dir,output_dir):
   if not final.is_file():
    rows.append({**base,"status":"NO_FINAL_REPAIR_ARTIFACT","initial":initial_filename});continue
   diff=compare(initial,final)
+  if task in TASK_SPEC_FILENAMES:
+   spec_paths=TASK_SPEC_FILENAMES[task]
+   diff["figure_spec_diff"]=compare_specs(ROOT/spec_paths["initial"],ROOT/spec_paths["final"])
   status="NO_REPAIR_APPLIED" if diff["byte_identical"] else "REPAIR_COMPARISON_READY"
   rows.append({**base,"status":status,"initial":initial_filename,"final":final_filename,"diff":diff})
  packet={"schema_version":"1.0.0","population":len(TASKS),"tasks":rows,
