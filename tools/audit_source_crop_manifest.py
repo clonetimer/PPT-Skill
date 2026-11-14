@@ -73,11 +73,23 @@ def audit_source_crop_manifest(source_dir: Path, manifest_path: Path) -> dict:
                                 info for info in page.get_image_info(xrefs=True)
                                 if fitz.Rect(info["bbox"]).intersects(region)
                             ]
-                            drawings = [
-                                item for item in page.get_drawings(extended=True)
-                                if item.get("type") not in ("clip", "group")
-                                and fitz.Rect(item.get("rect", page_rect)).intersects(region)
-                            ]
+                            drawings = []
+                            stroke_segment_candidates = 0
+                            for item in page.get_drawings(extended=True):
+                                if item.get("type") in ("clip", "group"):
+                                    continue
+                                visible_drawing = fitz.Rect(item.get("rect", page_rect)) & region
+                                # Keep horizontal/vertical zero-height or zero-width
+                                # strokes; Rect.intersects() drops these valid paths.
+                                if (visible_drawing.width < 0 or visible_drawing.height < 0 or
+                                    (visible_drawing.width == 0 and visible_drawing.height == 0)):
+                                    continue
+                                drawings.append(item)
+                                stroke_segment_candidates += sum(
+                                    1 for segment in item.get("items", [])
+                                    if segment[0] == "l" and
+                                    region.contains(segment[1]) and region.contains(segment[2])
+                                )
                             text_spans = []
                             for block in page.get_text("dict")["blocks"]:
                                 if block.get("type") != 0:
@@ -90,6 +102,7 @@ def audit_source_crop_manifest(source_dir: Path, manifest_path: Path) -> dict:
                                 "image_paint_events": image_paints,
                                 "image_xref_occurrences": len(image_xrefs),
                                 "drawing_records": len(drawings),
+                                "stroke_segment_candidates": stroke_segment_candidates,
                                 "text_spans": len(text_spans),
                                 "has_visual_content": bool(image_paints or drawings or text_spans),
                             }
