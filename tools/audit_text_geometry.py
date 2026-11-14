@@ -17,7 +17,10 @@ import fitz
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
-from pdf_figure_import import _normalize_pdf_text, _source_font
+from pdf_figure_import import (
+    _normalize_pdf_text, _source_font, _span_visible_fraction,
+    MIN_VISIBLE_TEXT_FRACTION,
+)
 
 EMU_PER_PT = 12700.0
 DEFAULT_OVERLAP_THRESHOLD_PT = 2.16
@@ -35,6 +38,8 @@ def _source_spans(page):
     for block_index, block in enumerate(page.get_text("dict")["blocks"]):
         for line_index, line in enumerate(block.get("lines", [])):
             for span_index, span in enumerate(line["spans"]):
+                if _span_visible_fraction(span, page.rect) < MIN_VISIBLE_TEXT_FRACTION:
+                    continue
                 text = _normalize_pdf_text(span.get("text", ""))
                 if not text.strip():
                     continue
@@ -102,7 +107,7 @@ def _unicode_findings(text):
         codepoint = f"U+{ord(char):04X}"
         category = unicodedata.category(char)
         name = unicodedata.name(char, "UNNAMED")
-        if (char == "\ufffd" or category in ("Co", "Cs", "Cn") or
+        if (char in ("\ufffd", "□") or category in ("Co", "Cs", "Cn") or
                 (category == "Cc" and char not in "\t\n\r")):
             suspicious.append({"char": char, "codepoint": codepoint,
                                "unicode_name": name, "category": category})
@@ -218,6 +223,7 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
         "math_glyph_count": len(math_glyphs),
         "math_glyphs": math_glyphs,
         "suspicious_glyph_count": len(suspicious_glyphs),
+        "glyph_substitution_count": sum(item["char"] == "□" for item in suspicious_glyphs),
         "suspicious_glyphs": suspicious_glyphs,
         "overlap_threshold_pt": overlap_threshold_pt,
         "read_only": True,
