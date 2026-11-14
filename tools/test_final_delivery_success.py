@@ -14,6 +14,10 @@ class FinalDeliverySuccessTests(unittest.TestCase):
   (p/"b.json").write_text(json.dumps({"dataset_id":"frozen","first_pass_generated":2,"mean_score_24":18.2,"rows":[
    {"figure_id":"a","first_pass":{"strict_pass":False}},{"figure_id":"b","first_pass":{"strict_pass":False}}]}))
   (p/"f.json").write_text(json.dumps({"reviewers":[{"reviewer_id":"R1","independent":True,"discipline":"control"}],"tasks":tasks}))
+  reviewer={"reviewer_id":"R1","independent":True,"discipline":"control"}
+  if tasks and tasks[0].get("reviewer_id")=="R2":
+   reviewer={"reviewer_id":"R2","independent":False,"discipline":"control"}
+  (p/"f.json").write_text(json.dumps({"reviewers":[reviewer],"tasks":tasks}))
   return calculate(p/"b.json",p/"f.json")
  def test_valid_final_pass_after_repair_counts_without_changing_first_pass(self):
   r=self.calc([good_task()])
@@ -27,6 +31,8 @@ class FinalDeliverySuccessTests(unittest.TestCase):
   self.assertTrue(r["final_delivery"]["invalid_completed_reviews"])
  def test_not_independent_reviewer_does_not_count(self):
   t=good_task()
+  # The registered reviewer exists but is explicitly not independent.
+  t["reviewer_id"]="R2"
   r=self.calc([t])
   self.assertEqual(r["final_delivery"]["accepted"],0)
  def test_pending_reviews_are_not_zero_rate(self):
