@@ -35,6 +35,28 @@ def make_two_panel_pdf(path: Path, *, labels=True, include_image=False):
     doc.close()
 
 
+def make_stacked_panel_pdf(path: Path, *, outer_frame=False):
+    doc = fitz.open()
+    page = doc.new_page(width=400, height=500)
+    if outer_frame:
+        page.draw_rect(fitz.Rect(20, 20, 380, 480), color=(.1, .1, .1), width=1)
+    page.draw_rect(fitz.Rect(40, 40, 360, 210), color=(.1, .2, .4), width=1)
+    page.draw_rect(fitz.Rect(40, 245, 360, 455), color=(.4, .2, .1), width=1)
+    page.draw_rect(fitz.Rect(65, 70, 335, 180), color=(.2, .3, .5), fill=(.9, .94, .98))
+    page.draw_rect(fitz.Rect(65, 280, 335, 425), color=(.5, .3, .2), fill=(.98, .93, .9))
+    doc.save(path)
+    doc.close()
+
+
+def make_single_frame_pdf(path: Path):
+    doc = fitz.open()
+    page = doc.new_page(width=600, height=400)
+    page.draw_rect(fitz.Rect(20, 20, 580, 380), color=(.1, .2, .4), width=1)
+    page.draw_line((50, 100), (550, 100), color=(.2, .3, .4), width=1)
+    doc.save(path)
+    doc.close()
+
+
 class SourceLayoutExtractionTests(unittest.TestCase):
     def test_explicit_panel_markers_and_boundaries_are_detected_in_source_order(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -84,6 +106,39 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             self.assertEqual(layout["panel_detection"]["status"], "NO_EXPLICIT_PANEL_MARKERS")
             self.assertEqual(layout["panel_detection"]["panels"], [])
             self.assertTrue(layout["requires_human_review"])
+
+    def test_unlabeled_stacked_enclosures_create_review_only_panel_candidates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "stacked.pdf"
+            make_stacked_panel_pdf(source)
+            layout = extract_source_layout(source)
+            detection = layout["panel_detection"]
+            self.assertEqual(detection["panels"], [])
+            self.assertEqual(detection["candidate_status"], "CANDIDATES_FOUND")
+            self.assertTrue(any(g["axis"] == "vertical_stack" for g in detection["alignment_groups"]))
+            self.assertTrue(any(c["candidate_type"] == "interstitial_band"
+                                for c in detection["unlabeled_panel_candidates"]))
+            self.assertTrue(all(c["review_status"] == "needs_human_review"
+                                for c in detection["unlabeled_panel_candidates"]))
+
+    def test_outer_figure_frame_is_not_promoted_to_an_unlabeled_panel(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "outer_frame.pdf"
+            make_single_frame_pdf(source)
+            layout = extract_source_layout(source)
+            detection = layout["panel_detection"]
+            self.assertEqual(detection["panels"], [])
+            self.assertEqual(detection["candidate_status"], "NO_GEOMETRIC_CANDIDATES")
+            self.assertEqual(detection["unlabeled_panel_candidates"], [])
+
+    def test_nested_outer_frame_is_filtered_while_internal_enclosures_remain_candidates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "nested.pdf"
+            make_stacked_panel_pdf(source, outer_frame=True)
+            layout = extract_source_layout(source)
+            candidates = layout["panel_detection"]["unlabeled_panel_candidates"]
+            self.assertGreaterEqual(len([c for c in candidates if c["candidate_type"] == "source_enclosure"]), 2)
+            self.assertFalse(any(c["bbox_pt"] == [20.0, 20.0, 380.0, 480.0] for c in candidates))
 
     def test_layout_elements_use_source_relative_coordinates(self):
         with tempfile.TemporaryDirectory() as tmp:
