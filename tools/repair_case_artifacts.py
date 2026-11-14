@@ -37,7 +37,7 @@ def pptx_object_snapshot(path: Path) -> dict:
     objects = {}
     for slide_index, slide in enumerate(prs.slides, 1):
         for shape_index, shape in enumerate(slide.shapes):
-            key = f"{slide_index}:{shape.name}:{shape_index}"
+            key = f"{slide_index}:{shape_index}"
             text = shape.text if shape.has_text_frame else None
             runs = []
             if shape.has_text_frame:
