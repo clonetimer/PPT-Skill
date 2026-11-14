@@ -11,18 +11,20 @@ from source_reconstruction_router import build_reconstruction_routes
 from source_region_composer import build_source_composition_manifest, write_source_composition_manifest
 
 
-def make_layout():
+def make_layout(include_shared=False):
+    elements = [
+        {"id": "image_a", "kind": "image", "source_order": 1, "bbox_pt": [10, 10, 160, 140]},
+        {"id": "image_b", "kind": "image", "source_order": 2, "bbox_pt": [210, 10, 390, 140]},
+        {"id": "vector_b", "kind": "filled_path", "source_order": 3, "bbox_pt": [220, 20, 380, 130]},
+        {"id": "text_b", "kind": "text_span", "source_order": None, "bbox_pt": [240, 40, 300, 60], "text": "Panel B"},
+    ]
+    if include_shared:
+        elements.append({"id": "shared", "kind": "stroke_path", "source_order": 4, "bbox_pt": [150, 40, 220, 50]})
     return {
         "schema_version": "1.1.0",
         "source": {"filename": "figure.pdf", "sha256": "a" * 64, "page_index": 0},
         "figure_region_pt": [0.0, 0.0, 400.0, 300.0],
-        "layout_elements": [
-            {"id": "image_a", "kind": "image", "source_order": 1, "bbox_pt": [10, 10, 160, 140]},
-            {"id": "image_b", "kind": "image", "source_order": 2, "bbox_pt": [210, 10, 390, 140]},
-            {"id": "vector_b", "kind": "filled_path", "source_order": 3, "bbox_pt": [220, 20, 380, 130]},
-            {"id": "text_b", "kind": "text_span", "source_order": None, "bbox_pt": [240, 40, 300, 60], "text": "Panel B"},
-            {"id": "shared", "kind": "stroke_path", "source_order": 4, "bbox_pt": [150, 40, 220, 50]},
-        ],
+        "layout_elements": elements,
         "image_assets": [
             {"id": "image_a", "source_order": 1, "bbox_pt": [10, 10, 160, 140]},
             {"id": "image_b", "source_order": 2, "bbox_pt": [210, 10, 390, 140]},
@@ -39,11 +41,11 @@ def make_layout():
 
 
 class SourceRegionComposerTests(unittest.TestCase):
-    def _files(self, root: Path):
+    def _files(self, root: Path, include_shared=False):
         layout_path = root / "layout.json"
         review_path = root / "review.json"
         routes_path = root / "routes.json"
-        layout_path.write_text(json.dumps(make_layout(), indent=2), encoding="utf-8")
+        layout_path.write_text(json.dumps(make_layout(include_shared=include_shared), indent=2), encoding="utf-8")
         review = create_source_layout_review_template(layout_path, review_path)
         review["reviewer"] = {"name": "reviewer", "type": "human"}
         for item in review["decisions"]:
@@ -70,7 +72,7 @@ class SourceRegionComposerTests(unittest.TestCase):
 
     def test_shared_boundary_object_is_listed_once_and_blocks_execution(self):
         with tempfile.TemporaryDirectory() as folder:
-            paths = self._files(Path(folder))
+            paths = self._files(Path(folder), include_shared=True)
             result = build_source_composition_manifest(*paths)
         shared = next(x for x in result["shared_boundary_objects"] if x["source_object_id"] == "shared")
         self.assertFalse(shared["duplicated"])
