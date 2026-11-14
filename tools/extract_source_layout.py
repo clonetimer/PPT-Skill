@@ -118,8 +118,17 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
             rect = fitz.Rect(drawing.get("rect", page_rect)) & region
             for _, clip in clip_stack:
                 rect &= clip
-            if rect.is_empty or rect.width <= 0 or rect.height <= 0:
+            if rect.is_empty or rect.width < 0 or rect.height < 0:
                 continue
+            # Horizontal/vertical strokes have a zero-height/width PDF bbox.
+            # Preserve them with a minimal geometry envelope rather than
+            # discarding the source relation candidate as an empty object.
+            if rect.width == 0:
+                rect.x0 -= .01
+                rect.x1 += .01
+            if rect.height == 0:
+                rect.y0 -= .01
+                rect.y1 += .01
 
             seqno = drawing.get("seqno")
             color = _hex_rgb(drawing.get("color"))
@@ -235,7 +244,20 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
 
         panels = []
         used_boundaries = set()
-        for marker in sorted(text_markers, key=lambda item: item["reading_order"]):
+        # Group labels into approximate visual rows before left-to-right
+        # ordering. Font metrics can shift a larger "(b)" above "(a)" by a
+        # couple of points even when both labels share the same panel row.
+        ordered_markers = []
+        marker_rows = []
+        row_tolerance = max(3.0, region.height * .04)
+        for marker in sorted(text_markers, key=lambda item: item["rect"].y0):
+            if not marker_rows or marker["rect"].y0 - marker_rows[-1][0]["rect"].y0 > row_tolerance:
+                marker_rows.append([marker])
+            else:
+                marker_rows[-1].append(marker)
+        for row in marker_rows:
+            ordered_markers.extend(sorted(row, key=lambda item: item["rect"].x0))
+        for marker in ordered_markers:
             center = fitz.Point((marker["rect"].x0 + marker["rect"].x1) / 2,
                                 (marker["rect"].y0 + marker["rect"].y1) / 2)
             matches = [
