@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import math
 import json
 from pathlib import Path
 
@@ -51,6 +52,60 @@ def _candidate_index(layout: dict) -> dict:
             "source_image_id": gutter["source_image_id"],
         }
     return index
+
+
+def _split_source_region(candidate_id: str, actual: dict, item: dict, region: list) -> list[dict]:
+    """Generate two evidence-linked *geometric* regions, never semantic panels."""
+    if actual["candidate_type"] not in ("source_enclosure", "nested_source_enclosure"):
+        raise ValueError("CANDIDATE_CANNOT_BE_SPLIT")
+    axis = item.get("split_axis")
+    value = item.get("split_position_pt")
+    if axis not in ("horizontal", "vertical") or isinstance(value, bool):
+        raise ValueError("INVALID_SPLIT_GEOMETRY")
+    if not isinstance(value, (float, int)) or not math.isfinite(float(value)):
+        raise ValueError("INVALID_SPLIT_GEOMETRY")
+    box = actual.get("bbox_pt")
+    if not isinstance(box, list) or len(box) != 4:
+        raise ValueError("INVALID_SPLIT_GEOMETRY")
+    x0, y0, x1, y1 = (float(n) for n in box)
+    rx0, ry0, rx1, ry1 = (float(n) for n in region)
+    if (not all(math.isfinite(v) for v in (x0,y0,x1,y1,rx0,ry0,rx1,ry1))
+        or x0 < rx0 or y0 < ry0 or x1 > rx1 or y1 > ry1
+        or x1 <= x0 or y1 <= y0):
+        raise ValueError("INVALID_SPLIT_GEOMETRY")
+    cut = float(value)
+    low, high = (y0, y1) if axis == "horizontal" else (x0, x1)
+    min_gap = max(2.0, (high - low) * 0.05)
+    if cut <= low + min_gap or cut >= high - min_gap:
+        raise ValueError("INVALID_SPLIT_GEOMETRY")
+    boxes = (
+        [[x0,y0,x1,cut], [x0,cut,x1,y1]]
+        if axis == "horizontal" else
+        [[x0,y0,cut,y1], [cut,y0,x1,y1]]
+    )
+    result = []
+    for index, child in enumerate(boxes, 1):
+        normalized = [
+            round((child[0] - rx0) / (rx1 - rx0), 6),
+            round((child[1] - ry0) / (ry1 - ry0), 6),
+            round((child[2] - child[0]) / (rx1 - rx0), 6),
+            round((child[3] - child[1]) / (ry1 - ry0), 6),
+        ]
+        result.append({
+            "candidate_id": f"{candidate_id}__part{index}",
+            "candidate_type": "human_split_region",
+            "bbox_pt": [round(v, 6) for v in child],
+            "bbox_normalized": normalized,
+            "derived_from_candidate": candidate_id,
+            "split_axis": axis,
+            "split_position_pt": cut,
+            "confidence": actual["confidence"],
+            "semantic_role": "geometric_region_only",
+            "review_state": "human_accepted_geometry_not_science",
+            "rationale": str(item.get("rationale","")).strip(),
+            "evidence_locator": str(item.get("evidence_locator","")).strip(),
+        })
+    return result
 
 
 def create_source_layout_review_template(layout_path: Path, output_path: Path) -> dict:
@@ -127,6 +182,7 @@ def validate_source_layout_review(layout_path: Path, review_path: Path) -> dict:
 
     accepted_regions = []
     accepted_panels = []
+    split_region_count = 0
     rejected = []
     pending = []
     for item in decisions:
@@ -140,10 +196,10 @@ def validate_source_layout_review(layout_path: Path, review_path: Path) -> dict:
         rationale = str(item.get("rationale", "")).strip()
         locator = str(item.get("evidence_locator", "")).strip()
 
-        if decision not in ("pending", "accept_region", "accept_panel", "reject", "defer"):
+        if decision not in ("pending", "accept_region", "accept_panel", "split_region", "reject", "defer"):
             errors.append(f"INVALID_DECISION:{candidate_id}")
             continue
-        if reviewer_type == "assistant_visual_triage" and decision in ("accept_region", "accept_panel", "reject"):
+        if reviewer_type == "assistant_visual_triage" and decision in ("accept_region", "accept_panel", "split_region", "reject"):
             errors.append(f"ASSISTANT_CANNOT_APPROVE_OR_REJECT:{candidate_id}")
             continue
         if decision in ("accept_region", "accept_panel", "reject"):
@@ -151,12 +207,24 @@ def validate_source_layout_review(layout_path: Path, review_path: Path) -> dict:
                 errors.append(f"HUMAN_REVIEWER_REQUIRED:{candidate_id}")
             if not rationale:
                 errors.append(f"REVIEW_RATIONALE_REQUIRED:{candidate_id}")
-        if decision in ("accept_region", "accept_panel") and not locator:
+        if decision in ("accept_region", "accept_panel", "split_region") and not locator:
             errors.append(f"EVIDENCE_LOCATOR_REQUIRED:{candidate_id}")
         if decision == "accept_panel" and actual["candidate_type"] not in (
             "source_enclosure", "nested_source_enclosure", "interstitial_band"
         ):
             errors.append(f"CANDIDATE_CANNOT_BE_PROMOTED_TO_PANEL:{candidate_id}")
+            continue
+
+        if decision == "split_region":
+            try:
+                children = _split_source_region(
+                    candidate_id, actual, item, layout["figure_region_pt"]
+                )
+            except ValueError as exc:
+                errors.append(f"{exc}:{candidate_id}")
+                continue
+            split_region_count += 1
+            accepted_regions.extend({**child, "reviewer": reviewer} for child in children)
             continue
 
         record = {
@@ -176,6 +244,13 @@ def validate_source_layout_review(layout_path: Path, review_path: Path) -> dict:
             pending.append(candidate_id)
 
     valid = not errors
+    if not valid:
+        # Prevent consumers from using partially approved geometry when any
+        # part of the file failed integrity, provenance or review checks.
+        accepted_regions.clear()
+        accepted_panels.clear()
+        split_region_count = 0
+        rejected.clear()
     return {
         "status": (
             "INVALID" if not valid else
@@ -188,6 +263,7 @@ def validate_source_layout_review(layout_path: Path, review_path: Path) -> dict:
         "decision_count": len(decisions),
         "accepted_region_count": len(accepted_regions),
         "accepted_panel_count": len(accepted_panels),
+        "split_region_count": split_region_count,
         "rejected_count": len(rejected),
         "pending_count": len(pending),
         "accepted_source_layout_regions": accepted_regions,
