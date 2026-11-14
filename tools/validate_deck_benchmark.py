@@ -27,7 +27,9 @@ def main():
                and abs(shape.width / 914400 - .13) < .01
                and abs(shape.height / 914400 - .13) < .01]
     assert len(squares) == 5
-    assert squares[1].fill.fore_color.rgb is not None
+    assert str(squares[1].fill.fore_color.rgb) == "DCA16C"
+    assert all(str(square.fill.fore_color.rgb) == ("DCA16C" if index == 1 else "FFFFFF")
+               for index, square in enumerate(squares))
     assert "schematic" in text[2].lower() and "numerical adjacency" in text[2].lower()
     pdf = PdfReader(ROOT / "dist/DECK01_c01_defense.pdf")
     assert len(pdf.pages) == 3
