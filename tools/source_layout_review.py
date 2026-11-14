@@ -357,8 +357,7 @@ def _candidate_index(layout):
             if not candidate_id:
                 continue
             # Keep the review decision key distinct from the source-region link.
-            if not item.get("candidate_id"):
-                item["candidate_id"] = candidate_id
+            item["candidate_id"] = candidate_id
             visual_items.append(item)
 
     if isinstance(base, dict):
