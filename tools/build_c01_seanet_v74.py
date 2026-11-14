@@ -72,6 +72,8 @@ def annotate_accessibility(path: Path) -> dict:
 
 def main():
     spec = json.loads(SPEC.read_text(encoding="utf-8"))
+    SVG.parent.mkdir(parents=True, exist_ok=True)
+    PPTX.parent.mkdir(parents=True, exist_ok=True)
     render(spec, SVG, PPTX)
     accessibility = annotate_accessibility(PPTX)
     report = {
