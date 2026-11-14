@@ -12,7 +12,7 @@ The immediate problem is not figure-page localization: the crop manifest is alre
 ## Goals
 
 1. Add an opt-in visual backend based on official PaddleOCR components:
-   - PP-DocLayout-S for broad visual-region proposals.
+   - PP-DocLayoutV2 for broad visual-region proposals.
    - PP-OCRv6 small detection/recognition for panel-marker candidates embedded in raster content.
    - ONNX Runtime inference where supported.
 2. Convert every model coordinate back to the exact selected PDF crop in PDF points; retain model name, version, score, DPI, image dimensions, and warnings as provenance.
@@ -39,7 +39,7 @@ Rejected for this repository increment. Its ownership/contact-graph and paint-or
 
 ### B. Official PaddleOCR models plus the existing PyMuPDF pipeline — selected
 
-Use PaddleOCR's Apache-2.0 PP-DocLayout-S and PP-OCRv6 small models as optional proposal engines. Keep PyMuPDF as the source-of-truth extractor. Implement the evidence fusion and source-object ownership logic inside PPT-Skill, without copying third-party implementation code.
+Use PaddleOCR's official Apache-2.0 PP-DocLayoutV2 (203.8 MB, 81.4 mAP on its general layout benchmark) and PP-OCRv6 small models as optional proposal engines. The official PaddleOCR 3.x layout module currently supports PP-DocLayoutV2; do not select the third-party PP-DocLayout-S adapter. Keep PyMuPDF as the source-of-truth extractor. Implement the evidence fusion and source-object ownership logic inside PPT-Skill, without copying third-party implementation code.
 
 Trade-offs: optional model installation and first-run weight download are required; detections remain proposals and may miss or over-segment scientific subpanels. This is preferable to coupling the project to an AGPL tool or pretending a general document detector is a scientific panel parser.
 
@@ -53,7 +53,7 @@ Rejected as the sole path. It remains useful as one evidence source, but cannot 
 
 Add `tools/source_layout_vision.py` with a stable, model-independent result contract. The PaddleOCR adapter is loaded only when `--vision-backend paddleocr` is requested. The default remains `none`.
 
-- Layout model: `PP-DocLayout-S`.
+- Layout model: `PP-DocLayoutV2`.
 - OCR models: `PP-OCRv6_small_det` and `PP-OCRv6_small_rec`.
 - Preferred engine: `onnxruntime`, where supported by the installed PaddleOCR release.
 - Initial supported optional runtime: Python 3.11 or 3.12. The base project must remain usable without this runtime.

@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import math
 import re
+from functools import lru_cache
+from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 
@@ -549,4 +551,83 @@ def fuse_visual_evidence(
         "panel_hypotheses": hypotheses,
         "visual_alignment_groups": _alignment_groups(candidates, region),
         "source_object_ownership": ownership,
+    }
+
+
+
+@lru_cache(maxsize=4)
+def _load_paddleocr_models(
+    layout_model: str,
+    ocr_det_model: str,
+    ocr_rec_model: str,
+):
+    """Load optional models once per process; importing PaddleOCR is deliberately lazy."""
+    try:
+        import paddleocr
+    except ImportError as exc:
+        raise RuntimeError(
+            "PADDLEOCR_OPTIONAL_DEPENDENCY_MISSING: install the optional vision "
+            "environment with 'python -m pip install -r requirements-vision.txt'."
+        ) from exc
+
+    try:
+        layout_cls = getattr(paddleocr, "LayoutDetection")
+        ocr_cls = getattr(paddleocr, "PaddleOCR")
+        layout = layout_cls(model_name=layout_model, engine="onnxruntime")
+        ocr = ocr_cls(
+            text_detection_model_name=ocr_det_model,
+            text_recognition_model_name=ocr_rec_model,
+            use_doc_orientation_classify=False,
+            use_doc_unwarping=False,
+            use_textline_orientation=False,
+            engine="onnxruntime",
+        )
+    except Exception as exc:
+        raise RuntimeError(
+            "PADDLEOCR_MODEL_INITIALIZATION_FAILED: check PaddleOCR/ONNX Runtime "
+            "versions, model availability, and the model cache."
+        ) from exc
+
+    version = getattr(paddleocr, "__version__", "unknown")
+    return layout, ocr, str(version)
+
+
+def run_paddleocr_backend(
+    image_path: str | Path,
+    *,
+    layout_model: str = "PP-DocLayoutV2",
+    ocr_det_model: str = "PP-OCRv6_small_det",
+    ocr_rec_model: str = "PP-OCRv6_small_rec",
+) -> dict:
+    """Run official PaddleOCR models and return raw results plus provenance.
+
+    NMS and merge filtering are disabled for layout boxes so nested proposals
+    remain available to the evidence-fusion stage.
+    """
+    layout, ocr, version = _load_paddleocr_models(
+        layout_model, ocr_det_model, ocr_rec_model
+    )
+    image_path = str(image_path)
+    try:
+        layout_result = layout.predict(
+            input=image_path,
+            batch_size=1,
+            layout_nms=False,
+            layout_merge_bboxes_mode="union",
+        )
+        ocr_result = ocr.predict(input=image_path)
+    except Exception as exc:
+        raise RuntimeError(
+            "PADDLEOCR_INFERENCE_FAILED: verify the input image and installed "
+            "ONNX Runtime execution provider."
+        ) from exc
+    return {
+        "backend": "paddleocr",
+        "engine": "onnxruntime",
+        "paddleocr_version": version,
+        "layout_model": layout_model,
+        "ocr_detection_model": ocr_det_model,
+        "ocr_recognition_model": ocr_rec_model,
+        "layout_result": layout_result,
+        "ocr_result": ocr_result,
     }

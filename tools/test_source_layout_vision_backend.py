@@ -21,7 +21,7 @@ class PaddleOCRBackendTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "PADDLEOCR_OPTIONAL_DEPENDENCY_MISSING"):
                 run_paddleocr_backend(Path("figure.png"))
 
-    def test_backend_uses_configured_official_models_and_onnxruntime(self):
+    def test_backend_uses_official_models_onnxruntime_and_preserves_nested_boxes(self):
         calls = {}
 
         class FakeLayout:
@@ -47,13 +47,15 @@ class PaddleOCRBackendTests(unittest.TestCase):
         with patch.dict(sys.modules, {"paddleocr": fake}):
             result = run_paddleocr_backend(
                 Path("figure.png"),
-                layout_model="PP-DocLayout-S",
+                layout_model="PP-DocLayoutV2",
                 ocr_det_model="PP-OCRv6_small_det",
                 ocr_rec_model="PP-OCRv6_small_rec",
             )
 
-        self.assertEqual(calls["layout_init"]["model_name"], "PP-DocLayout-S")
+        self.assertEqual(calls["layout_init"]["model_name"], "PP-DocLayoutV2")
         self.assertEqual(calls["layout_init"]["engine"], "onnxruntime")
+        self.assertFalse(calls["layout_predict"]["layout_nms"])
+        self.assertEqual(calls["layout_predict"]["layout_merge_bboxes_mode"], "union")
         self.assertEqual(calls["ocr_init"]["text_detection_model_name"], "PP-OCRv6_small_det")
         self.assertEqual(calls["ocr_init"]["text_recognition_model_name"], "PP-OCRv6_small_rec")
         self.assertEqual(calls["ocr_init"]["engine"], "onnxruntime")
@@ -61,6 +63,7 @@ class PaddleOCRBackendTests(unittest.TestCase):
         self.assertEqual(calls["ocr_predict"]["input"], "figure.png")
         self.assertEqual(result["backend"], "paddleocr")
         self.assertEqual(result["engine"], "onnxruntime")
+        self.assertEqual(result["layout_model"], "PP-DocLayoutV2")
         self.assertEqual(result["paddleocr_version"], "3.7.0")
         self.assertIn("layout_result", result)
         self.assertIn("ocr_result", result)
