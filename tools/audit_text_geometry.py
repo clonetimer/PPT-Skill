@@ -10,12 +10,14 @@ import argparse
 from collections import Counter
 import hashlib
 import json
+import math
 from pathlib import Path
 import unicodedata
 
 import fitz
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
+from pptx.enum.text import MSO_AUTO_SIZE
 
 from pdf_figure_import import (
     _normalize_pdf_text, _source_font, _span_visible_fraction,
@@ -55,6 +57,9 @@ def _source_spans(page):
                     "font": str(span.get("font", "")),
                     "target_font": _source_font(str(span.get("font", ""))),
                     "size_pt": float(span.get("size", 0)),
+                    "rotation_degrees": math.degrees(math.atan2(
+                        line.get("dir", (1, 0))[1], line.get("dir", (1, 0))[0]
+                    )) % 360,
                     "rect": (rect.x0, rect.y0, rect.x1, rect.y1),
                     "quad_available": quad is not None,
                     "location": [block_index, line_index, span_index],
@@ -144,6 +149,8 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
 
     mismatches = []
     font_mismatches = []
+    rotation_mismatches = []
+    autofit_mismatches = []
     font_mappings = {}
     suspicious_glyphs = []
     math_glyphs = []
@@ -153,6 +160,19 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
         if actual != expected:
             mismatches.append({"index": index, "source": expected,
                                "candidate": actual})
+        expected_angle = spans[index]["rotation_degrees"]
+        actual_angle = float(shapes[index].rotation)
+        angle_error = abs((actual_angle - expected_angle + 180) % 360 - 180)
+        if angle_error > 0.1:
+            rotation_mismatches.append({
+                "index": index, "source_degrees": expected_angle,
+                "candidate_degrees": actual_angle, "error_degrees": angle_error,
+            })
+        if shapes[index].text_frame.auto_size != MSO_AUTO_SIZE.NONE:
+            autofit_mismatches.append({
+                "index": index, "candidate_auto_size": str(shapes[index].text_frame.auto_size),
+                "expected": "NONE", "reason": "source geometry must not be host-reflowed",
+            })
         expected_font = spans[index]["target_font"]
         actual_font = _shape_font(shapes[index])
         font_mappings[spans[index]["font"]] = expected_font
@@ -195,7 +215,8 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
     count_mismatch = len(spans) != len(shapes)
     introduced_overlap_count = len(introduced_overlaps)
     mismatch_count = len(mismatches)
-    if count_mismatch or mismatch_count or introduced_overlap_count or introduced_oob or font_mismatches:
+    if (count_mismatch or mismatch_count or introduced_overlap_count or introduced_oob
+            or font_mismatches or rotation_mismatches or autofit_mismatches):
         status = "FAIL"
     elif suspicious_glyphs:
         status = "NEEDS_REVIEW"
@@ -221,6 +242,11 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
         "source_out_of_bounds_count": source_oob_count,
         "candidate_out_of_bounds_count": candidate_oob_count,
         "inherited_out_of_bounds_count": inherited_oob,
+        "rotation_mismatch_count": len(rotation_mismatches),
+        "rotation_mismatches": rotation_mismatches,
+        "rotation_tolerance_degrees": 0.1,
+        "autofit_mismatch_count": len(autofit_mismatches),
+        "autofit_mismatches": autofit_mismatches,
         "font_mappings": font_mappings,
         "font_mismatch_count": len(font_mismatches),
         "font_mismatches": font_mismatches,

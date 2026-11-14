@@ -29,6 +29,56 @@ def intersects(a, b, threshold=2.16 * 12700):
 
 
 class TextGeometryImportTests(unittest.TestCase):
+    def test_text_baseline_direction_survives_positive_negative_and_vertical_rotation(self):
+        """Mirrored angles have the same AABB but not the same text direction."""
+        for angle in (0, 30, -30, 90, -90, 180):
+            with self.subTest(angle=angle), tempfile.TemporaryDirectory() as tmp:
+                source, output = Path(tmp) / "source.pdf", Path(tmp) / "out.pptx"
+                doc = fitz.open()
+                page = doc.new_page(width=400, height=300)
+                origin = fitz.Point(180, 150)
+                page.insert_text(origin, "Label", fontsize=12, fontname="helv",
+                                 morph=(origin, fitz.Matrix(1, 1).prerotate(angle)))
+                line = next(l for b in page.get_text("dict")["blocks"]
+                            for l in b.get("lines", []))
+                dx, dy = line["dir"]
+                doc.save(source)
+                doc.close()
+                convert_pdf_page(source, output)
+                shape = next(s for s in Presentation(output).slides[0].shapes
+                             if s.shape_type == MSO_SHAPE_TYPE.TEXT_BOX)
+                rotation = math.radians(shape.rotation)
+                self.assertAlmostEqual(math.cos(rotation), dx, delta=1e-4)
+                self.assertAlmostEqual(math.sin(rotation), dy, delta=1e-4)
+                self.assertEqual(shape.text, "Label")
+                self.assertAlmostEqual(shape.text_frame.paragraphs[0].runs[0].font.size.pt,
+                                       12, delta=.01)
+
+    def test_imported_text_explicitly_disables_host_autofit_without_shrinking(self):
+        from pptx.enum.text import MSO_AUTO_SIZE
+        doc = fitz.open()
+        page = doc.new_page(width=240, height=120)
+        page.insert_text((30, 60), "Fixed label", fontsize=14, fontname="helv")
+        line = next(l for b in page.get_text("dict")["blocks"] for l in b.get("lines", []))
+        span = line["spans"][0]
+        deck = Presentation()
+        slide = deck.slides.add_slide(deck.slide_layouts[6])
+        self.assertTrue(_add_text(slide, span, line, page.rect))
+        frame = slide.shapes[0].text_frame
+        self.assertEqual(frame.auto_size, MSO_AUTO_SIZE.NONE)
+        self.assertFalse(frame.word_wrap)
+        self.assertAlmostEqual(frame.paragraphs[0].runs[0].font.size.pt, 14, delta=.01)
+        doc.close()
+
+    def test_arial_narrow_width_family_is_not_collapsed_to_regular_arial(self):
+        for alias in ("ArialNarrow", "ArialNarrowMT", "ArialNarrow-BoldItalic",
+                      "ABCDEF+ArialNarrow-Bold", "Arial-Narrow", "Arial Narrow"):
+            with self.subTest(alias=alias):
+                self.assertEqual(_source_font(alias), "Arial Narrow")
+        self.assertEqual(_source_font("Arial-BoldMT"), "Arial")
+        self.assertEqual(_source_font("Helvetica"), "Arial")
+        self.assertEqual(_source_font("TimesNewRomanPSMT"), "Times New Roman")
+
     def test_adjacent_source_spans_do_not_gain_false_overlap(self):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "adjacent.pdf"

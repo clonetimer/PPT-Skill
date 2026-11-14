@@ -143,5 +143,48 @@ class TextGeometryAuditTests(unittest.TestCase):
             self.assertEqual(report["glyph_substitution_count"], 1)
 
 
+class TextDirectionAuditTests(unittest.TestCase):
+    def test_autofit_mutation_is_rejected_before_host_can_reflow_source_text(self):
+        from pptx.enum.text import MSO_AUTO_SIZE
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp) / "source.pdf", Path(tmp) / "candidate.pptx"
+            make_two_spans(source)
+            convert_pdf_page(source, output)
+            deck = Presentation(output)
+            shape = next(s for s in deck.slides[0].shapes if s.has_text_frame and s.text.strip())
+            shape.text_frame.auto_size = MSO_AUTO_SIZE.TEXT_TO_FIT_SHAPE
+            deck.save(output)
+            report = audit_text_geometry(source, output)
+            self.assertEqual(report["status"], "FAIL")
+            self.assertEqual(report["autofit_mismatch_count"], 1)
+
+    def test_reflecting_rotation_fails_even_when_aabb_is_unchanged(self):
+        import math
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp) / "source.pdf", Path(tmp) / "candidate.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=400, height=300)
+            origin = fitz.Point(120, 150)
+            page.insert_text(origin, "Rotated label", fontsize=12, fontname="helv",
+                             morph=(origin, fitz.Matrix(1, 1).prerotate(30)))
+            line = next(l for b in page.get_text("dict")["blocks"] for l in b.get("lines", []))
+            expected_angle = math.degrees(math.atan2(line["dir"][1], line["dir"][0])) % 360
+            doc.save(source)
+            doc.close()
+            convert_pdf_page(source, output)
+            deck = Presentation(output)
+            shape = next(s for s in deck.slides[0].shapes if s.has_text_frame and s.text.strip())
+            shape.rotation = expected_angle
+            deck.save(output)
+            good = audit_text_geometry(source, output)
+            self.assertEqual(good["status"], "PASS")
+            shape.rotation = (-expected_angle) % 360
+            deck.save(output)
+            bad = audit_text_geometry(source, output)
+            self.assertEqual(bad["introduced_overlap_count"], 0)
+            self.assertEqual(bad["status"], "FAIL")
+            self.assertEqual(bad["rotation_mismatch_count"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()

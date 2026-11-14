@@ -24,7 +24,7 @@ from PIL import Image
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_CONNECTOR, MSO_SHAPE
-from pptx.enum.text import MSO_ANCHOR
+from pptx.enum.text import MSO_ANCHOR, MSO_AUTO_SIZE
 from pptx.enum.dml import MSO_LINE_DASH_STYLE
 from pptx.oxml.ns import qn
 from pptx.oxml.xmlchemy import OxmlElement
@@ -335,6 +335,10 @@ def _source_font(name):
         return "Georgia"
     if name.startswith("Times") or compact.startswith(("texgyretermes", "linlibertine")):
         return "Times New Roman"
+    # Width variants must be resolved before the generic Arial family. Mapping
+    # ArialNarrow to Arial preserves the name prefix but widens the glyphs.
+    if compact.startswith("arialnarrow"):
+        return "Arial Narrow"
     if name.startswith(("Helvetica", "Arial")) or compact in ("unnamedt3", "arialmt"):
         return "Arial"
     if compact.startswith("comicsansms"):
@@ -407,6 +411,9 @@ def _add_text(slide, span, line, page_rect=None):
     shape = slide.shapes.add_textbox(_pt_in(x), _pt_in(y), _pt_in(w), _pt_in(h))
     frame = shape.text_frame
     frame.clear()
+    # add_textbox defaults to spAutoFit. Some export hosts reflow despite
+    # wrap="none"; source PDF geometry must not be changed by host autofit.
+    frame.auto_size = MSO_AUTO_SIZE.NONE
     frame.word_wrap = False
     frame.margin_left = frame.margin_right = 0
     frame.margin_top = frame.margin_bottom = 0
@@ -425,7 +432,9 @@ def _add_text(slide, span, line, page_rect=None):
                                  (color & 255) / 255) if color is not None else (0, 0, 0))
     direction = line.get("dir", (1, 0))
     if abs(direction[0] - 1) > .001 or abs(direction[1]) > .001:
-        shape.rotation = math.degrees(math.atan2(-direction[1], direction[0]))
+        # Both the PDF direction vector and DrawingML use page y-down axes.
+        # Negating y reflects text while retaining an indistinguishable AABB.
+        shape.rotation = math.degrees(math.atan2(direction[1], direction[0])) % 360
     nofx(shape)
     return True
 

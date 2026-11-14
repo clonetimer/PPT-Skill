@@ -141,12 +141,17 @@ def compare_rendered_pages(source_pdf: Path, candidate_pdf: Path,
                 raise IndexError(f"page index {page_index} is outside {pdf.name}")
             page = doc[page_index]
             apply_figure_region(page, region)
+            page_size = (float(page.rect.width), float(page.rect.height))
             pix = page.get_pixmap(matrix=fitz.Matrix(dpi/72, dpi/72), alpha=False)
-            return Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
-    src, dst = raster(source_pdf, source_page_index, source_region), raster(candidate_pdf, candidate_page_index)
+            return Image.frombytes("RGB", (pix.width, pix.height), pix.samples), page_size
+    src, source_size = raster(source_pdf, source_page_index, source_region)
+    dst, candidate_size = raster(candidate_pdf, candidate_page_index)
+    # Raster dimensions are rounded to whole pixels. Compare physical PDF
+    # dimensions before resampling: a 0.01pt host rounding can add a full row,
+    # and equal raster dimensions can conceal genuinely different page ratios.
+    if abs(source_size[0]/source_size[1] - candidate_size[0]/candidate_size[1]) > .003:
+        raise ValueError("Source and candidate page aspect ratios differ")
     if src.size != dst.size:
-        if abs(src.width/src.height - dst.width/dst.height) > .003:
-            raise ValueError("Source and candidate page aspect ratios differ")
         dst = dst.resize(src.size, Image.Resampling.LANCZOS)
     a = np.asarray(ImageOps.grayscale(src))
     b = np.asarray(ImageOps.grayscale(dst))
@@ -173,6 +178,9 @@ def compare_rendered_pages(source_pdf: Path, candidate_pdf: Path,
         "renderer": "PDF-export comparison, not Office 2016 host certification",
         "source_region_pt": [float(x) for x in source_region] if source_region is not None else None,
         "dpi": dpi, "grid": grid,
+        "source_page_size_pt": list(source_size),
+        "candidate_page_size_pt": list(candidate_size),
+        "aspect_ratio_basis": "physical_pdf_page_dimensions",
         "global_similarity": round(global_sim,4),
         "mean_abs_difference": round(float(np.abs(a.astype(float)-b).mean())/255,4),
         "worst_tiles": worst,

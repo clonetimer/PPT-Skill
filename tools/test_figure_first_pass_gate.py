@@ -109,6 +109,30 @@ class FirstPassFidelityTests(unittest.TestCase):
         p=source_profile(pdf)
         self.assertTrue(any(r["code"]=="RASTER_ONLY" for r in p["risk_flags"]))
 
+    def test_visual_comparison_uses_physical_aspect_before_pixel_rounding(self):
+        source, candidate = self.root / "source.pdf", self.root / "rounded.pdf"
+        for path, height in ((source, 240), (candidate, 240.01)):
+            doc = fitz.open()
+            page = doc.new_page(width=360, height=height)
+            page.draw_rect(fitz.Rect(30, 30, 140, 100), fill=(.2, .4, .6))
+            doc.save(path)
+            doc.close()
+        # At 144 dpi, the 0.01pt page rounding causes a whole extra raster row.
+        result = compare_rendered_pages(source, candidate, dpi=144)
+        self.assertGreater(result["global_similarity"], .99)
+        self.assertFalse(result["requires_visual_review"])
+
+    def test_wrong_physical_aspect_is_rejected_even_with_equal_raster_dimensions(self):
+        source, candidate = self.root / "source.pdf", self.root / "wrong.pdf"
+        for path, width in ((source, 360.1), (candidate, 365)):
+            doc = fitz.open()
+            page = doc.new_page(width=width, height=240.1)
+            page.draw_rect(fitz.Rect(30, 30, 140, 100), fill=(.2, .4, .6))
+            doc.save(path)
+            doc.close()
+        with self.assertRaisesRegex(ValueError, "aspect ratios differ"):
+            compare_rendered_pages(source, candidate, dpi=10)
+
     def test_visual_gate_finds_localized_missing_chart_panel(self):
         pdf=self.root/"source.pdf"
         d=fitz.open(); page=d.new_page(width=480,height=270)
