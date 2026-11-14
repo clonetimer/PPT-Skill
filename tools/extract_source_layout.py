@@ -588,6 +588,9 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                     if index not in used_boundaries
                 ],
                 "candidate_status": "CANDIDATES_FOUND" if unlabeled_panel_candidates else "NO_GEOMETRIC_CANDIDATES",
+                "raster_gutter_candidate_status": (
+                    "CANDIDATES_FOUND" if raster_gutter_candidates else "NO_DOMINANT_IMAGE_GUTTERS"
+                ),
                 "unlabeled_panel_candidates": unlabeled_panel_candidates,
                 "alignment_groups": alignment_groups,
                 "raster_gutter_candidates": raster_gutter_candidates,
