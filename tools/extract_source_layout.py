@@ -77,7 +77,7 @@ def _geometric_panel_candidates(rectangle_candidates, region):
         area_fraction = rect.width * rect.height / (region.width * region.height)
         if area_fraction < .04 or area_fraction > .65:
             continue
-        if rect.width < region.width * .18 or rect.height < region.height * .045:
+        if rect.width < region.width * .12 or rect.height < region.height * .045:
             continue
         if any(all(abs(a-b) <= .75 for a, b in zip(rect, old["rect"]))
                for old in raw):
