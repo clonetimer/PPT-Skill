@@ -1,0 +1,121 @@
+{
+  "figure_id": "C01_composite_defense_slide_v75",
+  "source": "docs/C01_V73_SOURCE.md",
+  "review_status": "source-visible two-panel redraw with total-graph input, five class outputs, exact adjacency unknown; domain and final-size review pending",
+  "critical_labels": {
+    "input": "Input",
+    "gcn_1": "GCN",
+    "pooling_1": "pooling",
+    "gcn_2": "GCN",
+    "pooling_2": "pooling",
+    "sr_main": "SR",
+    "ea": "Energy-assisted module",
+    "sr_ea": "SR",
+    "sum": "+",
+    "dense": "Dense",
+    "ocf": "OCF / notch filter",
+    "band_group": "Band subgraphs",
+    "total_graph": "Total graph",
+    "band_1": "B₁",
+    "band_2": "B₂",
+    "band_3": "B₃",
+    "band_4": "Bq",
+    "class_output_label": "fault class"
+  },
+  "critical_edges": [
+    [
+      "input",
+      "gcn_1"
+    ],
+    [
+      "gcn_1",
+      "pooling_1"
+    ],
+    [
+      "pooling_1",
+      "gcn_2"
+    ],
+    [
+      "gcn_2",
+      "pooling_2"
+    ],
+    [
+      "pooling_2",
+      "sr_main"
+    ],
+    [
+      "sr_main",
+      "sum"
+    ],
+    [
+      "input",
+      "ea"
+    ],
+    [
+      "ea",
+      "gcn_1"
+    ],
+    [
+      "pooling_1",
+      "sr_ea"
+    ],
+    [
+      "sr_ea",
+      "sum"
+    ],
+    [
+      "sum",
+      "dense"
+    ],
+    [
+      "ocf",
+      "band_group"
+    ],
+    [
+      "total_graph",
+      "input"
+    ],
+    [
+      "band_1",
+      "total_graph"
+    ],
+    [
+      "band_2",
+      "total_graph"
+    ],
+    [
+      "band_3",
+      "total_graph"
+    ],
+    [
+      "band_4",
+      "total_graph"
+    ],
+    [
+      "dense",
+      "class_output"
+    ]
+  ],
+  "required_nodes": [
+    "input",
+    "gcn_1",
+    "pooling_1",
+    "gcn_2",
+    "pooling_2",
+    "sr_main",
+    "ea",
+    "sr_ea",
+    "sum",
+    "dense",
+    "ocf",
+    "band_group",
+    "total_graph",
+    "band_1",
+    "band_2",
+    "band_3",
+    "band_4",
+    "class_output",
+    "class_output_label",
+    "input_graph_schematic"
+  ]
+}
