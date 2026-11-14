@@ -16,16 +16,15 @@ The extractor records:
 ## Conservative inference boundary
 
 Panel detection is **evidence-led**:
-- an explicit single-letter panel marker such as `(a)` or `(b)` becomes a panel candidate;
-- a large source rectangle containing that marker is accepted as its boundary with high confidence;
-- a marker without an enclosing rectangle is retained as a low-confidence label-only candidate;
-- no explicit markers means `NO_EXPLICIT_PANEL_MARKERS` and an empty panel list. The extractor does not divide a figure into invented panels just because several large rectangles exist.
+- an explicit punctuated panel marker such as `(a)` or `b)` becomes a confirmed panel only when an enclosing source rectangle contains it;
+- a marker without an enclosing rectangle is retained under `unresolved_markers`, not counted as a confirmed panel;
+- no explicit markers means `NO_EXPLICIT_PANEL_MARKERS` and an empty panel list; markers without boundaries mean `NO_CONFIRMED_PANEL_BOUNDARIES` or `PARTIAL_PANEL_BOUNDARIES`. The extractor does not divide a figure into invented panels just because several large rectangles exist.
 
 Graph semantics are also conservative:
-- line segments are recorded as `edge_candidates`;
-- every candidate has `directedness: undetermined` and low confidence by default;
+- raw PDF line fragments are recorded as `stroke_segment_candidates`, not graph edges;
+- each segment has `directedness: undetermined` and low confidence by default;
 - a line's drawing order or geometric orientation alone is not proof of arrow direction, data flow, causality or a scientific edge;
-- connector candidates must be checked against arrowheads, legends, the paper caption and source-derived topology before being promoted to FigureSpec `semantic_edges`.
+- a stroke segment may be promoted to a FigureSpec semantic relation only after checking arrowheads, legends, the paper caption and source-derived topology.
 
 The source image is not embedded into the public layout JSON; image entries contain XRef, visible bounds, source-order and content hash. Original author images and paper PDFs remain private user material.
 
@@ -35,7 +34,7 @@ Every `reproduce_research_figure.py` run now attempts source-layout extraction *
 
 - `source_layout.json`
 - `source_preflight.json`
-- `delivery_manifest.json` with the source-layout path, SHA-256, panel status/count, layout-element count, edge-candidate count and image count.
+- `delivery_manifest.json` with the source-layout path, SHA-256, panel status/count, layout-element count, stroke-segment-candidate count and image count.
 
 Select a page and crop explicitly:
 
