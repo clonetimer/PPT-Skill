@@ -48,6 +48,24 @@ def make_stacked_panel_pdf(path: Path, *, outer_frame=False):
     doc.close()
 
 
+def make_raster_panels_pdf(path: Path):
+    from io import BytesIO
+    from PIL import Image, ImageDraw
+    image = Image.new("RGB", (400, 300), "white")
+    draw = ImageDraw.Draw(image)
+    draw.rectangle((25, 20, 375, 112), outline="#1F4E79", width=4, fill="#EAF2F8")
+    draw.line((50, 55, 350, 55), fill="#1F4E79", width=3)
+    draw.rectangle((25, 185, 375, 280), outline="#9C5700", width=4, fill="#FCE4D6")
+    draw.line((50, 230, 350, 230), fill="#9C5700", width=3)
+    payload = BytesIO()
+    image.save(payload, format="PNG")
+    doc = fitz.open()
+    page = doc.new_page(width=400, height=320)
+    page.insert_image(fitz.Rect(0, 0, 400, 300), stream=payload.getvalue())
+    doc.save(path)
+    doc.close()
+
+
 def make_horizontal_line_outside_crop_pdf(path: Path):
     doc = fitz.open()
     page = doc.new_page(width=300, height=200)
@@ -115,6 +133,18 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             self.assertEqual(layout["panel_detection"]["status"], "NO_EXPLICIT_PANEL_MARKERS")
             self.assertEqual(layout["panel_detection"]["panels"], [])
             self.assertTrue(layout["requires_human_review"])
+
+    def test_dominant_raster_image_emits_review_only_horizontal_gutter_candidate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "raster_panels.pdf"
+            make_raster_panels_pdf(source)
+            layout = extract_source_layout(source, figure_region=(0, 0, 400, 300))
+            detection = layout["panel_detection"]
+            self.assertEqual(detection["panels"], [])
+            gutters = detection["raster_gutter_candidates"]
+            self.assertTrue(any(item["axis"] == "horizontal" for item in gutters))
+            self.assertTrue(all(item["review_status"] == "needs_human_review" for item in gutters))
+            self.assertGreaterEqual(layout["image_assets"][0]["raster_gutter_candidate_count"], 1)
 
     def test_horizontal_stroke_outside_crop_is_not_kept_as_a_degenerate_layout_element(self):
         with tempfile.TemporaryDirectory() as tmp:
