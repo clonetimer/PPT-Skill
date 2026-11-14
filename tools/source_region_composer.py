@@ -27,6 +27,7 @@ def _object_class(kind: str) -> str:
 
 def _source_inventory(layout: dict) -> list[dict]:
     by_id: dict[str, dict] = {}
+    image_metadata = {item.get("id"): item for item in layout.get("image_assets", []) if item.get("id")}
     for item in layout.get("layout_elements", []):
         object_id = item.get("id")
         if not object_id:
@@ -38,6 +39,12 @@ def _source_inventory(layout: dict) -> list[dict]:
             "source_order": item.get("source_order"),
             "bbox_pt": item.get("bbox_pt"),
             "text": item.get("text") if item.get("kind") == "text_span" else None,
+            "font_family": item.get("font_family") if item.get("kind") == "text_span" else None,
+            "font_size_pt": item.get("font_size_pt") if item.get("kind") == "text_span" else None,
+            "font_flags": item.get("font_flags") if item.get("kind") == "text_span" else None,
+            "color": item.get("color") if item.get("kind") == "text_span" else None,
+            "direction": item.get("direction") if item.get("kind") == "text_span" else None,
+            "image_metadata": image_metadata.get(object_id),
         }
         if object_id in by_id and by_id[object_id] != record:
             raise ValueError(f"DUPLICATE_SOURCE_OBJECT_ID_CONFLICT:{object_id}")
@@ -53,6 +60,12 @@ def _source_inventory(layout: dict) -> list[dict]:
             "source_order": item.get("source_order"),
             "bbox_pt": item.get("bbox_pt"),
             "text": None,
+            "font_family": None,
+            "font_size_pt": None,
+            "font_flags": None,
+            "color": None,
+            "direction": None,
+            "image_metadata": item,
         }
         if object_id in by_id and by_id[object_id]["object_class"] != "image":
             raise ValueError(f"DUPLICATE_SOURCE_OBJECT_ID_CONFLICT:{object_id}")
@@ -69,6 +82,8 @@ def _source_inventory(layout: dict) -> list[dict]:
 def _treatment(route: str, object_class: str) -> str:
     if route == "native_vector" and object_class == "vector":
         return "editable_vector"
+    if route == "native_vector" and object_class == "text":
+        return "editable_text"
     if route == "native_text" and object_class == "text":
         return "editable_text"
     if route == "mixed_native_picture":
@@ -173,6 +188,15 @@ def build_source_composition_manifest(
                 "treatment": treatment,
                 "editable_expected": treatment in ("editable_vector", "editable_text"),
                 "bbox_pt": source_obj["bbox_pt"],
+                "text": source_obj.get("text"),
+                "font_family": source_obj.get("font_family"),
+                "font_size_pt": source_obj.get("font_size_pt"),
+                "font_flags": source_obj.get("font_flags"),
+                "color": source_obj.get("color"),
+                "direction": source_obj.get("direction"),
+                "source_image_sha256": (source_obj.get("image_metadata") or {}).get("sha256"),
+                "source_image_transform": (source_obj.get("image_metadata") or {}).get("transform"),
+                "source_image_xref": (source_obj.get("image_metadata") or {}).get("xref"),
             })
             unit_object_refs.setdefault(object_id, []).append(unit_id)
         objects.sort(key=lambda item: (

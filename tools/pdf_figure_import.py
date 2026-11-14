@@ -431,7 +431,7 @@ def _add_text(slide, span, line, page_rect=None):
 
 
 
-def _annotate_source_shape(shape, source_object_id, source_order, object_class):
+def _annotate_source_shape(shape, source_object_id, source_order, object_class, extra_metadata=None):
     """Attach stable SourceLayout provenance without changing rendered geometry."""
     shape.name = str(source_object_id)
     metadata = json.dumps({
@@ -439,6 +439,7 @@ def _annotate_source_shape(shape, source_object_id, source_order, object_class):
         "source_order": source_order,
         "object_class": object_class,
         "provenance": "source_pdf_import",
+        **(extra_metadata or {}),
     }, sort_keys=True, separators=(",", ":"))
     nonvisual_nodes = [node for node in shape._element.iter() if node.tag.endswith("}cNvPr")]
     if not nonvisual_nodes:
@@ -482,7 +483,14 @@ def _add_recovered_image(slide, event, warnings):
         BytesIO(event.png), _pt_in(b.x0), _pt_in(b.y0),
         width=_pt_in(b.width), height=_pt_in(b.height),
     )
-    _annotate_source_shape(shape, f"image_{event.seqno}", event.seqno, "image")
+    with Image.open(BytesIO(event.png)) as source_image:
+        pixel_size = list(source_image.size)
+    _annotate_source_shape(shape, f"image_{event.seqno}", event.seqno, "image", {
+        "source_image_sha256": hashlib.sha256(event.png).hexdigest(),
+        "source_image_xref": event.xref,
+        "source_image_transform": list(event.transform),
+        "source_image_pixel_size": pixel_size,
+    })
     return 1
 
 

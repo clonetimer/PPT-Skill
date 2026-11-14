@@ -99,6 +99,10 @@ def evaluate_reconstruction_quality(manifest_path: Path,pptx_path: Path,visual_r
             "source_object_id":meta["source_object_id"],
             "source_order":meta.get("source_order"),
             "object_class":meta.get("object_class"),
+            "source_image_sha256":meta.get("source_image_sha256"),
+            "source_image_xref":meta.get("source_image_xref"),
+            "source_image_transform":meta.get("source_image_transform"),
+            "source_image_pixel_size":meta.get("source_image_pixel_size"),
             "text":_normalize_text(shape.text if shape.has_text_frame else ""),
             "bbox_pt":[shape.left.pt,shape.top.pt,shape.left.pt+shape.width.pt,shape.top.pt+shape.height.pt],
             "is_picture":shape.shape_type==MSO_SHAPE_TYPE.PICTURE,
@@ -160,6 +164,38 @@ def evaluate_reconstruction_quality(manifest_path: Path,pptx_path: Path,visual_r
     total_chars=sum(item["source_characters"] for item in compared_text)
     total_edits=sum(item["edit_distance"] for item in compared_text)
 
+
+    image_rows=[]
+    for object_id,item in expected.items():
+        if item.get("treatment")!="picture_asset":
+            continue
+        actual=by_id.get(object_id,[])
+        if len(actual)!=1:
+            image_rows.append({"source_object_id":object_id,"status":"MISSING_OR_DUPLICATED"})
+            continue
+        source_hash=item.get("source_image_sha256")
+        actual_hash=actual[0].get("source_image_sha256")
+        source_transform=item.get("source_image_transform")
+        actual_transform=actual[0].get("source_image_transform")
+        hash_status=("MATCH" if source_hash and source_hash==actual_hash else
+                     "MISMATCH" if source_hash and actual_hash else "NOT_COMPARABLE")
+        transform_status=("MATCH" if source_transform is not None and source_transform==actual_transform else
+                          "MISMATCH" if source_transform is not None and actual_transform is not None else "NOT_COMPARABLE")
+        image_rows.append({
+            "source_object_id":object_id,
+            "source_image_sha256":source_hash,
+            "output_image_sha256":actual_hash,
+            "asset_hash_status":hash_status,
+            "source_transform":source_transform,
+            "output_transform":actual_transform,
+            "transform_status":transform_status,
+            "source_pixel_size":None,
+            "output_pixel_size":actual[0].get("source_image_pixel_size"),
+            "status":"COMPARED" if hash_status=="MATCH" and transform_status=="MATCH" else
+                     "FAIL" if "MISMATCH" in (hash_status,transform_status) else "NOT_COMPARABLE",
+        })
+    image_failures=[row["source_object_id"] for row in image_rows if row["status"]=="FAIL"]
+
     region=manifest.get("source",{}).get("figure_region_pt")
     geometry_comparable=(
         isinstance(region,list) and len(region)==4
@@ -188,6 +224,7 @@ def evaluate_reconstruction_quality(manifest_path: Path,pptx_path: Path,visual_r
     if duplicates: blockers.append("DUPLICATED_SOURCE_OBJECTS")
     if malformed: blockers.append("MALFORMED_SHAPE_PROVENANCE")
     if class_mismatches: blockers.append("OBJECT_CLASS_MISMATCH")
+    if image_failures: blockers.append("RASTER_SOURCE_IDENTITY_OR_TRANSFORM_MISMATCH")
     if not exact_order: blockers.append("SOURCE_ORDER_MISMATCH")
     if visual is not None and visual.get("requires_visual_review",False):
         blockers.append("VISUAL_DISCREPANCY_REQUIRES_REVIEW")
@@ -224,6 +261,12 @@ def evaluate_reconstruction_quality(manifest_path: Path,pptx_path: Path,visual_r
             "exact_match_spans":sum(1 for item in compared_text if item["exact_match"]),
             "character_error_rate":round(total_edits/max(1,total_chars),6) if compared_text else None,
             "spans":text_rows,
+        },
+        "raster_fidelity":{
+            "compared_assets":sum(row["status"]=="COMPARED" for row in image_rows),
+            "not_comparable_assets":sum(row["status"]=="NOT_COMPARABLE" for row in image_rows),
+            "failed_assets":image_failures,
+            "assets":image_rows,
         },
         "geometry_fidelity":{
             "status":geometry_status,
