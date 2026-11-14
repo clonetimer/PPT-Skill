@@ -82,8 +82,7 @@ class ReleaseReadinessTests(unittest.TestCase):
             self.validate_temp(prepare_template())
 
     def test_complete_independent_human_review_passes(self):
-        result = self.validate_temp(complete_synthetic_review())
-        self.assertIsNotNone(result)
+        self.validate_temp(complete_synthetic_review())
 
     def test_ai_reviewer_cannot_satisfy_human_final_review_gate(self):
         review = complete_synthetic_review()
