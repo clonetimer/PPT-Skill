@@ -110,7 +110,7 @@
         "input total graph is shown as a stacked schematic multi-subgraph representation",
         "both pooling modules use source-like vertical sides and slanted top/bottom edges",
         "Dense output contains five independent stacked squares with the second highlighted",
-        "the graph-level panel is explicitly disclosed as a SEANet excerpt; C01-FBG construction is separate"
+        "the graph-level figure is explicitly disclosed as a lower-panel excerpt, not the complete two-panel graphical abstract; it points to C01_FBG_construction and C01_composite"
       ],
       "traps": [
         "incorrect EA-to-lower-SR shortcut",
@@ -120,7 +120,8 @@
         "generic trapezoid geometry replacing the source pooling silhouette",
         "single output square replacing five class-output squares",
         "presenting the lower-panel excerpt as the complete two-panel graphical abstract",
-        "claiming numerical adjacency or pixel-perfect reproduction"
+        "claiming numerical adjacency or pixel-perfect reproduction",
+        "treating the standalone SEANet lower-panel excerpt as a complete redraw of the two-panel graphical abstract"
       ],
       "status": "automated_fixture"
     },
