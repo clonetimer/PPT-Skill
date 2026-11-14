@@ -116,6 +116,7 @@
     "band_3",
     "band_4",
     "class_output",
-    "class_output_label"
+    "class_output_label",
+    "input_container"
   ]
 }
