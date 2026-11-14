@@ -108,7 +108,8 @@
         "unmatched_large_rectangles",
         "candidate_status",
         "unlabeled_panel_candidates",
-        "alignment_groups"
+        "alignment_groups",
+        "raster_gutter_candidates"
       ],
       "properties": {
         "status": {
@@ -151,6 +152,12 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/alignmentGroup"
+          }
+        },
+        "raster_gutter_candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rasterGutter"
           }
         }
       }
@@ -457,6 +464,10 @@
             "medium",
             "high"
           ]
+        },
+        "raster_gutter_candidate_count": {
+          "type": "integer",
+          "minimum": 0
         }
       }
     },
@@ -569,6 +580,71 @@
             "low",
             "medium",
             "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        },
+        "review_status": {
+          "const": "needs_human_review"
+        }
+      }
+    },
+    "rasterGutter": {
+      "type": "object",
+      "required": [
+        "id",
+        "source_image_id",
+        "axis",
+        "start_pt",
+        "end_pt",
+        "width_pt",
+        "normalized_interval",
+        "mean_ink_fraction",
+        "confidence",
+        "confidence_basis",
+        "review_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source_image_id": {
+          "type": "string"
+        },
+        "axis": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        "start_pt": {
+          "type": "number"
+        },
+        "end_pt": {
+          "type": "number"
+        },
+        "width_pt": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "normalized_interval": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number"
+          }
+        },
+        "mean_ink_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium"
           ]
         },
         "confidence_basis": {
