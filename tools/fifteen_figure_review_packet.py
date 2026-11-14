@@ -26,8 +26,9 @@ TASK_FILENAMES={
  "I01":"I01_cell_image_quant.pptx",
  "DECK01":"DECK01_c01_defense.pptx",
 }
-TASK_FINAL_FILENAMES={**TASK_FILENAMES,"C01_SEANet":"C01_SEANet_graph_level_v74.pptx","C01_composite":"C01_composite_defense_slide_v75.pptx"}
+TASK_FINAL_FILENAMES={**TASK_FILENAMES,"C01_SEANet":"C01_SEANet_graph_level_v74.pptx","C01_composite":"C01_composite_defense_slide_v75.pptx","DECK01":"DECK01_c01_defense_v76.pptx"}
 TASK_SPEC_FILENAMES={"C01_SEANet":{"initial":"tests/fixtures/C01_SEANet_graph_level_initial_v73.json","final":"figure_specs/c01/C01_SEANet_graph_level_v74.json"},"C01_composite":{"initial":"figure_specs/c01/C01_composite_defense_slide.json","final":"figure_specs/c01/C01_composite_defense_slide_v75.json"}}
+TASK_DECK_SPEC_FILENAMES={"DECK01":{"initial":"specs/deck_spec_v75.example.json","final":"specs/deck_spec_v76.example.json"}}
 ROOT=Path(__file__).resolve().parents[1]
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def shape_inventory(path):
@@ -73,7 +74,23 @@ def compare_specs(initial_path,final_path):
          "modified":sum(x["kind"]=="modified" for x in changes),
          "changes":changes}
 
-def build_packet(initial_dir,final_dir,output_dir):
+
+def compare_json(initial_path,final_path):
+ a=json.loads(Path(initial_path).read_text(encoding="utf-8"))
+ b=json.loads(Path(final_path).read_text(encoding="utf-8"));changes=[]
+ def walk(path,left,right):
+  if isinstance(left,dict) and isinstance(right,dict):
+   for key in sorted(set(left)|set(right)):
+    if key not in left:changes.append({"path":f"{path}.{key}","kind":"added","after":right[key]})
+    elif key not in right:changes.append({"path":f"{path}.{key}","kind":"removed","before":left[key]})
+    else:walk(f"{path}.{key}",left[key],right[key])
+  elif isinstance(left,list) and isinstance(right,list):
+   if left!=right:changes.append({"path":path,"kind":"modified","before":left,"after":right})
+  elif left!=right:changes.append({"path":path,"kind":"modified","before":left,"after":right})
+ walk("deck_spec",a,b)
+ return {"initial_sha256":sha(initial_path),"final_sha256":sha(final_path),
+         "changed_fields":len(changes),"changes":changes}
+\ndef build_packet(initial_dir,final_dir,output_dir):
  initial_dir,final_dir,output_dir=map(Path,(initial_dir,final_dir,output_dir))
  output_dir.mkdir(parents=True,exist_ok=True);rows=[]
  for task in TASKS:
@@ -90,6 +107,9 @@ def build_packet(initial_dir,final_dir,output_dir):
   if task in TASK_SPEC_FILENAMES:
    spec_paths=TASK_SPEC_FILENAMES[task]
    diff["figure_spec_diff"]=compare_specs(ROOT/spec_paths["initial"],ROOT/spec_paths["final"])
+  if task in TASK_DECK_SPEC_FILENAMES:
+   spec_paths=TASK_DECK_SPEC_FILENAMES[task]
+   diff["deck_spec_diff"]=compare_json(ROOT/spec_paths["initial"],ROOT/spec_paths["final"])
   status="NO_REPAIR_APPLIED" if diff["byte_identical"] else "REPAIR_COMPARISON_READY"
   rows.append({**base,"status":status,"initial":initial_filename,"final":final_filename,"diff":diff})
  packet={"schema_version":"1.0.0","population":len(TASKS),"tasks":rows,
