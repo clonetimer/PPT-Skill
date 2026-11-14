@@ -20,6 +20,18 @@ Therefore the absence of the upper FBG-construction panel is **not, by itself, a
 
 This scope decision is grounded in `specs/research_figure_benchmark_v76.json`, `figure_specs/c01/C01_FBG_construction.json`, `figure_specs/c01/C01_SEANet_graph_level.json`, `figure_specs/c01/C01_composite_defense_slide.json`, and `docs/C01_V76_SOURCE_CORRECTION.md`.
 
+
+## Stage 1 full-figure criterion and component boundary
+
+The original Stage 1 review's corrective criteria explicitly require both `Graph Construction (Time-Frequency Graph)` and `Graph-level fault diagnosis framework` on one canvas, with the `Total graph` connection into the lower panel. A lower-panel excerpt can be reviewed as a component, but **cannot pass as a complete redraw of the original two-panel graphical abstract**.
+
+The repository separates the work into three linked deliverables:
+- `C01_FBG`: the upper frequency-band construction panel;
+- `C01_SEANet`: the lower graph-level diagnosis panel excerpt;
+- `C01_composite`: the complete two-panel redraw, including the Total graph → SEANet input connection.
+
+Accordingly, the v7.4 SEANet artifact now states explicitly that it is **not the full graphical abstract**, identifies `C01_FBG_construction` as its companion component, and points to `C01_composite` as the complete two-panel view. The 12/24 Stage 1 FAIL remains unchanged. The full-figure corrective criterion must be evaluated against `C01_composite`, not by silently treating the lower-panel excerpt as a complete figure.
+
 ## Confirmed repair targets that remain in scope
 
 1. **Input total-graph representation** — replace the single small flat network with a stacked multi-subgraph visual consistent with the source's stacked graph input. Keep node coordinates explicitly schematic; do not claim a numerical adjacency matrix.
@@ -52,4 +64,4 @@ The five squares remain separate native PowerPoint shapes; the semantic grouping
 
 ## Decision
 
-**Proceed with a second, source-grounded local repair of C01-SEANet. Do not add the upper FBG panel to this standalone figure.** After the second round passes automated audits, issue a new blind final-review packet that clearly declares the lower-panel excerpt scope.
+**Proceed with the source-grounded local repair of C01-SEANet as a component excerpt; do not misrepresent it as the complete graphical abstract.** The two-panel completeness requirement is assigned to C01_composite, which must be independently reviewed together with its upper FBG panel and Total graph → SEANet input connection. The Stage 1 12/24 FAIL remains frozen; a new blind final-review packet must declare these separate scopes.
