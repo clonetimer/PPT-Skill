@@ -57,7 +57,9 @@ def prepare_template() -> dict:
     }
 
 
-def validate_review(review: dict) -> None:
+def validate_review(review: dict | Path) -> None:
+    if isinstance(review, (str, Path)):
+        review = json.loads(Path(review).read_text(encoding="utf-8"))
     benchmark_path = ROOT / "specs/research_figure_benchmark_v76.json"
     benchmark = json.loads(benchmark_path.read_text(encoding="utf-8"))
     require(review.get("benchmark_sha256") == sha256(benchmark_path), "Benchmark changed since review")
@@ -66,6 +68,8 @@ def validate_review(review: dict) -> None:
     for reviewer_id, reviewer in reviewers.items():
         require(bool(reviewer_id and reviewer.get("name") and reviewer.get("date")),
                 f"{reviewer_id}: reviewer identity and date required")
+        require(reviewer.get("human") is True,
+                f"{reviewer_id}: reviewer must be explicitly identified as human")
         require(isinstance(reviewer.get("disciplines"), list) and bool(reviewer["disciplines"]),
                 f"{reviewer_id}: reviewer disciplines required")
         require(reviewer.get("independent_of_build") is True, f"{reviewer_id}: independence required")
