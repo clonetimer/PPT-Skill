@@ -16,11 +16,14 @@ def _sha256(path: Path) -> str:
 
 
 def _read_shape_metadata(shape):
-    descr = shape._element.xpath(".//p:cNvPr/@descr")
+    nodes = [node for node in shape._element.iter() if node.tag.endswith("}cNvPr")]
+    if not nodes:
+        return None
+    descr = nodes[0].get("descr")
     if not descr:
         return None
     try:
-        value = json.loads(descr[0])
+        value = json.loads(descr)
     except (TypeError, ValueError):
         return None
     return value if isinstance(value, dict) else None
