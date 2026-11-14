@@ -298,3 +298,14 @@ python tools/validate_c01_v73.py
 
 Paper: Lee et al., *Engineering Applications of Artificial Intelligence* 179 (2026), 115273. DOI: 10.1016/j.engappai.2026.115273.
 Author page: https://hai.snu.ac.kr/bbs/board.php?bo_table=sub4_1_a&wr_id=251
+
+
+### Evidence-based reconstruction routing (P1-01C)
+
+After human review, generate an advisory route audit for each accepted panel/region:
+
+```powershell
+python tools/source_reconstruction_router.py .\qa\source_layout.json .\qa\review.json --output .\qa\reconstruction_routes.json
+```
+
+The router distinguishes native vector, native text, mixed native/picture, source-picture-only, unsupported, and manual-review-required regions. It records object IDs and boundary overlap. It never executes a route or edits a FigureSpec; `execution_authorized` is always false.
