@@ -50,13 +50,15 @@ The hash-locked replay refuses to proceed when this crop audit fails. The
 manifest records caption anchors so a crop that cuts off the figure caption or
 selects the wrong UCFNet figure cannot silently enter the regression run.
 
-The record contains explicit panel-label candidates and enclosing source
-boundaries, relative coordinates, source text anchors and font tiers, stroke
-and fill palette counts, clipping regions, independent image/XRef hashes, and
-stroke-segment candidates (not semantic graph edges). It does **not** invent panel divisions when labels
-are absent, nor infer directed graph edges from line geometry alone; such
-relations remain unverified until the source arrowhead/legend/description is
-checked. See [source layout evidence schema](specs/source_figure_layout.schema.json)
+The record contains explicit panel-label candidates, source rectangle
+enclosures, repeated rectangle alignment groups, interstitial bands, and
+low-ink gutter candidates detected inside dominant raster figures. It also
+records relative coordinates, source text/font anchors, stroke/fill palette,
+clipping regions, image/XRef hashes and stroke-segment candidates. Unlabeled
+regions and raster gutters are **review-only candidates**, not confirmed
+panels. The extractor does not infer directed graph edges from line geometry
+alone; relations remain unverified until source arrowheads, legends and
+captions are checked. See [source layout evidence schema](specs/source_figure_layout.schema.json)
 and [P1-01 implementation notes](docs/P1_01_SOURCE_LAYOUT_EVIDENCE_2026-11-14.md).
 
 For a frozen ten-paper development cohort, replay source-layout extraction
