@@ -109,7 +109,7 @@
         "start_normalized": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
         "end_normalized": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
         "directedness": {"enum": ["undetermined", "directed", "undirected"]},
-        "confidence": {"enum": ["low", "medium", "high"},
+        "confidence": {"enum": ["low", "medium", "high"]},
         "confidence_basis": {"type": "string"}
       }
     },
@@ -125,7 +125,7 @@
         "bbox_pt": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
         "bbox_normalized": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
         "panel_candidate": {"type": ["string", "null"]},
-        "confidence": {"enum": ["low", "medium", "high"}
+        "confidence": {"enum": ["low", "medium", "high"]}
       }
     }
   }
