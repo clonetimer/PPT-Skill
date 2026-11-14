@@ -71,3 +71,10 @@ This is an initial evidence extractor, not yet a complete automatic panel parser
 - feed accepted SourceLayout records into FigureSpec drafting and route selection instead of leaving them as a sidecar.
 
 The frozen ten-paper strict first-pass success remains 0/10. P1-01 adds source evidence and prevents arbitrary layout assumptions; it has not yet demonstrated an increase in strict blind-test acceptance.
+
+
+## Ten-paper development-cohort diagnostic
+
+A crop-level source inventory was performed for the ten frozen papers using the source SHA-256 values and manually selected crop candidates. It found four image-only crops, five mixed-content/vector candidates and one vector/text candidate. Distilling's crop has over 124k raw line segments, which are now explicitly named `stroke_segment_candidates`, not semantic edges. A loose one-letter panel-marker rule was also tightened after it flagged math/page-furniture glyphs. See [ten-paper source-layout replay notes](P1_01_TEN_PAPER_SOURCE_LAYOUT_REPLAY_2026-11-14.md) and the [hash-locked crop fixture](../tests/fixtures/blind10_source_regions_2026-11-14.json).
+
+The exact local replay runner is `tools/benchmark_source_layout.py`; it verifies all source hashes and validates emitted JSON against the SourceLayout schema. Original PDFs remain local. This is development-cohort evidence, not a fresh blind holdout or a strict reproduction pass-rate improvement.
