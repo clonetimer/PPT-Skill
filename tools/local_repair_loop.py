@@ -93,8 +93,8 @@ def run_repair_loop(source_pptx,plan_path,manifest_path,output_dir,max_rounds=3)
    regression.append("DUPLICATE_SOURCE_OBJECTS")
   if metrics["object_preservation"]["missing_object_ids"]:
    regression.append("MISSING_SOURCE_OBJECTS")
-  if metrics["object_order"]["exact_order_match"] if "object_order" in metrics else False:
-   pass
+  if not metrics.get("source_order",{}).get("exact_order_match",True):
+   regression.append("SOURCE_ORDER_REGRESSION")
   if metrics["status"]=="FAIL":regression.extend(metrics.get("blockers",[]))
   accepted_round=not regression
   record={"round":index,"candidate":candidate.name,"candidate_sha256":sha(candidate),
