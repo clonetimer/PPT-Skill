@@ -601,8 +601,8 @@ def run_paddleocr_backend(
 ) -> dict:
     """Run official PaddleOCR models and return raw results plus provenance.
 
-    NMS and merge filtering are disabled for layout boxes so nested proposals
-    remain available to the evidence-fusion stage.
+    Layout NMS is disabled so overlapping and nested proposals remain available
+    to the evidence-fusion stage.
     """
     layout, ocr, version = _load_paddleocr_models(
         layout_model, ocr_det_model, ocr_rec_model
@@ -613,7 +613,6 @@ def run_paddleocr_backend(
             input=image_path,
             batch_size=1,
             layout_nms=False,
-            layout_merge_bboxes_mode="union",
         )
         ocr_result = ocr.predict(input=image_path)
     except Exception as exc:

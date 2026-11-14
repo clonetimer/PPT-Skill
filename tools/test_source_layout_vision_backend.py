@@ -55,7 +55,6 @@ class PaddleOCRBackendTests(unittest.TestCase):
         self.assertEqual(calls["layout_init"]["model_name"], "PP-DocLayoutV3")
         self.assertEqual(calls["layout_init"]["engine"], "onnxruntime")
         self.assertFalse(calls["layout_predict"]["layout_nms"])
-        self.assertEqual(calls["layout_predict"]["layout_merge_bboxes_mode"], "union")
         self.assertEqual(calls["ocr_init"]["text_detection_model_name"], "PP-OCRv6_small_det")
         self.assertEqual(calls["ocr_init"]["text_recognition_model_name"], "PP-OCRv6_small_rec")
         self.assertEqual(calls["ocr_init"]["engine"], "onnxruntime")
