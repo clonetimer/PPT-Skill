@@ -37,7 +37,7 @@ def validate():
     if by_id["el_0120"]["type"] != "graph" or len(by_id["el_0120"]["nodes"]) != 12:
         raise AssertionError("INPUT_GRAPH_ICON_MISSING")
     interband = [e for e in elements if e["type"] == "line" and e.get("dash")
-                 and e.get("id") in {"el_0121", "el_0122", "el_0123"}]
+                 and e.get("id") in {f"el_{i:04d}" for i in range(121, 130)}]
     if len(interband) != 9:
         raise AssertionError("INPUT_GRAPH_INTER_GROUP_LINKS_MISSING")
     if by_id["el_0130"].get("semantic_id") != "class_output":
