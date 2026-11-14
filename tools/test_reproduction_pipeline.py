@@ -181,6 +181,53 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
             )
             self.assertFalse(diff_path.exists(), "a past visual report must not survive a new run")
 
+    def test_human_reviewed_import_pipeline_emits_composition_and_quality_audits(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            source=root/"reviewed.pdf"
+            output=root/"out"
+            doc=fitz.open()
+            page=doc.new_page(width=300,height=200)
+            page.draw_rect(fitz.Rect(30,30,270,170),color=(.1,.2,.4),width=1)
+            page.insert_text((50,90),"(a)",fontsize=12)
+            page.insert_text((80,90),"Feature extraction",fontsize=10)
+            doc.save(source);doc.close()
+
+            first=run_pipeline(source,output,mode="import",render_host="none")
+            self.assertTrue((output/"source_layout.json").is_file())
+            layout_path=output/"source_layout.json"
+            review_path=root/"review.json"
+            review=create_source_layout_review_template(layout_path,review_path)
+            review["reviewer"]={"name":"independent reviewer","type":"human"}
+            accepted=0
+            for item in review["decisions"]:
+                kind=item["candidate_snapshot"]["candidate_type"]
+                if kind in ("source_enclosure","nested_source_enclosure"):
+                    item.update({
+                        "decision":"accept_panel",
+                        "rationale":"The enclosing boundary and panel label were checked against the source PDF.",
+                        "evidence_locator":"Figure 1(a), page 1",
+                    })
+                    accepted+=1
+                else:
+                    item["decision"]="defer"
+            self.assertGreater(accepted,0)
+            review_path.write_text(json.dumps(review,indent=2),encoding="utf-8")
+
+            result=run_pipeline(
+                source,output,mode="import",render_host="none",
+                source_layout_review=review_path,
+            )
+            self.assertIsNotNone(result["source_composition"])
+            self.assertTrue((output/"reconstruction_routes.json").is_file())
+            self.assertTrue((output/"source_composition_manifest.json").is_file())
+            self.assertTrue((output/"source_composition_pptx_audit.json").is_file())
+            self.assertTrue((output/"reconstruction_quality_metrics.json").is_file())
+            self.assertEqual(result["reports"]["source_composition_pptx_audit"]["status"],"PASS")
+            self.assertEqual(result["reports"]["reconstruction_quality_metrics"]["object_preservation"]["source_object_recall"],1.0)
+            self.assertEqual(result["reports"]["reconstruction_quality_metrics"]["text_fidelity"]["character_error_rate"],0.0)
+            self.assertFalse(result["reports"]["reconstruction_quality_metrics"]["policy"]["scientific_relations_verified"])
+
     def test_missing_pdf_renderer_has_an_explicit_review_blocker(self):
         """An unavailable optional host is a review blocker, never a fake visual PASS."""
         with tempfile.TemporaryDirectory() as folder:
