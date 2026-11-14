@@ -159,11 +159,11 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
     round_02 = rounds_dir / "round_02.pptx"
     shutil.copy2(INITIAL_PPTX, first_pass)
 
-    # Round 01: restore a compact, editable multi-group graph icon inside the Input block.
+    # Round 01: restore four stacked, editable band subgraphs and nine inter-band connectors inside the Input block.
     base_spec = copy.deepcopy(make_v74_spec())
     round_01_spec = copy.deepcopy(base_spec)
     add_input_graph_icon(round_01_spec)
-    round_01_spec["id"] = "C01_composite_defense_slide_round1"
+    round_01_spec["id"] = "C01_composite_defense_slide"
     round_01_spec["version"] = "7.4.1"
     round_01_svg = output_dir / "round_01.svg"
     render(round_01_spec, round_01_svg, round_01)
@@ -227,7 +227,7 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
         "rounds": [
             {
                 "round": 1, "path": str(round_01.relative_to(output_dir)), "sha256": sha(round_01),
-                "operation": "restore editable multi-group graph icon inside Input block",
+                "operation": "restore four stacked band subgraphs and nine dashed inter-band connectors inside Input block",
                 "object_diff": str((output_dir / "round_01_object_diff.json").relative_to(output_dir)),
                 "quality_audit": round_01_audit, "accepted": True, "rejected": False,
             },
