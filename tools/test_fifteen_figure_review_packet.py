@@ -98,6 +98,39 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertTrue(all(row["diagnosis_status"] in {"NO_CONFIRMED_DEFECT","REPAIR_EXECUTED"} for row in result["tasks"]))
         self.assertTrue(all(row["diagnosis_note"] for row in result["tasks"]))
 
+
+    def test_diagnosed_no_repair_tasks_are_marked_identical_not_repaired(self):
+        from pathlib import Path
+        import json
+        from scientific_ir import ROOT
+        ledger=json.loads((ROOT/"specs/15_figure_diagnostic_ledger_v76.json").read_text(encoding="utf-8"))
+        no_repair={task for task,row in ledger["tasks"].items() if row["status"]=="NO_CONFIRMED_DEFECT"}
+        repaired={task for task,row in ledger["tasks"].items() if row["status"]=="REPAIR_EXECUTED"}
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);initial=root/"initial";final=root/"final";out=root/"out"
+            initial.mkdir();final.mkdir()
+            for task in TASKS:
+                first=initial/TASK_FILENAMES[task]
+                last=final/TASK_FINAL_FILENAMES[task]
+                deck(first,task+" initial")
+                if task in no_repair:
+                    last.write_bytes(first.read_bytes())
+                else:
+                    deck(last,task+" repaired")
+            result=build_packet(initial,final,out)
+        rows={row["task_id"]:row for row in result["tasks"]}
+        self.assertEqual(set(rows),set(TASKS))
+        self.assertEqual(result["summary"]["no_repair_applied"],len(no_repair))
+        self.assertEqual(result["summary"]["comparison_ready"],len(repaired))
+        self.assertEqual(result["summary"]["missing"],0)
+        for task in no_repair:
+            self.assertEqual(rows[task]["status"],"NO_REPAIR_APPLIED")
+            self.assertTrue(rows[task]["diff"]["byte_identical"])
+            self.assertEqual(rows[task]["final_review_status"],"pending")
+        for task in repaired:
+            self.assertEqual(rows[task]["status"],"REPAIR_COMPARISON_READY")
+            self.assertFalse(rows[task]["diff"]["byte_identical"])
+
     def test_alignment_only_repair_is_included_in_object_diff(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);initial=root/"initial.pptx";final=root/"final.pptx"
