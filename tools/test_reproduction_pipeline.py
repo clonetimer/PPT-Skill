@@ -32,6 +32,17 @@ def make_blank_pdf(path: Path):
     doc.close()
 
 
+def make_panel_candidate_pdf(path: Path):
+    doc = fitz.open()
+    page = doc.new_page(width=300, height=240)
+    page.draw_rect(fitz.Rect(30, 25, 270, 95), color=(.1, .2, .4), width=1)
+    page.draw_rect(fitz.Rect(30, 135, 270, 210), color=(.4, .2, .1), width=1)
+    page.insert_text((40, 55), "upper module", fontsize=10)
+    page.insert_text((40, 165), "lower module", fontsize=10)
+    doc.save(path)
+    doc.close()
+
+
 def make_vector_pdf(path: Path, drawings: int = 5):
     doc = fitz.open()
     page = doc.new_page(width=240, height=160)
@@ -206,6 +217,34 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
             self.assertEqual(manifest["source_route_recommendation"]["recommended_reconstruction_class"],
                              "native_only")
             self.assertTrue((output / "source_layout_review_audit.json").exists())
+
+    def test_pipeline_consumes_only_human_accepted_source_layout_facts(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source = root / "panels.pdf"
+            output = root / "out"
+            review_path = root / "source_layout_review.json"
+            make_panel_candidate_pdf(source)
+            run_pipeline(source, output, mode="import", render_host="none")
+            layout = json.loads((output / "source_layout.json").read_text())
+            candidates = layout["panel_detection"]["unlabeled_panel_candidates"]
+            self.assertTrue(candidates)
+            review = create_source_layout_review_template(output / "source_layout.json", review_path)
+            review["reviewer"] = {"name": "domain reviewer", "type": "human"}
+            decision = next(x for x in review["decisions"] if x["candidate_id"] == candidates[0]["id"])
+            decision["decision"] = "accept_panel"
+            decision["rationale"] = "The source rectangle encloses a labeled method panel."
+            decision["evidence_locator"] = "Source PDF page 1, upper module"
+            review_path.write_text(json.dumps(review), encoding="utf-8")
+            result = run_pipeline(
+                source, output, mode="import", render_host="none",
+                source_layout_review=review_path,
+            )
+            manifest = json.loads((output / "delivery_manifest.json").read_text())
+            self.assertEqual(result["source_layout_review"]["status"], "VALIDATED_WITH_ACCEPTED_FACTS")
+            self.assertEqual(len(manifest["accepted_source_layout_facts"]["panels"]), 1)
+            self.assertEqual(manifest["accepted_source_layout_facts"]["panels"][0]["candidate_id"],
+                             candidates[0]["id"])
 
     def test_invalid_layout_review_fails_before_candidate_generation(self):
         with tempfile.TemporaryDirectory() as folder:
