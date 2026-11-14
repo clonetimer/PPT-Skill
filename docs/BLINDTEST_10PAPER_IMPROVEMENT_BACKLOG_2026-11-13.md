@@ -1,6 +1,6 @@
 # Ten-paper blind-test improvement backlog (2026-11-13)
 
-> Status: **P0-00 through P0-04 implemented and CI-verified**. The ten-paper baseline itself remains unchanged. This is the engineering follow-up to the user's genuine 10-paper trial, **not a claim that the improvements have been implemented**.
+> Status: **P0-00 through P0-04 implemented and CI-verified; P1-01 initial source-layout extractor implemented and integrated, with remaining source-cohort validation still open**. The ten-paper baseline itself remains unchanged.
 >
 > Frozen source/first-pass metadata: [`tests/fixtures/blind10_first_pass_frozen_2026-11-13.json`](../tests/fixtures/blind10_first_pass_frozen_2026-11-13.json). Source PDFs and author imagery are user-provided; they are **not** redistributed in this public repository.
 
@@ -24,7 +24,7 @@
 | **P0-02** | P0 · completed | Dense PDF resource budget / graceful abort / bounded segment conversion | 1/10 direct imports timeout | P0-00 |
 | **P0-03** | P0 · completed with one source-glyph blocker documented | Source-aware text geometry, glyph/fallback integrity and overlap repair with provenance | up to 55 overlaps in imported output | P0-01 |
 | **P0-04** | P0 · completed | Fail-closed zero-content/partial/hybrid validity and per-route QA statuses | prevents false first-pass passes | P0-01, P0-02 |
-| **P1-01** | P1 | Extract source panel geometry / order / visual grammar into source-layout evidence before FigureSpec drafting | 10/10 visual=2 | P0-04 |
+| **P1-01** | P1 · in progress | Extract source panel geometry / order / visual grammar into source-layout evidence before FigureSpec drafting; initial extractor and pipeline sidecar landed, source-cohort replay and FigureSpec consumption remain | 10/10 visual=2 | P0-04 |
 | **P1-02** | P1 | Evidence-based `vector/mixed/raster` route selection, non-flattening hybrid composition | vector fidelity plus local images | P0-01, P1-01 |
 | **P1-03** | P1 | Native orthogonal/curved connectors, junctions and graph enclosures with source routing fidelity | PoG, EvoOntology, HarnessMM | P1-01 |
 | **P1-04** | P1 | Network/experiment panels: data/tensor lanes, gated dual-stream, multi-panel insets, legends and image-with-vector annotations | PINN, GIN, UCFNet | P1-01 |
@@ -33,6 +33,15 @@
 | **P2-02** | P2 | Freeze new independent-papers holdout, six-axis blinded evaluation, Office 2016 host, measured improvement vs baseline | trustworthy first-pass rate | all P0, key P1 |
 
 ## Task-level implementation contracts
+
+### P1-01 initial implementation record (2026-11-14)
+
+- Added `tools/extract_source_layout.py` and `specs/source_figure_layout.schema.json`.
+- The unified pipeline now extracts `source_layout.json` before generating either route and stores its hash, panel summary, layout element count, edge-candidate count and image count in the delivery manifest. It supports 1-based CLI `--page` and PDF-point `--region`.
+- Explicit panel markers and enclosing source rectangles are recorded as candidates; unlabeled figures are not split into invented panels. Lines remain `directedness: undetermined` unless source evidence later resolves them.
+- Regression tests: 8/8 layout extraction, 10/10 end-to-end pipeline; [CI #193 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43553392378).
+- [P1-01 evidence report](P1_01_SOURCE_LAYOUT_EVIDENCE_2026-11-14.md).
+- **Remaining:** replay the ten-paper development cohort, improve nested/unlabeled panel detection, and consume verified SourceLayout evidence in FigureSpec drafting/route selection. Strict blind success remains 0/10.
 
 ### P0-01 — Native crop-aware image and mixed-vector importer
 **Files:** `tools/pdf_figure_import.py`; new `tools/pdf_source_assets.py`; new `tools/test_pdf_crop_assets.py`.
