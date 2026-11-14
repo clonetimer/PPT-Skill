@@ -50,7 +50,7 @@ def add_input_graph_icon(spec: dict) -> None:
         elements.insert(label_index + 2 + i, {
             "type": "line", "x1": x1, "y1": y1, "x2": x2, "y2": y2,
             "color": "#7896A6", "sw": 0.55, "dash": True,
-            "id": f"el_{f"{121+i:04d}"}",
+            "id": f"el_{121+i:04d}",
             "semantic_role": "connector", "evidence_ref": "source_1",
         })
 
@@ -80,7 +80,7 @@ def add_class_output(spec: dict) -> None:
             "type": "rect", "x": 8.90, "y": 5.02 + i * 0.17, "w": 0.13, "h": 0.13,
             "fill": "#DCA16C" if i == 1 else "#FFFFFF",
             "stroke": "#43525B", "sw": 0.65, "radius": 0, "dash": False,
-            "id": f"el_{f"{125+i:04d}"}",
+            "id": f"el_{125+i:04d}",
             "semantic_role": "layout_shape", "evidence_ref": "source_1",
         }
         squares.append(square)
