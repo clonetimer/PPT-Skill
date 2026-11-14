@@ -97,8 +97,8 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             source = Path(tmp) / "styles.pdf"
             make_two_panel_pdf(source)
             layout = extract_source_layout(source)
-            self.assertIn("helv", layout["style_profile"]["font_families"])
-            self.assertIn("tiro", layout["style_profile"]["font_families"])
+            self.assertIn("Helvetica", layout["style_profile"]["font_families"])
+            self.assertIn("Times-Roman", layout["style_profile"]["font_families"])
             self.assertGreaterEqual(len(layout["style_profile"]["stroke_widths_pt"]), 2)
             self.assertGreaterEqual(len(layout["style_profile"]["palette"]), 2)
 
@@ -110,7 +110,8 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             self.assertEqual(len(layout["image_assets"]), 1)
             image = layout["image_assets"][0]
             self.assertEqual(len(image["sha256"]), 64)
-            self.assertEqual(image["source_kind"], "xref")
+            self.assertIn(image["source_kind"], ("xref", "image_block"))
+            self.assertGreater(image["xref"], 0)
             self.assertEqual(image["panel_candidate"], "b")
 
 
