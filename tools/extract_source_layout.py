@@ -534,6 +534,8 @@ def main():
         "panels": len(layout["panel_detection"]["panels"]),
         "layout_elements": len(layout["layout_elements"]),
         "stroke_segment_candidates": len(layout["stroke_segment_candidates"]),
+        "unlabeled_panel_candidates": len(layout["panel_detection"]["unlabeled_panel_candidates"]),
+        "alignment_groups": len(layout["panel_detection"]["alignment_groups"]),
         "output": str(args.output),
     }, ensure_ascii=False))
 
