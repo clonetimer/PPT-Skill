@@ -58,7 +58,25 @@ clipping regions, image/XRef hashes and stroke-segment candidates. Unlabeled
 regions and raster gutters are **review-only candidates**, not confirmed
 panels. The extractor does not infer directed graph edges from line geometry
 alone; relations remain unverified until source arrowheads, legends and
-captions are checked. See [source layout evidence schema](specs/source_figure_layout.schema.json)
+captions are checked.
+
+To create a review file and explicitly accept/reject candidate regions:
+
+~~~bash
+python tools/source_layout_review.py template out/source_layout.json \
+  --output out/source_layout_review.json
+# Edit decisions, reviewer.name, rationale and evidence_locator in the JSON.
+python tools/source_layout_review.py validate out/source_layout.json \
+  out/source_layout_review.json --output out/source_layout_review_audit.json
+~~~
+
+Only a human reviewer can accept a panel or layout region. Raster gutters can
+be accepted only as layout regions, never as scientific panels. The unified
+reproduction pipeline accepts `--source-layout-review`, verifies the source
+and SourceLayout hashes, and records accepted facts in its manifest. Invalid
+or stale review files fail closed. A route recommendation (`native_only`,
+`mixed_native_picture`, `source_picture_only`) is advisory and does not
+override the actual importer report or the release gate. See [source layout evidence schema](specs/source_figure_layout.schema.json)
 and [P1-01 implementation notes](docs/P1_01_SOURCE_LAYOUT_EVIDENCE_2026-11-14.md).
 
 For a frozen ten-paper development cohort, replay source-layout extraction
