@@ -1111,16 +1111,31 @@
       "x": 12.49,
       "y": 3.05,
       "w": 0.18,
-      "h": 0.18,
+      "h": 1.06,
       "fill": "#FFFFFF",
-      "stroke": "#43525B",
-      "sw": 0.7,
+      "stroke": "#FFFFFF",
+      "sw": 0.1,
       "radius": 0,
       "dash": false,
       "id": "el_0058",
       "semantic_role": "scientific_object",
       "evidence_ref": "source_1",
       "semantic_id": "class_output"
+    },
+    {
+      "type": "rect",
+      "x": 12.49,
+      "y": 3.05,
+      "w": 0.18,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#43525B",
+      "sw": 0.7,
+      "radius": 0,
+      "dash": false,
+      "id": "el_0059",
+      "semantic_role": "layout_shape",
+      "evidence_ref": "source_1"
     },
     {
       "type": "rect",
@@ -1133,8 +1148,8 @@
       "sw": 0.7,
       "radius": 0,
       "dash": false,
-      "id": "el_0059",
-      "semantic_role": "scientific_object",
+      "id": "el_0060",
+      "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
     {
@@ -1148,8 +1163,8 @@
       "sw": 0.7,
       "radius": 0,
       "dash": false,
-      "id": "el_0060",
-      "semantic_role": "scientific_object",
+      "id": "el_0061",
+      "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
     {
@@ -1163,8 +1178,8 @@
       "sw": 0.7,
       "radius": 0,
       "dash": false,
-      "id": "el_0061",
-      "semantic_role": "scientific_object",
+      "id": "el_0062",
+      "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
     {
@@ -1178,8 +1193,8 @@
       "sw": 0.7,
       "radius": 0,
       "dash": false,
-      "id": "el_0062",
-      "semantic_role": "scientific_object",
+      "id": "el_0064",
+      "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
     {
@@ -1214,23 +1229,6 @@
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1",
       "semantic_id": "label_class_output"
-    },
-    {
-      "type": "text",
-      "text": "Lee et al. (2026), Engineering Applications of Artificial Intelligence 179, 115273 · DOI: 10.1016/j.engappai.2026.115273",
-      "x": 0.8,
-      "y": 6.85,
-      "w": 11.8,
-      "h": 0.22,
-      "size": 8.5,
-      "font": "Times New Roman",
-      "color": "#687780",
-      "bold": false,
-      "align": "left",
-      "italic": false,
-      "id": "el_0063",
-      "semantic_role": "annotation",
-      "evidence_ref": "source_1"
     }
   ],
   "schema_version": "7.6.0-dev",
