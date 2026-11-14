@@ -382,11 +382,13 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source_pdf", type=Path)
-    parser.add_argument("--page", type=int, default=0, help="zero-based PDF page index")
+    parser.add_argument("--page", type=int, default=1, help="1-based PDF page number")
     parser.add_argument("--region", type=float, nargs=4, metavar=("X0", "Y0", "X1", "Y1"))
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    layout = extract_source_layout(args.source_pdf, page_index=args.page,
+    if args.page < 1:
+        parser.error("--page must be a 1-based positive page number")
+    layout = extract_source_layout(args.source_pdf, page_index=args.page - 1,
                                    figure_region=tuple(args.region) if args.region else None)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(layout, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -394,7 +396,7 @@ def main():
         "status": layout["panel_detection"]["status"],
         "panels": len(layout["panel_detection"]["panels"]),
         "layout_elements": len(layout["layout_elements"]),
-        "edge_candidates": len(layout["edge_candidates"]),
+        "stroke_segment_candidates": len(layout["stroke_segment_candidates"]),
         "output": str(args.output),
     }, ensure_ascii=False))
 
