@@ -92,7 +92,7 @@ jobs:
           python tools/build_wine_scatter.py
           python tools/build_publication_example.py
           python tools/build_image_quant_example.py
-          python tools/build_deck_benchmark.py
+          python tools/repair_case_deck01_round1.py --output-dir dist/repair_cases/DECK01 --accepted-output dist/accepted_repairs/DECK01_c01_defense_v76.pptx
       - name: Validate SVG and JSON
         run: |
           python tools/validate_svg_examples.py
@@ -105,6 +105,8 @@ jobs:
           python -m json.tool MANIFEST_V7.json > /dev/null
           python -m json.tool specs/deck_spec_v75.example.json > /dev/null
           python -m json.tool specs/deck_spec_v75.schema.json > /dev/null
+          python -m json.tool specs/deck_spec_v76.example.json > /dev/null
+          python -m json.tool specs/deck_spec_v76.schema.json > /dev/null
           python -m json.tool figure_specs/c01/C01_composite_defense_slide.json > /dev/null
       - name: Validate FigureSpecs
         run: |
@@ -114,6 +116,7 @@ jobs:
           python tools/validate_c01_seanet_v74.py
           python tools/validate_c01_composite_v75.py
           python tools/validate_deck_spec.py
+          python tools/validate_deck_spec_v76.py
           python tools/validate_manifest.py
           python tools/validate_scientific_ir.py
           python tools/validate_quantitative_examples.py
@@ -127,6 +130,8 @@ jobs:
           python tools/test_scientific_value_mutations.py
           python tools/validate_research_benchmark.py
           python tools/test_release_readiness.py
+          python tools/test_repair_case_artifacts.py
+          python tools/test_repair_case_deck01_round1.py
           python tools/validate_output_profiles.py
           python tools/test_output_profiles.py
           python tools/check_scientific_accessibility.py
@@ -152,12 +157,12 @@ jobs:
           python tools/audit_pptx.py dist/Q07_wine_scatter.pptx --strict
           python tools/audit_pptx.py dist/Q08_wine_strip.pptx --strict
           python tools/audit_pptx.py dist/I01_cell_image_quant.pptx --strict --allow-raster
-          python tools/audit_pptx.py dist/DECK01_c01_defense.pptx --strict
+          python tools/audit_pptx.py dist/DECK01_c01_defense_v76.pptx --strict
       - name: Compile tools
         run: python -m py_compile tools/*.py
       - name: Prepare immutable 15-figure initial cohort
         run: |
-          python tools/prepare_15_figure_initial_cohort.py dist --c01-seanet-initial dist/repair_cases/C01_SEANet/rounds/first_pass.pptx --output-dir dist/initial_pass
+          python tools/prepare_15_figure_initial_cohort.py dist --c01-seanet-initial dist/repair_cases/C01_SEANet/rounds/first_pass.pptx --deck01-initial dist/repair_cases/DECK01/rounds/first_pass.pptx --output-dir dist/initial_pass
       - name: Prepare separate review stages
         run: |
           python tools/prepare_scientific_review_bundle.py --stage initial --output dist/scientific_review_initial_v76.zip
@@ -187,6 +192,14 @@ jobs:
           path: |
             dist/repair_cases/C01_composite/*
             dist/accepted_repairs/C01_composite_defense_slide_v75.pptx
+          if-no-files-found: error
+      - name: Upload DECK01 multi-round repair evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-deck01-round1
+          path: |
+            dist/repair_cases/DECK01/*
+            dist/accepted_repairs/DECK01_c01_defense_v76.pptx
           if-no-files-found: error
       - name: Upload initial review packet
         uses: actions/upload-artifact@v4
@@ -225,7 +238,11 @@ jobs:
             dist/Q*.pptx
             examples/I01_*.svg
             dist/I01_*.pptx
-            dist/DECK01_c01_defense.pptx
+            dist/DECK01_c01_defense_v76.pptx
+            dist/DECK01_c01_defense_v76.pdf
+            dist/DECK01_c01_defense_v76_slide_1.png
+            dist/DECK01_c01_defense_v76_slide_2.png
+            dist/DECK01_c01_defense_v76_slide_3.png
             dist/skill_tests/generalization/*.svg
             dist/skill_tests/generalization/*.pptx
           if-no-files-found: error
