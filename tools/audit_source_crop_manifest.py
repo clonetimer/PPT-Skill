@@ -104,7 +104,7 @@ def audit_source_crop_manifest(source_dir: Path, manifest_path: Path) -> dict:
                                 "drawing_records": len(drawings),
                                 "stroke_segment_candidates": stroke_segment_candidates,
                                 "text_spans": len(text_spans),
-                                "has_visual_content": bool(image_paints or drawings or text_spans),
+                                "has_visual_content": bool(image_paints or drawings),
                             }
                             if not row["source_content"]["has_visual_content"]:
                                 row["failures"].append("EMPTY_CROP_CONTENT")
