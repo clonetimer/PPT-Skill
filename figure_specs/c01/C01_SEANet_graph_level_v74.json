@@ -13,7 +13,7 @@
     "paper": "Lee et al., Engineering Applications of Artificial Intelligence 179 (2026), 115273",
     "doi": "10.1016/j.engappai.2026.115273",
     "figure": "SEANet graph-level diagnosis panel excerpt from the author-published FBG-SEANet graphical abstract",
-    "evidence": "Source-visible structural redraw of the lower SEANet diagnosis panel. FBG frequency-band graph construction is delivered separately in C01_FBG_construction; the combined two-panel flow is delivered in C01_composite_defense_slide. Graph coordinates remain schematic."
+    "evidence": "Source-visible structural redraw of the lower SEANet diagnosis panel. It is a local excerpt, not the complete two-panel graphical abstract. FBG frequency-band graph construction is delivered separately in C01_FBG_construction; the complete two-panel method overview and cross-panel flow are delivered in C01_composite. Graph coordinates remain schematic."
   },
   "elements": [
     {
@@ -1012,7 +1012,7 @@
     },
     {
       "type": "text",
-      "text": "SEANet graph-level panel excerpt; FBG construction is shown separately in C01_FBG_construction.",
+      "text": "SEANet lower-panel excerpt, not the full graphical abstract; FBG: C01_FBG_construction; full two-panel view: C01_composite.",
       "x": 0.8,
       "y": 6.55,
       "w": 11.8,
@@ -1266,7 +1266,7 @@
       "source_file_sha256": "08fb792243f10a8f386f415d4dd7952491beb637198e7983b70f11ce0b102f04",
       "source_locator": "Author-published graphical abstract — lower Graph-level fault diagnosis framework panel; article-grounded EA/SR terminology",
       "status": "source_visible_redraw",
-      "scope": "Standalone excerpt of the lower SEANet graph-level diagnosis panel. The upper FBG construction panel is a separate C01_FBG deliverable; the complete cross-panel flow is a separate C01_composite deliverable. Input graph topology is schematic, not a numerical adjacency matrix.",
+      "scope": "Standalone excerpt of the lower SEANet graph-level diagnosis panel, not the complete two-panel graphical abstract. The upper FBG construction panel is a separate C01_FBG deliverable; the complete two-panel connection is C01_composite. Input graph topology is schematic, not a numerical adjacency matrix.",
       "reuse": "derivative_redraw_only"
     }
   ],
