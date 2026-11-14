@@ -25,6 +25,7 @@ def calculate(baseline_path:Path,ledger_path:Path)->dict:
   reasons=[]
   reviewer=reviewers.get(task.get("reviewer_id"))
   if not reviewer: reasons.append("REVIEWER_NOT_REGISTERED")
+  elif reviewer.get("human") is not True: reasons.append("REVIEWER_NOT_HUMAN")
   elif reviewer.get("independent") is not True: reasons.append("REVIEWER_NOT_INDEPENDENT")
   elif reviewer.get("discipline") not in task.get("required_disciplines",[]): reasons.append("REVIEWER_DISCIPLINE_MISMATCH")
   if task.get("initial_review_before_expectations") is not True: reasons.append("INITIAL_REVIEW_ORDER_NOT_ATTESTED")
@@ -66,7 +67,7 @@ def calculate(baseline_path:Path,ledger_path:Path)->dict:
    "status":"MEASURED" if eligible_count else "NOT_YET_MEASURABLE",
    "invalid_completed_reviews":invalid,
    "repair_rounds_mean_for_accepted":round(sum(int(t.get("repair_rounds",0)) for t in accepted)/len(accepted),3) if accepted else None,
-   "rule":"PASS requires independent reviewer, prior blind initial review, six evidenced dimensions >=2, and all hard-fail checks explicitly false."
+   "rule":"PASS requires a registered human independent reviewer, prior blind initial review, six evidenced dimensions >=2, and all hard-fail checks explicitly false."
   },
   "cohort_policy":{
    "first_pass_baseline_immutable":True,
