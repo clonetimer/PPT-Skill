@@ -56,10 +56,10 @@ Page numbers in CLI are 1-based; PDF-point coordinates use the selected page's t
 
 ## Tests and evidence
 
-- 8 source-layout extraction tests cover explicit panel markers, no-marker conservative behavior, normalized coordinates, unknown edge direction, crop selection, font/stroke tiers, image provenance and JSON Schema validation.
-- 10 end-to-end reproduction-pipeline tests include source-layout manifest integration.
-- [Latest full CI #193 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43553392378), commit `10c66d1c`, includes 8/8 source-layout tests and 10/10 pipeline tests plus the existing full validation workflow.
-- Earlier failures #182–#192 were retained as red/green debugging evidence; they were caused by test expectation issues, zero-height PDF line bounds, and a missing test import. The latest passing run contains the corrected code and tests.
+- 12 source-layout extraction tests cover explicit panel markers, no-marker conservative behavior, normalized coordinates, unknown stroke direction, crop selection, font/stroke tiers, image provenance, JSON Schema validation and the one-based CLI.
+- 5 crop-manifest audit tests cover source hashes, page/crop bounds, caption containment, non-caption figure content and zero-height strokes.
+- 3 hash-locked benchmark tests cover successful sidecars, hash mismatch and caption-outside-crop rejection.
+- [Latest full CI #225 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43555988938), including all three source-layout suites and the existing full validation workflow.
 
 ## Remaining P1-01 work
 
@@ -67,14 +67,15 @@ This is an initial evidence extractor, not yet a complete automatic panel parser
 - detect nested and unlabeled panel arrangements using stronger evidence than large rectangles alone;
 - improve arrowhead/connector direction evidence without promoting uncertain lines to semantic edges;
 - infer repeated module alignment/spacing and panel relationships with explicit confidence;
-- replay the frozen ten-paper development cohort and compare panel/layout/style evidence to source crops; the cohort remains regression data, not a new blind holdout;
-- feed accepted SourceLayout records into FigureSpec drafting and route selection instead of leaving them as a sidecar.
+- cluster unlabeled/nested image and vector regions into reviewable panel candidates with confidence;
+- infer repeated-module alignment and relative spacing without promoting visual grouping into semantic topology;
+- feed only human-accepted SourceLayout facts into FigureSpec drafting and vector/mixed/image route selection instead of leaving them as a sidecar.
 
 The frozen ten-paper strict first-pass success remains 0/10. P1-01 adds source evidence and prevents arbitrary layout assumptions; it has not yet demonstrated an increase in strict blind-test acceptance.
 
 
 ## Ten-paper development-cohort diagnostic
 
-A crop-level source inventory was performed for the ten frozen papers using the source SHA-256 values and manually selected crop candidates. It found four image-only crops, five mixed-content/vector candidates and one vector/text candidate. Distilling's crop has over 124k raw line segments, which are now explicitly named `stroke_segment_candidates`, not semantic edges. A loose one-letter panel-marker rule was also tightened after it flagged math/page-furniture glyphs. See [ten-paper source-layout replay notes](P1_01_TEN_PAPER_SOURCE_LAYOUT_REPLAY_2026-11-14.md) and the [hash-locked crop fixture](../tests/fixtures/blind10_source_regions_2026-11-14.json).
+The ten-paper development-cohort replay now uses corrected figure crops and caption anchors. The audit found three image-backed crops without vector drawing records (Wind Turbine, HarnessMM and IIoT), six mixed image/vector crops (including GIN's 367 drawing records), and one vector/text crop (SkillSmith). PINN's crop was extended to include all of Figure 4; UCFNet was corrected from Figure 1 to Figure 2. Distilling contains 124,245 raw stroke-segment candidates; these remain source primitives, not semantic edges.
 
-The exact local replay runner is `tools/benchmark_source_layout.py`; it verifies all source hashes and validates emitted JSON against the SourceLayout schema. Original PDFs remain local. This is development-cohort evidence, not a fresh blind holdout or a strict reproduction pass-rate improvement.
+The crop manifest is hash-locked and caption-verified by `tools/audit_source_crop_manifest.py`; `tools/benchmark_source_layout.py` now refuses to replay if the source hash, crop bounds or caption anchor fail. It validates every emitted JSON against the SourceLayout schema. See [ten-paper source-layout replay notes](P1_01_TEN_PAPER_SOURCE_LAYOUT_REPLAY_2026-11-14.md) and the [hash-locked crop fixture](../tests/fixtures/blind10_source_regions_2026-11-14.json). Original PDFs remain local. This is development-cohort evidence, not a fresh blind holdout or a strict reproduction pass-rate improvement.
