@@ -34,15 +34,15 @@ def validate():
         raise AssertionError("DUPLICATE_COMPOSITE_V75_ELEMENT_IDS")
 
     by_id = {e["id"]: e for e in elements}
-    if by_id["el_0120"]["type"] != "graph" or len(by_id["el_0120"]["nodes"]) != 6:
+    if by_id["el_0120"]["type"] != "graph" or len(by_id["el_0120"]["nodes"]) != 12:
         raise AssertionError("INPUT_GRAPH_ICON_MISSING")
     interband = [e for e in elements if e["type"] == "line" and e.get("dash")
                  and e.get("id") in {"el_0121", "el_0122", "el_0123"}]
-    if len(interband) != 3:
+    if len(interband) != 9:
         raise AssertionError("INPUT_GRAPH_INTER_GROUP_LINKS_MISSING")
-    if by_id["el_0124"].get("semantic_id") != "class_output":
+    if by_id["el_0130"].get("semantic_id") != "class_output":
         raise AssertionError("CLASS_OUTPUT_SEMANTIC_GROUP_MISSING")
-    squares = [by_id[f"el_{i:04d}"] for i in range(125, 130)]
+    squares = [by_id[f"el_{i:04d}"] for i in range(131, 136)]
     if len(squares) != 5:
         raise AssertionError("FIVE_CLASS_OUTPUT_SQUARES_REQUIRED")
     if squares[1]["fill"] != "#DCA16C" or sum(e["fill"] == "#DCA16C" for e in squares) != 1:
@@ -91,8 +91,9 @@ def validate():
         "text_box_count": len(text_shapes),
         "text_overlaps": 0,
         "out_of_bounds": 0,
-        "input_graph_icon_nodes": 6,
-        "input_graph_inter_group_links": 3,
+        "input_graph_icon_nodes": 12,
+        "input_graph_band_subgraphs": 4,
+        "input_graph_interband_links": 9,
         "class_output_squares": 5,
         "orange_highlight_index": 2,
         "critical_routes": len(topology["critical_edges"]),
