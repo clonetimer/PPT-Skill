@@ -34,6 +34,8 @@ jobs:
           python tools/test_reproduction_pipeline.py
           python tools/test_figure_spec_release_audit.py
           python tools/test_source_layout_extraction.py
+          python tools/test_source_crop_manifest.py
+          python tools/test_source_layout_benchmark.py
           python tools/test_source_layout_benchmark.py
           python tools/test_audit_imported_pdf_figure.py
           python tools/test_office2016_compat.py
