@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clonetimer/PPT-Skill/specs/source_figure_layout.schema.json",
+  "title": "Source-observed scientific figure layout evidence",
+  "type": "object",
+  "required": [
+    "schema_version", "source", "page", "figure_region_pt",
+    "coordinate_system", "panel_detection", "layout_elements",
+    "edge_candidates", "clipping_regions", "image_assets",
+    "style_profile", "warnings", "requires_human_review"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "source": {
+      "type": "object",
+      "required": ["filename", "sha256", "page_index"],
+      "properties": {
+        "filename": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "page_index": {"type": "integer", "minimum": 0}
+      }
+    },
+    "page": {
+      "type": "object",
+      "required": ["width_pt", "height_pt", "aspect_ratio"],
+      "properties": {
+        "width_pt": {"type": "number", "exclusiveMinimum": 0},
+        "height_pt": {"type": "number", "exclusiveMinimum": 0},
+        "aspect_ratio": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "figure_region_pt": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {"type": "number"}
+    },
+    "coordinate_system": {
+      "type": "object",
+      "required": ["units", "origin", "normalized_region"],
+      "properties": {
+        "units": {"const": "PDF points"},
+        "origin": {"const": "top-left"},
+        "normalized_region": {"type": "string"}
+      }
+    },
+    "panel_detection": {
+      "type": "object",
+      "required": ["status", "marker_count", "panels", "unmatched_large_rectangles"],
+      "properties": {
+        "status": {"enum": ["EXPLICIT_MARKERS_FOUND", "NO_EXPLICIT_PANEL_MARKERS"]},
+        "marker_count": {"type": "integer", "minimum": 0},
+        "panels": {"type": "array", "items": {"$ref": "#/$defs/panel"}},
+        "unmatched_large_rectangles": {"type": "array"}
+      }
+    },
+    "layout_elements": {"type": "array", "items": {"$ref": "#/$defs/layoutElement"}},
+    "edge_candidates": {"type": "array", "items": {"$ref": "#/$defs/edgeCandidate"}},
+    "clipping_regions": {"type": "array"},
+    "image_assets": {"type": "array", "items": {"$ref": "#/$defs/imageAsset"}},
+    "style_profile": {
+      "type": "object",
+      "required": ["palette", "font_families", "font_size_tiers_pt", "stroke_widths_pt", "dash_patterns"],
+      "properties": {
+        "palette": {"type": "array"},
+        "font_families": {"type": "object"},
+        "font_size_tiers_pt": {"type": "array", "items": {"type": "number"}},
+        "stroke_widths_pt": {"type": "array", "items": {"type": "number"}},
+        "dash_patterns": {"type": "object"}
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "requires_human_review": {"const": true}
+  },
+  "$defs": {
+    "panel": {
+      "type": "object",
+      "required": ["id", "label", "order", "bbox_pt", "bbox_normalized", "boundary_source", "confidence", "confidence_basis"],
+      "properties": {
+        "id": {"type": "string"},
+        "label": {"type": "string"},
+        "order": {"type": "integer", "minimum": 1},
+        "bbox_pt": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+        "bbox_normalized": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+        "boundary_source": {"type": "string"},
+        "confidence": {"enum": ["low", "medium", "high"]},
+        "confidence_basis": {"type": "string"}
+      }
+    },
+    "layoutElement": {
+      "type": "object",
+      "required": ["id", "kind", "bbox_pt", "bbox_normalized", "semantic_role", "confidence", "confidence_basis"],
+      "properties": {
+        "id": {"type": "string"},
+        "kind": {"type": "string"},
+        "source_order": {"type": ["integer", "null"]},
+        "bbox_pt": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+        "bbox_normalized": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+        "semantic_role": {"type": "string"},
+        "confidence": {"enum": ["low", "medium", "high"]},
+        "confidence_basis": {"type": "string"}
+      }
+    },
+    "edgeCandidate": {
+      "type": "object",
+      "required": ["id", "start_pt", "end_pt", "start_normalized", "end_normalized", "directedness", "confidence", "confidence_basis"],
+      "properties": {
+        "id": {"type": "string"},
+        "start_pt": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
+        "end_pt": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
+        "start_normalized": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
+        "end_normalized": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
+        "directedness": {"enum": ["undetermined", "directed", "undirected"]},
+        "confidence": {"enum": ["low", "medium", "high"},
+        "confidence_basis": {"type": "string"}
+      }
+    },
+    "imageAsset": {
+      "type": "object",
+      "required": ["id", "source_order", "xref", "source_kind", "sha256", "bbox_pt", "bbox_normalized", "panel_candidate", "confidence"],
+      "properties": {
+        "id": {"type": "string"},
+        "source_order": {"type": "integer"},
+        "xref": {"type": "integer"},
+        "source_kind": {"enum": ["xref", "image_block"]},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "bbox_pt": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+        "bbox_normalized": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+        "panel_candidate": {"type": ["string", "null"]},
+        "confidence": {"enum": ["low", "medium", "high"}
+      }
+    }
+  }
+}
