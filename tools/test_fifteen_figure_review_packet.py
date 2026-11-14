@@ -131,6 +131,19 @@ class ReviewPacketTests(unittest.TestCase):
             self.assertEqual(rows[task]["status"],"REPAIR_COMPARISON_READY")
             self.assertFalse(rows[task]["diff"]["byte_identical"])
 
+
+    def test_object_rename_is_a_modified_object_not_remove_plus_add(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);before=root/"before.pptx";after=root/"after.pptx"
+            deck(before,"same text");deck(after,"same text")
+            prs=Presentation(before);prs.slides[0].shapes[0].name="source_object";prs.save(before)
+            prs=Presentation(after);prs.slides[0].shapes[0].name="repaired_object";prs.save(after)
+            result=compare(before,after)
+        self.assertEqual(result["changed_objects"],1)
+        self.assertEqual(result["object_diff"][0]["kind"],"modified")
+        self.assertEqual(result["object_diff"][0]["fields"]["name"],
+                         {"before":"source_object","after":"repaired_object"})
+
     def test_alignment_only_repair_is_included_in_object_diff(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);initial=root/"initial.pptx";final=root/"final.pptx"
