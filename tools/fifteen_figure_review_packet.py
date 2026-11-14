@@ -26,6 +26,7 @@ TASK_FILENAMES={
  "I01":"I01_cell_image_quant.pptx",
  "DECK01":"DECK01_c01_defense.pptx",
 }
+TASK_FINAL_FILENAMES={**TASK_FILENAMES,"C01_SEANet":"C01_SEANet_graph_level_v74.pptx"}
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def shape_inventory(path):
  prs=Presentation(path);out=[]
@@ -55,17 +56,18 @@ def build_packet(initial_dir,final_dir,output_dir):
  initial_dir,final_dir,output_dir=map(Path,(initial_dir,final_dir,output_dir))
  output_dir.mkdir(parents=True,exist_ok=True);rows=[]
  for task in TASKS:
-  filename=TASK_FILENAMES[task]
-  initial=initial_dir/filename
-  final=final_dir/filename
-  base={"task_id":task,"filename":filename,"final_review_status":"pending","final_decision":None}
+  initial_filename=TASK_FILENAMES[task]
+  final_filename=TASK_FINAL_FILENAMES[task]
+  initial=initial_dir/initial_filename
+  final=final_dir/final_filename
+  base={"task_id":task,"initial_filename":initial_filename,"final_filename":final_filename,"final_review_status":"pending","final_decision":None}
   if not initial.is_file():
    rows.append({**base,"status":"MISSING_INITIAL"});continue
   if not final.is_file():
-   rows.append({**base,"status":"NO_FINAL_REPAIR_ARTIFACT","initial":filename});continue
+   rows.append({**base,"status":"NO_FINAL_REPAIR_ARTIFACT","initial":initial_filename});continue
   diff=compare(initial,final)
   status="NO_REPAIR_APPLIED" if diff["byte_identical"] else "REPAIR_COMPARISON_READY"
-  rows.append({**base,"status":status,"initial":filename,"final":filename,"diff":diff})
+  rows.append({**base,"status":status,"initial":initial_filename,"final":final_filename,"diff":diff})
  packet={"schema_version":"1.0.0","population":len(TASKS),"tasks":rows,
   "summary":{"comparison_ready":sum(x["status"]=="REPAIR_COMPARISON_READY" for x in rows),
    "no_repair_applied":sum(x["status"]=="NO_REPAIR_APPLIED" for x in rows),
