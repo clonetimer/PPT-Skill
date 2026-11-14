@@ -30,6 +30,7 @@ jobs:
           python tools/test_pdf_import_budgets.py
           python tools/test_text_geometry_import.py
           python tools/test_text_geometry_audit.py
+          python tools/test_final_delivery_success.py
           python tools/test_reproduction_release_gate.py
           python tools/test_reproduction_pipeline.py
           python tools/test_figure_spec_release_audit.py

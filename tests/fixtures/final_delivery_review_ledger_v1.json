@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0.0",
+  "policy": "Append one task record per evaluated figure; never overwrite first-pass baseline.",
+  "tasks": [
+    {
+      "task_id": "B01",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "F07",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "C01_FBG",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "C01_SEANet",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "C01_composite",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "Q01",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "Q02",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "Q03",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "Q03P",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "Q04",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "Q05",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "Q06",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "Q07",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "I01",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    },
+    {
+      "task_id": "DECK01",
+      "final_review_status": "pending",
+      "final_decision": null,
+      "repair_rounds": 0,
+      "reviewer_id": null,
+      "evidence": []
+    }
+  ]
+}
