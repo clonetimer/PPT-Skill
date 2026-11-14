@@ -189,6 +189,9 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
     final_quality = validate_v75()
     if final_quality.get("status") != "PASS":
         raise RuntimeError("C01_COMPOSITE_V75_QUALITY_AUDIT_FAILED")
+    (output_dir / "round_02_quality_audit.json").write_text(
+        json.dumps(final_quality, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8"
+    )
     subprocess.run(
         [sys.executable, str(ROOT / "tools/audit_pptx.py"), str(FINAL_PPTX), "--strict"],
         check=True,
