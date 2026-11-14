@@ -92,6 +92,18 @@ class SourceCropManifestAuditTests(unittest.TestCase):
             self.assertEqual(result["status"], "FAIL")
             self.assertIn("REGION_OUT_OF_BOUNDS_OR_EMPTY", result["rows"][0]["failures"])
 
+    def test_caption_only_crop_fails_visual_content_requirement(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source_dir = root / "sources"
+            source_dir.mkdir()
+            pdf = source_dir / "one.pdf"
+            make_pdf(pdf)
+            manifest = write_manifest(root, pdf, region=(20, 145, 280, 180))
+            result = audit_source_crop_manifest(source_dir, manifest)
+            self.assertEqual(result["status"], "FAIL")
+            self.assertIn("EMPTY_CROP_CONTENT", result["rows"][0]["failures"])
+
     def test_missing_source_page_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
