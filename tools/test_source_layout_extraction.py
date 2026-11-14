@@ -47,6 +47,21 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             self.assertEqual([p["order"] for p in layout["panel_detection"]["panels"]], [1, 2])
             self.assertEqual(layout["page"]["aspect_ratio"], 1.5)
 
+    def test_plain_single_letter_text_is_not_a_panel_marker(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "single_letters.pdf"
+            doc = fitz.open()
+            page = doc.new_page(width=300, height=180)
+            page.insert_text((30, 50), "a", fontsize=12)
+            page.insert_text((50, 50), "b", fontsize=12)
+            page.draw_rect(fitz.Rect(20, 20, 280, 160), color=(.2, .2, .2))
+            doc.save(source)
+            doc.close()
+            layout = extract_source_layout(source)
+            self.assertEqual(layout["panel_detection"]["panels"], [])
+            self.assertEqual(layout["panel_detection"]["status"], "NO_EXPLICIT_PANEL_MARKERS")
+            self.assertEqual(layout["figure_region_source"], "full_page_default")
+
     def test_no_panel_marker_does_not_invent_subpanels(self):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "unlabelled.pdf"
