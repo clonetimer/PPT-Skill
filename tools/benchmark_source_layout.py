@@ -26,6 +26,7 @@ def run_benchmark(source_dir: Path, manifest_path: Path, output_dir: Path) -> di
     if crop_audit["status"] != "PASS":
         raise ValueError("SOURCE_CROP_MANIFEST_AUDIT_FAIL: " +
                          json.dumps(crop_audit["failures"], ensure_ascii=False))
+    crop_rows = {row["figure_id"]: row for row in crop_audit["rows"]}
     output_dir.mkdir(parents=True, exist_ok=True)
 
     rows = []
@@ -57,6 +58,10 @@ def run_benchmark(source_dir: Path, manifest_path: Path, output_dir: Path) -> di
             "figure_id": source["figure_id"],
             "source_sha256": actual_sha,
             "page_1based": source["page_1based"],
+            "region_pt": source["region_pt"],
+            "caption_text": source["caption_text"],
+            "caption_bbox_pt": crop_rows[source["figure_id"]]["caption"]["bbox_pt"],
+            "crop_audit_status": crop_rows[source["figure_id"]]["status"],
             "panel_detection_status": layout["panel_detection"]["status"],
             "confirmed_panels": len(layout["panel_detection"]["panels"]),
             "unresolved_markers": len(layout["panel_detection"]["unresolved_markers"]),
