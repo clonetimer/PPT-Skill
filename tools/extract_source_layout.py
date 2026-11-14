@@ -68,6 +68,137 @@ def _line_segments(drawing, region):
         yield start, end
 
 
+def _geometric_panel_candidates(rectangle_candidates, region):
+    """Return review-only enclosure/alignment candidates; never confirm panels."""
+    region = fitz.Rect(region)
+    raw = []
+    for item in rectangle_candidates:
+        rect = fitz.Rect(item["rect"])
+        area_fraction = rect.width * rect.height / (region.width * region.height)
+        if area_fraction < .04 or area_fraction > .65:
+            continue
+        if rect.width < region.width * .18 or rect.height < region.height * .045:
+            continue
+        if any(all(abs(a-b) <= .75 for a, b in zip(rect, old["rect"]))
+               for old in raw):
+            continue
+        raw.append({
+            "rect": rect,
+            "area_fraction": area_fraction,
+            "source_order": item.get("seqno"),
+        })
+
+    raw.sort(key=lambda item: (item["rect"].y0, item["rect"].x0, -item["area_fraction"]))
+    candidates = []
+    for index, item in enumerate(raw):
+        rect = item["rect"]
+        parents = [
+            (parent["rect"].width * parent["rect"].height, parent_index, parent)
+            for parent_index, parent in enumerate(raw)
+            if parent_index != index
+            and parent["rect"].width * parent["rect"].height > rect.width * rect.height * 1.15
+            and parent["rect"].contains(rect)
+        ]
+        parent_id = None
+        if parents:
+            _, parent_index, _ = min(parents, key=lambda value: value[0])
+            parent_id = f"rect_candidate_{parent_index + 1:02d}"
+        candidate_id = f"rect_candidate_{index + 1:02d}"
+        candidates.append({
+            "id": candidate_id,
+            "candidate_type": "nested_source_enclosure" if parent_id else "source_enclosure",
+            "bbox_pt": _bbox(rect),
+            "bbox_normalized": _normalized(rect, region),
+            "area_fraction": round(item["area_fraction"], 5),
+            "source_order": item["source_order"],
+            "parent_candidate_id": parent_id,
+            "confidence": "medium" if item["area_fraction"] >= .08 else "low",
+            "confidence_basis": "source PDF rectangular path; visual enclosure only, not proof of a scientific panel",
+            "review_status": "needs_human_review",
+        })
+
+    by_id = {item["id"]: item for item in candidates}
+    groups = []
+    group_specs = (
+        ("vertical_stack", lambda a, b:
+         abs(a.x0-b.x0) <= region.width*.03 and
+         abs(a.x1-b.x1) <= region.width*.03 and
+         (a.y1 <= b.y0 or b.y1 <= a.y0)),
+        ("horizontal_row", lambda a, b:
+         abs(a.y0-b.y0) <= region.height*.03 and
+         abs(a.y1-b.y1) <= region.height*.03 and
+         (a.x1 <= b.x0 or b.x1 <= a.x0)),
+    )
+    for axis, predicate in group_specs:
+        remaining = {item["id"]: fitz.Rect(item["bbox_pt"]) for item in candidates}
+        while remaining:
+            seed_id = next(iter(remaining))
+            component = {seed_id}
+            frontier = [seed_id]
+            while frontier:
+                current_id = frontier.pop()
+                current = remaining[current_id]
+                for other_id, other in remaining.items():
+                    if other_id in component:
+                        continue
+                    if predicate(current, other):
+                        component.add(other_id)
+                        frontier.append(other_id)
+            if len(component) >= 2:
+                member_ids = sorted(
+                    component,
+                    key=lambda cid: (
+                        fitz.Rect(by_id[cid]["bbox_pt"]).y0 if axis == "vertical_stack"
+                        else fitz.Rect(by_id[cid]["bbox_pt"]).x0
+                    ),
+                )
+                group_id = f"alignment_{axis}_{len(groups) + 1:02d}"
+                groups.append({
+                    "id": group_id,
+                    "axis": axis,
+                    "member_candidate_ids": member_ids,
+                    "confidence": "medium",
+                    "confidence_basis": "source rectangles have repeated aligned extents and non-overlapping intervals",
+                    "review_status": "needs_human_review",
+                })
+                for cid in member_ids:
+                    by_id[cid]["alignment_group_id"] = group_id
+            for cid in component:
+                remaining.pop(cid, None)
+
+    interstitial = []
+    for group in groups:
+        members = [fitz.Rect(by_id[cid]["bbox_pt"]) for cid in group["member_candidate_ids"]]
+        for first, second in zip(members, members[1:]):
+            if group["axis"] == "vertical_stack":
+                top, bottom = (first, second) if first.y0 <= second.y0 else (second, first)
+                gap = bottom.y0 - top.y1
+                x0, x1 = max(top.x0, bottom.x0), min(top.x1, bottom.x1)
+                if gap < 5 or x1 <= x0 or gap > region.height*.4:
+                    continue
+                rect = fitz.Rect(x0, top.y1, x1, bottom.y0)
+            else:
+                left, right = (first, second) if first.x0 <= second.x0 else (second, first)
+                gap = right.x0 - left.x1
+                y0, y1 = max(left.y0, right.y0), min(left.y1, right.y1)
+                if gap < 5 or y1 <= y0 or gap > region.width*.4:
+                    continue
+                rect = fitz.Rect(left.x1, y0, right.x0, y1)
+            interstitial.append({
+                "id": f"interstitial_{len(interstitial) + 1:02d}",
+                "candidate_type": "interstitial_band",
+                "bbox_pt": _bbox(rect),
+                "bbox_normalized": _normalized(rect, region),
+                "between_candidate_ids": group["member_candidate_ids"],
+                "alignment_group_id": group["id"],
+                "confidence": "low",
+                "confidence_basis": "unbounded gap between aligned source enclosures; candidate only, no source border",
+                "review_status": "needs_human_review",
+            })
+
+    return candidates + interstitial, groups
+
+
 def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                           figure_region: tuple[float, float, float, float] | None = None) -> dict:
     """Extract observable PDF geometry; inferred panels and graph edges remain candidates."""
@@ -246,6 +377,9 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                             "reading_order": (visible.y0, visible.x0, block_index, line_index, span_index),
                         })
 
+        unlabeled_panel_candidates, alignment_groups = _geometric_panel_candidates(
+            rectangle_candidates, region
+        )
         panels = []
         unresolved_markers = []
         used_boundaries = set()
@@ -360,6 +494,9 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                     item["bbox_pt"] for index, item in enumerate(rectangle_candidates)
                     if index not in used_boundaries
                 ],
+                "candidate_status": "CANDIDATES_FOUND" if unlabeled_panel_candidates else "NO_GEOMETRIC_CANDIDATES",
+                "unlabeled_panel_candidates": unlabeled_panel_candidates,
+                "alignment_groups": alignment_groups,
             },
             "layout_elements": layout_elements,
             "stroke_segment_candidates": stroke_segment_candidates,
