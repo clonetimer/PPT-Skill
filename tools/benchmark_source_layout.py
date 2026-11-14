@@ -65,6 +65,8 @@ def run_benchmark(source_dir: Path, manifest_path: Path, output_dir: Path) -> di
             "panel_detection_status": layout["panel_detection"]["status"],
             "confirmed_panels": len(layout["panel_detection"]["panels"]),
             "unresolved_markers": len(layout["panel_detection"]["unresolved_markers"]),
+            "unlabeled_panel_candidates": len(layout["panel_detection"]["unlabeled_panel_candidates"]),
+            "alignment_groups": len(layout["panel_detection"]["alignment_groups"]),
             "layout_elements": len(layout["layout_elements"]),
             "stroke_segment_candidates": len(layout["stroke_segment_candidates"]),
             "image_assets": len(layout["image_assets"]),
