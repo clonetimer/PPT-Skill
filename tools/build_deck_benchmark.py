@@ -85,7 +85,7 @@ def make_evidence_page(slide, slide_spec):
         add_rect(slide, x, y, width, .075, accent, accent, f"s03_card_{index+1}_accent")
         add_text(slide, block["title"], x+.20, y+.24, width-.40, .34, 12, True,
                  accent, name=f"s03_card_{index+1}_title")
-        add_text(slide, block["metric"], x+.20, y+.68, .90, .70, 30, True,
+        add_text(slide, block["metric"], x+.20, y+.68, .75, .70, 30, True,
                  "28343C", name=f"s03_card_{index+1}_metric")
         add_text(slide, block["descriptor"], x+1.05, y+.72, width-1.25, .76, 12,
                  color="43525B", name=f"s03_card_{index+1}_descriptor")
