@@ -47,6 +47,20 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             self.assertEqual([p["order"] for p in layout["panel_detection"]["panels"]], [1, 2])
             self.assertEqual(layout["page"]["aspect_ratio"], 1.5)
 
+    def test_punctuated_label_without_enclosing_boundary_stays_unresolved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "label_only.pdf"
+            doc = fitz.open()
+            page = doc.new_page(width=300, height=180)
+            page.insert_text((30, 50), "(b)", fontsize=12)
+            page.draw_line((40, 80), (250, 80), color=(.2, .2, .2), width=1)
+            doc.save(source)
+            doc.close()
+            layout = extract_source_layout(source)
+            self.assertEqual(layout["panel_detection"]["status"], "NO_CONFIRMED_PANEL_BOUNDARIES")
+            self.assertEqual(layout["panel_detection"]["panels"], [])
+            self.assertEqual(layout["panel_detection"]["unresolved_markers"][0]["label"], "b")
+
     def test_plain_single_letter_text_is_not_a_panel_marker(self):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "single_letters.pdf"
