@@ -106,6 +106,11 @@ def _shape_font(shape):
     return None
 
 
+def _shape_font_sizes(shape):
+    return [float(run.font.size.pt) for paragraph in shape.text_frame.paragraphs
+            for run in paragraph.runs if run.font.size is not None]
+
+
 def _unicode_findings(text):
     suspicious = []
     math_glyphs = []
@@ -149,6 +154,7 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
 
     mismatches = []
     font_mismatches = []
+    font_size_mismatches = []
     rotation_mismatches = []
     autofit_mismatches = []
     font_mappings = {}
@@ -181,6 +187,13 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
                                     "source_font": spans[index]["font"],
                                     "expected_target_font": expected_font,
                                     "candidate_font": actual_font})
+        actual_sizes = _shape_font_sizes(shapes[index])
+        expected_size = spans[index]["size_pt"]
+        if not actual_sizes or any(abs(value - expected_size) > 0.05 for value in actual_sizes):
+            font_size_mismatches.append({
+                "index": index, "source_size_pt": expected_size,
+                "candidate_run_sizes_pt": actual_sizes, "tolerance_pt": 0.05,
+            })
         bad, math_chars = _unicode_findings(expected)
         suspicious_glyphs.extend({**item, "span_index": index} for item in bad)
         math_glyphs.extend({**item, "span_index": index} for item in math_chars)
@@ -216,7 +229,7 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
     introduced_overlap_count = len(introduced_overlaps)
     mismatch_count = len(mismatches)
     if (count_mismatch or mismatch_count or introduced_overlap_count or introduced_oob
-            or font_mismatches or rotation_mismatches or autofit_mismatches):
+            or font_mismatches or font_size_mismatches or rotation_mismatches or autofit_mismatches):
         status = "FAIL"
     elif suspicious_glyphs:
         status = "NEEDS_REVIEW"
@@ -250,6 +263,9 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
         "font_mappings": font_mappings,
         "font_mismatch_count": len(font_mismatches),
         "font_mismatches": font_mismatches,
+        "font_size_mismatch_count": len(font_size_mismatches),
+        "font_size_mismatches": font_size_mismatches,
+        "font_size_tolerance_pt": 0.05,
         "math_glyph_count": len(math_glyphs),
         "math_glyphs": math_glyphs,
         "suspicious_glyph_count": len(suspicious_glyphs),

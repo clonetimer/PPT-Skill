@@ -127,6 +127,26 @@ class TextGeometryAuditTests(unittest.TestCase):
             self.assertTrue(report["font_mappings"])
 
 
+    def test_font_size_mutation_is_reported_even_when_text_and_bounds_match(self):
+        from pptx.util import Pt
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp)/"source.pdf", Path(tmp)/"candidate.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=300, height=180)
+            page.insert_text((40, 80), "Fixed-size label", fontsize=12, fontname="helv")
+            doc.save(source)
+            doc.close()
+            convert_pdf_page(source, output)
+            deck = Presentation(output)
+            shape = next(s for s in deck.slides[0].shapes if s.has_text_frame and s.text.strip())
+            shape.text_frame.paragraphs[0].runs[0].font.size = Pt(10)
+            deck.save(output)
+            report = audit_text_geometry(source, output)
+        self.assertEqual(report["status"], "FAIL")
+        self.assertEqual(report["font_size_mismatch_count"], 1)
+        self.assertAlmostEqual(report["font_size_mismatches"][0]["source_size_pt"], 12, delta=.01)
+        self.assertEqual(report["font_size_mismatches"][0]["candidate_run_sizes_pt"], [10.0])
+
     def test_unmapped_control_glyph_is_flagged_for_manual_review(self):
         with tempfile.TemporaryDirectory() as tmp:
             source, output = Path(tmp)/"unmapped.pdf", Path(tmp)/"unmapped.pptx"
