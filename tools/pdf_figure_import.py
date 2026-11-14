@@ -430,6 +430,20 @@ def _add_text(slide, span, line, page_rect=None):
     return True
 
 
+
+def _annotate_source_shape(shape, source_object_id, source_order, object_class):
+    """Attach stable SourceLayout provenance without changing rendered geometry."""
+    shape.name = str(source_object_id)
+    metadata = json.dumps({
+        "source_object_id": str(source_object_id),
+        "source_order": source_order,
+        "object_class": object_class,
+        "provenance": "source_pdf_import",
+    }, sort_keys=True, separators=(",", ":"))
+    nonvisual = shape._element.nvSpPr.cNvPr
+    nonvisual.set("descr", metadata)
+
+
 def _image_block_bytes(block):
     if not block.get("mask"):
         return block["image"]
@@ -462,10 +476,11 @@ def _add_recovered_image(slide, event, warnings):
     if len(event.transform) == 6 and (abs(event.transform[1]) > .01 or abs(event.transform[2]) > .01):
         warnings.append(f"image paint event {event.seqno}: source transform requires visual verification")
     b = event.visible_bbox
-    slide.shapes.add_picture(
+    shape = slide.shapes.add_picture(
         BytesIO(event.png), _pt_in(b.x0), _pt_in(b.y0),
         width=_pt_in(b.width), height=_pt_in(b.height),
     )
+    _annotate_source_shape(shape, f"image_{event.seqno}", event.seqno, "image")
     return 1
 
 
@@ -537,7 +552,7 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
         next_image = next(picture_events, None)
         picture_count = native_count = 0
         clip_stack = []
-        for drawing in extended:
+        for drawing_index, drawing in enumerate(extended):
             assert_budget(clock_start, max_seconds)
             current_seqno = drawing.get("seqno")
             if current_seqno is not None:
@@ -566,7 +581,12 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
                 )
                 if not centerline_in_crop:
                     raise ValueError("UNSUPPORTED_SOURCE_CROP_EDGE_STROKE: line width enters crop without centerline")
-            native_count += _add_drawing(slide, drawing, page.rect, warnings, clip_region)
+            added = _add_drawing(slide, drawing, page.rect, warnings, clip_region)
+            native_count += added
+            if added:
+                seqno = drawing.get("seqno")
+                source_id = f"draw_{seqno if seqno is not None else drawing_index}"
+                _annotate_source_shape(slide.shapes[-1], source_id, seqno, "vector")
         while next_image is not None:
             picture_count += _add_recovered_image(slide, next_image, warnings)
             next_image = next(picture_events, None)
@@ -575,7 +595,11 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
         for block in page_blocks:
             for line in block.get("lines", []):
                 for span in line["spans"]:
-                    text_count += int(_add_text(slide, span, line, page.rect))
+                    added_text = _add_text(slide, span, line, page.rect)
+                    text_count += int(added_text)
+                    if added_text:
+                        source_id = f"text_{block_index}_{line_index}_{span_index}"
+                        _annotate_source_shape(slide.shapes[-1], source_id, None, "text")
                     font_counts[_source_font(span["font"])] += 1
 
         assert_budget(clock_start, max_seconds)
