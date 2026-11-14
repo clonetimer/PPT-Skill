@@ -1,6 +1,6 @@
 # Ten-paper blind-test improvement backlog (2026-11-13)
 
-> Status: **P0-00 through P0-03 implemented and CI-verified**; P0-04 remains next. The ten-paper baseline itself remains unchanged. This is the engineering follow-up to the user's genuine 10-paper trial, **not a claim that the improvements have been implemented**.
+> Status: **P0-00 through P0-04 implemented and CI-verified**. The ten-paper baseline itself remains unchanged. This is the engineering follow-up to the user's genuine 10-paper trial, **not a claim that the improvements have been implemented**.
 >
 > Frozen source/first-pass metadata: [`tests/fixtures/blind10_first_pass_frozen_2026-11-13.json`](../tests/fixtures/blind10_first_pass_frozen_2026-11-13.json). Source PDFs and author imagery are user-provided; they are **not** redistributed in this public repository.
 
@@ -23,7 +23,7 @@
 | **P0-01** | P0 · completed | Crop-aware extraction of image XRefs, transforms, paint order and clipping; no blank-slide “success” | 4/10 direct imports blank | P0-00 |
 | **P0-02** | P0 · completed | Dense PDF resource budget / graceful abort / bounded segment conversion | 1/10 direct imports timeout | P0-00 |
 | **P0-03** | P0 · completed with one source-glyph blocker documented | Source-aware text geometry, glyph/fallback integrity and overlap repair with provenance | up to 55 overlaps in imported output | P0-01 |
-| **P0-04** | P0 | Fail-closed zero-content/partial/hybrid validity and per-route QA statuses | prevents false first-pass passes | P0-01, P0-02 |
+| **P0-04** | P0 · completed | Fail-closed zero-content/partial/hybrid validity and per-route QA statuses | prevents false first-pass passes | P0-01, P0-02 |
 | **P1-01** | P1 | Extract source panel geometry / order / visual grammar into source-layout evidence before FigureSpec drafting | 10/10 visual=2 | P0-04 |
 | **P1-02** | P1 | Evidence-based `vector/mixed/raster` route selection, non-flattening hybrid composition | vector fidelity plus local images | P0-01, P1-01 |
 | **P1-03** | P1 | Native orthogonal/curved connectors, junctions and graph enclosures with source routing fidelity | PoG, EvoOntology, HarnessMM | P1-01 |
@@ -70,6 +70,19 @@
 - **Statuses:** `STRUCTURE_FAIL`, `UNSUPPORTED_SOURCE`, `RESOURCE_LIMIT`, `NEEDS_SCIENTIFIC_REVIEW`, `NEEDS_VISUAL_REVIEW`, `TECHNICAL_PASS`; `FULL_ACCEPTED` requires recorded independent scientific assessment and Office host evidence if requested.
 - **Test first:** empty PPTX, one full-page raster, cropped source with absent image block, missing math figure, no export host, synthetic high-similarity but wrong-edge FigureSpec. **Every incomplete case must fail closed.**
 - **Done:** generated/exported/valid ZIP counts never count as fidelity passes. Keep source-visible vs FigureSpec-science-reinterpretation scoring separate.
+
+### P0-04 implementation record (2026-11-14)
+
+- Integrated `tools/reproduction_release_gate.py` into the production `tools/reproduce_research_figure.py` entrypoint; it is no longer a standalone helper.
+- Every conversion attempt now emits `delivery_manifest.json` and `quality_report.json`, including source/candidate SHA-256, route, reconstruction class, audits, blockers, render errors and pending approvals. Previous candidate/report outputs are cleared before a new run so stale artifacts cannot be mistaken for current results.
+- Explicit route classes and statuses: `native_only`, `mixed_native_picture`, `source_picture_only`, `RASTER_SOURCE_ONLY`, `UNSUPPORTED_SOURCE`, `RESOURCE_LIMIT`, `STRUCTURE_FAIL`, `NEEDS_SCIENTIFIC_REVIEW`, `NEEDS_VISUAL_REVIEW`, `TECHNICAL_PASS`, and `FULL_ACCEPTED`.
+- Both routes require structure, text geometry and OOXML preflight. PDF import requires source-comparison render evidence; FigureSpec requires a successful candidate render and does not use a misleading original-page SSIM comparison for a deliberately re-laid-out diagram.
+- New `tools/audit_figure_spec.py` checks evidence references, unique element IDs, semantic endpoints and declared `semantic_edges` against actual connector `semantic_link` objects. Missing contracts are review states; wrong links fail the scientific gate. This is an internal consistency audit, not a replacement for domain review.
+- Full acceptance requires explicit scientific, visual, rights and (by default) target-host approvals. OOXML PASS or LibreOffice export alone can never set `FULL_ACCEPTED`.
+- New regression suites: 20 release-classifier tests, 9 end-to-end pipeline tests and 6 FigureSpec semantic/output tests.
+- [CI #177 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43552465077), commit `cfbadbf2`.
+- **Remaining:** real Office 2016 COM host validation; domain-human approval; visual fidelity and strict first-pass generalization. Frozen ten-paper strict first-pass remains **0/10**.
+- See [P0-04 release gate report](P0_04_FAIL_CLOSED_RELEASE_GATE_2026-11-14.md).
 
 ### P1-01 — Source-first panel/layout/style IR
 **Files:** new `tools/extract_source_layout.py` and `specs/source_figure_layout.schema.json`; extend `specs/figure_spec_v76.schema.json`.
