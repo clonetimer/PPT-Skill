@@ -94,12 +94,14 @@ def compare_json(initial_path,final_path):
 def build_packet(initial_dir,final_dir,output_dir):
  initial_dir,final_dir,output_dir=map(Path,(initial_dir,final_dir,output_dir))
  output_dir.mkdir(parents=True,exist_ok=True);rows=[]
+ diagnostics=json.loads((ROOT/"specs/15_figure_diagnostic_ledger_v76.json").read_text(encoding="utf-8"))["tasks"]
  for task in TASKS:
   initial_filename=TASK_FILENAMES[task]
   final_filename=TASK_FINAL_FILENAMES[task]
   initial=initial_dir/initial_filename
   final=final_dir/final_filename
-  base={"task_id":task,"initial_filename":initial_filename,"final_filename":final_filename,"final_review_status":"pending","final_decision":None}
+  diagnosis=diagnostics[task]
+  base={"task_id":task,"initial_filename":initial_filename,"final_filename":final_filename,"diagnosis_status":diagnosis["status"],"diagnosis_note":diagnosis["note"],"final_review_status":"pending","final_decision":None}
   if not initial.is_file():
    rows.append({**base,"status":"MISSING_INITIAL"});continue
   if not final.is_file():
