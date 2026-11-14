@@ -54,6 +54,21 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertGreater(row["diff"]["figure_spec_diff"]["added"],0)
         self.assertGreater(row["diff"]["figure_spec_diff"]["modified"],0)
 
+
+    def test_c01_composite_v74_initial_is_compared_with_v75_final(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);initial=root/"initial";final=root/"final";out=root/"out"
+            initial.mkdir();final.mkdir()
+            deck(initial/"C01_composite_defense_slide_v74.pptx","initial")
+            deck(final/"C01_composite_defense_slide_v75.pptx","repaired")
+            result=build_packet(initial,final,out)
+        row=next(x for x in result["tasks"] if x["task_id"]=="C01_composite")
+        self.assertEqual(row["status"],"REPAIR_COMPARISON_READY")
+        self.assertEqual(row["initial"],"C01_composite_defense_slide_v74.pptx")
+        self.assertEqual(row["final"],"C01_composite_defense_slide_v75.pptx")
+        self.assertIn("figure_spec_diff",row["diff"])
+        self.assertGreater(row["diff"]["figure_spec_diff"]["added"],0)
+
     def test_packet_tracks_all_fifteen_without_fabricating_reviews(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);initial=root/"initial";final=root/"final";out=root/"out"
