@@ -48,6 +48,9 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertEqual(row["status"],"REPAIR_COMPARISON_READY")
         self.assertEqual(row["initial"],"C01_SEANet_graph_level_v73.pptx")
         self.assertEqual(row["final"],"C01_SEANet_graph_level_v74.pptx")
+        self.assertIn("figure_spec_diff",row["diff"])
+        self.assertGreater(row["diff"]["figure_spec_diff"]["added"],0)
+        self.assertGreater(row["diff"]["figure_spec_diff"]["modified"],0)
 
     def test_packet_tracks_all_fifteen_without_fabricating_reviews(self):
         with tempfile.TemporaryDirectory() as folder:
