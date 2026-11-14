@@ -34,6 +34,10 @@ def validate():
         raise AssertionError("DUPLICATE_COMPOSITE_V75_ELEMENT_IDS")
 
     by_id = {e["id"]: e for e in elements}
+    if by_id["el_0066"].get("semantic_id") != "input_container":
+        raise AssertionError("INPUT_CONTAINER_SEMANTIC_NODE_MISSING")
+    if by_id["el_0067"].get("semantic_id") != "input" or by_id["el_0067"].get("text") != "Input":
+        raise AssertionError("INPUT_LABEL_TOPOLOGY_NODE_MISSING")
     if by_id["el_0120"]["type"] != "graph" or len(by_id["el_0120"]["nodes"]) != 12:
         raise AssertionError("INPUT_GRAPH_ICON_MISSING")
     interband = [e for e in elements if e["type"] == "line" and e.get("dash")
