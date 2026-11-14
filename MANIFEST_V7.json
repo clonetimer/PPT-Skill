@@ -24,7 +24,8 @@
       "figure_specs/quant/Q07_wine_scatter.json",
       "figure_specs/quant/Q08_wine_strip.json",
       "figure_specs/image/I01_cell_image_quant.json",
-      "figure_specs/c01/C01_SEANet_graph_level_v74.json"
+      "figure_specs/c01/C01_SEANet_graph_level_v74.json",
+      "figure_specs/c01/C01_composite_defense_slide_v75.json"
     ],
     "examples": [
       "examples/B01_engineering_fdir_v71.svg",
@@ -99,7 +100,11 @@
       "tools/build_c01_seanet_v74.py",
       "tools/validate_c01_seanet_v74.py",
       "tools/repair_case_c01_seanet_round2.py",
-      "tools/test_repair_case_c01_seanet_round2.py"
+      "tools/test_repair_case_c01_seanet_round2.py",
+      "tools/build_c01_composite_v75.py",
+      "tools/validate_c01_composite_v75.py",
+      "tools/repair_case_c01_composite_round2.py",
+      "tools/test_repair_case_c01_composite_round2.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -116,7 +121,8 @@
       "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md",
       "docs/SCIENTIFIC_FIGURE_V76_COMPLETION_AUDIT.md",
       "docs/Q03_NATURE_PUBLICATION_CAPTION.md",
-      "docs/P2_C01_SEANet_STAGE1_SCOPE_RECONCILIATION_2026-11-15.md"
+      "docs/P2_C01_SEANet_STAGE1_SCOPE_RECONCILIATION_2026-11-15.md",
+      "docs/C01_COMPOSITE_V75_QA.md"
     ],
     "generated_outputs": [
       "dist/C01_FBG_construction_v73.pptx",
@@ -150,7 +156,11 @@
       "dist/DECK01_c01_defense.pdf",
       "dist/DECK01_c01_defense_slide_1.png",
       "dist/DECK01_c01_defense_slide_2.png",
-      "dist/DECK01_c01_defense_slide_3.png"
+      "dist/DECK01_c01_defense_slide_3.png",
+      "examples/C01_composite_defense_slide_v75.svg",
+      "dist/C01_composite_defense_slide_v75.pptx",
+      "dist/C01_composite_defense_slide_v75_preview.pdf",
+      "dist/C01_composite_defense_slide_v75_preview.png"
     ],
     "planning_specs": [
       "specs/deck_spec_v75.example.json",
@@ -165,7 +175,8 @@
       "specs/wine_charts_v76.json",
       "specs/chart_spec_v76.schema.json",
       "specs/research_figure_benchmark_v76.json",
-      "specs/output_profiles_v76.json"
+      "specs/output_profiles_v76.json",
+      "specs/c01_composite_expected_topology_v75.json"
     ],
     "source_data": [
       "data/README.md",
