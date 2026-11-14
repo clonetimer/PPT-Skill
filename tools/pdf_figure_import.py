@@ -440,8 +440,12 @@ def _annotate_source_shape(shape, source_object_id, source_order, object_class):
         "object_class": object_class,
         "provenance": "source_pdf_import",
     }, sort_keys=True, separators=(",", ":"))
-    nonvisual = shape._element.nvSpPr.cNvPr
-    nonvisual.set("descr", metadata)
+    nonvisual_container = getattr(shape._element, "nvSpPr", None)
+    if nonvisual_container is None:
+        nonvisual_container = getattr(shape._element, "nvPicPr", None)
+    if nonvisual_container is None:
+        raise ValueError("UNSUPPORTED_SHAPE_PROVENANCE_CONTAINER")
+    nonvisual_container.cNvPr.set("descr", metadata)
 
 
 def _image_block_bytes(block):
@@ -592,9 +596,9 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
             next_image = next(picture_events, None)
 
         text_count, font_counts = 0, Counter()
-        for block in page_blocks:
-            for line in block.get("lines", []):
-                for span in line["spans"]:
+        for block_index, block in enumerate(page_blocks):
+            for line_index, line in enumerate(block.get("lines", [])):
+                for span_index, span in enumerate(line["spans"]):
                     added_text = _add_text(slide, span, line, page.rect)
                     text_count += int(added_text)
                     if added_text:
