@@ -300,10 +300,6 @@ def _alignment_groups(candidates: list[dict], region: Sequence[float]) -> list[d
                     previous = component[-1]["bbox_pt"]
                     if axis == "horizontal_row":
                         center_delta = abs((box[1] + box[3]) / 2 - (previous[1] + previous[3]) / 2)
-                        overlap = _intersection_area(
-                            [box[0], max(box[1], previous[1]), box[2], min(box[3], previous[3])],
-                            [box[0], max(box[1], previous[1]), box[2], min(box[3], previous[3])],
-                        )
                         gap = box[0] - previous[2]
                         aligned = center_delta <= max(3.0, (ry1 - ry0) * 0.04)
                         size_ratio = min(box[3] - box[1], previous[3] - previous[1]) / max(
@@ -363,7 +359,6 @@ def fuse_visual_evidence(
         item["source_object_count"] = 0
         item["ownership_coverage"] = 0.0
 
-    # Parent is the smallest strictly larger proposal that fully contains the child.
     for item in candidates:
         box = item["bbox_pt"]
         parents = [
@@ -388,6 +383,16 @@ def fuse_visual_evidence(
             parent_id = by_id[parent_id]["parent_candidate_id"]
         item["depth"] = depth
 
+    def is_descendant(candidate_id: str, ancestor_id: str) -> bool:
+        current = by_id[candidate_id].get("parent_candidate_id")
+        visited = set()
+        while current and current in by_id and current not in visited:
+            if current == ancestor_id:
+                return True
+            visited.add(current)
+            current = by_id[current].get("parent_candidate_id")
+        return False
+
     objects_by_id = {}
     for source in list(layout_elements) + list(image_assets):
         object_id = source.get("id")
@@ -403,7 +408,8 @@ def fuse_visual_evidence(
             ownership.append({
                 "source_object_id": object_id, "candidate_id": None,
                 "source_order": source.get("source_order"), "overlap_ratio": 0.0,
-                "status": "UNRESOLVED", "reason": "MISSING_SOURCE_BBOX",
+                "status": "UNRESOLVED", "ownership_scope": None,
+                "reason": "MISSING_SOURCE_BBOX",
             })
             continue
         object_area = max(_area(box), 1e-6)
@@ -421,7 +427,7 @@ def fuse_visual_evidence(
                 "source_object_id": object_id, "candidate_id": None,
                 "source_order": source.get("source_order"),
                 "overlap_ratio": round(max((item[0] for item in overlaps), default=0.0), 6),
-                "status": "UNRESOLVED",
+                "status": "UNRESOLVED", "ownership_scope": None,
                 "reason": "CROSSES_REGION_BOUNDARY" if overlaps else "NO_REGION_OVERLAP",
             })
             continue
@@ -433,15 +439,30 @@ def fuse_visual_evidence(
                 "source_object_id": object_id, "candidate_id": None,
                 "source_order": source.get("source_order"),
                 "overlap_ratio": round(best[0], 6),
-                "status": "UNRESOLVED", "reason": "AMBIGUOUS_REGION_OWNERSHIP",
+                "status": "UNRESOLVED", "ownership_scope": None,
+                "reason": "AMBIGUOUS_REGION_OWNERSHIP",
             })
             continue
+        intersecting_children = [
+            candidate for candidate in candidates
+            if candidate["id"] != best[2]
+            and is_descendant(candidate["id"], best[2])
+            and _intersection_area(box, candidate["bbox_pt"]) > 0
+        ]
+        if intersecting_children:
+            status = "CONTAINER_ONLY"
+            scope = "container"
+            reason = "OBJECT_CROSSES_CHILD_REGIONS"
+        else:
+            status = "ASSIGNED"
+            scope = "region"
+            reason = "DEEPEST_UNAMBIGUOUS_CONTAINING_REGION"
         owned_by_candidate[best[2]].append(object_id)
         ownership.append({
             "source_object_id": object_id, "candidate_id": best[2],
             "source_order": source.get("source_order"),
             "overlap_ratio": round(best[0], 6),
-            "status": "ASSIGNED", "reason": "DEEPEST_UNAMBIGUOUS_CONTAINING_REGION",
+            "status": status, "ownership_scope": scope, "reason": reason,
         })
 
     for item in candidates:
