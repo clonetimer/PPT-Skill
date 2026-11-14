@@ -253,6 +253,84 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
             self.assertEqual(constraints["constraints"][0]["constraint_type"], "panel_boundary")
             self.assertEqual(constraints["semantic_edge_authorization"], "none")
 
+    def test_figurespec_route_applies_reviewed_panel_geometry_only_with_explicit_bindings(self):
+        import hashlib
+        from source_layout_constraints import compile_reviewed_layout_constraints
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            source=root/"panels.pdf"
+            spec=root/"figure.json"
+            output=root/"out"
+            review_path=root/"source_layout_review.json"
+            bindings=root/"bindings.json"
+            constraints=root/"source_constraints.json"
+            make_panel_candidate_pdf(source)
+            make_figurespec(spec,edges=True)
+            obj=json.loads(spec.read_text(encoding="utf-8"))
+            obj["canvas"]={"width_in":5.0,"height_in":4.0}
+            obj["elements"].append({
+                "id":"panel-outline","type":"rect","x":.1,"y":.1,"w":4.8,"h":3.8,
+                "stroke":"#000000","fill":"#FFFFFF",
+                "semantic_role":"decorative_group_boundary",
+                "evidence_ref":"paper-figure-1",
+            })
+            spec.write_text(json.dumps(obj),encoding="utf-8")
+            run_pipeline(source,output,mode="import",render_host="none")
+            layout=json.loads((output/"source_layout.json").read_text())
+            candidates=layout["panel_detection"]["unlabeled_panel_candidates"]
+            review=create_source_layout_review_template(output/"source_layout.json",review_path)
+            review["reviewer"]={"name":"domain reviewer","type":"human"}
+            item=next(x for x in review["decisions"] if x["candidate_id"]==candidates[0]["id"])
+            item.update({
+                "decision":"accept_panel",
+                "rationale":"A source enclosure panel is visible",
+                "evidence_locator":"PDF page 1, source enclosure"
+            })
+            review_path.write_text(json.dumps(review),encoding="utf-8")
+            compile_reviewed_layout_constraints(output/"source_layout.json",review_path,constraints)
+            bindings.write_text(json.dumps({
+                "schema_version":"1.0.0",
+                "source_constraints_sha256":hashlib.sha256(constraints.read_bytes()).hexdigest(),
+                "figure_spec_sha256":hashlib.sha256(spec.read_bytes()).hexdigest(),
+                "bindings":[{
+                    "source_constraint_id":candidates[0]["id"],
+                    "target_element_id":"panel-outline"
+                }],
+            }),encoding="utf-8")
+            result=run_pipeline(
+                source,output,mode="figurespec",figure_spec=spec,
+                source_layout_review=review_path,
+                source_layout_bindings=bindings,
+                render_host="none"
+            )
+            rendered=output/"reviewed_figure_spec.json"
+            self.assertTrue(rendered.exists())
+            self.assertEqual(result["source_layout_geometry_application"]["bound_element_count"],1)
+            revised=json.loads(rendered.read_text())
+            self.assertEqual(revised["semantic_edges"],obj["semantic_edges"])
+            self.assertFalse(revised["layout_provenance"]["scientific_relations_verified"])
+            self.assertNotEqual(
+                next(x for x in revised["elements"] if x["id"]=="panel-outline")["x"],.1
+            )
+
+    def test_figurespec_geometry_bindings_without_review_fail_closed(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            source=root/"panels.pdf"
+            spec=root/"figure.json"
+            bindings=root/"bindings.json"
+            output=root/"out"
+            make_panel_candidate_pdf(source)
+            make_figurespec(spec)
+            bindings.write_text(json.dumps({"schema_version":"1.0.0","bindings":[]}),encoding="utf-8")
+            result=run_pipeline(
+                source,output,mode="figurespec",figure_spec=spec,
+                source_layout_bindings=bindings,render_host="none"
+            )
+            self.assertEqual(result["status"],"STRUCTURE_FAIL")
+            self.assertFalse((output/"reviewed_figure_spec.json").exists())
+            self.assertIn("REVIEWED_SOURCE_LAYOUT_BINDINGS_REQUIRED",result["error"])
+
     def test_invalid_layout_review_fails_before_candidate_generation(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
