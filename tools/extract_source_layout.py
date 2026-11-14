@@ -89,7 +89,7 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
 
         layout_elements = []
         rectangle_candidates = []
-        edge_candidates = []
+        stroke_segment_candidates = []
         clipping_regions = []
         palette = Counter()
         stroke_widths = Counter()
@@ -178,8 +178,8 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 })
 
             for start, end in _line_segments(drawing, region):
-                edge_candidates.append({
-                    "id": f"edge_candidate_{seqno}_{len(edge_candidates)}",
+                stroke_segment_candidates.append({
+                    "id": f"stroke_segment_candidate_{seqno}_{len(stroke_segment_candidates)}",
                     "source_order": seqno,
                     "start_pt": [round(start.x, 3), round(start.y, 3)],
                     "end_pt": [round(end.x, 3), round(end.y, 3)],
@@ -362,7 +362,7 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 ],
             },
             "layout_elements": layout_elements,
-            "edge_candidates": edge_candidates,
+            "stroke_segment_candidates": stroke_segment_candidates,
             "clipping_regions": clipping_regions,
             "image_assets": image_assets,
             "image_extraction": image_stats,
