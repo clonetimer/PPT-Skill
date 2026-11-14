@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "benchmark_id": "ppt-skill-blind10-source-layout-development-replay-2026-11-14",
   "cohort_role": "DEVELOPMENT_REGRESSION_ONLY",
-  "source_regions_are": "manually selected figure-crop candidates in PDF points; each requires visual review before use as a definitive crop",
+  "source_regions_are": "manually inspected figure crop candidates in PDF points, extended to include each selected figure caption; UCFNet selects Figure 2 (the paper's architecture figure), not Figure 1; all crops remain reviewable candidates rather than inferred semantic ground truth",
   "sources": [
     {
       "figure_id": "01_wind_turbine_causal_framework",
@@ -13,7 +13,7 @@
         303.2,
         66.7,
         557.8,
-        340.5
+        364
       ]
     },
     {
@@ -25,7 +25,7 @@
         25,
         35,
         475,
-        480
+        666
       ]
     },
     {
@@ -37,7 +37,7 @@
         123.3,
         55.5,
         472.2,
-        521.2
+        542
       ]
     },
     {
@@ -49,7 +49,7 @@
         120.9,
         65.7,
         556.2,
-        301.4
+        326
       ]
     },
     {
@@ -61,7 +61,7 @@
         53,
         55,
         558,
-        295
+        306
       ]
     },
     {
@@ -73,7 +73,7 @@
         54,
         54,
         558,
-        337.7
+        373
       ]
     },
     {
@@ -85,7 +85,7 @@
         45.5,
         55.4,
         549.8,
-        351.3
+        373
       ]
     },
     {
@@ -97,7 +97,7 @@
         60,
         90,
         550,
-        330
+        355
       ]
     },
     {
@@ -109,7 +109,7 @@
         108,
         72,
         503.8,
-        295
+        316
       ]
     },
     {
@@ -118,10 +118,10 @@
       "sha256": "12fae733898d6e6d05b67e674d531454ace87e7b6bb733c17e4c2b5ecad133ae",
       "page_1based": 4,
       "region_pt": [
-        160,
-        150,
-        510,
-        355
+        70,
+        565,
+        535,
+        775
       ]
     }
   ]
