@@ -18,6 +18,7 @@ from figure_first_pass_gate import (
 )
 from reproduction_release_gate import classify_release
 from extract_source_layout import extract_source_layout
+from source_layout_review import validate_source_layout_review, recommend_source_route
 
 
 def sha256(path: Path) -> str:
@@ -40,6 +41,7 @@ def _empty_candidate() -> dict:
 def _clear_previous_outputs(destination: Path) -> None:
     for name in (
         "candidate_editable.pptx", "candidate.svg", "source_preflight.json", "source_layout.json",
+        "source_layout_review_audit.json",
         "import_report.json", "semantic_audit.json", "structure_audit.json",
         "text_geometry_audit.json", "visual_audit.json",
         "office2016_ooxml_preflight.json", "quality_report.json",
@@ -62,7 +64,8 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
                  max_vertices: int = 250000,
                  max_seconds: float = 60.0,
                  page_index: int = 0,
-                 figure_region: tuple[float, float, float, float] | None = None) -> dict:
+                 figure_region: tuple[float, float, float, float] | None = None,
+                 source_layout_review: Path | None = None) -> dict:
     source_pdf = Path(source_pdf).resolve()
     destination = Path(destination).resolve()
     if not source_pdf.is_file():
@@ -79,10 +82,14 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
     destination.mkdir(parents=True, exist_ok=True)
     _clear_previous_outputs(destination)
     figure_spec = Path(figure_spec).resolve() if figure_spec else None
+    source_layout_review = Path(source_layout_review).resolve() if source_layout_review else None
     candidate = destination / "candidate_editable.pptx"
     source_info = {}
     source_layout = {}
     source_layout_error = None
+    source_route_recommendation = None
+    source_layout_review_audit = None
+    source_layout_review_error = None
     import_report = {}
     semantic_audit = None
     structure = None
@@ -102,6 +109,19 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
                 source_pdf, page_index=page_index, figure_region=figure_region
             )
             _write_json(destination / "source_layout.json", source_layout)
+            source_route_recommendation = recommend_source_route(source_layout)
+            if source_layout_review is not None:
+                source_layout_review_audit = validate_source_layout_review(
+                    destination / "source_layout.json", source_layout_review
+                )
+                _write_json(destination / "source_layout_review_audit.json",
+                            source_layout_review_audit)
+                if source_layout_review_audit["status"] == "INVALID":
+                    source_layout_review_error = (
+                        "SOURCE_LAYOUT_REVIEW_INVALID: " +
+                        "; ".join(source_layout_review_audit["errors"])
+                    )
+                    error = source_layout_review_error
         except Exception as exc:
             source_layout_error = f"{type(exc).__name__}: {exc}"
     except Exception as exc:
@@ -242,6 +262,22 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             "image_asset_count": len(source_layout.get("image_assets", [])),
         } if source_layout else None),
         "source_layout_error": source_layout_error,
+        "source_route_recommendation": source_route_recommendation,
+        "source_layout_review": ({
+            "path": str(source_layout_review),
+            "sha256": sha256(source_layout_review),
+            "audit_path": str(destination / "source_layout_review_audit.json"),
+            "audit_sha256": sha256(destination / "source_layout_review_audit.json"),
+            "status": source_layout_review_audit["status"],
+            "accepted_region_count": source_layout_review_audit["accepted_region_count"],
+            "accepted_panel_count": source_layout_review_audit["accepted_panel_count"],
+            "pending_count": source_layout_review_audit["pending_count"],
+        } if source_layout_review and source_layout_review_audit else None),
+        "accepted_source_layout_facts": ({
+            "regions": source_layout_review_audit["accepted_source_layout_regions"],
+            "panels": source_layout_review_audit["accepted_source_panels"],
+        } if source_layout_review_audit else {"regions": [], "panels": []}),
+        "source_layout_review_error": source_layout_review_error,
         "candidate": ({
             "path": str(candidate), "sha256": sha256(candidate),
             **candidate_info,
@@ -254,6 +290,7 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
         } if rendered_pdf and rendered_pdf.is_file() else None),
         "reports": {
             "source_preflight": source_info,
+            "source_layout_review": source_layout_review_audit,
             "import": import_report or None,
             "structure": structure,
             "text_geometry": text_geometry,
@@ -299,6 +336,8 @@ def main():
     parser.add_argument("--page", type=int, default=1, help="1-based source PDF page")
     parser.add_argument("--region", type=float, nargs=4, metavar=("X0", "Y0", "X1", "Y1"),
                         help="optional figure crop in PDF points")
+    parser.add_argument("--source-layout-review", type=Path,
+                        help="optional human-reviewed SourceLayout decisions JSON")
     args = parser.parse_args()
     approvals = json.loads(args.approvals_json.read_text(encoding="utf-8")) if args.approvals_json else None
     result = run_pipeline(
@@ -312,6 +351,7 @@ def main():
         max_seconds=args.max_seconds,
         page_index=args.page - 1,
         figure_region=tuple(args.region) if args.region else None,
+        source_layout_review=args.source_layout_review,
     )
     print(json.dumps({
         "status": result["status"],
