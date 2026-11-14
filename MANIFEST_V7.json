@@ -23,7 +23,8 @@
       "figure_specs/quant/Q06_iris_trend_interval.json",
       "figure_specs/quant/Q07_wine_scatter.json",
       "figure_specs/quant/Q08_wine_strip.json",
-      "figure_specs/image/I01_cell_image_quant.json"
+      "figure_specs/image/I01_cell_image_quant.json",
+      "figure_specs/c01/C01_SEANet_graph_level_v74.json"
     ],
     "examples": [
       "examples/B01_engineering_fdir_v71.svg",
@@ -94,7 +95,11 @@
       "tools/test_local_repair_loop.py",
       "tools/test_repair_case_c01_seanet.py",
       "tools/test_prepare_15_figure_initial_cohort.py",
-      "tools/test_fifteen_figure_review_packet.py"
+      "tools/test_fifteen_figure_review_packet.py",
+      "tools/build_c01_seanet_v74.py",
+      "tools/validate_c01_seanet_v74.py",
+      "tools/repair_case_c01_seanet_round2.py",
+      "tools/test_repair_case_c01_seanet_round2.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -110,7 +115,8 @@
       "docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md",
       "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md",
       "docs/SCIENTIFIC_FIGURE_V76_COMPLETION_AUDIT.md",
-      "docs/Q03_NATURE_PUBLICATION_CAPTION.md"
+      "docs/Q03_NATURE_PUBLICATION_CAPTION.md",
+      "docs/P2_C01_SEANet_STAGE1_SCOPE_RECONCILIATION_2026-11-15.md"
     ],
     "generated_outputs": [
       "dist/C01_FBG_construction_v73.pptx",
