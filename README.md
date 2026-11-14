@@ -36,6 +36,20 @@ python tools/extract_source_layout.py source.pdf --page 1 \
   --region 40 60 980 720 --output out/source_layout.json
 ~~~
 
+Before the ten-paper development replay, validate the frozen source hashes,
+crop bounds and caption anchors:
+
+~~~bash
+python tools/audit_source_crop_manifest.py \
+  --source-dir ./ten_papers \
+  --manifest tests/fixtures/blind10_source_regions_2026-11-14.json \
+  --output qa/source_crop_manifest_audit.json
+~~~
+
+The hash-locked replay refuses to proceed when this crop audit fails. The
+manifest records caption anchors so a crop that cuts off the figure caption or
+selects the wrong UCFNet figure cannot silently enter the regression run.
+
 The record contains explicit panel-label candidates and enclosing source
 boundaries, relative coordinates, source text anchors and font tiers, stroke
 and fill palette counts, clipping regions, independent image/XRef hashes, and
