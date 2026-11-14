@@ -309,3 +309,14 @@ python tools/source_reconstruction_router.py .\qa\source_layout.json .\qa\review
 ```
 
 The router distinguishes native vector, native text, mixed native/picture, source-picture-only, unsupported, and manual-review-required regions. It records object IDs and boundary overlap. It never executes a route or edits a FigureSpec; `execution_authorized` is always false.
+
+
+### Structure-aware composition manifest (P1-01D)
+
+After P1-01C has produced an advisory route file, build a source-object composition plan:
+
+```powershell
+python tools/source_region_composer.py .\qa\source_layout.json .\qa\review.json .\qa\reconstruction_routes.json --output .\qa\source_composition_manifest.json
+```
+
+The manifest keeps vector paths, editable text spans, and raster images separate, preserves source paint order, and identifies objects crossing multiple reviewed regions. It is a planning/audit artifact only; it does not execute reconstruction or modify a FigureSpec. The existing `pdf_figure_import.py` remains the PDF-to-PPTX importer.
