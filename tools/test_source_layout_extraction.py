@@ -48,6 +48,15 @@ def make_stacked_panel_pdf(path: Path, *, outer_frame=False):
     doc.close()
 
 
+def make_horizontal_line_outside_crop_pdf(path: Path):
+    doc = fitz.open()
+    page = doc.new_page(width=300, height=200)
+    page.draw_line((40, 100), (260, 100), color=(.2, .3, .4), width=1)
+    page.insert_text((30, 165), "Caption inside crop", fontsize=9)
+    doc.save(path)
+    doc.close()
+
+
 def make_single_frame_pdf(path: Path):
     doc = fitz.open()
     page = doc.new_page(width=600, height=400)
@@ -106,6 +115,15 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             self.assertEqual(layout["panel_detection"]["status"], "NO_EXPLICIT_PANEL_MARKERS")
             self.assertEqual(layout["panel_detection"]["panels"], [])
             self.assertTrue(layout["requires_human_review"])
+
+    def test_horizontal_stroke_outside_crop_is_not_kept_as_a_degenerate_layout_element(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "off_crop_line.pdf"
+            make_horizontal_line_outside_crop_pdf(source)
+            layout = extract_source_layout(source, figure_region=(20, 145, 280, 180))
+            self.assertEqual(layout["stroke_segment_candidates"], [])
+            self.assertFalse(any(item["kind"] in ("stroke_path", "filled_path")
+                                 for item in layout["layout_elements"]))
 
     def test_unlabeled_stacked_enclosures_create_review_only_panel_candidates(self):
         with tempfile.TemporaryDirectory() as tmp:
