@@ -20,7 +20,8 @@ PANEL_ALT = (
     "A stacked schematic total-graph input flows through GCN and pooling stages. "
     "The energy-assisted branch feeds the first GCN; the first pooling stage also "
     "feeds a second SR readout. Both SR outputs merge before Dense classification "
-    "and a five-square class output. FBG construction is presented separately."
+    "and a five-square class output. This is a lower-panel excerpt, not the complete two-panel graphical abstract; "
+    "FBG construction is shown in C01_FBG_construction and the complete two-panel flow in C01_composite."
 )
 
 
