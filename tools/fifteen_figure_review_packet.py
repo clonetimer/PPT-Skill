@@ -90,7 +90,8 @@ def compare_json(initial_path,final_path):
  walk("deck_spec",a,b)
  return {"initial_sha256":sha(initial_path),"final_sha256":sha(final_path),
          "changed_fields":len(changes),"changes":changes}
-\ndef build_packet(initial_dir,final_dir,output_dir):
+
+def build_packet(initial_dir,final_dir,output_dir):
  initial_dir,final_dir,output_dir=map(Path,(initial_dir,final_dir,output_dir))
  output_dir.mkdir(parents=True,exist_ok=True);rows=[]
  for task in TASKS:
