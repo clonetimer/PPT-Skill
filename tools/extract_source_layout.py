@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from io import BytesIO
 import argparse
 import hashlib
 import json
@@ -10,6 +11,8 @@ from pathlib import Path
 import re
 
 import fitz
+import numpy as np
+from PIL import Image
 
 from pdf_source_assets import collect_image_events
 
@@ -66,6 +69,81 @@ def _line_segments(drawing, region):
         if not (region.contains(start) and region.contains(end)):
             continue
         yield start, end
+
+
+def _raster_gutters(event, image_index, region):
+    """Find low-ink gutters inside a dominant source image; candidates only."""
+    bbox = fitz.Rect(event.visible_bbox) & fitz.Rect(region)
+    if bbox.is_empty or bbox.width <= 0 or bbox.height <= 0:
+        return []
+    if bbox.width * bbox.height < fitz.Rect(region).width * fitz.Rect(region).height * .20:
+        return []
+    transform = tuple(event.transform or ())
+    if len(transform) == 6 and (abs(transform[1]) > .01 or abs(transform[2]) > .01):
+        return []
+
+    with Image.open(BytesIO(event.png)) as source:
+        rgba = source.convert("RGBA")
+        background = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
+        background.alpha_composite(rgba)
+        gray = background.convert("L")
+        gray.thumbnail((1600, 1600), Image.Resampling.LANCZOS)
+        pixels = np.asarray(gray, dtype=np.uint8)
+
+    candidates = []
+    for axis, projection in (
+        ("horizontal", (pixels < 245).mean(axis=1)),
+        ("vertical", (pixels < 245).mean(axis=0)),
+    ):
+        dimension = len(projection)
+        scale = dimension / (bbox.height if axis == "horizontal" else bbox.width)
+        min_run = max(4, int(np.ceil(3.0 * scale)))
+        blank = projection <= .01
+        runs = []
+        start = None
+        for position, is_blank in enumerate(blank):
+            if is_blank and start is None:
+                start = position
+            elif not is_blank and start is not None:
+                if position - start >= min_run:
+                    runs.append((start, position - 1))
+                start = None
+        if start is not None and dimension - start >= min_run:
+            runs.append((start, dimension - 1))
+
+        for run_start, run_end in runs:
+            if run_start <= dimension * .02 or run_end >= dimension * .98:
+                continue
+            ink_fraction = float(projection[run_start:run_end + 1].mean())
+            if axis == "horizontal":
+                start_pt = bbox.y0 + run_start / scale
+                end_pt = bbox.y0 + (run_end + 1) / scale
+                normalized = [
+                    round((start_pt - region.y0) / region.height, 6),
+                    round((end_pt - region.y0) / region.height, 6),
+                ]
+            else:
+                start_pt = bbox.x0 + run_start / scale
+                end_pt = bbox.x0 + (run_end + 1) / scale
+                normalized = [
+                    round((start_pt - region.x0) / region.width, 6),
+                    round((end_pt - region.x0) / region.width, 6),
+                ]
+            width_pt = end_pt - start_pt
+            candidates.append({
+                "id": f"raster_gutter_{image_index}_{axis}_{len(candidates) + 1:02d}",
+                "source_image_id": f"image_{event.seqno}",
+                "axis": axis,
+                "start_pt": round(start_pt, 3),
+                "end_pt": round(end_pt, 3),
+                "width_pt": round(width_pt, 3),
+                "normalized_interval": normalized,
+                "mean_ink_fraction": round(ink_fraction, 6),
+                "confidence": "medium" if width_pt >= 5 and ink_fraction <= .005 else "low",
+                "confidence_basis": "low-ink run in a dominant source image; whitespace is not proof of a scientific panel boundary",
+                "review_status": "needs_human_review",
+            })
+    return candidates
 
 
 def _geometric_panel_candidates(rectangle_candidates, region):
@@ -439,7 +517,8 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
             })
 
         image_assets = []
-        for event in image_events:
+        raster_gutter_candidates = []
+        for image_index, event in enumerate(image_events):
             visible = event.visible_bbox & region
             if visible.is_empty or visible.width <= 0 or visible.height <= 0:
                 continue
@@ -449,6 +528,8 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 if fitz.Rect(panel["bbox_pt"]).contains(center)
             ]
             panel_candidate = containing[0]["id"] if len(containing) == 1 else None
+            image_gutters = _raster_gutters(event, image_index, region)
+            raster_gutter_candidates.extend(image_gutters)
             image_assets.append({
                 "id": f"image_{event.seqno}",
                 "source_order": event.seqno,
@@ -459,6 +540,7 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 "bbox_normalized": _normalized(visible, region),
                 "transform": list(event.transform),
                 "panel_candidate": panel_candidate,
+                "raster_gutter_candidate_count": len(image_gutters),
                 "confidence": "high",
             })
             layout_elements.append({
@@ -508,6 +590,7 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 "candidate_status": "CANDIDATES_FOUND" if unlabeled_panel_candidates else "NO_GEOMETRIC_CANDIDATES",
                 "unlabeled_panel_candidates": unlabeled_panel_candidates,
                 "alignment_groups": alignment_groups,
+                "raster_gutter_candidates": raster_gutter_candidates,
             },
             "layout_elements": layout_elements,
             "stroke_segment_candidates": stroke_segment_candidates,
