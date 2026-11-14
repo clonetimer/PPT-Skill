@@ -45,6 +45,7 @@ class C01SeanetRoundTwoTests(unittest.TestCase):
             self.assertTrue((case / "renders" / "round_01.png").is_file())
             self.assertTrue((case / "renders" / "round_02.png").is_file())
             self.assertTrue((case / "renders" / "round_01_vs_round_02.png").is_file())
+            self.assertFalse(any(p.name.startswith("lo-profile") for p in (case / "renders").iterdir()))
 
 
 if __name__ == "__main__":
