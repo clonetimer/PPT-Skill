@@ -56,10 +56,10 @@ Page numbers in CLI are 1-based; PDF-point coordinates use the selected page's t
 
 ## Tests and evidence
 
-- 15 source-layout extraction tests cover explicit panel markers, no-marker conservative behavior, normalized coordinates, unknown stroke direction, crop selection, font/stroke tiers, image provenance, schema validation, one-based CLI, aligned rectangle candidates, outer-frame rejection and raster gutters.
+- 17 source-layout extraction tests cover explicit panel markers, no-marker conservative behavior, normalized coordinates, unknown stroke direction, crop selection, font/stroke tiers, image provenance, schema validation, one-based CLI, aligned rectangle candidates, outer-frame rejection and raster gutters.
 - 6 crop-manifest audit tests cover source hashes, page/crop bounds, caption containment, non-caption figure content, zero-height strokes and caption-only crop rejection.
 - 3 hash-locked benchmark tests cover successful sidecars, hash mismatch and caption-outside-crop rejection.
-- The current CI run is being used to verify the geometric/raster candidate extension; the last fully green baseline is [CI #246 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43557264829).
+- The geometric/raster candidate extension is verified by [CI #253 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43557493825): 17/17 source-layout extraction, 6/6 crop-manifest audit, 3/3 hash-locked benchmark, plus the full repository validation workflow.
 
 ## Remaining P1-01 work
 
