@@ -102,6 +102,17 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             self.assertGreaterEqual(len(layout["style_profile"]["stroke_widths_pt"]), 2)
             self.assertGreaterEqual(len(layout["style_profile"]["palette"]), 2)
 
+    def test_extracted_layout_conforms_to_versioned_schema(self):
+        import jsonschema
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "schema.pdf"
+            make_two_panel_pdf(source, include_image=True)
+            layout = extract_source_layout(source)
+            schema_path = Path(__file__).resolve().parents[1] / "specs" / "source_figure_layout.schema.json"
+            schema = json.loads(schema_path.read_text(encoding="utf-8"))
+            jsonschema.Draft202012Validator.check_schema(schema)
+            jsonschema.validate(layout, schema)
+
     def test_image_occurrences_have_source_hash_and_local_crop_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "image_panel.pdf"
