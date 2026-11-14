@@ -38,6 +38,7 @@ jobs:
           python tools/test_source_layout_benchmark.py
           python tools/test_source_layout_review.py
           python tools/test_source_layout_split_review.py
+          python tools/test_source_layout_constraints.py
           python tools/test_source_layout_benchmark.py
           python tools/test_audit_imported_pdf_figure.py
           python tools/test_office2016_compat.py
