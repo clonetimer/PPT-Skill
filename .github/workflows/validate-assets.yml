@@ -38,6 +38,7 @@ jobs:
           python tools/test_local_repair_loop.py
           python tools/test_repair_case_c01_seanet.py
           python tools/test_repair_case_c01_seanet_round2.py
+          python tools/test_repair_case_c01_composite_round2.py
           python tools/test_prepare_15_figure_initial_cohort.py
           python tools/test_fifteen_figure_review_packet.py
           python tools/test_reproduction_release_gate.py
@@ -78,9 +79,13 @@ jobs:
           python tools/build_c01_v73.py
           python tools/build_c01_v74.py
           python tools/build_c01_seanet_v74.py
+          python tools/build_c01_composite_v75.py
       - name: Execute C01-SEANet multi-round source-grounded repair
         run: |
           python tools/repair_case_c01_seanet_round2.py --output-dir dist/repair_cases/C01_SEANet --accepted-output dist/accepted_repairs/C01_SEANet_graph_level_v74.pptx
+      - name: Execute C01 composite multi-round source-grounded repair
+        run: |
+          python tools/repair_case_c01_composite_round2.py --output-dir dist/repair_cases/C01_composite --accepted-output dist/accepted_repairs/C01_composite_defense_slide_v75.pptx
       - name: Build data and image examples
         run: |
           python tools/build_quantitative_examples.py
@@ -95,6 +100,8 @@ jobs:
           python -m json.tool figure_specs/c01/C01_FBG_construction.json > /dev/null
           python -m json.tool figure_specs/c01/C01_SEANet_graph_level.json > /dev/null
           python -m json.tool figure_specs/c01/C01_SEANet_graph_level_v74.json > /dev/null
+          python -m json.tool figure_specs/c01/C01_composite_defense_slide_v75.json > /dev/null
+          python -m json.tool specs/c01_composite_expected_topology_v75.json > /dev/null
           python -m json.tool MANIFEST_V7.json > /dev/null
           python -m json.tool specs/deck_spec_v75.example.json > /dev/null
           python -m json.tool specs/deck_spec_v75.schema.json > /dev/null
@@ -105,6 +112,7 @@ jobs:
           python tools/validate_c01_v73.py
           python tools/validate_c01_v74.py
           python tools/validate_c01_seanet_v74.py
+          python tools/validate_c01_composite_v75.py
           python tools/validate_deck_spec.py
           python tools/validate_manifest.py
           python tools/validate_scientific_ir.py
@@ -132,6 +140,7 @@ jobs:
           python tools/audit_pptx.py dist/C01_FBG_construction_v73.pptx --strict
           python tools/audit_pptx.py dist/C01_SEANet_graph_level_v73.pptx --strict
           python tools/audit_pptx.py dist/C01_SEANet_graph_level_v74.pptx --strict
+          python tools/audit_pptx.py dist/C01_composite_defense_slide_v75.pptx --strict
           python tools/audit_pptx.py dist/C01_composite_defense_slide_v74.pptx --strict
           python tools/audit_pptx.py dist/Q01_iris_scatter.pptx --strict
           python tools/audit_pptx.py dist/Q02_iris_strip.pptx --strict
@@ -171,6 +180,14 @@ jobs:
             dist/repair_cases/C01_SEANet/*
             dist/accepted_repairs/C01_SEANet_graph_level_v74.pptx
           if-no-files-found: error
+      - name: Upload C01 composite multi-round repair evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-c01-composite-round2
+          path: |
+            dist/repair_cases/C01_composite/*
+            dist/accepted_repairs/C01_composite_defense_slide_v75.pptx
+          if-no-files-found: error
       - name: Upload initial review packet
         uses: actions/upload-artifact@v4
         with:
@@ -194,6 +211,10 @@ jobs:
             dist/C01_SEANet_graph_level_v74.pptx
             dist/C01_SEANet_graph_level_v74.pdf
             dist/C01_SEANet_graph_level_v74.preview.png
+            examples/C01_composite_defense_slide_v75.svg
+            dist/C01_composite_defense_slide_v75.pptx
+            dist/C01_composite_defense_slide_v75_preview.pdf
+            dist/C01_composite_defense_slide_v75_preview.png
             examples/C01_composite_defense_slide_v74.svg
             dist/C01_composite_defense_slide_v74.pptx
             examples/Q*.svg
