@@ -15,7 +15,7 @@ from render_figure_spec import clean_theme
 
 SPEC = ROOT / "specs/deck_spec_v75.example.json"
 OUTPUT = ROOT / "dist/DECK01_c01_defense.pptx"
-METHOD = ROOT / "dist/C01_composite_defense_slide_v74.pptx"
+METHOD = ROOT / "dist/C01_composite_defense_slide_v75.pptx"
 
 
 def text(slide, value, x, y, w, h, size, bold=False, color="28343C"):
