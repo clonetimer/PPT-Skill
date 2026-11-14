@@ -45,6 +45,17 @@
 - [P1-01 source-layout evidence report](P1_01_SOURCE_LAYOUT_EVIDENCE_2026-11-14.md) and [ten-paper crop replay report](P1_01_TEN_PAPER_SOURCE_LAYOUT_REPLAY_2026-11-14.md).
 - **Remaining:** calibrate unlabeled/nested geometric and raster gutter candidates, add human accept/reject decisions, infer repeated-module spacing with confidence, and consume only accepted SourceLayout facts in FigureSpec drafting and route selection. Strict blind success remains 0/10.
 
+### P1-01 reviewed-region split and geometry binding (2026-11-14)
+
+- Human review now supports `split_region` with horizontal/vertical PDF-point boundaries for source-enclosure candidates. Splits create two **geometric regions**, never two auto-approved scientific panels. Assistant-only approval, near-edge/out-of-bounds/nonfinite split coordinates, stale hashes and incomplete evidence fail closed.
+- Review validation is atomic: any invalid decision clears all accepted facts from the emitted audit.
+- `tools/source_layout_constraints.py` compiles only the accepted geometry to a versioned constraints file and `specs/source_layout_constraints.schema.json` validates its structure. Pending or invalid reviews cannot create a trusted-looking constraints file.
+- `tools/apply_reviewed_geometry.py` consumes an explicit SHA-locked map of constraint IDs to FigureSpec **decorative panel-frame** element IDs. It creates a separate FigureSpec without overwriting the source; moving scientific nodes, arrows, labels or datasets is prohibited because node movement without connector repair can corrupt topology.
+- The unified FigureSpec pipeline accepts `--source-layout-bindings`, renders the resulting `reviewed_figure_spec.json` and records the application audit and both source hashes in its manifest. No semantic relations are inferred by this step.
+- [CI #289 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43561770711), including split-review, constraints-schema, binding-safety and pipeline integration tests.
+- [Detailed operator guidance](P1_01_REVIEWED_GEOMETRY_BINDINGS_2026-11-14.md).
+- **Still open:** content-aware panel reflow/connector routing, domain-expert evaluation of proposed panel candidates, actual Windows PowerPoint 2016 host validation, and fresh independent blind-paper first-pass scoring. The original ten-paper strict rate remains **0/10**.
+
 ### P0-01 — Native crop-aware image and mixed-vector importer
 **Files:** `tools/pdf_figure_import.py`; new `tools/pdf_source_assets.py`; new `tools/test_pdf_crop_assets.py`.
 
