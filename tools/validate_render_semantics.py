@@ -22,6 +22,7 @@ LEGACY = [
 ]
 CURRENT_ONLY = [
     ("C01_SEANet_graph_level_v74", "figure_specs/c01/C01_SEANet_graph_level_v74.json", "examples/C01_SEANet_graph_level_v74.svg", "dist/C01_SEANet_graph_level_v74.pptx", "dist/C01_SEANet_graph_level_v74.pdf"),
+    ("C01_composite_defense_slide_v75", "figure_specs/c01/C01_composite_defense_slide_v75.json", "examples/C01_composite_defense_slide_v75.svg", "dist/C01_composite_defense_slide_v75.pptx", "dist/C01_composite_defense_slide_v75_preview.pdf"),
 ]
 
 
