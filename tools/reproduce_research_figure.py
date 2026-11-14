@@ -19,6 +19,7 @@ from figure_first_pass_gate import (
 from reproduction_release_gate import classify_release
 from extract_source_layout import extract_source_layout
 from source_layout_review import validate_source_layout_review, recommend_source_route
+from source_layout_constraints import compile_reviewed_layout_constraints
 
 
 def sha256(path: Path) -> str:
@@ -41,7 +42,7 @@ def _empty_candidate() -> dict:
 def _clear_previous_outputs(destination: Path) -> None:
     for name in (
         "candidate_editable.pptx", "candidate.svg", "source_preflight.json", "source_layout.json",
-        "source_layout_review_audit.json",
+        "source_layout_review_audit.json", "source_layout_constraints.json",
         "import_report.json", "semantic_audit.json", "structure_audit.json",
         "text_geometry_audit.json", "visual_audit.json",
         "office2016_ooxml_preflight.json", "quality_report.json",
@@ -91,6 +92,7 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
     source_layout_error = None
     source_route_recommendation = None
     source_layout_review_audit = None
+    source_layout_constraints = None
     source_layout_review_error = None
     import_report = {}
     semantic_audit = None
@@ -125,6 +127,12 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
                             "; ".join(source_layout_review_audit["errors"])
                         )
                         error = source_layout_review_error
+                    elif source_layout_review_audit["status"] == "VALIDATED_WITH_ACCEPTED_FACTS":
+                        source_layout_constraints = compile_reviewed_layout_constraints(
+                            destination / "source_layout.json",
+                            source_layout_review,
+                            destination / "source_layout_constraints.json",
+                        )
                 except Exception as exc:
                     source_layout_review_error = (
                         f"SOURCE_LAYOUT_REVIEW_INVALID: {type(exc).__name__}: {exc}"
@@ -288,6 +296,14 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             "regions": source_layout_review_audit["accepted_source_layout_regions"],
             "panels": source_layout_review_audit["accepted_source_panels"],
         } if source_layout_review_audit else {"regions": [], "panels": []}),
+        "source_layout_constraints": ({
+            "path": str(destination / "source_layout_constraints.json"),
+            "sha256": sha256(destination / "source_layout_constraints.json"),
+            "constraint_count": source_layout_constraints["constraint_count"],
+            "source_panel_constraint_count": source_layout_constraints["source_panel_constraint_count"],
+            "region_constraint_count": source_layout_constraints["region_constraint_count"],
+            "scope": "human-reviewed geometric evidence only; not semantic approval",
+        } if source_layout_constraints else None),
         "source_layout_review_error": source_layout_review_error,
         "candidate": ({
             "path": str(candidate), "sha256": sha256(candidate),
