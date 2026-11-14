@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import fitz
 from PIL import Image
@@ -134,10 +135,25 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
             doc.close()
             before = source.read_bytes()
 
-            result = run_pipeline(
-                source, output, mode="import", render_host="auto",
-                page_index=0, figure_region=(200, 100, 350, 240),
-            )
+            # A PDF export is required to exercise the visual comparison, but
+            # the CI runner does not necessarily have LibreOffice installed.
+            # Model the exported page deterministically while still exercising
+            # the actual production source-crop comparison and diff rendering.
+            reference_render = root / "reference_render.pdf"
+            with fitz.open(source) as original, fitz.open() as rendered:
+                cropped_page = rendered.new_page(width=150, height=140)
+                cropped_page.show_pdf_page(
+                    cropped_page.rect, original, 0,
+                    clip=fitz.Rect(200, 100, 350, 240),
+                )
+                rendered.save(reference_render)
+            with patch("reproduce_research_figure._export_with_libreoffice",
+                       return_value=reference_render) as exporter:
+                result = run_pipeline(
+                    source, output, mode="import", render_host="auto",
+                    page_index=0, figure_region=(200, 100, 350, 240),
+                )
+                exporter.assert_called_once()
             self.assertEqual(result["source"]["sha256"],
                              hashlib.sha256(before).hexdigest())
             self.assertEqual(source.read_bytes(), before)
@@ -164,6 +180,20 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
                 page_index=0, figure_region=(200, 100, 350, 240),
             )
             self.assertFalse(diff_path.exists(), "a past visual report must not survive a new run")
+
+    def test_missing_pdf_renderer_has_an_explicit_review_blocker(self):
+        """An unavailable optional host is a review blocker, never a fake visual PASS."""
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source, output = root / "paper.pdf", root / "out"
+            make_vector_pdf(source, drawings=2)
+            with patch("reproduce_research_figure._export_with_libreoffice",
+                       return_value=None):
+                result = run_pipeline(source, output, mode="import", render_host="auto")
+            self.assertIsNone(result["reports"]["visual"])
+            self.assertEqual(result["render_error"], "NO_SUPPORTED_PDF_RENDERER")
+            self.assertFalse((output / "source_candidate_diff.png").exists())
+            self.assertFalse(result["final_release_approved"])
 
     def test_invalid_crop_records_failure_without_a_full_page_candidate(self):
         """Invalid --region is a terminal source error, never silently ignored."""
