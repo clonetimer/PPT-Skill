@@ -247,6 +247,7 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                         })
 
         panels = []
+        unresolved_markers = []
         used_boundaries = set()
         # Group labels into approximate visual rows before left-to-right
         # ordering. Font metrics can shift a larger "(b)" above "(a)" by a
@@ -269,25 +270,27 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 for index, candidate in enumerate(rectangle_candidates)
                 if candidate["rect"].contains(center)
             ]
-            if matches:
-                _, boundary_index, boundary = min(matches, key=lambda item: item[0])
-                used_boundaries.add(boundary_index)
-                panel_rect = boundary["rect"]
-                confidence = "high"
-                boundary_source = "explicit rectangular PDF path containing panel label"
-            else:
-                panel_rect = marker["rect"]
-                confidence = "low"
-                boundary_source = "label only; no enclosing panel boundary detected"
+            if not matches:
+                unresolved_markers.append({
+                    "label": marker["label"],
+                    "text": marker["text"],
+                    "bbox_pt": marker["bbox_pt"],
+                    "confidence": "low",
+                    "confidence_basis": "explicit panel-like punctuation but no enclosing source boundary",
+                })
+                continue
+            _, boundary_index, boundary = min(matches, key=lambda item: item[0])
+            used_boundaries.add(boundary_index)
+            panel_rect = boundary["rect"]
             panels.append({
                 "id": f"panel_{marker['label']}",
                 "label": marker["label"],
                 "order": len(panels) + 1,
                 "bbox_pt": _bbox(panel_rect),
                 "bbox_normalized": _normalized(panel_rect, region),
-                "boundary_source": boundary_source,
-                "confidence": confidence,
-                "confidence_basis": "explicit panel-like text marker; boundary only accepted when source path encloses marker",
+                "boundary_source": "explicit rectangular PDF path containing panel label",
+                "confidence": "high",
+                "confidence_basis": "explicit panel marker enclosed by a source PDF rectangle",
             })
 
         image_assets = []
@@ -344,9 +347,15 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                 "normalized_region": "[x, y, width, height] in 0..1 relative to figure_region_pt",
             },
             "panel_detection": {
-                "status": "EXPLICIT_MARKERS_FOUND" if panels else "NO_EXPLICIT_PANEL_MARKERS",
+                "status": (
+                    "PARTIAL_PANEL_BOUNDARIES" if panels and unresolved_markers
+                    else "EXPLICIT_MARKERS_FOUND" if panels
+                    else "NO_CONFIRMED_PANEL_BOUNDARIES" if unresolved_markers
+                    else "NO_EXPLICIT_PANEL_MARKERS"
+                ),
                 "marker_count": len(text_markers),
                 "panels": panels,
+                "unresolved_markers": unresolved_markers,
                 "unmatched_large_rectangles": [
                     item["bbox_pt"] for index, item in enumerate(rectangle_candidates)
                     if index not in used_boundaries
