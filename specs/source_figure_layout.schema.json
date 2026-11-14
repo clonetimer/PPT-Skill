@@ -4,7 +4,7 @@
   "title": "Source-observed scientific figure layout evidence",
   "type": "object",
   "required": [
-    "schema_version", "source", "page", "figure_region_pt",
+    "schema_version", "source", "page", "figure_region_pt", "figure_region_source",
     "coordinate_system", "panel_detection", "layout_elements",
     "edge_candidates", "clipping_regions", "image_assets",
     "style_profile", "warnings", "requires_human_review"
@@ -33,6 +33,7 @@
       "type": "array", "minItems": 4, "maxItems": 4,
       "items": {"type": "number"}
     },
+    "figure_region_source": {"enum": ["explicit_user_crop", "full_page_default"]},
     "coordinate_system": {
       "type": "object",
       "required": ["units", "origin", "normalized_region"],
