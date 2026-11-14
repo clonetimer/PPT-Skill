@@ -170,6 +170,20 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
             )
             self.assertEqual(result["status"], "NEEDS_VISUAL_REVIEW")
 
+    def test_pipeline_emits_source_layout_evidence_before_conversion(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source = root / "source.pdf"
+            output = root / "out"
+            make_vector_pdf(source, drawings=2)
+            result = run_pipeline(source, output, mode="import", render_host="none")
+            layout = json.loads((output / "source_layout.json").read_text())
+            manifest = json.loads((output / "delivery_manifest.json").read_text())
+            self.assertEqual(layout["source"]["sha256"], manifest["source"]["sha256"])
+            self.assertIn("panel_detection", layout)
+            self.assertIn("source_layout", manifest)
+            self.assertEqual(manifest["source_layout"]["path"], str(output / "source_layout.json"))
+
     def test_import_without_visual_export_is_not_technical_pass(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
