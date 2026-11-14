@@ -182,7 +182,7 @@ class ReproductionPipelineReleaseTests(unittest.TestCase):
     def test_text_geometry_is_mandatory_for_both_routes(self):
         base = dict(
             route="import",
-            candidate={"shape_count": 10, "full_page_pictures": 0},
+            candidate={"shape_count": 50, "native_vectors": 40, "picture_objects": 0, "full_page_pictures": 0},
             import_report={"reconstruction_class": "native_only"},
             structure={"status": "PASS"},
             visual={"status": "PASS", "requires_visual_review": False,
