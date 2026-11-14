@@ -6,7 +6,7 @@ C01 Composite v7.5 is the complete two-panel FBG-SEANet structural redraw. It co
 
 ## Source-grounded repairs
 
-- **Round 01:** add a small editable multi-group graph icon inside the lower Input block, including dashed inter-group links. It is explicitly schematic and does not encode a numerical adjacency matrix.
+- **Round 01:** add a small editable multi-group graph icon inside the lower Input block, including dashed inter-group links. The Total graph route is anchored to the Input container rather than the visible text label. The icon is explicitly schematic and does not encode a numerical adjacency matrix.
 - **Round 02:** restore five independent vertically stacked class-output squares after Dense, with the second square highlighted orange; restore the Dense → class-output connector and the `fault class` label.
 - All new objects are native PowerPoint shapes. Each object receives non-empty alternative text; the title carries a whole-figure description. The three-slide DECK01 method slide now embeds the v7.5 composite.
 
