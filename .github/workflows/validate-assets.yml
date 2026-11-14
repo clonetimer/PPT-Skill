@@ -136,6 +136,16 @@ jobs:
         run: |
           python tools/prepare_scientific_review_bundle.py --stage initial --output dist/scientific_review_initial_v76.zip
           python tools/prepare_scientific_review_bundle.py --stage reconciliation --output dist/scientific_review_reconciliation_v76.zip
+      - name: Prepare 15-figure initial versus repair review
+        run: |
+          python tools/fifteen_figure_review_packet.py dist dist/accepted_repairs --output-dir dist/15_figure_repair_review
+      - name: Upload 15-figure repair-review ledger
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-15-figure-repair-review
+          path: |
+            dist/15_figure_repair_review/*
+          if-no-files-found: error
       - name: Upload initial review packet
         uses: actions/upload-artifact@v4
         with:
