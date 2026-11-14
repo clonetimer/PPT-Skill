@@ -147,6 +147,8 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
         raise ValueError("REPAIR_CASE_OUTPUT_DIR_MUST_BE_EMPTY")
     output_dir.mkdir(parents=True, exist_ok=True)
     if not INITIAL_PPTX.is_file():
+        subprocess.run([sys.executable, str(ROOT / "tools/build_c01_v74.py")], check=True)
+    if not INITIAL_PPTX.is_file():
         raise FileNotFoundError("C01_COMPOSITE_V74_INITIAL_PPTX_MISSING")
 
     rounds_dir = output_dir / "rounds"
