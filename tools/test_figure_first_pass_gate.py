@@ -9,6 +9,8 @@ from pathlib import Path
 import sys
 from tempfile import TemporaryDirectory
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 
 import fitz
 from PIL import Image
@@ -72,6 +74,30 @@ class FirstPassFidelityTests(unittest.TestCase):
         d.save(pdf2); d.close()
         p=source_profile(pdf2)
         self.assertTrue(any(r["code"]=="UNREPRESENTABLE_STROKE" for r in p["risk_flags"]))
+
+    def test_preflight_detects_bboxlog_images_without_text_dict_blocks(self):
+        pdf=self.root/"xref_only_image.pdf"
+        d=fitz.open();page=d.new_page(width=200,height=100)
+        page.draw_rect(fitz.Rect(0,0,0,0))
+        d.save(pdf);d.close()
+        event=SimpleNamespace(visible_bbox=fitz.Rect(10,10,100,90))
+        stats={"source_paint_events":1,"recovered_xrefs":1,"from_dict_blocks":0,
+               "off_page_image_events":0,"unresolved_visible_events":0,"warnings":[]}
+        with patch("figure_first_pass_gate.collect_image_events",return_value=([event],stats)):
+            profile=source_profile(pdf)
+        self.assertEqual(profile["source_pictures"],1)
+        self.assertTrue(any(item["code"]=="RASTER_ONLY" for item in profile["risk_flags"]))
+
+    def test_preflight_blocks_unresolved_visible_image_paint_events(self):
+        pdf=self.root/"unresolved_image.pdf"
+        d=fitz.open();page=d.new_page(width=200,height=100)
+        d.save(pdf);d.close()
+        stats={"source_paint_events":1,"recovered_xrefs":0,"from_dict_blocks":0,
+               "off_page_image_events":0,"unresolved_visible_events":1,
+               "warnings":["visible image could not be recovered"]}
+        with patch("figure_first_pass_gate.collect_image_events",return_value=([],stats)):
+            profile=source_profile(pdf)
+        self.assertTrue(any(item["code"]=="UNRESOLVED_VISIBLE_IMAGES" for item in profile["risk_flags"]))
 
     def test_raster_only_source_is_explicitly_flagged(self):
         pdf=self.root/"unseen_image_only.pdf"

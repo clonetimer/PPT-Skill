@@ -25,6 +25,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pdf_ellipse_recognition import ellipse_bounds
 from audit_text_geometry import audit_text_geometry
 from source_figure_crop import apply_figure_region, drawable_intersects_region
+from pdf_source_assets import collect_image_events
 
 
 def _bad_glyphs(s: str) -> list[str]:
@@ -51,7 +52,8 @@ def source_profile(source: Path, *, page: int = 0,
         unusual_strokes = sum(1 for d in drawings if (d.get("width") or 0) > 1584)
         clip_count = sum(1 for d in extended if d["type"] == "clip")
         ellipse_count = sum(bool(ellipse_bounds(d)) for d in drawings)
-        images = [b for b in p.get_text("dict")["blocks"] if b["type"] == 1]
+        image_blocks = [b for b in p.get_text("dict")["blocks"] if b["type"] == 1]
+        image_events, image_stats = collect_image_events(p, doc, image_blocks=image_blocks)
         math_fonts = {name: n for name, n in fonts.items()
                       if any(t in name.lower() for t in
                              ("math", "symbol", "stix", "cmmi", "cmsy", "msam"))}
@@ -69,9 +71,11 @@ def source_profile(source: Path, *, page: int = 0,
              "Compare every chart panel after export; rectangular scissor may not preserve pattern fills")
         flag("DENSE_VECTORS", "medium", 1 if len(drawings) > 1000 else 0,
              "Check lines, legends, pattern fills and source paint order in each figure panel")
+        flag("UNRESOLVED_VISIBLE_IMAGES", "high", image_stats["unresolved_visible_events"],
+             "Resolve visible PDF image paint events before export; do not accept a partial or blank candidate")
         flag("TINY_LABELS", "medium", sum(s["size"] < 6 for s in spans),
              "Inspect at final intended size, not just the high-resolution preview")
-        flag("RASTER_ONLY", "high", int(not drawings and bool(images)),
+        flag("RASTER_ONLY", "high", int(not drawings and bool(image_events)),
              "A raster-only figure cannot be assumed to have editable scientific primitives")
         return {
             "source": source.name,
@@ -82,7 +86,8 @@ def source_profile(source: Path, *, page: int = 0,
             "figure_region_pt": selected_region,
             "source_drawings": len(drawings),
             "source_text_spans": len(spans),
-            "source_pictures": len(images),
+            "source_pictures": len(image_events),
+            "image_extraction": image_stats,
             "clipped_paths": clip_count,
             "recognizable_source_ellipses": ellipse_count,
             "font_families": dict(fonts),
