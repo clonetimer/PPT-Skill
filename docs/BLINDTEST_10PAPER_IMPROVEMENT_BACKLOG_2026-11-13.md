@@ -41,9 +41,9 @@
 - Explicit panel markers and enclosing source rectangles are recorded as candidates; unlabeled figures are not split into invented panels. Lines remain `directedness: undetermined` unless source evidence later resolves them.
 - The ten-paper development crop fixture is now hash-locked and includes a caption anchor for each figure. PINN was extended to include the full three-panel Figure 4; UCFNet was corrected to select Figure 2, the actual network architecture.
 - The crop audit checks all ten source hashes, page/crop bounds, caption containment and non-caption figure content. GIN is classified as mixed image/vector (367 drawing records), not image-only.
-- Regression suites: 12/12 source-layout extraction, 5/5 crop-manifest audit, 3/3 hash-locked benchmark; [CI #225 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43555988938).
+- Regression suites: 12/12 source-layout extraction, 5/5 crop-manifest audit, 3/3 hash-locked benchmark; [CI #253 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43557493825).
 - [P1-01 source-layout evidence report](P1_01_SOURCE_LAYOUT_EVIDENCE_2026-11-14.md) and [ten-paper crop replay report](P1_01_TEN_PAPER_SOURCE_LAYOUT_REPLAY_2026-11-14.md).
-- **Remaining:** cluster unlabeled/nested panels, infer repeated-module alignment/spacing with confidence, and consume only reviewed SourceLayout facts in FigureSpec drafting and route selection. Strict blind success remains 0/10.
+- **Remaining:** calibrate unlabeled/nested geometric and raster gutter candidates, add human accept/reject decisions, infer repeated-module spacing with confidence, and consume only accepted SourceLayout facts in FigureSpec drafting and route selection. Strict blind success remains 0/10.
 
 ### P0-01 — Native crop-aware image and mixed-vector importer
 **Files:** `tools/pdf_figure_import.py`; new `tools/pdf_source_assets.py`; new `tools/test_pdf_crop_assets.py`.
