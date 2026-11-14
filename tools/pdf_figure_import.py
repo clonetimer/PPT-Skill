@@ -440,12 +440,10 @@ def _annotate_source_shape(shape, source_object_id, source_order, object_class):
         "object_class": object_class,
         "provenance": "source_pdf_import",
     }, sort_keys=True, separators=(",", ":"))
-    nonvisual_container = getattr(shape._element, "nvSpPr", None)
-    if nonvisual_container is None:
-        nonvisual_container = getattr(shape._element, "nvPicPr", None)
-    if nonvisual_container is None:
+    nonvisual_nodes = shape._element.xpath(".//p:cNvPr")
+    if not nonvisual_nodes:
         raise ValueError("UNSUPPORTED_SHAPE_PROVENANCE_CONTAINER")
-    nonvisual_container.cNvPr.set("descr", metadata)
+    nonvisual_nodes[0].set("descr", metadata)
 
 
 def _image_block_bytes(block):
