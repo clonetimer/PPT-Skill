@@ -68,10 +68,9 @@ class ReproductionReleaseGateTests(unittest.TestCase):
             route="figurespec",
             candidate={"shape_count": 50, "native_vectors": 40, "text_objects": 10, "full_page_pictures": 0},
             structure={"status": "PASS"},
-            text_geometry=None,
+            text_geometry={"status": "PASS"},
             visual={"status": "PASS", "requires_visual_review": False, "evidence_type": "candidate_render", "renderer": "LibreOffice", "global_similarity": 0.99},
             office={"status": "PASS"},
-            text_geometry={"status": "PASS"},
             semantic_audit={"status": "FAIL", "missing_edges": ["encoder_to_fusion"]},
         )
         self.assertEqual(result["status"], "NEEDS_SCIENTIFIC_REVIEW")
@@ -115,7 +114,8 @@ class ReproductionReleaseGateTests(unittest.TestCase):
             route="figurespec",
             candidate={"shape_count": 50, "native_vectors": 40, "text_objects": 10, "full_page_pictures": 0},
             structure={"status": "PASS"},
-            visual={"requires_visual_review": False},
+            text_geometry={"status": "PASS"},
+            visual={"status": "PASS", "requires_visual_review": False, "evidence_type": "candidate_render", "renderer": "LibreOffice"},
             office={"status": "PASS"},
             semantic_audit={"status": "PASS"},
             approvals={
