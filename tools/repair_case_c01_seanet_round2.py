@@ -149,6 +149,7 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
                 "base_sha256": sha(round_01),
                 "sha256": sha(round_02),
                 "operation": "source-grounded structural rebuild from C01-SEANet FigureSpec v7.4",
+                "rationale": "Restore the stacked schematic total-graph input, source-like pooling silhouettes, five independent class-output squares, explicit lower-panel excerpt scope and object alt text. Center the revised two-line class label beneath the five-square stack.",
                 "accepted": True,
                 "rejected": False,
                 "figure_spec_diff": str(diff_path.relative_to(output_dir)),
