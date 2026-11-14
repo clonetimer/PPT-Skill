@@ -40,7 +40,7 @@ def prepare_template() -> dict:
         "benchmark_sha256": sha256(benchmark_path),
         "reviewers": {},
         "tasks": {task["id"]: {
-            "required_discipline": task["discipline"], "reviewer_id": "",
+            "required_discipline": task["discipline"], "reviewer_id": "", "repair_rounds": 0,
             "source_sha256": sha256(ROOT / task["source"]),
             "input_sha256": sha256(ROOT / task["input"]),
             "related_inputs_sha256": {path: sha256(ROOT / path)
