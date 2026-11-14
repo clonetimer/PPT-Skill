@@ -102,7 +102,7 @@ def validate():
 def main():
     result = validate()
     output = ROOT / "dist/C01_composite_defense_slide_v75_validation.json"
-    output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
