@@ -18,6 +18,7 @@ def make_pdf(path: Path):
     page.draw_rect(fitz.Rect(20, 30, 280, 180), color=(.2, .3, .4), width=1)
     page.insert_text((30, 50), "(a)", fontsize=12)
     page.draw_line((50, 100), (240, 100), color=(.2, .3, .4), width=1)
+    page.insert_text((30, 165), "Source figure caption", fontsize=9)
     doc.save(path)
     doc.close()
 
@@ -39,6 +40,7 @@ class SourceLayoutBenchmarkTests(unittest.TestCase):
                     "sha256": hashlib.sha256(pdf.read_bytes()).hexdigest(),
                     "page_1based": 1,
                     "region_pt": [20, 30, 280, 180],
+                    "caption_text": "Source figure caption",
                 })
             manifest = root / "manifest.json"
             manifest.write_text(json.dumps({
@@ -53,6 +55,29 @@ class SourceLayoutBenchmarkTests(unittest.TestCase):
             self.assertTrue((output_dir / "one_source_layout.json").exists())
             self.assertTrue((output_dir / "two_source_layout.json").exists())
             self.assertTrue((output_dir / "source_layout_benchmark_summary.csv").exists())
+
+    def test_caption_outside_crop_aborts_before_layout_extraction(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source_dir = root / "sources"
+            output_dir = root / "out"
+            source_dir.mkdir()
+            pdf = source_dir / "one.pdf"
+            make_pdf(pdf)
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps({
+                "benchmark_id": "caption-outside-crop",
+                "cohort_role": "test",
+                "sources": [{
+                    "figure_id": "one", "filename": "one.pdf",
+                    "sha256": hashlib.sha256(pdf.read_bytes()).hexdigest(),
+                    "page_1based": 1, "region_pt": [20, 30, 280, 130],
+                    "caption_text": "Source figure caption",
+                }],
+            }), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "SOURCE_CROP_MANIFEST_AUDIT_FAIL"):
+                run_benchmark(source_dir, manifest, output_dir)
+            self.assertFalse((output_dir / "one_source_layout.json").exists())
 
     def test_hash_mismatch_aborts_before_writing_candidate_sidecar(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -70,6 +95,7 @@ class SourceLayoutBenchmarkTests(unittest.TestCase):
                     "figure_id": "one", "filename": "one.pdf",
                     "sha256": "0" * 64, "page_1based": 1,
                     "region_pt": [20, 30, 280, 180],
+                    "caption_text": "Source figure caption",
                 }],
             }), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "SOURCE_HASH_MISMATCH"):
