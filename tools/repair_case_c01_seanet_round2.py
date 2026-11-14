@@ -78,7 +78,7 @@ def render_pptx(pptx: Path, output_dir: Path, stem: str) -> tuple[Path, Path]:
 
 
 def run_case(output_dir: Path, accepted_output: Path) -> dict:
-    output_dir = Path(output_dir)
+    output_dir = Path(output_dir).resolve()
     if output_dir.exists() and any(output_dir.iterdir()):
         raise ValueError("REPAIR_CASE_OUTPUT_DIR_MUST_BE_EMPTY")
     output_dir.mkdir(parents=True, exist_ok=True)
