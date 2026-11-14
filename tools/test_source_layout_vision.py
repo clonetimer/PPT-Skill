@@ -1,4 +1,4 @@
-"""Tests for optional visual proposals and source-object evidence fusion."""
+"""Tests for optional visual proposals and conservative SourceLayout evidence fusion."""
 from __future__ import annotations
 
 import unittest
@@ -142,6 +142,20 @@ class EvidenceFusionTests(unittest.TestCase):
                 "bbox_normalized": [0.55, 0.1, 0.4, 0.4],
                 "needs_human_review": True,
             },
+            {
+                "id": "visual_region_004", "candidate_type": "visual_region",
+                "model_label": "table", "model_score": 0.90,
+                "bbox_pt": [40.0, 110.0, 100.0, 170.0],
+                "bbox_normalized": [0.2, 0.55, 0.3, 0.3],
+                "needs_human_review": True,
+            },
+            {
+                "id": "visual_region_005", "candidate_type": "visual_region",
+                "model_label": "algorithm", "model_score": 0.89,
+                "bbox_pt": [60.0, 110.0, 120.0, 170.0],
+                "bbox_normalized": [0.3, 0.55, 0.3, 0.3],
+                "needs_human_review": True,
+            },
         ]
         markers = [
             {
@@ -173,6 +187,10 @@ class EvidenceFusionTests(unittest.TestCase):
              "bbox_pt": [120.0, 45.0, 180.0, 85.0]},
             {"id": "draw_crossing", "kind": "stroke_path", "source_order": 7,
              "bbox_pt": [90.0, 45.0, 130.0, 60.0]},
+            {"id": "draw_ambiguous", "kind": "stroke_path", "source_order": 8,
+             "bbox_pt": [70.0, 120.0, 90.0, 160.0]},
+            {"id": "draw_unassigned", "kind": "stroke_path", "source_order": 9,
+             "bbox_pt": [205.0, 205.0, 215.0, 215.0]},
         ]
         images = [
             {"id": "image_xref_9", "kind": "image", "source_order": 3,
@@ -199,28 +217,31 @@ class EvidenceFusionTests(unittest.TestCase):
             ["visual_region_002", "visual_region_003"],
         )
         unresolved = {item["id"]: item for item in result["ocr_panel_markers"]}
-        self.assertEqual(unresolved["ocr_marker_003"]["anchor_status"], "unresolved")
+        self.assertEqual(unresolved["ocr_marker_003"]["anchor_status"], "UNRESOLVED")
 
-    def test_source_objects_are_assigned_only_when_containment_is_unambiguous(self):
+    def test_source_objects_are_assigned_to_deepest_region_or_unresolved_when_ambiguous(self):
         regions, markers, elements, images = self._inputs()
         result = fuse_visual_evidence(regions, markers, elements, images, [0, 0, 200, 200])
         ownership = {item["source_object_id"]: item for item in result["source_object_ownership"]}
         self.assertEqual(ownership["draw_inside_a"]["candidate_id"], "visual_region_002")
         self.assertEqual(ownership["draw_inside_b"]["candidate_id"], "visual_region_003")
         self.assertEqual(ownership["image_xref_9"]["candidate_id"], "visual_region_002")
-        self.assertEqual(ownership["draw_crossing"]["status"], "UNRESOLVED")
+        self.assertEqual(ownership["draw_crossing"]["candidate_id"], "visual_region_001")
+        self.assertEqual(ownership["draw_crossing"]["ownership_scope"], "container")
+        self.assertEqual(ownership["draw_ambiguous"]["status"], "UNRESOLVED")
+        self.assertEqual(ownership["draw_unassigned"]["status"], "UNRESOLVED")
         self.assertTrue(all(item["source_order"] is not None for item in ownership.values()
-                            if item["status"] == "ASSIGNED"))
+                            if item["status"] in ("ASSIGNED", "CONTAINER_ONLY")))
 
     def test_sibling_regions_create_review_only_horizontal_alignment_group(self):
         regions, markers, elements, images = self._inputs()
         result = fuse_visual_evidence(regions, markers, elements, images, [0, 0, 200, 200])
         groups = result["visual_alignment_groups"]
-        self.assertEqual(len(groups), 1)
-        self.assertEqual(groups[0]["axis"], "horizontal_row")
-        self.assertEqual(groups[0]["member_candidate_ids"],
+        horizontal = [item for item in groups if item["axis"] == "horizontal_row"]
+        self.assertEqual(len(horizontal), 1)
+        self.assertEqual(horizontal[0]["member_candidate_ids"],
                          ["visual_region_002", "visual_region_003"])
-        self.assertTrue(groups[0]["needs_human_review"])
+        self.assertTrue(horizontal[0]["needs_human_review"])
 
 
 if __name__ == "__main__":
