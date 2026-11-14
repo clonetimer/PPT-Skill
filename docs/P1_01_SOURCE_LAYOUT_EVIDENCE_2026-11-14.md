@@ -11,7 +11,7 @@ The extractor records:
 - source text spans, recovered glyph-quad bounds, original font family, font size, direction and color;
 - stroke widths, dash patterns, fill/stroke/text palette counts and font-size tiers;
 - clipping scissor regions and independent image XRef/block occurrences with SHA-256 and crop/panel candidate;
-- line-segment candidates with endpoints and source order.
+- generic stroke-segment candidates with endpoints and source order; these are not asserted to be graph edges.
 
 ## Conservative inference boundary
 
