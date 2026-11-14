@@ -34,6 +34,8 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertEqual(TASK_FILENAMES["Q03P"],"Q03_iris_mean_ci_nature.pptx")
         self.assertEqual(TASK_FILENAMES["C01_SEANet"],"C01_SEANet_graph_level_v73.pptx")
         self.assertEqual(TASK_FINAL_FILENAMES["C01_SEANet"],"C01_SEANet_graph_level_v74.pptx")
+        self.assertEqual(TASK_FILENAMES["C01_composite"],"C01_composite_defense_slide_v74.pptx")
+        self.assertEqual(TASK_FINAL_FILENAMES["C01_composite"],"C01_composite_defense_slide_v75.pptx")
         self.assertEqual(len(TASK_FILENAMES),15)
 
 
