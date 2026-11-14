@@ -55,6 +55,25 @@ Counts below come from the current source-layout extraction logic over the corre
 | SkillSmith | 4 / [108,72,503.8,316] | 212 | 118 | 0 | 1,512 | 1 | 0 |
 | UCFNet Figure 2 | 4 / [70,565,535,775] | 192 | 110 | 3 | 13,167 | 0 | 0 |
 
+### Review-only unlabeled-region candidates
+
+A second pass now proposes geometric enclosures and low-ink gutters without declaring them to be panels:
+
+| Figure | Geometric region candidates | Repeated alignment groups | Raster gutter candidates | Current interpretation |
+|---|---:|---:|---:|---|
+| Wind Turbine | 0 | 0 | 0 | One image-backed framework; no reliable internal gutter detected |
+| PINN Tool Wear | 5 | 1 vertical stack | 0 | Two aligned source enclosures plus an interstitial band suggest three stacked regions; two nested enclosures remain submodule candidates |
+| Attention-guided GIN | 0 | 0 | 1 | One weak vertical low-ink run; not enough to split the five-stage image |
+| Agent Distillation | 0 | 0 | 0 | Dense composite; no high-confidence enclosure/gutter candidate |
+| EvoOntology | 3 | 1 horizontal row | 0 | Two right-side enclosures and their narrow interstitial band; not a complete three-column segmentation |
+| HarnessMM | 0 | 0 | 3 | Three low-ink horizontal runs near the lower figure/legend; may be footer or separator, so review only |
+| IIoT Digital Twin | 0 | 0 | 1 | One weak vertical gutter candidate between figure regions; no panel split asserted |
+| Paths-over-Graph | 0 | 0 | 0 | One outer figure frame only; no internal panel boundaries inferred |
+| SkillSmith | 0 | 0 | 0 | One outer figure frame only; compile/runtime split remains a visual-review hypothesis |
+| UCFNet Figure 2 | 0 | 0 | 0 | Internal streams/modules are visible, but no enclosing PDF rectangles or reliable low-ink gutters |
+
+All geometric and raster candidates carry `needs_human_review`, confidence and source evidence. A low-ink gap is not automatically a panel boundary; a rectangle is not automatically a scientific module.
+
 Source layout/style profiles also retain font-family counts and font-size tiers, palette counts, stroke-width tiers and clipping regions. Those measurements are preserved in each per-figure JSON output rather than reduced to one universal visual template.
 
 ### What the inventory changes
