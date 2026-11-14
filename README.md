@@ -343,3 +343,21 @@ python tools/reconstruction_quality_metrics.py .\qa\source_composition_manifest.
 ```
 
 The report includes object recall, missing/duplicate IDs, object class, source order/Kendall tau, text CER, and geometry IoU when the coordinate transform is comparable. Cropped or unknown transforms are marked `NOT_COMPARABLE`. Scientific correctness and Office 2016 host rendering remain independent review gates.
+
+
+### Reviewed import: composition and quality reports are now integrated
+
+When a hash-valid human SourceLayout review is supplied to the one-command import pipeline, it now also emits:
+
+- `reconstruction_routes.json`
+- `source_composition_manifest.json`
+- `source_composition_pptx_audit.json`
+- `reconstruction_quality_metrics.json`
+
+Example:
+
+```powershell
+python tools/reproduce_research_figure.py .\paper.pdf --output .\qa\figure --mode import --source-layout-review .\qa\review.json --render-host auto
+```
+
+The pipeline keeps the first-pass PPTX immutable for that run and produces object, text, raster, order, geometry, and optional visual evidence. A blocked composition manifest remains a blocker; it is not silently bypassed. Scientific and Office 2016 approval remain separate.
