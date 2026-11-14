@@ -113,15 +113,21 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             _write_json(destination / "source_layout.json", source_layout)
             source_route_recommendation = recommend_source_route(source_layout)
             if source_layout_review is not None:
-                source_layout_review_audit = validate_source_layout_review(
-                    destination / "source_layout.json", source_layout_review
-                )
-                _write_json(destination / "source_layout_review_audit.json",
-                            source_layout_review_audit)
-                if source_layout_review_audit["status"] == "INVALID":
+                try:
+                    source_layout_review_audit = validate_source_layout_review(
+                        destination / "source_layout.json", source_layout_review
+                    )
+                    _write_json(destination / "source_layout_review_audit.json",
+                                source_layout_review_audit)
+                    if source_layout_review_audit["status"] == "INVALID":
+                        source_layout_review_error = (
+                            "SOURCE_LAYOUT_REVIEW_INVALID: " +
+                            "; ".join(source_layout_review_audit["errors"])
+                        )
+                        error = source_layout_review_error
+                except Exception as exc:
                     source_layout_review_error = (
-                        "SOURCE_LAYOUT_REVIEW_INVALID: " +
-                        "; ".join(source_layout_review_audit["errors"])
+                        f"SOURCE_LAYOUT_REVIEW_INVALID: {type(exc).__name__}: {exc}"
                     )
                     error = source_layout_review_error
         except Exception as exc:
