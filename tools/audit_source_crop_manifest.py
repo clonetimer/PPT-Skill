@@ -78,9 +78,15 @@ def audit_source_crop_manifest(source_dir: Path, manifest_path: Path) -> dict:
                             for item in page.get_drawings(extended=True):
                                 if item.get("type") in ("clip", "group"):
                                     continue
-                                visible_drawing = fitz.Rect(item.get("rect", page_rect)) & region
+                                source_drawing = fitz.Rect(item.get("rect", page_rect))
+                                # Check source bounds first: a line outside the
+                                # crop can still produce a zero-height intersection.
+                                if (source_drawing.x1 < region.x0 or source_drawing.x0 > region.x1 or
+                                    source_drawing.y1 < region.y0 or source_drawing.y0 > region.y1):
+                                    continue
+                                visible_drawing = source_drawing & region
                                 # Keep horizontal/vertical zero-height or zero-width
-                                # strokes; Rect.intersects() drops these valid paths.
+                                # strokes when their source coordinates are inside the crop.
                                 if (visible_drawing.width < 0 or visible_drawing.height < 0 or
                                     (visible_drawing.width == 0 and visible_drawing.height == 0)):
                                     continue
