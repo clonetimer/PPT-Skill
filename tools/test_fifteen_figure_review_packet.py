@@ -49,7 +49,11 @@ class ReviewPacketTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);initial=root/"initial.pptx";final=root/"final.pptx"
             deck(initial,"fault class");deck(final,"fault class")
+            initial_prs=Presentation(initial)
+            initial_prs.slides[0].shapes[0].text_frame.paragraphs[0].alignment=PP_ALIGN.CENTER
+            initial_prs.save(initial)
             prs=Presentation(final)
+            prs.slides[0].shapes[0].text_frame.paragraphs[0].alignment=PP_ALIGN.CENTER
             prs.slides[0].shapes[0].text_frame.paragraphs[0].alignment=PP_ALIGN.RIGHT
             prs.save(final)
             result=compare(initial,final)
