@@ -109,7 +109,8 @@
         "candidate_status",
         "unlabeled_panel_candidates",
         "alignment_groups",
-        "raster_gutter_candidates"
+        "raster_gutter_candidates",
+        "raster_gutter_candidate_status"
       ],
       "properties": {
         "status": {
@@ -159,6 +160,12 @@
           "items": {
             "$ref": "#/$defs/rasterGutter"
           }
+        },
+        "raster_gutter_candidate_status": {
+          "enum": [
+            "CANDIDATES_FOUND",
+            "NO_DOMINANT_IMAGE_GUTTERS"
+          ]
         }
       }
     },
