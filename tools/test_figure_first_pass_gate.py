@@ -104,6 +104,28 @@ class FirstPassFidelityTests(unittest.TestCase):
         self.assertLess(diff["global_similarity"],.88)
         self.assertTrue((self.root/"diff.png").exists())
 
+    def test_comparison_uses_selected_source_pixels_not_rescaled_full_page(self):
+        """Figure-region comparison cannot score a different full-page layout."""
+        source = self.root / "paper.pdf"
+        candidate = self.root / "candidate.pdf"
+        doc = fitz.open()
+        page = doc.new_page(width=400, height=300)
+        page.draw_rect(fitz.Rect(20, 20, 90, 90), fill=(1, 0, 0))
+        page.draw_rect(fitz.Rect(220, 120, 280, 170), fill=(.2, .5, .8))
+        doc.save(source)
+        doc.close()
+        doc = fitz.open()
+        page = doc.new_page(width=160, height=120)
+        page.draw_rect(fitz.Rect(20, 20, 80, 70), fill=(.2, .5, .8))
+        doc.save(candidate)
+        doc.close()
+        result = compare_rendered_pages(
+            source, candidate, dpi=72, source_region=(200, 100, 360, 220)
+        )
+        self.assertGreater(result["global_similarity"], .99)
+        self.assertFalse(result["requires_visual_review"])
+        self.assertEqual(result["source_region_pt"], [200.0, 100.0, 360.0, 220.0])
+
     def test_candidate_counts_native_ellipse_as_vector_not_picture(self):
         ppt=self.root/"native.pptx"
         d=Presentation(); sl=d.slides.add_slide(d.slide_layouts[6])

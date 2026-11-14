@@ -18,6 +18,7 @@ from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 from pdf_figure_import import _normalize_pdf_text
+from source_figure_crop import apply_figure_region, drawable_intersects_region
 
 
 def _count_visible_source_drawings(page):
@@ -43,15 +44,17 @@ def _count_visible_source_drawings(page):
         clip_box = fitz.Rect(page.rect)
         for _, rectangle in stack:
             clip_box &= rectangle
-        if not clip_box.is_empty and clip_box.intersects(drawing["rect"]):
+        if not clip_box.is_empty and drawable_intersects_region(drawing, clip_box):
             visible += 1
     return visible
 
 
-def audit_figure(source_pdf: Path, candidate_pptx: Path, *, page_index: int = 0) -> dict:
+def audit_figure(source_pdf: Path, candidate_pptx: Path, *, page_index: int = 0,
+                 figure_region: tuple[float, float, float, float] | None = None) -> dict:
     source_pdf, candidate_pptx = Path(source_pdf), Path(candidate_pptx)
     with fitz.open(source_pdf) as document:
         page = document[page_index]
+        selected_region = apply_figure_region(page, figure_region)
         src_width, src_height = page.rect.width, page.rect.height
         source_vectors = len(page.get_drawings())
         visible_vectors = _count_visible_source_drawings(page)
@@ -115,6 +118,7 @@ def audit_figure(source_pdf: Path, candidate_pptx: Path, *, page_index: int = 0)
         "picture_shapes": len(picture_shapes),
         "full_page_pictures": full_page_pictures,
         "source_page_pt": [round(src_width, 3), round(src_height, 3)],
+        "figure_region_pt": selected_region,
         "candidate_page_pt": [round(deck.slide_width.pt, 3), round(deck.slide_height.pt, 3)],
     }
 

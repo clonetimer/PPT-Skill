@@ -21,6 +21,7 @@ from pdf_figure_import import (
     _normalize_pdf_text, _source_font, _span_visible_fraction,
     MIN_VISIBLE_TEXT_FRACTION,
 )
+from source_figure_crop import apply_figure_region
 
 EMU_PER_PT = 12700.0
 DEFAULT_OVERLAP_THRESHOLD_PT = 2.16
@@ -123,12 +124,14 @@ def _unicode_findings(text):
 
 def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
                         page_index: int = 0,
+                        figure_region: tuple[float, float, float, float] | None = None,
                         overlap_threshold_pt: float = DEFAULT_OVERLAP_THRESHOLD_PT) -> dict:
     source_pdf, candidate_pptx = Path(source_pdf), Path(candidate_pptx)
     if overlap_threshold_pt < 0:
         raise ValueError("overlap_threshold_pt must be non-negative")
     with fitz.open(source_pdf) as source_doc:
         page = source_doc[page_index]
+        selected_region = apply_figure_region(page, figure_region)
         source_rect = (0.0, 0.0, float(page.rect.width), float(page.rect.height))
         spans = _source_spans(page)
     deck = Presentation(candidate_pptx)
@@ -204,6 +207,7 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
         "source_sha256": hashlib.sha256(source_pdf.read_bytes()).hexdigest(),
         "candidate_sha256": hashlib.sha256(candidate_pptx.read_bytes()).hexdigest(),
         "page_size_pt": [source_rect[2], source_rect[3]],
+        "figure_region_pt": selected_region,
         "source_text_span_count": len(spans),
         "candidate_text_shape_count": len(shapes),
         "matched_text_count": matched,

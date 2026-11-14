@@ -45,6 +45,7 @@ def _clear_previous_outputs(destination: Path) -> None:
         "candidate_editable.pptx", "candidate.svg", "source_preflight.json", "source_layout.json",
         "source_layout_review_audit.json", "source_layout_constraints.json",
         "reviewed_figure_spec.json", "source_geometry_application_audit.json",
+        "source_candidate_diff.png",
         "import_report.json", "semantic_audit.json", "structure_audit.json",
         "text_geometry_audit.json", "visual_audit.json",
         "office2016_ooxml_preflight.json", "quality_report.json",
@@ -111,7 +112,7 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
     render_error = None
 
     try:
-        source_info = source_profile(source_pdf, page=page_index)
+        source_info = source_profile(source_pdf, page=page_index, figure_region=figure_region)
         _write_json(destination / "source_preflight.json", source_info)
         try:
             source_layout = extract_source_layout(
@@ -154,6 +155,7 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
                 from pdf_figure_import import convert_pdf_page
                 import_report = convert_pdf_page(
                     source_pdf, candidate, page_index=page_index,
+                    figure_region=figure_region,
                     max_drawings=max_drawings,
                     max_source_segments=max_source_segments,
                     max_vertices=max_vertices,
@@ -211,8 +213,12 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             try:
                 from audit_imported_pdf_figure import audit_figure
                 from audit_text_geometry import audit_text_geometry
-                structure = audit_figure(source_pdf, candidate, page_index=page_index)
-                text_geometry = audit_text_geometry(source_pdf, candidate, page_index=page_index)
+                structure = audit_figure(
+                    source_pdf, candidate, page_index=page_index, figure_region=figure_region
+                )
+                text_geometry = audit_text_geometry(
+                    source_pdf, candidate, page_index=page_index, figure_region=figure_region
+                )
                 _write_json(destination / "structure_audit.json", structure)
                 _write_json(destination / "text_geometry_audit.json", text_geometry)
             except Exception as exc:
@@ -228,6 +234,7 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
                         source_pdf, rendered_pdf,
                         preview=destination / "source_candidate_diff.png",
                         source_page_index=page_index,
+                        source_region=figure_region,
                         candidate_page_index=0,
                     )
                     visual.update({
@@ -286,10 +293,12 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             else "figurespec_science_grounded_reinterpretation"
         ),
         "source": {"path": str(source_pdf), "sha256": sha256(source_pdf),
-                   "page_index": page_index},
+                   "page_index": page_index,
+                   "figure_region_pt": list(figure_region) if figure_region else None},
         "source_layout": ({
             "path": str(destination / "source_layout.json"),
             "sha256": sha256(destination / "source_layout.json"),
+            "figure_region_pt": source_layout.get("figure_region_pt"),
             "panel_detection": source_layout.get("panel_detection"),
             "layout_element_count": len(source_layout.get("layout_elements", [])),
             "stroke_segment_candidate_count": len(source_layout.get("stroke_segment_candidates", [])),

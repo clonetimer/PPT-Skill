@@ -24,6 +24,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 from pdf_ellipse_recognition import ellipse_bounds
 from audit_text_geometry import audit_text_geometry
+from source_figure_crop import apply_figure_region, drawable_intersects_region
 
 
 def _bad_glyphs(s: str) -> list[str]:
@@ -31,11 +32,16 @@ def _bad_glyphs(s: str) -> list[str]:
             if c == "\ufffd" or unicodedata.category(c) in ("Co", "Cs")]
 
 
-def source_profile(source: Path, *, page: int = 0) -> dict:
+def source_profile(source: Path, *, page: int = 0,
+                   figure_region: tuple[float, float, float, float] | None = None) -> dict:
     """Freeze source evidence before candidate generation; do not infer meaning."""
+    if page < 0:
+        raise ValueError("INVALID_SOURCE_PAGE_INDEX: zero-based page index must be non-negative")
     with fitz.open(source) as doc:
         p = doc[page]
-        drawings = p.get_drawings()
+        original_page_pt = [round(p.rect.width, 3), round(p.rect.height, 3)]
+        selected_region = apply_figure_region(p, figure_region)
+        drawings = [d for d in p.get_drawings() if drawable_intersects_region(d, p.rect)]
         extended = p.get_drawings(extended=True)
         spans = [span for block in p.get_text("dict")["blocks"]
                  for line in block.get("lines", []) for span in line["spans"]
@@ -72,6 +78,8 @@ def source_profile(source: Path, *, page: int = 0) -> dict:
             "sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
             "page_index": page,
             "page_pt": [round(p.rect.width, 3), round(p.rect.height, 3)],
+            "original_page_pt": original_page_pt,
+            "figure_region_pt": selected_region,
             "source_drawings": len(drawings),
             "source_text_spans": len(spans),
             "source_pictures": len(images),
@@ -119,15 +127,18 @@ def compare_rendered_pages(source_pdf: Path, candidate_pdf: Path,
                            *, dpi: int = 110, grid: int = 4,
                            preview: Path | None = None,
                            source_page_index: int = 0,
+                           source_region: tuple[float, float, float, float] | None = None,
                            candidate_page_index: int = 0) -> dict:
     """Compare final PDF-exported appearance; identify weak spatial tiles."""
-    def raster(pdf, page_index):
+    def raster(pdf, page_index, region=None):
         with fitz.open(pdf) as doc:
             if page_index < 0 or page_index >= len(doc):
                 raise IndexError(f"page index {page_index} is outside {pdf.name}")
-            pix = doc[page_index].get_pixmap(matrix=fitz.Matrix(dpi/72, dpi/72), alpha=False)
+            page = doc[page_index]
+            apply_figure_region(page, region)
+            pix = page.get_pixmap(matrix=fitz.Matrix(dpi/72, dpi/72), alpha=False)
             return Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
-    src, dst = raster(source_pdf, source_page_index), raster(candidate_pdf, candidate_page_index)
+    src, dst = raster(source_pdf, source_page_index, source_region), raster(candidate_pdf, candidate_page_index)
     if src.size != dst.size:
         if abs(src.width/src.height - dst.width/dst.height) > .003:
             raise ValueError("Source and candidate page aspect ratios differ")
@@ -155,6 +166,7 @@ def compare_rendered_pages(source_pdf: Path, candidate_pdf: Path,
         composite.save(preview)
     return {
         "renderer": "PDF-export comparison, not Office 2016 host certification",
+        "source_region_pt": [float(x) for x in source_region] if source_region is not None else None,
         "dpi": dpi, "grid": grid,
         "global_similarity": round(global_sim,4),
         "mean_abs_difference": round(float(np.abs(a.astype(float)-b).mean())/255,4),

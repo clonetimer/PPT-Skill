@@ -124,8 +124,25 @@ SourceLayout JSON against the versioned schema. See the
 The unified `reproduce_research_figure.py` entrypoint also emits
 `source_layout.json` before generating the candidate, records its hash and
 panel/element counts in `delivery_manifest.json`, and accepts a 1-based
-`--page` plus optional PDF-point `--region`. This is an evidence artifact,
-not a semantic FigureSpec or an automatic claim that a line is directed.
+`--page` plus optional PDF-point `--region`. For **PDF import**, the same
+selected region is also applied to editable native objects, clipped source
+images, text/structure audits and pixel-based source comparison. It is not
+merely a source-layout sidecar. Use the original selected page's PDF points:
+
+~~~bash
+python tools/reproduce_research_figure.py source.pdf \
+  --output out/figure-recovery --mode import --page 3 \
+  --region 60 90 550 355 --render-host auto
+~~~
+
+The resulting slide has the crop's aspect ratio and dimensions. Invalid or
+rotated-page crop requests fail closed. For editable imports, source glyphs
+partly cut by the crop, stroke-width-only fringes and rotated/skewed image
+objects cannot yet be reconstructed faithfully; these cases return an
+explicit unsupported-source diagnostic. Enlarge the source crop or rebuild
+the affected source element with a reviewed FigureSpec. `source_layout.json` remains an
+evidence artifact, not a semantic FigureSpec or an automatic claim that a
+line is directed.
 
 ## Evidence-first new-figure recovery (first-pass gate)
 

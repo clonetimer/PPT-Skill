@@ -14,6 +14,7 @@ import hashlib
 from io import BytesIO
 import json
 import math
+import os
 from pathlib import Path
 import re
 import time
@@ -37,6 +38,7 @@ from pdf_import_budget import (
     DEFAULT_MAX_DRAWINGS, DEFAULT_MAX_SOURCE_SEGMENTS,
     DEFAULT_MAX_VERTICES, DEFAULT_MAX_SECONDS,
 )
+from source_figure_crop import apply_figure_region, drawable_intersects_region
 
 
 def _color(value):
@@ -471,31 +473,65 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
                      max_drawings: int = DEFAULT_MAX_DRAWINGS,
                      max_source_segments: int = DEFAULT_MAX_SOURCE_SEGMENTS,
                      max_vertices: int = DEFAULT_MAX_VERTICES,
-                     max_seconds: float = DEFAULT_MAX_SECONDS) -> dict:
+                     max_seconds: float = DEFAULT_MAX_SECONDS,
+                     figure_region: tuple[float, float, float, float] | None = None) -> dict:
     pdf_path, pptx_path = Path(pdf_path), Path(pptx_path)
+    if page_index < 0:
+        raise ValueError("INVALID_SOURCE_PAGE_INDEX: zero-based page index must be non-negative")
+    if (pdf_path.resolve() == pptx_path.resolve() or
+        (pptx_path.exists() and os.path.samefile(pdf_path, pptx_path))):
+        raise ValueError("REFUSE_TO_OVERWRITE_SOURCE_PDF")
+    source_sha256 = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
     clock_start = time.monotonic()
     document = fitz.open(pdf_path)
     try:
         page = document[page_index]
+        selected_region = apply_figure_region(page, figure_region)
         width_pt, height_pt = float(page.rect.width), float(page.rect.height)
+        if min(width_pt, height_pt) < 72:
+            raise ValueError("UNSUPPORTED_SOURCE_CROP_SIZE: PowerPoint slide must be at least 1 inch per axis")
         deck = Presentation()
         deck.slide_width, deck.slide_height = _pt_in(width_pt), _pt_in(height_pt)
         slide = deck.slides.add_slide(deck.slide_layouts[6])
         slide.background.fill.solid()
         slide.background.fill.fore_color.rgb = RGBColor(255, 255, 255)
         extended = page.get_drawings(extended=True)
+        # Preflight the selected figure, not unrelated diagrams or plots on
+        # the same paper page. Keep all records for paint-order and clip-stack
+        # reconstruction below; only drawable candidates count against budget.
+        visible_drawings = [
+            d for d in extended
+            if d.get("type") not in ("f", "fs", "s") or
+               drawable_intersects_region(d, page.rect)
+        ]
         resource_profile = preflight_drawing_budget(
-            extended, clock_start=clock_start, max_drawings=max_drawings,
+            visible_drawings, clock_start=clock_start, max_drawings=max_drawings,
             max_source_segments=max_source_segments, max_vertices=max_vertices,
             max_seconds=max_seconds,
         )
         warnings = []
         page_blocks = page.get_text("dict")["blocks"]
+        if selected_region is not None:
+            for block in page_blocks:
+                for line in block.get("lines", []):
+                    for span in line["spans"]:
+                        if not _normalize_pdf_text(span.get("text", "")).strip():
+                            continue
+                        bbox = fitz.Rect(span["bbox"])
+                        if (bbox.x0 < page.rect.x0 - .1 or bbox.y0 < page.rect.y0 - .1 or
+                            bbox.x1 > page.rect.x1 + .1 or bbox.y1 > page.rect.y1 + .1):
+                            raise ValueError("UNSUPPORTED_SOURCE_CROP_EDGE_TEXT: glyph clipping requires manual reconstruction")
 
         images, source_image_stats = collect_image_events(
             page, document,
             image_blocks=[b for b in page_blocks if b["type"] == 1],
         )
+        if selected_region is not None and any(
+            len(event.transform) == 6 and
+            (abs(event.transform[1]) > .01 or abs(event.transform[2]) > .01)
+            for event in images
+        ):
+            raise ValueError("UNSUPPORTED_SOURCE_IMAGE_TRANSFORM: cropped rotated/skewed image needs manual reconstruction")
         warnings.extend(source_image_stats["warnings"])
         picture_events = iter(images)
         next_image = next(picture_events, None)
@@ -520,8 +556,17 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
             clip_region = fitz.Rect(page.rect)
             for _, rect in clip_stack:
                 clip_region &= rect
-            if not clip_region.is_empty:
-                native_count += _add_drawing(slide, drawing, page.rect, warnings, clip_region)
+            if clip_region.is_empty or not drawable_intersects_region(drawing, clip_region):
+                continue
+            if selected_region is not None and drawing.get("type") in ("s", "fs"):
+                box = fitz.Rect(drawing["rect"])
+                centerline_in_crop = (
+                    box.x0 <= clip_region.x1 and box.x1 >= clip_region.x0 and
+                    box.y0 <= clip_region.y1 and box.y1 >= clip_region.y0
+                )
+                if not centerline_in_crop:
+                    raise ValueError("UNSUPPORTED_SOURCE_CROP_EDGE_STROKE: line width enters crop without centerline")
+            native_count += _add_drawing(slide, drawing, page.rect, warnings, clip_region)
         while next_image is not None:
             picture_count += _add_recovered_image(slide, next_image, warnings)
             next_image = next(picture_events, None)
@@ -547,7 +592,8 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
         clean_theme(pptx_path)
         return {
             "page_size_pt": [width_pt, height_pt],
-            "source_sha256": hashlib.sha256(pdf_path.read_bytes()).hexdigest(),
+            "figure_region_pt": selected_region,
+            "source_sha256": source_sha256,
             "native_shapes": native_count,
             "text_shapes": text_count,
             "picture_shapes": picture_count,

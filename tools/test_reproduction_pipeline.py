@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import io
+import hashlib
 import json
 from pathlib import Path
 import tempfile
@@ -9,6 +10,7 @@ import unittest
 
 import fitz
 from PIL import Image
+from pptx import Presentation
 
 from reproduce_research_figure import run_pipeline
 from reproduction_release_gate import classify_release
@@ -100,6 +102,83 @@ def make_figurespec(path: Path, *, edges=True, actual_link="a__b"):
 
 
 class ReproductionPipelineReleaseTests(unittest.TestCase):
+    def test_negative_source_page_index_cannot_select_last_page(self):
+        """A mistaken --page 0 must not silently import an unrelated last page."""
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source, output = root / "multi.pdf", root / "out"
+            doc = fitz.open()
+            for label in ("FIRST", "SECOND"):
+                page = doc.new_page(width=250, height=160)
+                page.draw_rect(fitz.Rect(20, 20, 80, 60))
+                page.insert_text((25, 80), label)
+            doc.save(source)
+            doc.close()
+            result = run_pipeline(source, output, mode="import", render_host="none", page_index=-1)
+            self.assertEqual(result["status"], "STRUCTURE_FAIL")
+            self.assertIn("INVALID_SOURCE_PAGE_INDEX", result["error"])
+            self.assertFalse((output / "candidate_editable.pptx").exists())
+
+    def test_imported_figure_crop_matches_source_layout_audits_and_output_geometry(self):
+        """The production --region must drive conversion and every source QA stage."""
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source, output = root / "paper.pdf", root / "out"
+            doc = fitz.open()
+            page = doc.new_page(width=400, height=300)
+            page.draw_rect(fitz.Rect(20, 20, 75, 60), color=(1, 0, 0))
+            page.insert_text((30, 80), "OTHER FIGURE", fontsize=10)
+            page.draw_rect(fitz.Rect(230, 130, 290, 170), color=(.2, .3, .7))
+            page.insert_text((240, 190), "Target Figure", fontsize=10)
+            doc.save(source)
+            doc.close()
+            before = source.read_bytes()
+
+            result = run_pipeline(
+                source, output, mode="import", render_host="auto",
+                page_index=0, figure_region=(200, 100, 350, 240),
+            )
+            self.assertEqual(result["source"]["sha256"],
+                             hashlib.sha256(before).hexdigest())
+            self.assertEqual(source.read_bytes(), before)
+            self.assertEqual(result["source_layout"]["figure_region_pt"],
+                             [200, 100, 350, 240])
+            self.assertEqual(result["reports"]["source_preflight"]["page_pt"], [150, 140])
+            self.assertEqual(result["reports"]["import"]["page_size_pt"], [150, 140])
+            self.assertEqual(result["reports"]["structure"]["status"], "PASS")
+            self.assertEqual(result["reports"]["text_geometry"]["status"], "PASS")
+            self.assertEqual(result["reports"]["text_geometry"]["source_text_span_count"], 1)
+            self.assertIsNotNone(result["reports"]["visual"])
+            self.assertEqual(result["reports"]["visual"]["source_region_pt"],
+                             [200.0, 100.0, 350.0, 240.0])
+            self.assertNotEqual(result["status"], "STRUCTURE_FAIL")
+            deck = Presentation(output / "candidate_editable.pptx")
+            self.assertEqual([deck.slide_width.pt, deck.slide_height.pt], [150, 140])
+            labels = [s.text for s in deck.slides[0].shapes if s.has_text_frame and s.text.strip()]
+            self.assertEqual(labels, ["Target Figure"])
+
+            diff_path = output / "source_candidate_diff.png"
+            self.assertTrue(diff_path.exists())
+            run_pipeline(
+                source, output, mode="import", render_host="none",
+                page_index=0, figure_region=(200, 100, 350, 240),
+            )
+            self.assertFalse(diff_path.exists(), "a past visual report must not survive a new run")
+
+    def test_invalid_crop_records_failure_without_a_full_page_candidate(self):
+        """Invalid --region is a terminal source error, never silently ignored."""
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source, output = root / "paper.pdf", root / "out"
+            make_vector_pdf(source, drawings=2)
+            result = run_pipeline(
+                source, output, mode="import", render_host="none",
+                figure_region=(200, 30, 100, 120),
+            )
+            self.assertEqual(result["status"], "STRUCTURE_FAIL")
+            self.assertIn("INVALID_FIGURE_REGION", result["error"])
+            self.assertFalse((output / "candidate_editable.pptx").exists())
+
     def test_blank_source_writes_structural_fail_manifest_without_candidate(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

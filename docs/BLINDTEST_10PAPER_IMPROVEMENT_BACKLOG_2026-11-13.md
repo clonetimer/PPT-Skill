@@ -56,6 +56,40 @@
 - [Detailed operator guidance](P1_01_REVIEWED_GEOMETRY_BINDINGS_2026-11-14.md).
 - **Still open:** content-aware panel reflow/connector routing, domain-expert evaluation of proposed panel candidates, actual Windows PowerPoint 2016 host validation, and fresh independent blind-paper first-pass scoring. The original ten-paper strict rate remains **0/10**.
 
+### P1-01 source-crop execution consistency (2026-11-14)
+
+- Repaired the unified pipeline's `--region` boundary: previously SourceLayout
+  used the selected crop while native PDF import, source text/structure QA and
+  rendered comparison still inspected the full page. These stages now use the
+  same validated, in-memory source crop, with source PDF SHA-256 preserved.
+- A crop generates a slide at the crop's native PDF dimensions, preserves
+  independently editable intersecting images, native paths and labels, and
+  excludes source objects outside the crop. Original source PDF bytes stay
+  unchanged. Off-crop vectors no longer consume drawing budget.
+- Corrected source preflight of zero-height/width PDF line bounds: horizontal
+  and vertical strokes are still visible source marks, including thick-line
+  risks, and cannot be discarded by a strict rectangle-intersection test.
+- Invalid/out-of-page or rotated-page crop requests fail closed. The pipeline
+  removes stale source-comparison PNGs before every run.
+- Independent read-only code review found and prompted further corrections:
+  source paths excluded from crop budget are now also skipped before expensive
+  Bézier expansion; zero-width/height strokes remain in visibility checks.
+  Rotated/skewed images, partly visible source text glyphs and stroke-only
+  fringes that cannot be mapped faithfully to native objects explicitly fail
+  `UNSUPPORTED_SOURCE` instead of silently distorting or losing ink.
+- The standalone SourceLayout extractor now rejects invalid/rotated-page crops
+  consistently with the unified pipeline; API page index `-1` cannot select
+  the last page. Direct PDF import also refuses output aliases or hardlinks
+  to the source file, preserving original source bytes and SHA.
+- Behavioral tests cover these review findings, selected figure crops,
+  editable crossing vector/image objects, off-crop budget, line visibility,
+  source-pixel comparison, end-to-end QA parity and stale artifact removal.
+  Local full unittest discovery: **273 tests passed** (after preparing the
+  existing `.testtmp` directory required by one historical test).
+- This repairs correctness of the *development regression workflow*; it does
+  **not** change the frozen first-pass blind-test rate (**0/10**) or establish
+  Windows Office 2016 and independent scientific/visual acceptance.
+
 ### P0-01 — Native crop-aware image and mixed-vector importer
 **Files:** `tools/pdf_figure_import.py`; new `tools/pdf_source_assets.py`; new `tools/test_pdf_crop_assets.py`.
 

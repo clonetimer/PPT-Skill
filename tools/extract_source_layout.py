@@ -280,14 +280,15 @@ def _geometric_panel_candidates(rectangle_candidates, region):
 def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
                           figure_region: tuple[float, float, float, float] | None = None) -> dict:
     """Extract observable PDF geometry; inferred panels and graph edges remain candidates."""
+    from source_figure_crop import validate_figure_region
+    if page_index < 0:
+        raise ValueError("INVALID_SOURCE_PAGE_INDEX: zero-based page index must be non-negative")
     source_pdf = Path(source_pdf)
     with fitz.open(source_pdf) as document:
         page = document[page_index]
         page_rect = fitz.Rect(page.rect)
-        region = fitz.Rect(figure_region) if figure_region else fitz.Rect(page_rect)
-        region &= page_rect
-        if region.is_empty or region.width <= 0 or region.height <= 0:
-            raise ValueError("figure_region must intersect the selected source page")
+        checked = validate_figure_region(page, figure_region)
+        region = fitz.Rect(checked) if checked is not None else fitz.Rect(page_rect)
 
         drawings = page.get_drawings(extended=True)
         blocks = page.get_text("dict")["blocks"]

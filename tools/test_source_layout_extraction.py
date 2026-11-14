@@ -85,6 +85,27 @@ def make_single_frame_pdf(path: Path):
 
 
 class SourceLayoutExtractionTests(unittest.TestCase):
+    def test_standalone_extractor_rejects_out_of_bounds_crop_instead_of_clamping(self):
+        """SourceLayout and native import must bind exactly the same source crop."""
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "paper.pdf"
+            make_two_panel_pdf(source)
+            with self.assertRaisesRegex(ValueError, "INVALID_FIGURE_REGION"):
+                extract_source_layout(source, figure_region=(300, 0, 610, 400))
+
+    def test_standalone_extractor_rejects_rotated_page_crop(self):
+        """Rotated page coordinates cannot be silently interpreted differently."""
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "rotated.pdf"
+            doc = fitz.open()
+            page = doc.new_page(width=300, height=240)
+            page.draw_rect(fitz.Rect(20, 20, 100, 80))
+            page.set_rotation(90)
+            doc.save(source)
+            doc.close()
+            with self.assertRaisesRegex(ValueError, "UNSUPPORTED_ROTATED_SOURCE_CROP"):
+                extract_source_layout(source, figure_region=(20, 20, 100, 100))
+
     def test_explicit_panel_markers_and_boundaries_are_detected_in_source_order(self):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "two_panel.pdf"
