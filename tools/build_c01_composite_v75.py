@@ -18,7 +18,7 @@ SVG = ROOT / "examples/C01_composite_defense_slide_v75.svg"
 PPTX = ROOT / "dist/C01_composite_defense_slide_v75.pptx"
 
 PANEL_ALT = (
-    "Complete two-panel FBG-SEANet structural redraw. The upper panel shows sensor signals, "
+    "Complete two-panel FBG-SEANet structural redraw. The upper panel shows sensor signals, four stacked frequency-band subgraphs, "
     "notch filtering, frequency-band subgraphs and their connected total graph. The total graph "
     "feeds the lower SEANet diagnosis panel. The lower panel shows the GCN/pooling main route, "
     "energy-assisted branch, two SR readouts, summation, Dense and five vertically stacked class "
@@ -168,6 +168,7 @@ def annotate_accessibility(path: Path) -> dict:
         "class_output_squares": 5,
         "orange_highlight_index": 2,
         "panel_description": PANEL_ALT,
+        "reading_order": "upper FBG panel left-to-right, then lower SEANet diagnosis path left-to-right, followed by the evidence boundary and source citation",
     }
 
 
