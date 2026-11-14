@@ -45,6 +45,20 @@ relations remain unverified until the source arrowhead/legend/description is
 checked. See [source layout evidence schema](specs/source_figure_layout.schema.json)
 and [P1-01 implementation notes](docs/P1_01_SOURCE_LAYOUT_EVIDENCE_2026-11-14.md).
 
+For a frozen ten-paper development cohort, replay source-layout extraction
+with hash verification (the PDFs remain local and are not committed):
+
+~~~bash
+python tools/benchmark_source_layout.py \
+  --source-dir ./ten_papers \
+  --manifest tests/fixtures/blind10_source_regions_2026-11-14.json \
+  --output-dir ./qa/source_layout_blind10
+~~~
+
+The runner stops on any source SHA mismatch and validates every emitted
+SourceLayout JSON against the versioned schema. See the
+[ten-paper crop inventory and panel-detection findings](docs/P1_01_TEN_PAPER_SOURCE_LAYOUT_REPLAY_2026-11-14.md).
+
 The unified `reproduce_research_figure.py` entrypoint also emits
 `source_layout.json` before generating the candidate, records its hash and
 panel/element counts in `delivery_manifest.json`, and accepts a 1-based
