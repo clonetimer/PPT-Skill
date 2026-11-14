@@ -24,10 +24,10 @@
 | **P0-02** | P0 · completed | Dense PDF resource budget / graceful abort / bounded segment conversion | 1/10 direct imports timeout | P0-00 |
 | **P0-03** | P0 · completed with one source-glyph blocker documented | Source-aware text geometry, glyph/fallback integrity and overlap repair with provenance | up to 55 overlaps in imported output | P0-01 |
 | **P0-04** | P0 · completed | Fail-closed zero-content/partial/hybrid validity and per-route QA statuses | prevents false first-pass passes | P0-01, P0-02 |
-| **P1-01** | P1 · in progress | Source-layout extractor, corrected ten-paper crops, caption/hash audit and pipeline sidecar landed; unlabeled/nested panel clustering and FigureSpec/route consumption remain | 10/10 visual=2 | P0-04 |
-| **P1-02** | P1 | Evidence-based `vector/mixed/raster` route selection, non-flattening hybrid composition | vector fidelity plus local images | P0-01, P1-01 |
-| **P1-03** | P1 | Native orthogonal/curved connectors, junctions and graph enclosures with source routing fidelity | PoG, EvoOntology, HarnessMM | P1-01 |
-| **P1-04** | P1 | Network/experiment panels: data/tensor lanes, gated dual-stream, multi-panel insets, legends and image-with-vector annotations | PINN, GIN, UCFNet | P1-01 |
+| **P1-01** | P1 · implementation complete; validation gates remain | SourceLayout 1.1.0, PP-DocLayoutV3/PP-OCRv6 optional visual evidence, human-reviewed panels, reviewed geometry bindings, advisory route selection, composition manifest, PPTX provenance annotation and output audit | panel structure and hybrid object preservation | P0-04 |
+| **P1-02** | P1 · implementation in progress | Multi-dimensional reconstruction metrics: object preservation/class, paint order, text CER, full-page geometry IoU where comparable, optional visual evidence; no blended score | measurable technical reconstruction quality | P1-01 |
+| **P1-03** | P1 | Native orthogonal/curved connectors, junctions and graph enclosures with source routing fidelity | PoG, EvoOntology, HarnessMM | P1-01, P1-02 |
+| **P1-04** | P1 | Network/experiment panels: data/tensor lanes, gated dual-stream, multi-panel insets, legends and image-with-vector annotations | PINN, GIN, UCFNet | P1-01, P1-02 |
 | **P1-05** | P1 | Typography and two-size profiles: publication at source figure dimensions vs projection-ready multi-slide derivative | 10/10 readability=2 | P0-03, P1-01 |
 | **P2-01** | P2 | **Non-destructive** second-pass local repair engine, immutable first-pass output, object-level diff | correction-rate metric | P0-03, P1-02 |
 | **P2-02** | P2 | Freeze new independent-papers holdout, six-axis blinded evaluation, Office 2016 host, measured improvement vs baseline | trustworthy first-pass rate | all P0, key P1 |
