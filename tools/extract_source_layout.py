@@ -118,7 +118,7 @@ def extract_source_layout(source_pdf: Path, *, page_index: int = 0,
             rect = fitz.Rect(drawing.get("rect", page_rect)) & region
             for _, clip in clip_stack:
                 rect &= clip
-            if rect.is_empty or rect.width < 0 or rect.height < 0:
+            if rect.width < 0 or rect.height < 0 or (rect.width == 0 and rect.height == 0):
                 continue
             # Horizontal/vertical strokes have a zero-height/width PDF bbox.
             # Preserve them with a minimal geometry envelope rather than
