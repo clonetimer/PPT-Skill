@@ -87,6 +87,8 @@ def validate_review(review: dict | Path) -> None:
         require(result.get("required_discipline") == task["discipline"], f"{task_id}: discipline changed")
         reviewer_id = result.get("reviewer_id")
         require(reviewer_id in reviewers, f"{task_id}: assigned reviewer required")
+        require(type(result.get("repair_rounds")) is int and result.get("repair_rounds", -1) >= 0,
+                f"{task_id}: repair round count must be a non-negative integer")
         require(task["discipline"] in reviewers[reviewer_id]["disciplines"],
                 f"{task_id}: reviewer field does not cover {task['discipline']}")
         require(result.get("source_checked") is True, f"{task_id}: source check required")
