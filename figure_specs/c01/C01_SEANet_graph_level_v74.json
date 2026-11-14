@@ -1193,7 +1193,7 @@
       "sw": 0.7,
       "radius": 0,
       "dash": false,
-      "id": "el_0064",
+      "id": "el_0063",
       "semantic_role": "layout_shape",
       "evidence_ref": "source_1"
     },
@@ -1229,6 +1229,23 @@
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1",
       "semantic_id": "label_class_output"
+    },
+    {
+      "type": "text",
+      "text": "Lee et al. (2026), Engineering Applications of Artificial Intelligence 179, 115273 · DOI: 10.1016/j.engappai.2026.115273",
+      "x": 0.8,
+      "y": 6.85,
+      "w": 11.8,
+      "h": 0.22,
+      "size": 8.5,
+      "font": "Times New Roman",
+      "color": "#687780",
+      "bold": false,
+      "align": "left",
+      "italic": false,
+      "id": "el_0064",
+      "semantic_role": "annotation",
+      "evidence_ref": "source_1"
     }
   ],
   "schema_version": "7.6.0-dev",
