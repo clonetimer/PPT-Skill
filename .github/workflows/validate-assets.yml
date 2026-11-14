@@ -107,6 +107,7 @@ jobs:
           python -m json.tool specs/deck_spec_v75.schema.json > /dev/null
           python -m json.tool specs/deck_spec_v76.example.json > /dev/null
           python -m json.tool specs/deck_spec_v76.schema.json > /dev/null
+          python -m json.tool specs/15_figure_diagnostic_ledger_v76.json > /dev/null
           python -m json.tool figure_specs/c01/C01_composite_defense_slide.json > /dev/null
       - name: Validate FigureSpecs
         run: |
@@ -132,6 +133,7 @@ jobs:
           python tools/test_release_readiness.py
           python tools/test_repair_case_artifacts.py
           python tools/test_repair_case_deck01_round1.py
+          python tools/test_prepare_no_repair_candidates.py
           python tools/validate_output_profiles.py
           python tools/test_output_profiles.py
           python tools/check_scientific_accessibility.py
@@ -163,6 +165,8 @@ jobs:
       - name: Prepare immutable 15-figure initial cohort
         run: |
           python tools/prepare_15_figure_initial_cohort.py dist --c01-seanet-initial dist/repair_cases/C01_SEANet/rounds/first_pass.pptx --deck01-initial dist/repair_cases/DECK01/rounds/first_pass.pptx --output-dir dist/initial_pass
+      - name: Preserve diagnosed no-repair candidates
+        run: python tools/prepare_no_repair_candidates.py dist/initial_pass dist/accepted_repairs
       - name: Prepare separate review stages
         run: |
           python tools/prepare_scientific_review_bundle.py --stage initial --output dist/scientific_review_initial_v76.zip
