@@ -17,6 +17,7 @@ from figure_first_pass_gate import (
     _export_with_libreoffice,
 )
 from reproduction_release_gate import classify_release
+from extract_source_layout import extract_source_layout
 
 
 def sha256(path: Path) -> str:
@@ -38,7 +39,7 @@ def _empty_candidate() -> dict:
 
 def _clear_previous_outputs(destination: Path) -> None:
     for name in (
-        "candidate_editable.pptx", "candidate.svg", "source_preflight.json",
+        "candidate_editable.pptx", "candidate.svg", "source_preflight.json", "source_layout.json",
         "import_report.json", "semantic_audit.json", "structure_audit.json",
         "text_geometry_audit.json", "visual_audit.json",
         "office2016_ooxml_preflight.json", "quality_report.json",
@@ -59,7 +60,9 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
                  max_drawings: int = 10000,
                  max_source_segments: int = 100000,
                  max_vertices: int = 250000,
-                 max_seconds: float = 60.0) -> dict:
+                 max_seconds: float = 60.0,
+                 page_index: int = 0,
+                 figure_region: tuple[float, float, float, float] | None = None) -> dict:
     source_pdf = Path(source_pdf).resolve()
     destination = Path(destination).resolve()
     if not source_pdf.is_file():
@@ -78,6 +81,8 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
     figure_spec = Path(figure_spec).resolve() if figure_spec else None
     candidate = destination / "candidate_editable.pptx"
     source_info = {}
+    source_layout = {}
+    source_layout_error = None
     import_report = {}
     semantic_audit = None
     structure = None
@@ -90,8 +95,15 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
     render_error = None
 
     try:
-        source_info = source_profile(source_pdf)
+        source_info = source_profile(source_pdf, page=page_index)
         _write_json(destination / "source_preflight.json", source_info)
+        try:
+            source_layout = extract_source_layout(
+                source_pdf, page_index=page_index, figure_region=figure_region
+            )
+            _write_json(destination / "source_layout.json", source_layout)
+        except Exception as exc:
+            source_layout_error = f"{type(exc).__name__}: {exc}"
     except Exception as exc:
         error = f"SOURCE_PREFLIGHT_ERROR: {type(exc).__name__}: {exc}"
 
@@ -100,7 +112,7 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             if mode == "import":
                 from pdf_figure_import import convert_pdf_page
                 import_report = convert_pdf_page(
-                    source_pdf, candidate,
+                    source_pdf, candidate, page_index=page_index,
                     max_drawings=max_drawings,
                     max_source_segments=max_source_segments,
                     max_vertices=max_vertices,
@@ -145,8 +157,8 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             try:
                 from audit_imported_pdf_figure import audit_figure
                 from audit_text_geometry import audit_text_geometry
-                structure = audit_figure(source_pdf, candidate)
-                text_geometry = audit_text_geometry(source_pdf, candidate)
+                structure = audit_figure(source_pdf, candidate, page_index=page_index)
+                text_geometry = audit_text_geometry(source_pdf, candidate, page_index=page_index)
                 _write_json(destination / "structure_audit.json", structure)
                 _write_json(destination / "text_geometry_audit.json", text_geometry)
             except Exception as exc:
@@ -158,8 +170,12 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
                 if rendered_pdf is None:
                     render_error = "NO_SUPPORTED_PDF_RENDERER"
                 elif mode == "import":
-                    visual = compare_rendered_pages(source_pdf, rendered_pdf,
-                                                     preview=destination / "source_candidate_diff.png")
+                    visual = compare_rendered_pages(
+                        source_pdf, rendered_pdf,
+                        preview=destination / "source_candidate_diff.png",
+                        source_page_index=page_index,
+                        candidate_page_index=0,
+                    )
                     visual.update({
                         "status": "PASS",
                         "evidence_type": "source_comparison",
@@ -194,7 +210,11 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
         office=office if candidate.is_file() else None,
         semantic_audit=semantic_audit,
         approvals=approvals,
-        source_risks=source_info.get("risk_flags", []),
+        source_risks=(
+            list(source_info.get("risk_flags", [])) +
+            ([{"code": "SOURCE_LAYOUT_EXTRACTION_FAILED", "severity": "high"}]
+             if source_layout_error else [])
+        ),
         error=error,
         require_native=require_native,
         require_office_host=require_office_host,
@@ -211,7 +231,17 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             import_report.get("reconstruction_class") if mode == "import"
             else "figurespec_science_grounded_reinterpretation"
         ),
-        "source": {"path": str(source_pdf), "sha256": sha256(source_pdf)},
+        "source": {"path": str(source_pdf), "sha256": sha256(source_pdf),
+                   "page_index": page_index},
+        "source_layout": ({
+            "path": str(destination / "source_layout.json"),
+            "sha256": sha256(destination / "source_layout.json"),
+            "panel_detection": source_layout.get("panel_detection"),
+            "layout_element_count": len(source_layout.get("layout_elements", [])),
+            "edge_candidate_count": len(source_layout.get("edge_candidates", [])),
+            "image_asset_count": len(source_layout.get("image_assets", [])),
+        } if source_layout else None),
+        "source_layout_error": source_layout_error,
         "candidate": ({
             "path": str(candidate), "sha256": sha256(candidate),
             **candidate_info,
@@ -266,6 +296,9 @@ def main():
     parser.add_argument("--max-source-segments", type=int, default=100000)
     parser.add_argument("--max-vertices", type=int, default=250000)
     parser.add_argument("--max-seconds", type=float, default=60.0)
+    parser.add_argument("--page", type=int, default=1, help="1-based source PDF page")
+    parser.add_argument("--region", type=float, nargs=4, metavar=("X0", "Y0", "X1", "Y1"),
+                        help="optional figure crop in PDF points")
     args = parser.parse_args()
     approvals = json.loads(args.approvals_json.read_text(encoding="utf-8")) if args.approvals_json else None
     result = run_pipeline(
@@ -277,6 +310,8 @@ def main():
         max_source_segments=args.max_source_segments,
         max_vertices=args.max_vertices,
         max_seconds=args.max_seconds,
+        page_index=args.page - 1,
+        figure_region=tuple(args.region) if args.region else None,
     )
     print(json.dumps({
         "status": result["status"],
