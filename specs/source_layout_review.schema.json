@@ -33,7 +33,9 @@
         "properties": {
           "candidate_id": {"type": "string"},
           "candidate_snapshot": {"type": "object"},
-          "decision": {"enum": ["pending", "accept_region", "accept_panel", "reject", "defer"]},
+          "decision": {"enum": ["pending", "accept_region", "accept_panel", "split_region", "reject", "defer"]},
+          "split_axis": {"enum": ["horizontal", "vertical"]},
+          "split_position_pt": {"type": "number"},
           "rationale": {"type": "string"},
           "evidence_locator": {"type": "string"}
         }
