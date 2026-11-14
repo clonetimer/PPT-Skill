@@ -81,6 +81,8 @@ def audit_figure_spec_semantics(spec_path: Path) -> dict:
         blockers.append("UNDECLARED_EDGE_RENDERED")
 
     if not declared:
+        # With no declared edge contract, existing visual connector strings
+        # cannot be checked for scientific meaning; require a human audit.
         if blockers:
             status = "FAIL"
         else:
