@@ -3,7 +3,6 @@
   "source": "docs/C01_V73_SOURCE.md",
   "review_status": "source-visible two-panel redraw with total-graph input, five class outputs, exact adjacency unknown; domain and final-size review pending",
   "critical_labels": {
-    "input": "Input",
     "gcn_1": "GCN",
     "pooling_1": "pooling",
     "gcn_2": "GCN",
@@ -20,7 +19,8 @@
     "band_2": "B₂",
     "band_3": "B₃",
     "band_4": "Bq",
-    "class_output_label": "fault class"
+    "class_output_label": "fault class",
+    "input_label": "Input"
   },
   "critical_edges": [
     [
@@ -97,7 +97,6 @@
     ]
   ],
   "required_nodes": [
-    "input",
     "gcn_1",
     "pooling_1",
     "gcn_2",
@@ -116,6 +115,8 @@
     "band_4",
     "class_output",
     "class_output_label",
-    "input_graph_schematic"
+    "input_graph_schematic",
+    "input",
+    "input_label"
   ]
 }
