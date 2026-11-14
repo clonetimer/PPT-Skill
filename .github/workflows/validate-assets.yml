@@ -36,6 +36,7 @@ jobs:
           python tools/test_source_layout_extraction.py
           python tools/test_source_layout_vision.py
           python tools/test_source_layout_vision_backend.py
+          python tools/test_source_layout_vision_integration.py
           python tools/test_source_crop_manifest.py
           python tools/test_source_layout_benchmark.py
           python tools/test_source_layout_review.py
