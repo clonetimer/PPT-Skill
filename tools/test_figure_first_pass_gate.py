@@ -77,8 +77,7 @@ class FirstPassFidelityTests(unittest.TestCase):
 
     def test_preflight_detects_bboxlog_images_without_text_dict_blocks(self):
         pdf=self.root/"xref_only_image.pdf"
-        d=fitz.open();page=d.new_page(width=200,height=100)
-        page.draw_rect(fitz.Rect(0,0,0,0))
+        d=fitz.open();d.new_page(width=200,height=100)
         d.save(pdf);d.close()
         event=SimpleNamespace(visible_bbox=fitz.Rect(10,10,100,90))
         stats={"source_paint_events":1,"recovered_xrefs":1,"from_dict_blocks":0,
