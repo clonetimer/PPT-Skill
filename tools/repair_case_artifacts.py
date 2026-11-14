@@ -31,6 +31,24 @@ def _rgb(value):
         return None
 
 
+def _shape_fill_rgb(shape):
+    try:
+        if shape.fill.type is None:
+            return None
+        return _rgb(shape.fill.fore_color)
+    except (AttributeError, TypeError, ValueError):
+        return None
+
+
+def _shape_line_rgb(shape):
+    try:
+        if shape.line.fill.type is None:
+            return None
+        return _rgb(shape.line.color)
+    except (AttributeError, TypeError, ValueError):
+        return None
+
+
 def pptx_object_snapshot(path: Path) -> dict:
     """Capture editable objects with stable per-slide object keys and visual attributes."""
     prs = Presentation(path)
@@ -65,8 +83,8 @@ def pptx_object_snapshot(path: Path) -> dict:
                 "rotation": float(shape.rotation),
                 "text": text,
                 "font_runs": runs,
-                "fill": _rgb(shape.fill.fore_color) if shape.fill.type else None,
-                "line": _rgb(shape.line.color) if shape.line.fill.type else None,
+                "fill": _shape_fill_rgb(shape),
+                "line": _shape_line_rgb(shape),
             }
     return objects
 
