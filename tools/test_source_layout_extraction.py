@@ -143,6 +143,41 @@ class SourceLayoutExtractionTests(unittest.TestCase):
             jsonschema.Draft202012Validator.check_schema(schema)
             jsonschema.validate(layout, schema)
 
+    def test_standalone_cli_uses_one_based_page_and_emits_summary(self):
+        import subprocess
+        import sys
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "cli.pdf"
+            output = root / "layout.json"
+            make_two_panel_pdf(source)
+            result = subprocess.run(
+                [sys.executable, str(Path(__file__).with_name("extract_source_layout.py")),
+                 str(source), "--page", "1", "--output", str(output)],
+                capture_output=True, text=True, check=True,
+            )
+            payload = json.loads(output.read_text(encoding="utf-8"))
+            summary = json.loads(result.stdout)
+            self.assertEqual(payload["source"]["page_index"], 0)
+            self.assertEqual(summary["stroke_segment_candidates"],
+                             len(payload["stroke_segment_candidates"]))
+            self.assertIn("panels", summary)
+
+    def test_standalone_cli_rejects_zero_based_page_argument(self):
+        import subprocess
+        import sys
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "cli.pdf"
+            make_two_panel_pdf(source)
+            result = subprocess.run(
+                [sys.executable, str(Path(__file__).with_name("extract_source_layout.py")),
+                 str(source), "--page", "0", "--output", str(root / "layout.json")],
+                capture_output=True, text=True,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("1-based positive", result.stderr)
+
     def test_image_occurrences_have_source_hash_and_local_crop_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "image_panel.pdf"
