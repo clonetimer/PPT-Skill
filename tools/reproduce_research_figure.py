@@ -45,6 +45,8 @@ def _clear_previous_outputs(destination: Path) -> None:
         "candidate_editable.pptx", "candidate.svg", "source_preflight.json", "source_layout.json",
         "source_layout_review_audit.json", "source_layout_constraints.json",
         "reviewed_figure_spec.json", "source_geometry_application_audit.json",
+        "reconstruction_routes.json", "source_composition_manifest.json",
+        "source_composition_pptx_audit.json", "reconstruction_quality_metrics.json",
         "source_candidate_diff.png",
         "import_report.json", "semantic_audit.json", "structure_audit.json",
         "text_geometry_audit.json", "visual_audit.json",
@@ -99,6 +101,10 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
     source_layout_review_audit = None
     source_layout_constraints = None
     source_layout_geometry_application = None
+    reconstruction_routes = None
+    source_composition_manifest = None
+    source_composition_pptx_audit = None
+    reconstruction_quality_metrics = None
     source_layout_review_error = None
     import_report = {}
     semantic_audit = None
@@ -139,6 +145,19 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
                             source_layout_review,
                             destination / "source_layout_constraints.json",
                         )
+                        if mode == "import":
+                            from source_reconstruction_router import build_reconstruction_routes
+                            from source_region_composer import build_source_composition_manifest
+                            reconstruction_routes = build_reconstruction_routes(
+                                destination / "source_layout.json", source_layout_review
+                            )
+                            _write_json(destination / "reconstruction_routes.json", reconstruction_routes)
+                            source_composition_manifest = build_source_composition_manifest(
+                                destination / "source_layout.json",
+                                source_layout_review,
+                                destination / "reconstruction_routes.json",
+                            )
+                            _write_json(destination / "source_composition_manifest.json", source_composition_manifest)
                 except Exception as exc:
                     source_layout_review_error = (
                         f"SOURCE_LAYOUT_REVIEW_INVALID: {type(exc).__name__}: {exc}"
@@ -261,6 +280,28 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
         elif render_host == "none":
             render_error = "RENDER_HOST_DISABLED"
 
+        if mode == "import" and source_composition_manifest is not None:
+            if source_composition_manifest.get("status") == "COMPOSITION_PLAN_READY":
+                from audit_source_composition_pptx import audit_imported_pptx_against_composition
+                from reconstruction_quality_metrics import evaluate_reconstruction_quality
+                source_composition_pptx_audit = audit_imported_pptx_against_composition(
+                    destination / "source_composition_manifest.json", candidate
+                )
+                _write_json(destination / "source_composition_pptx_audit.json", source_composition_pptx_audit)
+                reconstruction_quality_metrics = evaluate_reconstruction_quality(
+                    destination / "source_composition_manifest.json",
+                    candidate,
+                    destination / "visual_audit.json" if (destination / "visual_audit.json").is_file() else None,
+                )
+                _write_json(destination / "reconstruction_quality_metrics.json", reconstruction_quality_metrics)
+            else:
+                _write_json(destination / "source_composition_pptx_audit.json", {
+                    "status": "BLOCKED",
+                    "reason": "SOURCE_COMPOSITION_MANIFEST_BLOCKED",
+                    "blockers": source_composition_manifest.get("blockers", []),
+                    "execution_authorized": False,
+                })
+
     release = classify_release(
         route=mode,
         candidate=candidate_info,
@@ -342,6 +383,14 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             "scientific_relations_verified": False,
         } if source_layout_geometry_application else None),
         "source_layout_review_error": source_layout_review_error,
+        "source_composition": ({
+            "routes_path": str(destination / "reconstruction_routes.json"),
+            "routes_sha256": sha256(destination / "reconstruction_routes.json"),
+            "manifest_path": str(destination / "source_composition_manifest.json"),
+            "manifest_sha256": sha256(destination / "source_composition_manifest.json"),
+            "status": source_composition_manifest["status"],
+            "blockers": source_composition_manifest.get("blockers", []),
+        } if source_composition_manifest else None),
         "candidate": ({
             "path": str(candidate), "sha256": sha256(candidate),
             **candidate_info,
@@ -361,6 +410,8 @@ def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
             "semantic": semantic_audit,
             "visual": visual,
             "office_ooxml": office if candidate.is_file() else None,
+            "source_composition_pptx_audit": source_composition_pptx_audit,
+            "reconstruction_quality_metrics": reconstruction_quality_metrics,
         },
         "error": error,
         "render_error": render_error,
