@@ -2,7 +2,7 @@
 
 ## 历史评审结论
 
-评审对象是 Stage 1 初始文件 C01_SEANet_initial.pptx，不是后续修复版本。修订后的评分为 **12/24，FAIL**；此前 17/24 PASS 已被评审记录撤销。
+评审对象是 Stage 1 初始文件 C01_SEANet_initial.pptx（SHA-256：1fe3fd1c42b6ab5cec60485724b3d710325be78c60b5d671c6fd27f83bd01b85），不是后续修复版本。修订后的评分为 **12/24，FAIL**；此前 17/24 PASS 已被评审记录撤销。该记录为 AI 技术评审，不是机械故障诊断领域专家签审。
 
 主要缺陷：
 1. 初始文件只绘制下方 graph-level diagnosis panel，上方 FBG construction 整体缺失。
@@ -11,9 +11,9 @@
 4. Dense 后五个纵向独立输出方块被简化为一个。
 5. 88 个对象缺少有效替代文本和整图阅读顺序。
 6. 引用和重大结构性改绘披露不足。
-7. 未提供自动化重建脚本/依赖链。
+7. 未提供自动化重建脚本/依赖链。\n\n初始评审中的 critical_scientific_error 与 undisclosed_image_processing 标记保留为历史记录，不通过修改评审文件追溯性删除；修复版应由新一轮评审重新判断。
 
-## 整改与交付分层
+## 整改与交付分层\n\n上方 FBG panel 的缺失在 C01-SEANet 作为下半部分组件摘绘时，不单独构成该组件的缺陷；但该摘绘不能作为完整两面板 graphical abstract 通过验收。完整双面板要求由 C01-composite 独立承担，并与 C01-FBG、C01-SEANet 一起审查。
 
 | 评审要求 | 当前处理 | 对应资产/自动检查 |
 |---|---|---|
