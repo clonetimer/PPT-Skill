@@ -6,7 +6,7 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.util import Inches
 
-from fifteen_figure_review_packet import TASK_FILENAMES, TASK_FINAL_FILENAMES
+from fifteen_figure_review_packet import TASK_FILENAMES, TASK_FINAL_FILENAMES, TASK_COMPANION_FILENAMES
 from prepare_no_repair_candidates import prepare
 from repair_case_artifacts import sha256_file
 from scientific_ir import ROOT
@@ -30,6 +30,8 @@ class PrepareNoRepairCandidatesTests(unittest.TestCase):
             initial.mkdir()
             for task in no_repair:
                 deck(initial / TASK_FILENAMES[task], task)
+            for task,names in TASK_COMPANION_FILENAMES.items():
+                for name in names:deck(initial/name,task+" companion")
             result = prepare(initial, final)
             self.assertEqual(set(result["copied"]), set(no_repair))
             for task in no_repair:
@@ -37,6 +39,8 @@ class PrepareNoRepairCandidatesTests(unittest.TestCase):
                     sha256_file(initial / TASK_FILENAMES[task]),
                     sha256_file(final / TASK_FINAL_FILENAMES[task]),
                 )
+            self.assertTrue((final/"Q08_wine_strip.pptx").is_file())
+            self.assertIn("Q07:Q08_wine_strip.pptx",result["copied"])
             manifest = json.loads((final / "no_repair_candidate_manifest.json").read_text())
             self.assertEqual(set(manifest["no_confirmed_defect_tasks"]), set(no_repair))
 
