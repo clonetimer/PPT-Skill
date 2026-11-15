@@ -129,7 +129,8 @@
       "tools/build_c01_composite_explainer_v76.py",
       "tools/validate_c01_composite_explainer_v76.py",
       "tools/test_c01_composite_explainer_v76.py",
-      "tools/test_audit_pptx.py"
+      "tools/test_audit_pptx.py",
+      "tools/build_c01_v76_base.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
