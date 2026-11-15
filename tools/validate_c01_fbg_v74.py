@@ -26,12 +26,12 @@ def validate():
     required=[
         "Graph Construction (Time-Frequency Graph)",
         "Band-pass filters","Total graph","OCF","Notch filter",
-        "operational component\nremoved","Sub graph 1:\\n1st band",
-        "Sub graph 2:\\n2nd band","Sub graph 3:\\n3rd band","Sub graph N:\\nNth band",
+        "operational component\nremoved","Sub graph 1:\n1st band",
+        "Sub graph 2:\n2nd band","Sub graph 3:\n3rd band","Sub graph N:\nNth band",
         "Frequency","Fault sensitivity cues clearer (qualitative)"
     ]
-    normalized={label.casefold().replace("\\r\\n","\\n") for label in labels}
-    missing=[label for label in required if label.casefold().replace("\\r\\n","\\n") not in normalized]
+    normalized={label.casefold().replace("\r\n","\n") for label in labels}
+    missing=[label for label in required if label.casefold().replace("\r\n","\n") not in normalized]
     assert not missing, missing
     assert sum(label=="Fault sensitivity" for label in labels)==2
     graphs=[e for e in spec["elements"] if e["type"]=="graph"]
