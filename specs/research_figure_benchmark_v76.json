@@ -105,27 +105,29 @@
       "source": "docs/C01_V73_SOURCE.md",
       "input": "figure_specs/c01/C01_SEANet_graph_level_v74.json",
       "related_inputs": [
-        "docs/C01_V76_SOURCE_CORRECTION.md"
+        "docs/C01_V76_SOURCE_CORRECTION.md",
+        "docs/C01_SEANet_STAGE1_RECONCILIATION_V76.md"
       ],
       "expected": [
-        "GCN/pooling main route reaches SR then summation and Dense classification",
-        "EA feeds back to the first GCN; first pooling branches to a second SR",
-        "SR means sensitivity-aware readout",
-        "input total graph is shown as a stacked schematic multi-subgraph representation",
-        "both pooling modules use source-like vertical sides and slanted top/bottom edges",
+        "the standalone SEANet asset is explicitly disclosed as a lower-panel excerpt, while the complete two-panel FBG-SEANet view is delivered separately",
+        "the main GCN/pooling route and the Input-to-EA-to-first-GCN branch are source-aligned",
+        "the first pooling output branches to a second readout and both readout paths converge at summation before Dense",
+        "both pooling modules use source-like quadrilateral geometry with near-vertical sides and slanted top and bottom edges",
+        "the Input is shown as a stacked schematic multi-subgraph representation, not a single flattened graph",
         "Dense output contains five independent stacked squares with the second highlighted",
-        "the graph-level figure is explicitly disclosed as a lower-panel excerpt, not the complete two-panel graphical abstract; it points to C01_FBG_construction and C01_composite"
+        "the author-lab visible readout label IR layer is preserved and the public abstract's SR terminology is disclosed as unresolved",
+        "all editable objects have alternative text and the excerpt scope/source attribution are visible"
       ],
       "traps": [
-        "incorrect EA-to-lower-SR shortcut",
-        "missing Dense or parallel pooling-to-SR branch",
-        "SR/EA swap",
+        "incorrect EA-to-lower-readout shortcut",
+        "missing Dense or parallel pooling-to-readout branch",
+        "silently replacing source-visible IR layer with SR or claiming the terminology discrepancy is resolved",
         "single flattened input graph replacing the stacked total-graph symbol",
-        "generic trapezoid geometry replacing the source pooling silhouette",
+        "axis-aligned rectangles or generic symmetric trapezoids replacing source-like pooling quadrilaterals",
         "single output square replacing five class-output squares",
         "presenting the lower-panel excerpt as the complete two-panel graphical abstract",
         "claiming numerical adjacency or pixel-perfect reproduction",
-        "treating the standalone SEANet lower-panel excerpt as a complete redraw of the two-panel graphical abstract"
+        "claiming the publisher high-resolution graphical abstract was visually inspected"
       ],
       "status": "automated_fixture"
     },
