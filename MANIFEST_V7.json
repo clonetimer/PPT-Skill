@@ -114,7 +114,9 @@
       "tools/repair_case_deck01_round1.py",
       "tools/test_repair_case_deck01_round1.py",
       "tools/prepare_no_repair_candidates.py",
-      "tools/test_prepare_no_repair_candidates.py"
+      "tools/test_prepare_no_repair_candidates.py",
+      "tools/package_15_final_candidates.py",
+      "tools/test_package_15_final_candidates.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -180,7 +182,8 @@
       "dist/DECK01_c01_defense_v76.pdf",
       "dist/DECK01_c01_defense_v76_slide_1.png",
       "dist/DECK01_c01_defense_v76_slide_2.png",
-      "dist/DECK01_c01_defense_v76_slide_3.png"
+      "dist/DECK01_c01_defense_v76_slide_3.png",
+      "dist/PPT-Skill_15_final_candidates_v76.zip"
     ],
     "planning_specs": [
       "specs/deck_spec_v75.example.json",
