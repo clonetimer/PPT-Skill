@@ -76,20 +76,24 @@
       "discipline": "machinery_fault_diagnosis",
       "mode": "presentation",
       "source": "docs/C01_V73_SOURCE.md",
-      "input": "figure_specs/c01/C01_FBG_construction.json",
+      "input": "figure_specs/c01/C01_FBG_construction_v74.json",
       "related_inputs": [
         "docs/C01_LITERATURE_COMPARISON_2026-11-07.md"
       ],
       "expected": [
-        "frequency-band graph terminology matches the publisher",
-        "sensor traces feed OCF/notch filtering with clearer fault cues",
-        "band-pass filtering yields connected band subgraphs and a total graph"
+        "the original source-visible title Graph Construction (Time-Frequency Graph) is preserved",
+        "the paper method term Frequency-band graph (FBG) is identified in a subtitle",
+        "OCF/notch filtering is shown with qualitative fault-sensitivity cues before and after processing",
+        "band-pass filters create one subgraph per frequency band",
+        "the first, second, third and Nth band labels and frequency direction are visible",
+        "the frequency-band subgraphs connect to a total graph",
+        "sensor glyphs, waveforms and graph coordinates remain explicitly schematic"
       ],
       "traps": [
-        "time-frequency graph terminology drift",
-        "missing OCF effect",
-        "invented frequency response",
-        "claiming numerical adjacency"
+        "replacing the source-visible Time-Frequency Graph title with the paper-method term",
+        "omitting the frequency direction or ordinal band labels",
+        "claiming numerical frequency cutoffs or measured waveform amplitudes without evidence",
+        "presenting schematic inter-band links as a numerical adjacency matrix"
       ],
       "status": "automated_fixture"
     },
