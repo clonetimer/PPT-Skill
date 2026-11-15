@@ -100,8 +100,8 @@
       "layout": "composite_method",
       "figure_ref": "figure_specs/c01/C01_composite_defense_slide_v75.json",
       "on_slide": [
-        "Frequency-band graph",
-        "Graph-level diagnosis",
+        "FBG-SEANet: frequency-band graph construction and diagnosis",
+        "Graph-level fault diagnosis framework",
         "fault class"
       ],
       "speaker_notes": "Walk through OCF and band subgraphs. In SEANet, EA feeds the first GCN, first pooling branches to the lower SR, and both SR paths merge before Dense classification and five independent class-output squares (second highlighted orange). State that the input graph icon, sensor glyphs and adjacency are schematic."
