@@ -55,7 +55,8 @@ def validate():
         raise AssertionError("SOURCE_VISIBLE_IR_LABELS_AND_TERMINOLOGY_NOTE_REQUIRED")
     if "SR" not in visible_labels or "unresolved" not in visible_labels.lower():
         raise AssertionError("IR_SR_TERMINOLOGY_DISCREPANCY_NOT_DISCLOSED")
-    if "IR/SR" not in " ".join(spec["figure_contract"]["unverified"]):
+    unverified_text = " ".join(spec["figure_contract"]["unverified"]).lower()
+    if "ir layer" not in unverified_text or "sr" not in unverified_text or "unresolved" not in unverified_text:
         raise AssertionError("IR_SR_UNVERIFIED_BOUNDARY_MISSING")
     if "10.1016/j.engappai.2026.115273" not in " ".join(e.get("text", "") for e in elements):
         raise AssertionError("SOURCE_DOI_MISSING")
