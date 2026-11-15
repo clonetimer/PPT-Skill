@@ -116,7 +116,8 @@
       "tools/prepare_no_repair_candidates.py",
       "tools/test_prepare_no_repair_candidates.py",
       "tools/package_15_final_candidates.py",
-      "tools/test_package_15_final_candidates.py"
+      "tools/test_package_15_final_candidates.py",
+      "tools/validate_b01_engineering_fdir.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -137,7 +138,9 @@
       "docs/C01_COMPOSITE_V75_QA.md",
       "docs/FINAL_DELIVERY_SUCCESS_METRICS_V76.md",
       "docs/LOCAL_REPAIR_CASE_TEMPLATE_V76.md",
-      "docs/15_FIGURE_DIAGNOSTIC_LEDGER_V76.md"
+      "docs/15_FIGURE_DIAGNOSTIC_LEDGER_V76.md",
+      "docs/B01_STATE_TRANSITION_AND_AUTHORITY_TABLE_V76.md",
+      "docs/B01_STATE_TRANSITIONS_V76.csv"
     ],
     "generated_outputs": [
       "dist/C01_FBG_construction_v73.pptx",
