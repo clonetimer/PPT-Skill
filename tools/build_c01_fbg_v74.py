@@ -126,7 +126,7 @@ def build_spec() -> dict:
         "id":"source_1",
         "source":"docs/C01_V73_SOURCE.md",
         "source_file_sha256":source_hash,
-        "source_locator":"Author-published graphical abstract, upper Graph Construction (Time-Frequency Graph) panel; article abstract and method description for FBG terminology",
+        "source_locator":"Author-lab graphical abstract, upper Graph Construction (Time-Frequency Graph) panel; public abstract and method description for FBG terminology; publisher high-resolution image not directly accessed",
         "status":"source_visible_redraw",
         "scope":"Sensor signals, OCF/notch filter, qualitative fault-sensitivity cue, band-pass subgraphs, frequency direction and total graph. Sensor glyphs, waveforms and graph coordinates are schematic.",
         "reuse":"derivative_redraw_only"
