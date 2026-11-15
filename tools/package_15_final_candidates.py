@@ -9,6 +9,7 @@ import zipfile
 from pathlib import Path
 
 from validate_research_benchmark import OUTPUTS, artifact_paths
+from fifteen_figure_review_packet import TASK_SUPPLEMENTARY_FILENAMES
 from scientific_ir import ROOT
 
 
@@ -58,6 +59,14 @@ def build(output: Path, root: Path = ROOT) -> dict:
         entries.append({"task_id":"QUANTITATIVE_AUDIT","source":relative,
                         "archive_path":"03_审计证据/"+Path(relative).name,
                         "size_bytes":source.stat().st_size,"sha256":sha256(source)})
+    for task_id, filenames in TASK_SUPPLEMENTARY_FILENAMES.items():
+        for filename in filenames:
+            source=root/"dist/accepted_repairs"/filename
+            if not source.is_file():
+                raise FileNotFoundError(f"SUPPLEMENTARY_FINAL_CANDIDATE_MISSING:{task_id}:{filename}")
+            entries.append({"task_id":task_id,"source":str(source.relative_to(root)),
+                            "archive_path":f"02_最终候选版/{task_id}/02_两页演示版/{filename}",
+                            "size_bytes":source.stat().st_size,"sha256":sha256(source)})
     q07_files = [item for item in entries if item["task_id"] == "Q07"]
     q07_scatter = [item for item in q07_files if "/01_散点/" in item["archive_path"]]
     q07_distribution = [item for item in q07_files if "/02_分布/" in item["archive_path"]]
