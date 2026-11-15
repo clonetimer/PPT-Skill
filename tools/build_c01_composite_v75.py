@@ -71,8 +71,7 @@ def add_input_graph_icon(spec: dict) -> None:
 
 def add_class_output(spec: dict) -> None:
     elements = spec["elements"]
-    line = next(e for e in elements if e.get("id") == "el_0089")
-    label = next(e for e in elements if e.get("id") == "el_0090")
+    line = next(e for e in elements if e.get("semantic_link") == "dense__class_output")
     group = {
         "type": "rect", "x": 8.89, "y": 5.00, "w": 0.15, "h": 0.85,
         "fill": "#FFFFFF", "stroke": "#FFFFFF", "sw": 0.1,
@@ -82,11 +81,13 @@ def add_class_output(spec: dict) -> None:
     }
     # The semantic group is the endpoint of Dense -> class output; visible squares remain independent.
     line["semantic_link"] = "dense__class_output"
-    label.update(text="fault class", x=8.58, y=5.91, w=0.68, h=0.21,
-                 size=9.5, align="center", color="#687780",
-                 semantic_id="class_output_label", semantic_role="scientific_label")
-    index = elements.index(line)
-    elements.insert(index, group)
+    label = {
+        "type":"text","text":"fault class","x":8.58,"y":5.91,"w":0.68,"h":0.21,
+        "size":9.5,"align":"center","color":"#687780",
+        "id":"el_0136","semantic_id":"class_output_label",
+        "semantic_role":"scientific_label","evidence_ref":"source_1",
+    }
+    elements.append(group)
     squares = []
     for i in range(5):
         square = {
@@ -97,8 +98,8 @@ def add_class_output(spec: dict) -> None:
             "semantic_role": "layout_shape", "evidence_ref": "source_1",
         }
         squares.append(square)
-    label_index = elements.index(label)
-    elements[label_index:label_index] = squares
+    elements.extend(squares)
+    elements.append(label)
     spec["semantic_edges"] = [*spec["semantic_edges"], ["dense", "class_output"]]
 
 
