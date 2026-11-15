@@ -19,8 +19,7 @@ SVG = ROOT / "examples/C01_composite_defense_slide_v75.svg"
 PPTX = ROOT / "dist/C01_composite_defense_slide_v75.pptx"
 
 PANEL_ALT = (
-    "Complete two-panel FBG-SEANet structural redraw. The upper panel shows sensor signals, four stacked frequency-band subgraphs, "
-    "notch filtering, frequency-band subgraphs and their connected total graph. The total graph "
+    "Complete two-panel FBG-SEANet structural redraw. The upper panel shows sensor signals, OCF/notch and band-pass filtering, the first, second, third and Nth band subgraphs along the frequency axis, and their connected total graph. The total graph "
     "feeds the lower SEANet diagnosis panel. The lower panel shows the GCN/pooling main route, "
     "energy-assisted branch, two IR-labelled readout blocks, summation, Dense and five vertically stacked class "
     "outputs with the second highlighted. Sensor glyphs and graph adjacency are schematic. The author-lab graphic "
