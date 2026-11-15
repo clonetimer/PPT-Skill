@@ -23,7 +23,7 @@ ACCEPTED = ROOT / "dist/accepted_repairs/C01_composite_explainer_v76.pptx"
 
 DESCRIPTIONS = (
     "Slide 1 of 2: Graph Construction (Time-Frequency Graph), corresponding to frequency-band graph (FBG) construction in the paper. Sensor signals pass through OCF/notch filtering with qualitative fault-sensitivity cues; band-pass filters form ordinal frequency-band subgraphs that connect to a total graph. Waveforms and graph coordinates are schematic.",
-    "Slide 2 of 2: SEANet graph-level diagnosis. The total graph constructed on slide 1 is the Input. The main GCN/pooling route and energy-assisted branch feed two sensitivity-aware readout (SR) paths, which are summed before Dense classification into five class outputs. Graph coordinates are schematic.",
+    "Slide 2 of 2: SEANet graph-level diagnosis. The total graph constructed on slide 1 is the Input. The main GCN/pooling route and energy-assisted branch feed two readout paths, which are summed before Dense classification into five class outputs. The author-lab figure appears to label both readout blocks IR layer; the public abstract uses SR for sensitivity-aware readout. The discrepancy is unresolved and the source-visible IR label is preserved. Graph coordinates are schematic.",
 )
 
 
