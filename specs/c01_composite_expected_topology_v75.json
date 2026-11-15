@@ -1,7 +1,7 @@
 {
   "figure_id": "C01_composite_defense_slide_v75",
   "source": "docs/C01_V73_SOURCE.md",
-  "review_status": "source-visible two-panel redraw with total-graph input, four stacked input band-subgraphs, five class outputs, exact adjacency unknown; domain and final-size review pending",
+  "review_status": "author_lab_graphical_abstract_checked; publisher_high_resolution_source_not_accessible; IR_SR_readout_label_discrepancy_unresolved; exact_adjacency_unknown; domain_and_final_size_review_pending",
   "critical_labels": {
     "gcn_1": "GCN",
     "pooling_1": "pooling",
