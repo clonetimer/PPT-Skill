@@ -146,6 +146,11 @@ class ReviewPacketTests(unittest.TestCase):
                     first=initial/name;last=final/name
                     deck(first,task+" companion")
                     last.write_bytes(first.read_bytes())
+            for task,names in TASK_SUPPLEMENTARY_FILENAMES.items():
+                for name in names:
+                    path=final/name
+                    path.parent.mkdir(parents=True,exist_ok=True)
+                    path.write_bytes(b"review supplementary artifact")
             result=build_packet(initial,final,out)
         rows={row["task_id"]:row for row in result["tasks"]}
         self.assertEqual(set(rows),set(TASKS))
