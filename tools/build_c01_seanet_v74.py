@@ -79,7 +79,7 @@ def main():
     spec = json.loads(SPEC.read_text(encoding="utf-8"))
     source_path = ROOT / spec["evidence_records"][0]["source"]
     spec["evidence_records"][0]["source_file_sha256"] = hashlib.sha256(source_path.read_bytes()).hexdigest()
-    SPEC.write_text(json.dumps(spec, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    SPEC.write_text(json.dumps(spec, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     SVG.parent.mkdir(parents=True, exist_ok=True)
     PPTX.parent.mkdir(parents=True, exist_ok=True)
     render(spec, SVG, PPTX)
