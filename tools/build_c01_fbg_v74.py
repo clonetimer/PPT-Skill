@@ -110,7 +110,7 @@ def build_spec() -> dict:
     )
     spec["figure_contract"] = {
         "claim": spec["claim"],
-        "archetype": "schematic_led_pipeline",
+        "archetype": "schematic_led_composite",
         "output_mode": "presentation",
         "unverified": [
             "Exact numerical frequency cutoffs",
