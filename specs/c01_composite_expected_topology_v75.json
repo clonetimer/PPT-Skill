@@ -7,9 +7,9 @@
     "pooling_1": "pooling",
     "gcn_2": "GCN",
     "pooling_2": "pooling",
-    "sr_main": "SR",
+    "sr_main": "IR layer",
     "ea": "Energy-assisted module",
-    "sr_ea": "SR",
+    "sr_ea": "IR layer",
     "sum": "+",
     "dense": "Dense",
     "ocf": "OCF / notch filter",
@@ -118,5 +118,6 @@
     "class_output",
     "class_output_label",
     "input_label"
-  ]
+  ],
+  "readout_label_discrepancy": "Author-lab graphical abstract appears to label both readout blocks IR layer; public abstract uses SR. Unresolved; do not silently harmonize."
 }
