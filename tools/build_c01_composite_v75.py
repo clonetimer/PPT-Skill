@@ -9,7 +9,7 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
-from build_c01_v74 import make_spec
+from build_c01_v76_base import make_spec
 from render_figure_spec import render
 from scientific_ir import CONTRACTS
 
@@ -29,9 +29,10 @@ PANEL_ALT = (
 
 def add_input_graph_icon(spec: dict) -> None:
     elements = spec["elements"]
-    input_box = next(e for e in elements if e.get("semantic_id") == "input" and e["type"] == "rect")
-    input_box.update(semantic_role="scientific_object")
-    label = next(e for e in elements if e.get("semantic_id") == "input" and e["type"] == "text" and e.get("text") == "Input")
+    input_box = next(e for e in elements if e["type"]=="rect" and abs(e.get("x",0)-.70)<1e-6
+                     and abs(e.get("y",0)-5.17)<1e-6 and abs(e.get("w",0)-1.00)<1e-6)
+    input_box.update(semantic_id="input", semantic_role="scientific_object")
+    label = next(e for e in elements if e["type"]=="text" and e.get("text")=="Input")
     label.update(x=0.75, y=5.29, w=0.43, h=0.27, align="left", semantic_id="input_label")
 
     # Four compact band-subgraph rows make the total-graph input structure visible.
