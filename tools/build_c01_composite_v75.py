@@ -27,6 +27,22 @@ PANEL_ALT = (
 )
 
 
+def reserve_added_element_ids(spec: dict) -> None:
+    """Move base elements away from the stable IDs reserved for v7.5 additions."""
+    reserved={f"el_{index:04d}" for index in range(120,137)}
+    used={element.get("id") for element in spec["elements"]}
+    next_id=200
+    for element in spec["elements"]:
+        if element.get("id") in reserved:
+            while f"el_{next_id:04d}" in used or f"el_{next_id:04d}" in reserved:
+                next_id+=1
+            old=element["id"]
+            element["id"]=f"el_{next_id:04d}"
+            used.add(element["id"])
+            used.discard(old)
+            next_id+=1
+
+
 def add_input_graph_icon(spec: dict) -> None:
     elements = spec["elements"]
     input_box = next(e for e in elements if e["type"]=="rect" and abs(e.get("x",0)-.70)<1e-6
@@ -181,6 +197,7 @@ def annotate_accessibility(path: Path) -> dict:
 
 def build_spec() -> dict:
     spec = copy.deepcopy(make_spec())
+    reserve_added_element_ids(spec)
     add_input_graph_icon(spec)
     add_class_output(spec)
     spec["id"] = "C01_composite_defense_slide_v75"
