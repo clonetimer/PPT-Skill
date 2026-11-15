@@ -16,8 +16,8 @@
       "note": "The 40×40 grid and L=5 temporal stack are shown as schematic; channel-to-cell coordinates are not asserted."
     },
     "C01_FBG": {
-      "status": "NO_CONFIRMED_DEFECT",
-      "note": "Frequency-band terminology, OCF notch-filter role, band-pass filtering, band subgraphs and total graph are present; exact adjacency remains schematic."
+      "status": "REPAIR_EXECUTED",
+      "note": "One source-grounded repair round restores the exact author-graphic title Time-Frequency Graph while retaining the paper term FBG in a subtitle; adds the frequency-direction arrow, ordinal subgraph labels, ellipsis, and qualitative fault-sensitivity cues. Numerical cutoffs, waveform values and adjacency remain schematic; independent domain/final-size review is pending."
     },
     "C01_SEANet": {
       "status": "REPAIR_EXECUTED",
