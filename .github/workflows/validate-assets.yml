@@ -168,6 +168,7 @@ jobs:
           python tools/audit_pptx.py dist/C01_SEANet_graph_level_v73.pptx --strict
           python tools/audit_pptx.py dist/C01_SEANet_graph_level_v74.pptx --strict
           python tools/audit_pptx.py dist/C01_composite_defense_slide_v75.pptx --strict
+          python tools/audit_pptx.py dist/C01_composite_explainer_v76.pptx --strict
           python tools/audit_pptx.py dist/C01_composite_defense_slide_v74.pptx --strict
           python tools/audit_pptx.py dist/Q01_iris_scatter.pptx --strict
           python tools/audit_pptx.py dist/Q02_iris_strip.pptx --strict
