@@ -117,7 +117,9 @@
       "tools/test_prepare_no_repair_candidates.py",
       "tools/package_15_final_candidates.py",
       "tools/test_package_15_final_candidates.py",
-      "tools/validate_b01_engineering_fdir.py"
+      "tools/validate_b01_engineering_fdir.py",
+      "tools/export_quantitative_reproduction_audit.py",
+      "tools/test_export_quantitative_reproduction_audit.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -186,7 +188,9 @@
       "dist/DECK01_c01_defense_v76_slide_1.png",
       "dist/DECK01_c01_defense_v76_slide_2.png",
       "dist/DECK01_c01_defense_v76_slide_3.png",
-      "dist/PPT-Skill_15_final_candidates_v76.zip"
+      "dist/PPT-Skill_15_final_candidates_v76.zip",
+      "dist/quantitative_reproduction_audit_v76.json",
+      "dist/quantitative_point_traceability_v76.csv"
     ],
     "planning_specs": [
       "specs/deck_spec_v75.example.json",
