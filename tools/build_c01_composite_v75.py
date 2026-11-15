@@ -22,8 +22,9 @@ PANEL_ALT = (
     "Complete two-panel FBG-SEANet structural redraw. The upper panel shows sensor signals, four stacked frequency-band subgraphs, "
     "notch filtering, frequency-band subgraphs and their connected total graph. The total graph "
     "feeds the lower SEANet diagnosis panel. The lower panel shows the GCN/pooling main route, "
-    "energy-assisted branch, two SR readouts, summation, Dense and five vertically stacked class "
-    "outputs with the second highlighted. Sensor glyphs and graph adjacency are schematic."
+    "energy-assisted branch, two IR-labelled readout blocks, summation, Dense and five vertically stacked class "
+    "outputs with the second highlighted. Sensor glyphs and graph adjacency are schematic. The author-lab graphic "
+    "appears to label both readouts IR; the public abstract uses SR; the terminology discrepancy remains unresolved."
 )
 
 
