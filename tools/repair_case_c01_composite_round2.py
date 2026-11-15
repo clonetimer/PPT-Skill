@@ -99,7 +99,12 @@ def mechanical_audit(path: Path) -> dict:
             iw = max(0, min(a.left + a.width, b.left + b.width) - max(a.left, b.left))
             ih = max(0, min(a.top + a.height, b.top + b.height) - max(a.top, b.top))
             if iw > Inches(0.03) and ih > Inches(0.03):
-                overlaps.append((a.name, b.name))
+                overlaps.append({
+                    "shape_a":a.name,"shape_b":b.name,
+                    "text_a":a.text,"text_b":b.text,
+                    "bbox_a":[a.left,a.top,a.width,a.height],
+                    "bbox_b":[b.left,b.top,b.width,b.height],
+                })
     if overlaps:
         raise AssertionError("INTERMEDIATE_TEXT_OVERLAPS:" + repr(overlaps))
     missing_alt = [s.name for s in shapes if not any(
