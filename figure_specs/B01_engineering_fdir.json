@@ -251,20 +251,6 @@
     },
     {
       "type": "text",
-      "text": "0.1 s",
-      "x": 3.15,
-      "y": 1.82,
-      "w": 0.55,
-      "h": 0.2,
-      "size": 11.5,
-      "color": "#65717C",
-      "font": "Microsoft YaHei",
-      "id": "el_0018",
-      "semantic_role": "annotation",
-      "evidence_ref": "source_1"
-    },
-    {
-      "type": "text",
       "text": "diag.",
       "x": 6.29,
       "y": 1.82,
@@ -657,6 +643,21 @@
       "id": "el_0048",
       "semantic_role": "annotation",
       "evidence_ref": "source_1"
+    },
+    {
+      "type": "text",
+      "text": "Engineering concept schematic · no mission-specific timing is asserted.",
+      "x": 0.58,
+      "y": 6.82,
+      "w": 12.17,
+      "h": 0.24,
+      "size": 10.5,
+      "color": "#65717C",
+      "font": "Microsoft YaHei",
+      "align": "left",
+      "id": "el_0049",
+      "semantic_role": "evidence_boundary",
+      "evidence_ref": "source_1"
     }
   ],
   "schema_version": "7.6.0-dev",
@@ -665,7 +666,7 @@
     "archetype": "schematic_led_composite",
     "output_mode": "presentation",
     "unverified": [
-      "Mission-specific timing and authorization rules require a primary source."
+      "Mission-specific timing and authorization rules require a primary source; no timing value is asserted in this diagram."
     ]
   },
   "evidence_records": [
