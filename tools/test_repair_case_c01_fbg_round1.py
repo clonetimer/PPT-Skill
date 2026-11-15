@@ -1,5 +1,7 @@
 import json
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -14,6 +16,8 @@ from scientific_ir import ROOT
                      "LibreOffice and Poppler are required for C01-FBG repair evidence")
 class C01FbgRepairRoundOneTests(unittest.TestCase):
     def test_source_title_and_region_repair_has_immutable_round_and_render_evidence(self):
+        subprocess.run([sys.executable,str(ROOT/"tools/build_c01_v73.py")],check=True)
+        subprocess.run([sys.executable,str(ROOT/"tools/build_c01_fbg_v74.py")],check=True)
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder)
             case=root/"case"
