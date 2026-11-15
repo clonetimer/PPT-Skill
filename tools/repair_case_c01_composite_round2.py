@@ -20,6 +20,7 @@ from pptx.util import Inches
 from build_c01_v74 import make_spec as make_v74_spec
 from build_c01_composite_v75 import (
     add_input_graph_icon,
+    reserve_added_element_ids,
     annotate_accessibility,
     build_spec,
 )
@@ -167,6 +168,7 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
     # Round 01: restore four stacked, editable band subgraphs and nine inter-band connectors inside the Input block.
     base_spec = copy.deepcopy(make_v74_spec())
     round_01_spec = copy.deepcopy(base_spec)
+    reserve_added_element_ids(round_01_spec)
     add_input_graph_icon(round_01_spec)
     round_01_spec["id"] = "C01_composite_defense_slide"
     round_01_spec["version"] = "7.4.1"
