@@ -68,6 +68,7 @@ jobs:
           python tools/test_figure_first_pass_gate.py
           python tools/test_audit_source_grounded_radar.py
           python tools/test_unseen_figure_families.py
+          python tools/test_image_first_workflow.py
       - name: Build B01/F07
         run: |
           python tools/build_v71_examples.py
@@ -125,6 +126,8 @@ jobs:
           python -m json.tool specs/deck_spec_v76.example.json > /dev/null
           python -m json.tool specs/deck_spec_v76.schema.json > /dev/null
           python -m json.tool specs/15_figure_diagnostic_ledger_v76.json > /dev/null
+          python -m json.tool specs/image_first_workflow_v8.schema.json > /dev/null
+          python -m json.tool specs/image_first_workflow_v8.example.json > /dev/null
           python -m json.tool figure_specs/c01/C01_composite_defense_slide.json > /dev/null
       - name: Validate FigureSpecs
         run: |
@@ -135,6 +138,7 @@ jobs:
           python tools/validate_c01_composite_v75.py
           python tools/validate_deck_spec.py
           python tools/validate_deck_spec_v76.py
+          python tools/validate_image_first_workflow.py specs/image_first_workflow_v8.example.json
           python tools/validate_scientific_ir.py
           python tools/validate_quantitative_examples.py
           python tools/export_quantitative_reproduction_audit.py

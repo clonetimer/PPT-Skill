@@ -1,0 +1,986 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clonetimer/PPT-Skill/specs/image_first_workflow_v8.schema.json",
+  "title": "PPT-Skill Image-first slide workflow v8",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "workflow_id",
+    "mode",
+    "deck_spec_ref",
+    "slide_id",
+    "slide_index",
+    "content_lock",
+    "stage_a",
+    "stage_b"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "8.0.0-dev"
+    },
+    "workflow_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "mode": {
+      "const": "image_first"
+    },
+    "deck_spec_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "slide_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "slide_index": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "content_lock": {
+      "$ref": "#/$defs/contentLock"
+    },
+    "stage_a": {
+      "$ref": "#/$defs/stageA"
+    },
+    "stage_b": {
+      "$ref": "#/$defs/stageB"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "stage_a": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "generated",
+                  "needs_revision",
+                  "approved",
+                  "locked"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage_a": {
+            "required": [
+              "target_image"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage_a": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "approved",
+                  "locked"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage_a": {
+            "properties": {
+              "review": {
+                "properties": {
+                  "decision": {
+                    "const": "approved"
+                  },
+                  "reviewer": {
+                    "$ref": "#/$defs/humanReviewer"
+                  },
+                  "checks": {
+                    "$ref": "#/$defs/approvedChecks"
+                  },
+                  "issues": {
+                    "maxItems": 0
+                  }
+                },
+                "required": [
+                  "decision",
+                  "reviewer",
+                  "reviewed_at",
+                  "checks",
+                  "issues"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage_a": {
+            "properties": {
+              "status": {
+                "const": "needs_revision"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage_a": {
+            "properties": {
+              "review": {
+                "properties": {
+                  "decision": {
+                    "const": "revise"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage_b": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "in_progress",
+                  "reconstructed",
+                  "audited",
+                  "accepted"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage_a": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "approved",
+                  "locked"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage_b": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "reconstructed",
+                  "audited",
+                  "accepted"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage_b": {
+            "required": [
+              "target_image_sha256",
+              "pptx",
+              "rendered_preview",
+              "object_inventory",
+              "audit"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage_b": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "audited",
+                  "accepted"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage_b": {
+            "required": [
+              "parity"
+            ],
+            "properties": {
+              "audit": {
+                "properties": {
+                  "status": {
+                    "const": "pass"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage_b": {
+            "properties": {
+              "status": {
+                "const": "accepted"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage_b": {
+            "properties": {
+              "parity": {
+                "properties": {
+                  "human_review": {
+                    "properties": {
+                      "decision": {
+                        "const": "approved"
+                      },
+                      "reviewer": {
+                        "$ref": "#/$defs/humanReviewer"
+                      },
+                      "reviewed_at": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "decision",
+                      "reviewer"
+                    ]
+                  }
+                }
+              },
+              "audit": {
+                "properties": {
+                  "office_2016_roundtrip": {
+                    "const": "passed"
+                  },
+                  "office_2016_evidence": {
+                    "$ref": "#/$defs/fileAsset"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "fileAsset": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "additionalProperties": false
+    },
+    "imageAsset": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256",
+        "width_px",
+        "height_px",
+        "media_type"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "width_px": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height_px": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "media_type": {
+          "enum": [
+            "image/png",
+            "image/jpeg",
+            "image/webp"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "contentLock": {
+      "type": "object",
+      "required": [
+        "claim",
+        "on_slide",
+        "speaker_notes",
+        "evidence",
+        "visual_constraints"
+      ],
+      "properties": {
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "on_slide": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "speaker_notes": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "source",
+              "status"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "source_visible",
+                  "paper_grounded",
+                  "verified_artifact",
+                  "unverified"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "visual_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "humanReviewer": {
+      "type": "object",
+      "required": [
+        "name",
+        "type"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "const": "human"
+        }
+      },
+      "additionalProperties": false
+    },
+    "reviewer": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "human",
+            "assistant_visual_triage"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "additionalProperties": false
+    },
+    "reviewChecks": {
+      "type": "object",
+      "required": [
+        "scientific_content",
+        "exact_text",
+        "source_fidelity",
+        "visual_hierarchy",
+        "projection_readability",
+        "reconstruction_feasibility"
+      ],
+      "properties": {
+        "scientific_content": {
+          "type": "boolean"
+        },
+        "exact_text": {
+          "type": "boolean"
+        },
+        "source_fidelity": {
+          "type": "boolean"
+        },
+        "visual_hierarchy": {
+          "type": "boolean"
+        },
+        "projection_readability": {
+          "type": "boolean"
+        },
+        "reconstruction_feasibility": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "approvedChecks": {
+      "type": "object",
+      "required": [
+        "scientific_content",
+        "exact_text",
+        "source_fidelity",
+        "visual_hierarchy",
+        "projection_readability",
+        "reconstruction_feasibility"
+      ],
+      "properties": {
+        "scientific_content": {
+          "const": true
+        },
+        "exact_text": {
+          "const": true
+        },
+        "source_fidelity": {
+          "const": true
+        },
+        "visual_hierarchy": {
+          "const": true
+        },
+        "projection_readability": {
+          "const": true
+        },
+        "reconstruction_feasibility": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "stageA": {
+      "type": "object",
+      "required": [
+        "status",
+        "generation",
+        "prompt",
+        "reference_assets",
+        "target_image",
+        "review"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "planned",
+            "generated",
+            "needs_revision",
+            "approved",
+            "locked"
+          ]
+        },
+        "generation": {
+          "type": "object",
+          "required": [
+            "provider",
+            "model",
+            "aspect_ratio",
+            "width_px",
+            "height_px",
+            "iteration"
+          ],
+          "properties": {
+            "provider": {
+              "const": "Image2"
+            },
+            "model": {
+              "type": "string",
+              "minLength": 1
+            },
+            "aspect_ratio": {
+              "const": "16:9"
+            },
+            "width_px": {
+              "const": 1920
+            },
+            "height_px": {
+              "const": 1080
+            },
+            "iteration": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "seed": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "prompt": {
+          "type": "object",
+          "required": [
+            "template_ref",
+            "rendered_asset"
+          ],
+          "properties": {
+            "template_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rendered_asset": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/fileAsset"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "reference_assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "asset",
+              "role"
+            ],
+            "properties": {
+              "asset": {
+                "$ref": "#/$defs/fileAsset"
+              },
+              "role": {
+                "enum": [
+                  "content_source",
+                  "style_reference",
+                  "layout_reference",
+                  "icon_reference"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "target_image": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/imageAsset"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "review": {
+          "type": "object",
+          "required": [
+            "decision",
+            "reviewer",
+            "reviewed_at",
+            "checks",
+            "issues"
+          ],
+          "properties": {
+            "decision": {
+              "enum": [
+                "pending",
+                "revise",
+                "approved"
+              ]
+            },
+            "reviewer": {
+              "$ref": "#/$defs/reviewer"
+            },
+            "reviewed_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "checks": {
+              "$ref": "#/$defs/reviewChecks"
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "objectInventory": {
+      "type": "object",
+      "required": [
+        "native_text_shapes",
+        "native_shape_objects",
+        "native_connectors",
+        "native_charts",
+        "picture_objects",
+        "full_slide_image_backgrounds"
+      ],
+      "properties": {
+        "native_text_shapes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "native_shape_objects": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "native_connectors": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "native_charts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "picture_objects": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "full_slide_image_backgrounds": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "audit": {
+      "type": "object",
+      "required": [
+        "status",
+        "out_of_bounds",
+        "text_box_overlaps",
+        "full_slide_image_backgrounds",
+        "editable_text_coverage",
+        "missing_text",
+        "office_2016_roundtrip",
+        "failures",
+        "office_2016_evidence"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        },
+        "out_of_bounds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_box_overlaps": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "full_slide_image_backgrounds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "editable_text_coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "missing_text": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "office_2016_roundtrip": {
+          "enum": [
+            "pending",
+            "passed",
+            "failed"
+          ]
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "office_2016_evidence": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/fileAsset"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "parity": {
+      "type": "object",
+      "required": [
+        "target_image_sha256",
+        "rendered_preview_sha256",
+        "metrics",
+        "thresholds",
+        "human_review",
+        "method"
+      ],
+      "properties": {
+        "target_image_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "rendered_preview_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "metrics": {
+          "type": "object",
+          "required": [
+            "global_ssim",
+            "mean_absolute_error",
+            "dhash_hamming_distance"
+          ],
+          "properties": {
+            "global_ssim": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "mean_absolute_error": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "dhash_hamming_distance": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 64
+            }
+          },
+          "additionalProperties": false
+        },
+        "thresholds": {
+          "type": "object",
+          "required": [
+            "global_ssim_min",
+            "mean_absolute_error_max",
+            "dhash_hamming_distance_max"
+          ],
+          "properties": {
+            "global_ssim_min": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "mean_absolute_error_max": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "dhash_hamming_distance_max": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 64
+            }
+          },
+          "additionalProperties": false
+        },
+        "human_review": {
+          "type": "object",
+          "required": [
+            "decision",
+            "reviewer",
+            "notes",
+            "reviewed_at"
+          ],
+          "properties": {
+            "decision": {
+              "enum": [
+                "pending",
+                "approved",
+                "rejected"
+              ]
+            },
+            "reviewer": {
+              "$ref": "#/$defs/reviewer"
+            },
+            "notes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "reviewed_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "stageB": {
+      "type": "object",
+      "required": [
+        "status",
+        "target_image_sha256",
+        "pptx",
+        "rendered_preview",
+        "object_inventory",
+        "parity",
+        "audit"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not_started",
+            "in_progress",
+            "reconstructed",
+            "audited",
+            "accepted"
+          ]
+        },
+        "target_image_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pptx": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/fileAsset"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rendered_preview": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/imageAsset"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "object_inventory": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/objectInventory"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parity": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/parity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "audit": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/audit"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

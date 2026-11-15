@@ -1,5 +1,25 @@
 # Academic Defense PPT Skill
 
+## V8 — Image-first two-stage slide generation
+
+For visually complex defense slides, generate and review a single Image2 target image first, then reconstruct it as editable native PowerPoint objects. The per-slide workflow contract, prompt builder, PPTX audit, image comparison, and acceptance validator are documented in [the V8 Image-first workflow](docs/IMAGE_FIRST_WORKFLOW_V8.md).
+
+Create a per-slide prompt and manifest:
+
+```bash
+python tools/create_image_first_manifest.py specs/deck_spec_v76.example.json s02 --output-dir dist/image_first/fbg-seanet-s02
+```
+
+After Image2 generation and human approval, rebuild the slide as editable PPTX, export its preview, then run:
+
+```bash
+python tools/audit_image_first_reconstruction.py dist/image_first/fbg-seanet-s02/workflow.json --output dist/image_first/fbg-seanet-s02/pptx_audit.json
+python tools/compare_image_first_renders.py dist/image_first/fbg-seanet-s02/target_image.png dist/image_first/fbg-seanet-s02/render/slide.png --output dist/image_first/fbg-seanet-s02/parity.json
+python tools/validate_image_first_workflow.py dist/image_first/fbg-seanet-s02/workflow.json
+```
+
+Image-first is for composition-sensitive slides; quantitative plots and formula/topology-critical figures remain spec-first. A full-slide raster image is not an acceptable editable PPTX reconstruction. Stage A requires human approval; final acceptance additionally requires native-object audits, visual parity review, and a PowerPoint 2016 host round trip.
+
 ## Unified research-figure production entrypoint
 
 For a source-author vector PDF, run the full evidence-linked workflow:

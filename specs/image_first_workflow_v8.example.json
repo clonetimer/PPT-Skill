@@ -1,0 +1,69 @@
+{
+  "schema_version": "8.0.0-dev",
+  "workflow_id": "fbg-seanet-s02",
+  "mode": "image_first",
+  "deck_spec_ref": "specs/deck_spec_v76.example.json",
+  "slide_id": "s02",
+  "slide_index": 2,
+  "content_lock": {
+    "claim": "FBG construction feeds a two-branch graph-level diagnosis path.",
+    "on_slide": [
+      "FBG-SEANet: frequency-band graph construction and diagnosis",
+      "Graph-level fault diagnosis framework",
+      "fault class"
+    ],
+    "speaker_notes": "Walk through OCF and band subgraphs. In SEANet, EA feeds the first GCN, first pooling branches to the lower SR, and both SR paths merge before Dense classification and five independent class-output squares (second highlighted orange). State that the input graph icon, sensor glyphs and adjacency are schematic.",
+    "evidence": [
+      {
+        "source": "docs/C01_V73_SOURCE.md",
+        "status": "source_visible"
+      }
+    ],
+    "visual_constraints": [
+      "Keep the FBG construction and SEANet diagnosis paths scientifically separate but visually connected.",
+      "Use the source-grounded route direction and preserve the evidence boundary.",
+      "Do not convert speaker notes into visible text."
+    ]
+  },
+  "stage_a": {
+    "status": "planned",
+    "generation": {
+      "provider": "Image2",
+      "model": "Image2",
+      "aspect_ratio": "16:9",
+      "width_px": 1920,
+      "height_px": 1080,
+      "iteration": 0,
+      "seed": null
+    },
+    "prompt": {
+      "template_ref": "prompts/image2_slide_prompt_template.md",
+      "rendered_asset": null
+    },
+    "reference_assets": [],
+    "target_image": null,
+    "review": {
+      "decision": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "checks": {
+        "scientific_content": false,
+        "exact_text": false,
+        "source_fidelity": false,
+        "visual_hierarchy": false,
+        "projection_readability": false,
+        "reconstruction_feasibility": false
+      },
+      "issues": []
+    }
+  },
+  "stage_b": {
+    "status": "not_started",
+    "target_image_sha256": null,
+    "pptx": null,
+    "rendered_preview": null,
+    "object_inventory": null,
+    "parity": null,
+    "audit": null
+  }
+}
