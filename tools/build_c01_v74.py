@@ -92,7 +92,7 @@ def make_spec():
         for x in (7.75, 8.12, 8.46):
             add("line", x1=x, y1=top, x2=x+.04, y2=top+.10,
                 color="#43525B", sw=1.1, dash=True)
-    txt("Inter-band links schematic", 7.17, 3.43, 1.72, .16, 8.5, color=muted)
+    txt("Inter-band links", 6.72, 3.63, 1.35, .16, 8.5, color=muted)
     arrow(8.97, 2.02, 8.97, 3.56)
     txt("Frequency", 8.32, 3.63, .56, .16, 7.8, align="right", color=muted)
     segment(8.05, 3.73, 8.05, 3.94, "total_graph__input")
