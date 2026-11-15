@@ -48,7 +48,7 @@ def build_spec() -> dict:
 
     # Keep the original OCF waveform sequence and add the source-visible qualitative cue.
     by_id["el_0011"]["text"] = "Operational component\nremoved"
-    by_id["el_0011"].update(y=4.48, h=.48, size=9.3)
+    by_id["el_0011"].update(y=4.48, h=.48, size=9.5)
     by_id["el_0041"]["text"] = "Fault sensitivity cues clearer (qualitative)"
     by_id["el_0041"].update(x=4.54, y=5.08, w=1.43, h=.20, size=8.8)
     extra = [
