@@ -954,7 +954,7 @@
     {
       "id": "source_1",
       "source": "docs/C01_V73_SOURCE.md",
-      "source_file_sha256": "08fb792243f10a8f386f415d4dd7952491beb637198e7983b70f11ce0b102f04",
+      "source_file_sha256": "4e49357e23555a4c38c4506510c9431c299f237b17cb7bc911a84de35a259ed1",
       "source_locator": "Author-published graphical abstract, Paper-grounded statements, and Terminology",
       "status": "source_visible_redraw",
       "scope": "Visible graph-level method topology; node coordinates are schematic.",
