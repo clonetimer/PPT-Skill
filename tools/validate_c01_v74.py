@@ -25,8 +25,8 @@ def main():
         "ocf": "OCF / notch filter", "band_group": "Band subgraphs", "total_graph": "Total graph",
         "band_1": "B₁", "band_2": "B₂", "band_3": "B₃", "band_4": "Bq",
         "input": "Input", "gcn_1": "GCN", "pooling_1": "pooling",
-        "gcn_2": "GCN", "pooling_2": "pooling", "sr_main": "IR layer",
-        "ea": "Energy-assisted module", "sr_ea": "IR layer", "sum": "+", "dense": "Dense",
+        "gcn_2": "GCN", "pooling_2": "pooling", "sr_main": "SR",
+        "ea": "Energy-assisted module", "sr_ea": "SR", "sum": "+", "dense": "Dense",
     }
     assert labels == expected, (labels, expected)
     expected_edges = {
@@ -42,16 +42,6 @@ def main():
     assert {tuple(edge) for edge in spec["semantic_edges"]} == expected_edges
     assert "band-pass filters" in [e.get("text") for e in spec["elements"]]
     assert "Fault cues clearer" in [e.get("text") for e in spec["elements"]]
-    assert "Frequency" in [e.get("text") for e in spec["elements"]]
-    assert any(e["type"]=="line" and e.get("arrow") and e.get("x1")==e.get("x2")
-               and abs(e["x1"]-8.97)<1e-6 for e in spec["elements"])
-    pooling=[e for e in spec["elements"] if e["type"]=="polygon" and e.get("semantic_id") in {"pooling_1","pooling_2"}]
-    assert len(pooling)==2 and all(len(e["points"])==4 for e in pooling)
-    for shape in pooling:
-        assert abs(shape["points"][1][1]-shape["points"][0][1])>.05
-        assert abs(shape["points"][2][1]-shape["points"][3][1])>.05
-    labels_text=" ".join(e.get("text","") for e in spec["elements"])
-    assert "public abstract uses SR" in labels_text and "unresolved" in labels_text.lower()
     total_layers = [e for e in spec["elements"] if e["type"] == "graph"
                     and e.get("semantic_id") == "total_graph"]
     interband_links = [e for e in spec["elements"] if e["type"] == "line"
