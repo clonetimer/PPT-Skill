@@ -30,7 +30,9 @@ def validate():
         "Subgraph 2 · 2nd band","Subgraph 3 · 3rd band","Subgraph N · Nth band",
         "Frequency","Fault sensitivity cues clearer (qualitative)"
     ]
-    assert all(label in labels for label in required), [x for x in required if x not in labels]
+    normalized={label.casefold().replace("\\r\\n","\\n") for label in labels}
+    missing=[label for label in required if label.casefold().replace("\\r\\n","\\n") not in normalized]
+    assert not missing, missing
     assert sum(label=="Fault sensitivity" for label in labels)==2
     graphs=[e for e in spec["elements"] if e["type"]=="graph"]
     assert len(graphs)==5, "four frequency-band subgraphs plus total graph required"
