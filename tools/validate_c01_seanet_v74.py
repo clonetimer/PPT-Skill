@@ -50,6 +50,13 @@ def validate():
             or "C01_FBG_construction" not in by_id["el_0043"]["text"]
             or "C01_composite" not in by_id["el_0043"]["text"]):
         raise AssertionError("GRAPH_LEVEL_EXCERPT_SCOPE_NOT_DISCLOSED")
+    visible_labels = " ".join(e.get("text", "") for e in elements)
+    if visible_labels.count("IR layer") != 3:
+        raise AssertionError("SOURCE_VISIBLE_IR_LABELS_AND_TERMINOLOGY_NOTE_REQUIRED")
+    if "SR" not in visible_labels or "unresolved" not in visible_labels.lower():
+        raise AssertionError("IR_SR_TERMINOLOGY_DISCREPANCY_NOT_DISCLOSED")
+    if "IR/SR" not in " ".join(spec["figure_contract"]["unverified"]):
+        raise AssertionError("IR_SR_UNVERIFIED_BOUNDARY_MISSING")
     if "10.1016/j.engappai.2026.115273" not in " ".join(e.get("text", "") for e in elements):
         raise AssertionError("SOURCE_DOI_MISSING")
 
