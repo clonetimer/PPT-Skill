@@ -4,9 +4,7 @@
   "review_status": "author_lab_graphical_abstract_checked; publisher_high_resolution_source_not_accessible; IR_SR_readout_label_discrepancy_unresolved; exact_adjacency_unknown; domain_and_final_size_review_pending",
   "critical_labels": {
     "gcn_1": "GCN",
-    "pooling_1": "pooling",
     "gcn_2": "GCN",
-    "pooling_2": "pooling",
     "sr_main": "IR layer",
     "ea": "Energy-assisted module",
     "sr_ea": "IR layer",
@@ -20,7 +18,9 @@
     "band_3": "B₃",
     "band_4": "Bq",
     "class_output_label": "fault class",
-    "input_label": "Input"
+    "input_label": "Input",
+    "label_pooling_1": "pooling",
+    "label_pooling_2": "pooling"
   },
   "critical_edges": [
     [
