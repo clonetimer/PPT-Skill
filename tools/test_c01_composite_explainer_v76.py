@@ -1,4 +1,6 @@
 import shutil
+import subprocess
+import sys
 import unittest
 from pathlib import Path
 from pptx import Presentation
@@ -12,6 +14,8 @@ from scientific_ir import ROOT
                      "LibreOffice and Poppler are required for the two-slide C01 explainer")
 class C01CompositeExplainerTests(unittest.TestCase):
     def test_two_slide_enlarged_companion_preserves_both_editable_panels(self):
+        subprocess.run([sys.executable,str(ROOT/"tools/build_c01_fbg_v74.py")],check=True)
+        subprocess.run([sys.executable,str(ROOT/"tools/build_c01_seanet_v74.py")],check=True)
         build()
         result=validate()
         self.assertEqual(result["status"],"PASS")
