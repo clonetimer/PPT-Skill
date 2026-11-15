@@ -742,7 +742,7 @@
     },
     {
       "type": "text",
-      "text": "SR",
+      "text": "IR layer",
       "x": 8.89,
       "y": 3.23,
       "w": 1.04,
@@ -947,7 +947,7 @@
     },
     {
       "type": "text",
-      "text": "SR",
+      "text": "IR layer",
       "x": 5.75,
       "y": 4.88,
       "w": 1.24,
@@ -995,7 +995,7 @@
     },
     {
       "type": "text",
-      "text": "The EA module embeds energy-related features into each graph node; the SR layer models sensor-wise fault sensitivity.",
+      "text": "The author-lab graphical abstract appears to label both readout blocks IR layer; the public abstract describes a sensitivity-aware readout (SR). The discrepancy is unresolved.",
       "x": 0.8,
       "y": 6.15,
       "w": 11.8,
@@ -1256,7 +1256,8 @@
     "unverified": [
       "Numerical adjacency matrix",
       "Pixel-level source-image match",
-      "Exact sensor graph coordinates"
+      "Exact sensor graph coordinates",
+      "The author-lab graphical abstract appears to label both readout blocks IR layer, while the public abstract describes a sensitivity-aware readout (SR); the exact source label is unresolved."
     ]
   },
   "evidence_records": [
@@ -1266,7 +1267,7 @@
       "source_file_sha256": "08fb792243f10a8f386f415d4dd7952491beb637198e7983b70f11ce0b102f04",
       "source_locator": "Author-published graphical abstract — lower Graph-level fault diagnosis framework panel; article-grounded EA/SR terminology",
       "status": "source_visible_redraw",
-      "scope": "Standalone excerpt of the lower SEANet graph-level diagnosis panel, not the complete two-panel graphical abstract. The upper FBG construction panel is a separate C01_FBG deliverable; the complete two-panel connection is C01_composite. Input graph topology is schematic, not a numerical adjacency matrix.",
+      "scope": "Standalone excerpt of the lower SEANet graph-level diagnosis panel, not the complete two-panel graphical abstract. The upper FBG construction panel is a separate C01_FBG deliverable; the complete two-panel connection is C01_composite. The accessible author-lab image appears to label the two readout blocks IR layer; the public abstract uses SR terminology. This discrepancy is not resolved. Input graph topology is schematic, not a numerical adjacency matrix.",
       "reuse": "derivative_redraw_only"
     }
   ],
