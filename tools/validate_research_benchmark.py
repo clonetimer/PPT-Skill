@@ -39,6 +39,8 @@ def artifact_paths(task_id):
             paths.extend(f"dist/Q08_wine_strip.{suffix}" for suffix in
                          ("pptx", "pdf", "preview.png", "grayscale.png",
                           "protanopia.png", "deuteranopia.png"))
+    elif task_id == "C01_FBG":
+        paths.extend((f"dist/{stem}.pdf", f"dist/{stem}.preview.png"))
     elif task_id == "C01_composite":
         paths.extend((f"dist/{stem}_preview.pdf", f"dist/{stem}_preview.png"))
     elif task_id == "DECK01":
