@@ -25,7 +25,8 @@
       "figure_specs/quant/Q08_wine_strip.json",
       "figure_specs/image/I01_cell_image_quant.json",
       "figure_specs/c01/C01_SEANet_graph_level_v74.json",
-      "figure_specs/c01/C01_composite_defense_slide_v75.json"
+      "figure_specs/c01/C01_composite_defense_slide_v75.json",
+      "figure_specs/c01/C01_FBG_construction_v74.json"
     ],
     "examples": [
       "examples/B01_engineering_fdir_v71.svg",
@@ -120,7 +121,11 @@
       "tools/validate_b01_engineering_fdir.py",
       "tools/export_quantitative_reproduction_audit.py",
       "tools/test_export_quantitative_reproduction_audit.py",
-      "tools/validate_f07_telemetry_embedding.py"
+      "tools/validate_f07_telemetry_embedding.py",
+      "tools/build_c01_fbg_v74.py",
+      "tools/validate_c01_fbg_v74.py",
+      "tools/repair_case_c01_fbg_round1.py",
+      "tools/test_repair_case_c01_fbg_round1.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -143,7 +148,8 @@
       "docs/LOCAL_REPAIR_CASE_TEMPLATE_V76.md",
       "docs/15_FIGURE_DIAGNOSTIC_LEDGER_V76.md",
       "docs/B01_STATE_TRANSITION_AND_AUTHORITY_TABLE_V76.md",
-      "docs/B01_STATE_TRANSITIONS_V76.csv"
+      "docs/B01_STATE_TRANSITIONS_V76.csv",
+      "docs/C01_FBG_REGION_COMPARISON_V74.md"
     ],
     "generated_outputs": [
       "dist/C01_FBG_construction_v73.pptx",
@@ -191,7 +197,10 @@
       "dist/DECK01_c01_defense_v76_slide_3.png",
       "dist/PPT-Skill_15_final_candidates_v76.zip",
       "dist/quantitative_reproduction_audit_v76.json",
-      "dist/quantitative_point_traceability_v76.csv"
+      "dist/quantitative_point_traceability_v76.csv",
+      "dist/C01_FBG_construction_v74.pptx",
+      "dist/C01_FBG_construction_v74.pdf",
+      "dist/C01_FBG_construction_v74.preview.png"
     ],
     "planning_specs": [
       "specs/deck_spec_v75.example.json",
