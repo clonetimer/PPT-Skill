@@ -6,15 +6,20 @@ C01 Composite v7.5 is the complete two-panel FBG-SEANet structural redraw. It co
 
 ## Source-grounded repairs
 
+The directly inspected visual source is the author-lab graphical abstract. The publisher high-resolution graphical abstract could not be accessed; previous claims of publisher-image inspection are withdrawn. The author-lab image appears to label both readout blocks IR layer, while the public abstract uses SR. The composite preserves the visible IR labels and discloses the unresolved terminology difference.
+
 - **Round 01:** add an editable total-graph icon with four stacked band-subgraph rows (12 nodes), eight within-band edges and nine dashed inter-band connectors inside the lower Input block. The Total graph route is anchored to the Input container rather than the visible text label. The icon is explicitly schematic and does not encode a numerical adjacency matrix.
 - **Round 02:** restore five independent vertically stacked class-output squares after Dense, with the second square highlighted orange; restore the Dense → class-output connector and the `fault class` label.
-- All new objects are native PowerPoint shapes. Each object receives non-empty alternative text; the title carries a whole-figure description. The three-slide DECK01 method slide now embeds the v7.5 composite.
+- Both pooling modules use editable freeform quadrilaterals with near-vertical sides and slanted top/bottom edges, matching the author-lab source silhouette.
+- The five output squares remain separate native shapes; the second square is highlighted orange.
+- All objects are native PowerPoint shapes. Each object receives non-empty alternative text; the title carries a whole-figure description. The three-slide DECK01 method slide now embeds the v7.5 composite.
 
 ## Automated acceptance
 
 The v7.5 validator checks:
 - all 18 source-critical routes (five upper-panel, one cross-panel, twelve lower-panel);
 - the 12-node editable input graph icon representing four stacked band subgraphs, with eight within-band edges and nine dashed inter-band links;
+- two source-like pooling quadrilaterals and the explicit IR/SR terminology note;
 - five independent class-output squares and the second-square highlight;
 - the Dense → class-output semantic route;
 - no rasterized objects, missing alt text, text overlap or out-of-bounds shapes.
