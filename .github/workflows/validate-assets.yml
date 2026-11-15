@@ -37,6 +37,7 @@ jobs:
           python tools/test_final_delivery_success.py
           python tools/test_local_repair_loop.py
           python tools/test_repair_case_c01_seanet.py
+          python tools/test_audit_pptx.py
           python tools/test_repair_case_c01_fbg_round1.py
           python tools/test_repair_case_c01_seanet_round2.py
           python tools/test_repair_case_c01_composite_round2.py
