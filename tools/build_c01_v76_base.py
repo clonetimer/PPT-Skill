@@ -59,7 +59,7 @@ def make_spec():
     txt("Band subgraphs", 5.15, 1.43, 1.58, .27, 11, True, semantic_id="band_group")
     txt("Total graph", 7.31, 1.43, 1.46, .27, 11, True, semantic_id="total_graph")
     txt("band-pass filters", 5.15, 1.72, 1.58, .18, 9.5, color=muted)
-    txt("1st · 2nd · 3rd · Nth", 7.31, 1.72, 1.46, .18, 8.8, color=muted)
+    txt("1st · 2nd · 3rd · Nth", 7.31, 1.72, 1.46, .22, 9.5, color=muted)
 
     colors = ["#668A9C", "#6D9A8E", "#B88E58", "#8A7CA5"]
     labels = ["Sensor 1", "Sensor 2", "Sensor M-1", "Sensor M"]
@@ -92,9 +92,9 @@ def make_spec():
         for x in (7.75, 8.12, 8.46):
             add("line", x1=x, y1=top, x2=x+.04, y2=top+.10,
                 color="#43525B", sw=1.1, dash=True)
-    txt("Inter-band links", 6.72, 3.63, 1.35, .16, 8.5, color=muted)
+    txt("Inter-band links", 6.72, 3.60, 1.35, .22, 9.5, color=muted)
     arrow(8.97, 2.02, 8.97, 3.56)
-    txt("Frequency", 8.32, 3.63, .56, .16, 7.8, align="right", color=muted)
+    txt("Frequency", 8.12, 3.60, .76, .22, 9.5, align="right", color=muted)
     segment(8.05, 3.73, 8.05, 3.94, "total_graph__input")
     segment(8.05, 3.94, .55, 3.94, "total_graph__input")
     segment(.55, 3.94, .55, 5.43, "total_graph__input")
@@ -153,12 +153,12 @@ def make_spec():
         box(9.54, y, .37, .37, fill="#EAF2F5", stroke="#7896A6", radius=.18)
         txt(n, 9.58, y+.045, .29, .27, 10.5, True)
         txt(title, 10.03, y-.02, 2.42, .28, 11.5, True, "left")
-        txt(body, 10.03, y+.34, 2.52, .66, 9.2 if n == "2" else 10.5, align="left")
+        txt(body, 10.03, y+.34, 2.52, .66, 9.5 if n == "2" else 10.5, align="left")
     txt("Evidence boundary", 9.52, 4.89, 3.00, .27, 11.5, True, "left")
-    txt("Graph nodes/edges are schematic. The author-lab figure appears to label both readouts IR; the public abstract uses SR. The exact label remains unresolved.",
-        9.52, 5.22, 3.00, .78, 9.0, align="left")
+    txt("Graph nodes and edges are schematic. Readout terminology remains unresolved: the author-lab figure shows IR, while the public abstract uses SR.",
+        9.52, 5.22, 3.00, .78, 9.5, align="left")
     txt("Lee et al., EAAI 179 (2026), 115273\nDOI: 10.1016/j.engappai.2026.115273", 9.52, 6.12, 3.04, .47, 9.5, align="left", color=muted)
-    txt("Author-lab source-visible redraw · schematic graph adjacency · readout label IR/SR discrepancy unresolved", .65, 6.96, 12.14, .23, 9.2, align="left", color=muted)
+    txt("Author-lab source-visible redraw · schematic graph adjacency · readout label IR/SR discrepancy unresolved", .65, 6.96, 12.14, .23, 9.5, align="left", color=muted)
     semantic_edges = [["input", "gcn_1"], ["gcn_1", "pooling_1"],
                       ["pooling_1", "gcn_2"], ["gcn_2", "pooling_2"],
                       ["pooling_2", "sr_main"], ["sr_main", "sum"],
