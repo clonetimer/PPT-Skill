@@ -42,6 +42,9 @@ def main():
     assert {tuple(edge) for edge in spec["semantic_edges"]} == expected_edges
     assert "band-pass filters" in [e.get("text") for e in spec["elements"]]
     assert "Fault cues clearer" in [e.get("text") for e in spec["elements"]]
+    assert "Frequency" in [e.get("text") for e in spec["elements"]]
+    assert any(e["type"]=="line" and e.get("arrow") and e.get("x1")==e.get("x2")
+               and abs(e["x1"]-8.97)<1e-6 for e in spec["elements"])
     pooling=[e for e in spec["elements"] if e["type"]=="polygon" and e.get("semantic_id") in {"pooling_1","pooling_2"}]
     assert len(pooling)==2 and all(len(e["points"])==4 for e in pooling)
     for shape in pooling:
