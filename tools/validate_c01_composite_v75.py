@@ -46,6 +46,8 @@ def validate():
         if len(points)!=4 or abs(points[1][1]-points[0][1])<.05 or abs(points[2][1]-points[3][1])<.05:
             raise AssertionError("POOLING_QUADRILATERAL_MUST_HAVE_SLOPED_TOP_AND_BOTTOM_EDGES")
     labels=[e.get("text","") for e in elements if e["type"]=="text"]
+    if "Frequency" not in labels or not any(e["type"]=="line" and e.get("arrow") and e.get("x1")==e.get("x2") and abs(e["x1"]-8.97)<1e-6 for e in elements):
+        raise AssertionError("COMPOSITE_FREQUENCY_DIRECTION_MISSING")
     if labels.count("IR layer")!=2:
         raise AssertionError("COMPOSITE_MUST_PRESERVE_TWO_SOURCE_VISIBLE_IR_LABELS")
     if not any("public abstract uses SR" in label and "unresolved" in label.lower() for label in labels):
