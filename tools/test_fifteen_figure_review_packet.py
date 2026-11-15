@@ -3,7 +3,7 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.enum.text import PP_ALIGN
 from pptx.util import Inches
-from fifteen_figure_review_packet import compare,TASKS,build_packet,TASK_FILENAMES,TASK_FINAL_FILENAMES
+from fifteen_figure_review_packet import compare,TASKS,build_packet,TASK_FILENAMES,TASK_FINAL_FILENAMES,TASK_COMPANION_FILENAMES
 
 def deck(path,text="Label"):
     prs=Presentation()
@@ -38,6 +38,7 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertEqual(TASK_FINAL_FILENAMES["C01_composite"],"C01_composite_defense_slide_v75.pptx")
         self.assertEqual(TASK_FILENAMES["DECK01"],"DECK01_c01_defense.pptx")
         self.assertEqual(TASK_FINAL_FILENAMES["DECK01"],"DECK01_c01_defense_v76.pptx")
+        self.assertEqual(TASK_COMPANION_FILENAMES["Q07"],("Q08_wine_strip.pptx",))
         self.assertEqual(len(TASK_FILENAMES),15)
 
 
@@ -90,7 +91,9 @@ class ReviewPacketTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);initial=root/"initial";final=root/"final";out=root/"out"
             initial.mkdir();final.mkdir()
-            for task in TASKS:deck(initial/(task+".pptx"))
+            for task in TASKS:deck(initial/TASK_FILENAMES[task])
+            for names in TASK_COMPANION_FILENAMES.values():
+                for name in names:deck(initial/name)
             result=build_packet(initial,final,out)
         self.assertEqual(result["population"],15)
         self.assertEqual(result["summary"]["missing"],15)
@@ -117,6 +120,11 @@ class ReviewPacketTests(unittest.TestCase):
                     last.write_bytes(first.read_bytes())
                 else:
                     deck(last,task+" repaired")
+            for task,names in TASK_COMPANION_FILENAMES.items():
+                for name in names:
+                    first=initial/name;last=final/name
+                    deck(first,task+" companion")
+                    last.write_bytes(first.read_bytes())
             result=build_packet(initial,final,out)
         rows={row["task_id"]:row for row in result["tasks"]}
         self.assertEqual(set(rows),set(TASKS))
@@ -127,6 +135,8 @@ class ReviewPacketTests(unittest.TestCase):
             self.assertEqual(rows[task]["status"],"NO_REPAIR_APPLIED")
             self.assertTrue(rows[task]["diff"]["byte_identical"])
             self.assertEqual(rows[task]["final_review_status"],"pending")
+        self.assertEqual(rows["Q07"]["diff"]["companion_missing"],[])
+        self.assertEqual(rows["Q07"]["diff"]["companion_artifacts"][0]["filename"],"Q08_wine_strip.pptx")
         for task in repaired:
             self.assertEqual(rows[task]["status"],"REPAIR_COMPARISON_READY")
             self.assertFalse(rows[task]["diff"]["byte_identical"])
