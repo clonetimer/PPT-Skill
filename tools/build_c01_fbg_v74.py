@@ -77,6 +77,11 @@ def build_spec() -> dict:
             "id":"el_0046","semantic_role":"annotation","evidence_ref":"source_1"
         },
     ]
+    extra.append({
+        "type":"text","text":"Frequency-band graph (FBG) construction","x":0.45,"y":0.66,"w":12.43,"h":0.18,
+        "size":10.5,"font":"Times New Roman","color":"#687780","align":"left",
+        "id":"el_0047","semantic_role":"annotation","evidence_ref":"source_1"
+    })
     spec["elements"].extend(extra)
     by_id["el_0039"]["text"] = (
         "One subgraph is formed per frequency band; connected subgraphs form the final frequency-band graph."
