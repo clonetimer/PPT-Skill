@@ -26,10 +26,10 @@ TASK_FILENAMES={
  "I01":"I01_cell_image_quant.pptx",
  "DECK01":"DECK01_c01_defense.pptx",
 }
-TASK_FINAL_FILENAMES={**TASK_FILENAMES,"C01_SEANet":"C01_SEANet_graph_level_v74.pptx","C01_composite":"C01_composite_defense_slide_v75.pptx","DECK01":"DECK01_c01_defense_v76.pptx"}
+TASK_FINAL_FILENAMES={**TASK_FILENAMES,"C01_FBG":"C01_FBG_construction_v74.pptx","C01_SEANet":"C01_SEANet_graph_level_v74.pptx","C01_composite":"C01_composite_defense_slide_v75.pptx","DECK01":"DECK01_c01_defense_v76.pptx"}
 # Q07 is a two-artifact deliverable: scatter (Q07) plus categorical distribution (Q08).
 TASK_COMPANION_FILENAMES={"Q07":("Q08_wine_strip.pptx",)}
-TASK_SPEC_FILENAMES={"C01_SEANet":{"initial":"tests/fixtures/C01_SEANet_graph_level_initial_v73.json","final":"figure_specs/c01/C01_SEANet_graph_level_v74.json"},"C01_composite":{"initial":"figure_specs/c01/C01_composite_defense_slide.json","final":"figure_specs/c01/C01_composite_defense_slide_v75.json"}}
+TASK_SPEC_FILENAMES={"C01_FBG":{"initial":"figure_specs/c01/C01_FBG_construction.json","final":"figure_specs/c01/C01_FBG_construction_v74.json"},"C01_SEANet":{"initial":"tests/fixtures/C01_SEANet_graph_level_initial_v73.json","final":"figure_specs/c01/C01_SEANet_graph_level_v74.json"},"C01_composite":{"initial":"figure_specs/c01/C01_composite_defense_slide.json","final":"figure_specs/c01/C01_composite_defense_slide_v75.json"}}
 TASK_DECK_SPEC_FILENAMES={"DECK01":{"initial":"specs/deck_spec_v75.example.json","final":"specs/deck_spec_v76.example.json"}}
 ROOT=Path(__file__).resolve().parents[1]
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
