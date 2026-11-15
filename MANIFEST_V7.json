@@ -128,7 +128,8 @@
       "tools/test_repair_case_c01_fbg_round1.py",
       "tools/build_c01_composite_explainer_v76.py",
       "tools/validate_c01_composite_explainer_v76.py",
-      "tools/test_c01_composite_explainer_v76.py"
+      "tools/test_c01_composite_explainer_v76.py",
+      "tools/test_audit_pptx.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
