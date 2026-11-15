@@ -66,7 +66,9 @@ jobs:
           python tools/test_audit_source_grounded_radar.py
           python tools/test_unseen_figure_families.py
       - name: Build B01/F07
-        run: python tools/build_v71_examples.py
+        run: |
+          python tools/build_v71_examples.py
+          python tools/validate_b01_engineering_fdir.py
       - name: Render independent-paper generalization trials
         run: |
           python tools/render_figure_spec.py dist/skill_tests/generalization/Mamba_Figure1.json --svg dist/skill_tests/generalization/Mamba_Figure1.svg --pptx dist/skill_tests/generalization/Mamba_Figure1.pptx
