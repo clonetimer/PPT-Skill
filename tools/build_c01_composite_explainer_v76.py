@@ -106,6 +106,9 @@ def build(output: Path = OUTPUT) -> dict:
         shutil.copy2(page, ROOT / f"dist/C01_composite_explainer_v76_slide_{index}.png")
     ACCEPTED.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(output, ACCEPTED)
+    shutil.copy2(ROOT/"dist/C01_composite_explainer_v76.pdf", ACCEPTED.parent/"C01_composite_explainer_v76.pdf")
+    for index in (1,2):
+        shutil.copy2(ROOT/f"dist/C01_composite_explainer_v76_slide_{index}.png", ACCEPTED.parent/f"C01_composite_explainer_v76_slide_{index}.png")
 
     report = {
         "status": "PASS",
