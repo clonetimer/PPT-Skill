@@ -119,7 +119,8 @@
       "tools/test_package_15_final_candidates.py",
       "tools/validate_b01_engineering_fdir.py",
       "tools/export_quantitative_reproduction_audit.py",
-      "tools/test_export_quantitative_reproduction_audit.py"
+      "tools/test_export_quantitative_reproduction_audit.py",
+      "tools/validate_f07_telemetry_embedding.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
