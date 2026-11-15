@@ -35,7 +35,7 @@ def validate():
     graphs=[e for e in spec["elements"] if e["type"]=="graph"]
     assert len(graphs)==5, "four frequency-band subgraphs plus total graph required"
     assert sum(e["type"]=="line" and e.get("arrow") and e.get("id")=="el_0045" for e in spec["elements"])==1
-    assert "Frequency-band graph (FBG)" in spec["elements"][1]["text"]
+    assert "Frequency-band graph (FBG) construction" in labels
     assert "Exact numerical frequency cutoffs" in spec["figure_contract"]["unverified"]
     assert all(e["type"]!="image" for e in spec["elements"])
     assert SVG.is_file() and PPTX.is_file()
