@@ -49,7 +49,8 @@
     "evidence_scope": "Visible graph-level method topology; node coordinates are schematic.",
     "unverified": [
       "Numerical adjacency matrix",
-      "Pixel-level source-image match"
+      "Pixel-level source-image match",
+      "The author-lab graphical abstract appears to label both readout blocks IR layer; the public abstract describes a sensitivity-aware readout (SR). The exact source label is unresolved."
     ]
   },
   "C01_composite_defense_slide": {
@@ -62,7 +63,8 @@
     "evidence_scope": "Paper-grounded labels and visible process sequence; layout and several glyphs are adaptations.",
     "unverified": [
       "Numerical adjacency matrix",
-      "Pixel-level source-image match"
+      "Pixel-level source-image match",
+      "The author-lab graphical abstract appears to label both readout blocks IR layer; the public abstract describes a sensitivity-aware readout (SR). The exact source label is unresolved."
     ]
   },
   "Q01_iris_scatter": {
