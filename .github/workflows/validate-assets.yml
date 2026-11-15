@@ -37,6 +37,7 @@ jobs:
           python tools/test_final_delivery_success.py
           python tools/test_local_repair_loop.py
           python tools/test_repair_case_c01_seanet.py
+          python tools/test_repair_case_c01_fbg_round1.py
           python tools/test_repair_case_c01_seanet_round2.py
           python tools/test_repair_case_c01_composite_round2.py
           python tools/test_prepare_15_figure_initial_cohort.py
@@ -80,9 +81,14 @@ jobs:
       - name: Build C01
         run: |
           python tools/build_c01_v73.py
+          python tools/build_c01_fbg_v74.py
+          python tools/validate_c01_fbg_v74.py
           python tools/build_c01_v74.py
           python tools/build_c01_seanet_v74.py
           python tools/build_c01_composite_v75.py
+      - name: Execute C01-FBG source-grounded repair
+        run: |
+          python tools/repair_case_c01_fbg_round1.py --output-dir dist/repair_cases/C01_FBG --accepted-output dist/accepted_repairs/C01_FBG_construction_v74.pptx
       - name: Execute C01-SEANet multi-round source-grounded repair
         run: |
           python tools/repair_case_c01_seanet_round2.py --output-dir dist/repair_cases/C01_SEANet --accepted-output dist/accepted_repairs/C01_SEANet_graph_level_v74.pptx
@@ -101,6 +107,7 @@ jobs:
           python tools/validate_svg_examples.py
           python -m json.tool profiles/C01_SOURCE_PROFILE_V73.json > /dev/null
           python -m json.tool figure_specs/c01/C01_FBG_construction.json > /dev/null
+          python -m json.tool figure_specs/c01/C01_FBG_construction_v74.json > /dev/null
           python -m json.tool figure_specs/c01/C01_SEANet_graph_level.json > /dev/null
           python -m json.tool figure_specs/c01/C01_SEANet_graph_level_v74.json > /dev/null
           python -m json.tool figure_specs/c01/C01_composite_defense_slide_v75.json > /dev/null
@@ -151,6 +158,7 @@ jobs:
       - name: Audit generated PPTX
         run: |
           python tools/audit_pptx.py dist/C01_FBG_construction_v73.pptx --strict
+          python tools/audit_pptx.py dist/C01_FBG_construction_v74.pptx --strict
           python tools/audit_pptx.py dist/C01_SEANet_graph_level_v73.pptx --strict
           python tools/audit_pptx.py dist/C01_SEANet_graph_level_v74.pptx --strict
           python tools/audit_pptx.py dist/C01_composite_defense_slide_v75.pptx --strict
@@ -203,6 +211,16 @@ jobs:
             dist/repair_cases/C01_SEANet/*
             dist/accepted_repairs/C01_SEANet_graph_level_v74.pptx
           if-no-files-found: error
+      - name: Upload C01-FBG repair evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-c01-fbg-round1
+          path: |
+            dist/repair_cases/C01_FBG/*
+            dist/accepted_repairs/C01_FBG_construction_v74.pptx
+            dist/C01_FBG_construction_v74.pdf
+            dist/C01_FBG_construction_v74.preview.png
+          if-no-files-found: error
       - name: Upload C01 composite multi-round repair evidence
         uses: actions/upload-artifact@v4
         with:
@@ -239,6 +257,9 @@ jobs:
             examples/C01_*_v73.svg
             dist/C01_*_v73.pptx
             examples/C01_SEANet_graph_level_v74.svg
+            dist/C01_FBG_construction_v74.pptx
+            dist/C01_FBG_construction_v74.pdf
+            dist/C01_FBG_construction_v74.preview.png
             dist/C01_SEANet_graph_level_v74.pptx
             dist/C01_SEANet_graph_level_v74.pdf
             dist/C01_SEANet_graph_level_v74.preview.png
