@@ -70,7 +70,7 @@ def build(output: Path, root: Path = ROOT) -> dict:
     q07_files = [item for item in entries if item["task_id"] == "Q07"]
     q07_scatter = [item for item in q07_files if "/01_散点/" in item["archive_path"]]
     q07_distribution = [item for item in q07_files if "/02_分布/" in item["archive_path"]]
-    required = {"Q07_wine_scatter.pptx", "Q08_wine_strip.pptx",
+    required = {"Q08_wine_strip.pptx",
                 "Q08_wine_strip.svg", "Q08_wine_strip.pdf",
                 "Q08_wine_strip.preview.png"}
     actual = {Path(item["source"]).name for item in q07_distribution}
