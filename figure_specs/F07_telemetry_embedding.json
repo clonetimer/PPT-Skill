@@ -105,7 +105,7 @@
     },
     {
       "type": "text",
-      "text": "Subsystem- and\nfunction-informed\nparameter ordering",
+      "text": "Illustrative ordering by subsystem and function",
       "x": 0.7,
       "y": 3.24,
       "w": 2.55,
@@ -160,7 +160,7 @@
     },
     {
       "type": "text",
-      "text": "Occupancy is schematic;\nexact channel coordinates are not shown.",
+      "text": "Occupancy is schematic; no channel-to-cell mapping is asserted.",
       "x": 3.82,
       "y": 5.18,
       "w": 3.35,
