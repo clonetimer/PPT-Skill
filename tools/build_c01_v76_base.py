@@ -146,16 +146,16 @@ def make_spec():
 
     txt("Reading guide", 9.52, 1.04, 3.06, .34, 15, True, "left")
     for y, n, title, body in [
-        (1.58, "1", "Filter", "Remove operational components from sensor signals."),
-        (2.65, "2", "Construct", "Band-pass filters form 1st, 2nd, 3rd … Nth subgraphs; these connect into the total graph."),
-        (3.72, "3", "Diagnose", "EA feeds first GCN; first pooling branches to two readout paths."),
+        (1.58, "1", "Filter", "OCF / notch filtering\nsuppresses operational\ncomponents."),
+        (2.65, "2", "Construct", "Band-pass filters form\nfrequency-band subgraphs;\nthese connect into the\ntotal graph."),
+        (3.72, "3", "Diagnose", "EA feeds the first GCN;\nfirst pooling branches to\ntwo readout paths."),
     ]:
         box(9.54, y, .37, .37, fill="#EAF2F5", stroke="#7896A6", radius=.18)
         txt(n, 9.58, y+.045, .29, .27, 10.5, True)
         txt(title, 10.03, y-.02, 2.42, .28, 11.5, True, "left")
         txt(body, 10.03, y+.34, 2.52, .66, 9.5 if n == "2" else 10.5, align="left")
     txt("Evidence boundary", 9.52, 4.89, 3.00, .27, 11.5, True, "left")
-    txt("Graph nodes and edges are schematic. Readout terminology remains unresolved: the author-lab figure shows IR, while the public abstract uses SR.",
+    txt("Graph nodes and edges are schematic.\nReadout label unresolved: author-lab\nfigure shows IR; public abstract uses SR.",
         9.52, 5.22, 3.00, .78, 9.5, align="left")
     txt("Lee et al., EAAI 179 (2026), 115273\nDOI: 10.1016/j.engappai.2026.115273", 9.52, 6.12, 3.04, .47, 9.5, align="left", color=muted)
     txt("Author-lab source-visible redraw · schematic graph adjacency · readout label IR/SR discrepancy unresolved", .65, 6.96, 12.14, .23, 9.5, align="left", color=muted)
