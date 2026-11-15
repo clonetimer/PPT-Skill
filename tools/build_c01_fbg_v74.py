@@ -59,7 +59,7 @@ def build_spec() -> dict:
         },
         {
             "type":"text","text":"Fault sensitivity","x":4.62,"y":4.22,"w":1.27,"h":.18,
-            "size":9.0,"font":"Times New Roman","color":"#43525B","align":"center",
+            "size":9.5,"font":"Times New Roman","color":"#43525B","align":"center",
             "id":"el_0043","semantic_role":"annotation","evidence_ref":"source_1"
         },
         {
@@ -92,7 +92,7 @@ def build_spec() -> dict:
         "Sensor glyphs and waveforms, graph coordinates and inter-band links are schematic; "
         "no numerical band cutoffs or adjacency matrix are asserted."
     )
-    by_id["el_0040"].update(size=8.8, y=6.42, h=.30)
+    by_id["el_0040"].update(size=9.5, y=6.42, h=.30)
 
     spec["schema_version"] = "7.6.0-dev"
     spec["version"] = "7.4.0"
