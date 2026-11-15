@@ -114,7 +114,7 @@ def make_spec():
             polygon(front, fill="#F1F4F5", stroke="#7896A6", sw=.9,
                     semantic_id=stage_nodes[j])
             txt(label, x+.05, cy+.13, width-.10, .25, 9.8, True,
-                semantic_id=stage_nodes[j])
+                semantic_id=f"label_{stage_nodes[j]}")
         else:
             box(x, cy, width, .51, fill="#F3F7F9" if j else "#EAF2F5",
                 stroke="#7896A6", radius=.035, semantic_id=stage_nodes[j])
