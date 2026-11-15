@@ -117,7 +117,7 @@ def make_spec():
                 semantic_id=f"label_{stage_nodes[j]}")
         else:
             box(x, cy, width, .51, fill="#F3F7F9" if j else "#EAF2F5",
-                stroke="#7896A6", radius=.035, semantic_id=stage_nodes[j])
+                stroke="#7896A6", radius=.035)
             txt(label, x+.035, cy+.12, width-.07, .27,
                 9.8 if j == 5 else 10.5, True, semantic_id=stage_nodes[j])
         if j:
