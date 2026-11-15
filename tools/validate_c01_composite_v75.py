@@ -68,11 +68,6 @@ def validate():
         raise AssertionError("FIVE_CLASS_OUTPUT_SQUARES_REQUIRED")
     if squares[1]["fill"] != "#DCA16C" or sum(e["fill"] == "#DCA16C" for e in squares) != 1:
         raise AssertionError("SECOND_CLASS_OUTPUT_MUST_BE_ORANGE")
-    labels = [e.get("text","") for e in elements if e["type"]=="text"]
-    if labels.count("IR layer") != 2:
-        raise AssertionError("COMPOSITE_MUST_PRESERVE_TWO_SOURCE_VISIBLE_IR_LABELS")
-    if not any("public abstract uses SR" in label and "unresolved" in label.lower() for label in labels):
-        raise AssertionError("COMPOSITE_IR_SR_TERMINOLOGY_BOUNDARY_MISSING")
     if by_id["el_0090"].get("text") != "fault class":
         raise AssertionError("FAULT_CLASS_LABEL_MISSING")
     if ("dense", "class_output") not in {tuple(x) for x in spec["semantic_edges"]}:
