@@ -40,6 +40,7 @@ jobs:
           python tools/test_repair_case_c01_fbg_round1.py
           python tools/test_repair_case_c01_seanet_round2.py
           python tools/test_repair_case_c01_composite_round2.py
+          python tools/test_c01_composite_explainer_v76.py
           python tools/test_prepare_15_figure_initial_cohort.py
           python tools/test_fifteen_figure_review_packet.py
           python tools/test_reproduction_release_gate.py
@@ -95,6 +96,11 @@ jobs:
       - name: Execute C01 composite multi-round source-grounded repair
         run: |
           python tools/repair_case_c01_composite_round2.py --output-dir dist/repair_cases/C01_composite --accepted-output dist/accepted_repairs/C01_composite_defense_slide_v75.pptx
+      - name: Build enlarged two-slide C01 explainer companion
+        run: |
+          python tools/build_c01_composite_explainer_v76.py
+          python tools/validate_c01_composite_explainer_v76.py
+          python tools/audit_pptx.py dist/C01_composite_explainer_v76.pptx --strict
       - name: Build data and image examples
         run: |
           python tools/build_quantitative_examples.py
@@ -228,6 +234,17 @@ jobs:
           path: |
             dist/repair_cases/C01_composite/*
             dist/accepted_repairs/C01_composite_defense_slide_v75.pptx
+          if-no-files-found: error
+      - name: Upload C01 two-slide explainer companion
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-c01-composite-explainer-v76
+          path: |
+            dist/C01_composite_explainer_v76.pptx
+            dist/C01_composite_explainer_v76.pdf
+            dist/C01_composite_explainer_v76_slide_1.png
+            dist/C01_composite_explainer_v76_slide_2.png
+            dist/accepted_repairs/C01_composite_explainer_v76.*
           if-no-files-found: error
       - name: Upload DECK01 multi-round repair evidence
         uses: actions/upload-artifact@v4
