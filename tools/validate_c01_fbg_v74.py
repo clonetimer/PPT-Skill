@@ -28,7 +28,7 @@ def validate():
         "Band-pass filters","Total graph","OCF","Notch filter",
         "operational component\nremoved","Sub graph 1:\n1st band",
         "Sub graph 2:\n2nd band","Sub graph 3:\n3rd band","Sub graph N:\nNth band",
-        "Frequency","Fault sensitivity cues clearer (qualitative)"
+        "Frequency","Fault-sensitivity cues\nclearer (qualitative)"
     ]
     normalized={label.casefold().replace("\r\n","\n") for label in labels}
     missing=[label for label in required if label.casefold().replace("\r\n","\n") not in normalized]
