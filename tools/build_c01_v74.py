@@ -130,7 +130,7 @@ def make_spec():
     box(7.88, 5.17, .70, .51, fill="#F3F7F9", stroke="#7896A6", radius=.035)
     txt("Dense", 7.91, 5.29, .64, .27, 10, True, semantic_id="dense")
     arrow(7.71, 5.43, 7.85, 5.43, semantic_link="sum__dense")
-    arrow(8.61, 5.43, 8.90, 5.43)
+    arrow(8.61, 5.43, 8.90, 5.43, semantic_link="dense__class_output")
     segment(1.18, 5.70, 1.18, 6.24, "input__ea")
     box(1.28, 6.03, 2.62, .48, fill="#F7F5F9", stroke="#8A7CA5", radius=.035)
     txt("Energy-assisted module", 1.39, 6.14, 2.41, .26, 10.5, True, semantic_id="ea")
