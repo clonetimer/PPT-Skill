@@ -37,14 +37,14 @@ def build_spec() -> dict:
     by_id["el_0003"]["size"] = 10.5
 
     labels = [
-        ("el_0026", "Subgraph 1 · 1st band", 5.98, 2.11, 1.12),
-        ("el_0028", "Subgraph 2 · 2nd band", 5.98, 2.99, 1.12),
-        ("el_0030", "Subgraph 3 · 3rd band", 5.98, 3.87, 1.12),
-        ("el_0032", "Subgraph N · Nth band", 5.98, 4.75, 1.12),
+        ("el_0026", "Sub graph 1:\\n1st band", 6.06, 2.03, 1.03),
+        ("el_0028", "Sub graph 2:\\n2nd band", 6.06, 2.91, 1.03),
+        ("el_0030", "Sub graph 3:\\n3rd band", 6.06, 3.79, 1.03),
+        ("el_0032", "Sub graph N:\\nNth band", 6.06, 4.67, 1.03),
     ]
     for object_id, value, x, y, width in labels:
         element = by_id[object_id]
-        element.update(text=value, x=x, y=y, w=width, h=.25, size=9.2, align="left")
+        element.update(text=value, x=x, y=y, w=width, h=.36, size=8.2, align="left")
 
     # Keep the original OCF waveform sequence and add the source-visible qualitative cue.
     by_id["el_0011"]["text"] = "Operational component\nremoved"
