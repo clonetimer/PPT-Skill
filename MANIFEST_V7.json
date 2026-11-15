@@ -229,7 +229,8 @@
       "specs/research_figure_benchmark_v76.json",
       "specs/output_profiles_v76.json",
       "specs/c01_composite_expected_topology_v75.json",
-      "specs/15_figure_diagnostic_ledger_v76.json"
+      "specs/15_figure_diagnostic_ledger_v76.json",
+      "specs/c01_standalone_initial_topology_v73.json"
     ],
     "source_data": [
       "data/README.md",
