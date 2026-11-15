@@ -34,9 +34,11 @@ def validate():
         raise AssertionError("DUPLICATE_COMPOSITE_V75_ELEMENT_IDS")
 
     by_id = {e["id"]: e for e in elements}
-    if by_id["el_0066"].get("semantic_id") != "input":
+    input_box=next((e for e in elements if e.get("semantic_id")=="input" and e["type"]=="rect"),None)
+    input_label=next((e for e in elements if e.get("semantic_id")=="input_label" and e["type"]=="text"),None)
+    if input_box is None:
         raise AssertionError("INPUT_CONTAINER_TOPOLOGY_NODE_MISSING")
-    if by_id["el_0067"].get("semantic_id") != "input_label" or by_id["el_0067"].get("text") != "Input":
+    if input_label is None or input_label.get("text")!="Input":
         raise AssertionError("INPUT_LABEL_SEMANTIC_NODE_MISSING")
     poolings=[e for e in elements if e["type"]=="polygon" and e.get("semantic_id") in {"pooling_1","pooling_2"}]
     if len(poolings)!=2:
@@ -70,7 +72,8 @@ def validate():
         raise AssertionError("FIVE_CLASS_OUTPUT_SQUARES_REQUIRED")
     if squares[1]["fill"] != "#DCA16C" or sum(e["fill"] == "#DCA16C" for e in squares) != 1:
         raise AssertionError("SECOND_CLASS_OUTPUT_MUST_BE_ORANGE")
-    if by_id["el_0090"].get("text") != "fault class":
+    class_label=next((e for e in elements if e.get("semantic_id")=="class_output_label" and e["type"]=="text"),None)
+    if class_label is None or class_label.get("text")!="fault class":
         raise AssertionError("FAULT_CLASS_LABEL_MISSING")
     if ("dense", "class_output") not in {tuple(x) for x in spec["semantic_edges"]}:
         raise AssertionError("DENSE_TO_CLASS_OUTPUT_EDGE_MISSING")
