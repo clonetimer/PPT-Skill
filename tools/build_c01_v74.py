@@ -13,7 +13,7 @@ SPEC = ROOT / "figure_specs/c01/C01_composite_defense_slide.json"
 
 
 def make_spec():
-    source = json.loads((ROOT / "figure_specs/c01/C01_FBG_construction.json").read_text(encoding="utf-8"))
+    source = json.loads((ROOT / "figure_specs/c01/C01_FBG_construction_v74.json").read_text(encoding="utf-8"))
     graphs = [e for e in source["elements"] if e["type"] == "graph"]
     ink, muted, line = "#28343C", "#687780", "#AAB5BC"
     elements = []
@@ -47,7 +47,7 @@ def make_spec():
     box(.42, .82, 8.67, 3.05, stroke="#CFD8DE")
     box(.42, 4.02, 8.67, 2.78, stroke="#CFD8DE")
     box(9.26, .82, 3.64, 5.98, stroke="#CFD8DE")
-    txt("01  Frequency-band graph", .63, 1.02, 8.2, .30, 14, True, "left")
+    txt("01  Time-Frequency Graph (FBG)", .63, 1.02, 8.2, .30, 14, True, "left")
     txt("Sensor signals", .65, 1.43, 2.15, .25, 11, True, "left")
     txt("OCF / notch filter", 3.18, 1.43, 1.65, .27, 11, True, semantic_id="ocf")
     txt("Band subgraphs", 5.15, 1.43, 1.58, .27, 11, True, semantic_id="band_group")
