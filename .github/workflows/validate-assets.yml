@@ -69,6 +69,7 @@ jobs:
         run: |
           python tools/build_v71_examples.py
           python tools/validate_b01_engineering_fdir.py
+          python tools/validate_f07_telemetry_embedding.py
       - name: Render independent-paper generalization trials
         run: |
           python tools/render_figure_spec.py dist/skill_tests/generalization/Mamba_Figure1.json --svg dist/skill_tests/generalization/Mamba_Figure1.svg --pptx dist/skill_tests/generalization/Mamba_Figure1.pptx
