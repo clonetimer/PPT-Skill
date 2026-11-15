@@ -7,7 +7,7 @@ import json
 import shutil
 from pathlib import Path
 
-from fifteen_figure_review_packet import TASK_FINAL_FILENAMES, TASK_FILENAMES
+from fifteen_figure_review_packet import TASK_FINAL_FILENAMES, TASK_FILENAMES, TASK_COMPANION_FILENAMES
 from repair_case_artifacts import sha256_file, write_json
 from scientific_ir import ROOT
 
@@ -33,6 +33,19 @@ def prepare(initial_dir: Path, final_dir: Path) -> dict:
         else:
             shutil.copy2(initial, final)
             copied.append(task_id)
+        for filename in TASK_COMPANION_FILENAMES.get(task_id,()):
+            companion_initial=initial_dir/filename
+            companion_final=final_dir/filename
+            if not companion_initial.is_file():
+                raise FileNotFoundError(f"NO_REPAIR_COMPANION_INITIAL_MISSING:{task_id}:{companion_initial}")
+            companion_final.parent.mkdir(parents=True,exist_ok=True)
+            if companion_final.exists():
+                if sha256_file(companion_final)!=sha256_file(companion_initial):
+                    raise ValueError(f"REFUSE_TO_OVERWRITE_EXISTING_COMPANION_REPAIR:{task_id}:{filename}")
+                preserved.append(f"{task_id}:{filename}")
+            else:
+                shutil.copy2(companion_initial,companion_final)
+                copied.append(f"{task_id}:{filename}")
     report = {
         "schema_version": "1.0.0",
         "no_confirmed_defect_tasks": copied + preserved,
