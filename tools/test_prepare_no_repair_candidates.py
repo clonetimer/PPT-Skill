@@ -40,7 +40,7 @@ class PrepareNoRepairCandidatesTests(unittest.TestCase):
                     sha256_file(final / TASK_FINAL_FILENAMES[task]),
                 )
             self.assertTrue((final/"Q08_wine_strip.pptx").is_file())
-            self.assertIn("Q07:Q08_wine_strip.pptx",result["copied"])
+            self.assertIn({"task_id":"Q07","filename":"Q08_wine_strip.pptx"},result["companion_copied"])
             manifest = json.loads((final / "no_repair_candidate_manifest.json").read_text())
             self.assertEqual(set(manifest["no_confirmed_defect_tasks"]), set(no_repair))
 
