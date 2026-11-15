@@ -69,6 +69,7 @@ jobs:
           python tools/test_audit_source_grounded_radar.py
           python tools/test_unseen_figure_families.py
           python tools/test_image_first_workflow.py
+          python tools/test_image_first_stage_a.py
       - name: Validate committed Image-first example before generated specs are rebuilt
         run: python tools/validate_image_first_workflow.py specs/image_first_workflow_v8.example.json
       - name: Build B01/F07

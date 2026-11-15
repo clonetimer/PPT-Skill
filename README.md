@@ -12,7 +12,20 @@ python tools/create_image_first_manifest.py specs/deck_spec_v76.example.json s02
 
 DeckSpec slides may bind a committed FigureSpec through `figure_ref` and a versioned directed-topology contract through `topology_ref`. The prompt builder includes source labels, required nodes, directed edges, and geometry constraints; the manifest locks both source-file SHA-256 hashes and rejects stale contracts. Speaker notes remain presenter-only.
 
-After Image2 generation and human approval, rebuild the slide as editable PPTX, export its preview, then run:
+After Image2 generation, place the 1920 × 1080 target PNG inside the per-slide output directory and record it with the Stage-A helpers:
+
+```bash
+python tools/record_image_first_target.py dist/image_first/fbg-seanet-s02/workflow.json dist/image_first/fbg-seanet-s02/target_image.png
+python tools/review_image_first_target.py dist/image_first/fbg-seanet-s02/workflow.json --decision revise --reviewer "visual triage" --reviewer-type assistant_visual_triage --issue "Frequency axis must point downward"
+```
+
+Human approval requires all six checks:
+
+```bash
+python tools/review_image_first_target.py dist/image_first/fbg-seanet-s02/workflow.json --decision approve --reviewer "domain reviewer" --check scientific_content --check exact_text --check source_fidelity --check visual_hierarchy --check projection_readability --check reconstruction_feasibility
+```
+
+After Stage A approval, rebuild the slide as editable PPTX, export its preview, then run:
 
 ```bash
 python tools/audit_image_first_reconstruction.py dist/image_first/fbg-seanet-s02/workflow.json --output dist/image_first/fbg-seanet-s02/pptx_audit.json

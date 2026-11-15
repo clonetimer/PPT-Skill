@@ -60,6 +60,8 @@ Stage A 必须由人工批准后才能进入 Stage B。批准检查：
 | `prompts/image2_slide_prompt_template.md` | Image2 提示词规则模板 |
 | `tools/build_image2_slide_prompt.py` | 从 DeckSpec 生成目标图提示词 |
 | `tools/create_image_first_manifest.py` | 创建单页 prompt 与工作流 manifest |
+| `tools/record_image_first_target.py` | 记录 Image2 目标图、尺寸与 SHA-256 |
+| `tools/review_image_first_target.py` | 记录 Stage A 修订或人工批准结果 |
 | `tools/audit_image_first_reconstruction.py` | 审计 PPTX 原生对象、文字覆盖与布局 |
 | `tools/compare_image_first_renders.py` | 计算目标图与渲染图的图像差异指标 |
 | `tools/validate_image_first_workflow.py` | 校验状态迁移、来源锁定、文件哈希和验收门槛 |
@@ -91,7 +93,7 @@ python tools/create_image_first_manifest.py \
 - target_image 的相对路径、SHA-256、像素宽高和媒体类型；
 - 生成迭代、参考图和 prompt 哈希。
 
-人工检查并修正后，将状态设为 `approved`，填写人工 reviewer、时间戳，并把六项 checks 全部置为 true。未通过审查的图像保持 `generated` 或 `needs_revision`，不得启动 Stage B。
+使用 `tools/record_image_first_target.py` 记录目标 PNG 的相对路径、SHA-256、像素宽高和媒体类型；该工具要求 1920 × 1080，并自动递增 iteration。随后用 `tools/review_image_first_target.py` 记录审查结果。修订时必须写入至少一条 issue；批准时必须由 human reviewer 完成六项 checks 且无遗留 issue。未通过审查的图像保持 `generated` 或 `needs_revision`，不得启动 Stage B。
 
 ## 4. 执行 Stage B 与审计
 
