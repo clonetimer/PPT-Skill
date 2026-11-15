@@ -124,12 +124,11 @@ def make_spec():
                   semantic_link=f"{stage_nodes[j-1]}__{stage_nodes[j]}")
     add("ellipse", x=7.24, y=5.20, w=.45, h=.45, fill="#FFFFFF", stroke="#43525B", sw=1)
     txt("+", 7.28, 5.25, .37, .33, 15, True, semantic_id="sum")
-    arrow(6.97, 5.43, 7.21, 5.43, semantic_link="sr_main__sum")
+    arrow(7.17, 5.43, 7.21, 5.43, semantic_link="sr_main__sum")
     box(7.88, 5.17, .70, .51, fill="#F3F7F9", stroke="#7896A6", radius=.035)
     txt("Dense", 7.91, 5.29, .64, .27, 10, True, semantic_id="dense")
     arrow(7.71, 5.43, 7.85, 5.43, semantic_link="sum__dense")
     arrow(8.61, 5.43, 8.90, 5.43)
-    txt("class", 8.61, 5.73, .40, .21, 9.5, color=muted)
     segment(1.18, 5.70, 1.18, 6.24, "input__ea")
     box(1.28, 6.03, 2.62, .48, fill="#F7F5F9", stroke="#8A7CA5", radius=.035)
     txt("Energy-assisted module", 1.39, 6.14, 2.41, .26, 10.5, True, semantic_id="ea")
@@ -146,13 +145,13 @@ def make_spec():
     txt("Reading guide", 9.52, 1.04, 3.06, .34, 15, True, "left")
     for y, n, title, body in [
         (1.58, "1", "Filter", "Remove operational components from sensor signals."),
-        (2.65, "2", "Construct", "Build frequency-specific subgraphs and connect them."),
+        (2.65, "2", "Construct", "Band-pass filters form 1st, 2nd, 3rd … Nth subgraphs; these connect into the total graph."),
         (3.72, "3", "Diagnose", "EA feeds first GCN; first pooling branches to two readout paths."),
     ]:
         box(9.54, y, .37, .37, fill="#EAF2F5", stroke="#7896A6", radius=.18)
         txt(n, 9.58, y+.045, .29, .27, 10.5, True)
         txt(title, 10.03, y-.02, 2.42, .28, 11.5, True, "left")
-        txt(body, 10.03, y+.34, 2.52, .59, 10.5, align="left")
+        txt(body, 10.03, y+.34, 2.52, .66, 9.2 if n == "2" else 10.5, align="left")
     txt("Evidence boundary", 9.52, 4.89, 3.00, .27, 11.5, True, "left")
     txt("Graph nodes/edges are schematic. The author-lab figure appears to label both readouts IR; the public abstract uses SR. The exact label remains unresolved.",
         9.52, 5.22, 3.00, .78, 9.0, align="left")
