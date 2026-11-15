@@ -21,11 +21,11 @@
     },
     "C01_SEANet": {
       "status": "REPAIR_EXECUTED",
-      "note": "Two source-grounded repair rounds restore the stacked input, source-like pooling silhouettes, parallel SR path, Dense output and five class squares. Independent domain/final-size review remains pending."
+      "note": "Two source-grounded repair rounds restore the stacked input, source-like pooling silhouettes, parallel readout path, Dense output and five class squares. The author-lab image appears to label both readout blocks IR layer while the public abstract uses SR; both labels are preserved as IR and the discrepancy disclosed as unresolved. Independent domain/final-size review remains pending."
     },
     "C01_composite": {
       "status": "REPAIR_EXECUTED",
-      "note": "Two source-grounded repair rounds restore four input band-subgraphs, the cross-panel Total graph-to-Input route and five independent class-output squares. Independent domain/final-size review remains pending."
+      "note": "Two source-grounded repair rounds restore four input band-subgraphs, the cross-panel Total graph-to-Input route, source-like pooling quadrilaterals and five independent class-output squares. The author-lab image appears to label both readout blocks IR layer while the public abstract uses SR; both labels are preserved as IR and the discrepancy disclosed as unresolved. Independent domain/final-size review remains pending."
     },
     "Q01": {
       "status": "NO_CONFIRMED_DEFECT",
