@@ -2,6 +2,10 @@
 
 ## 来源与术语边界
 
+- 作者实验室原图页面：https://hai.snu.ac.kr/bbs/board.php?bo_table=sub4_1_a&wr_id=251
+- 作者页面图像：https://hai.snu.ac.kr/data/editor/2606/78d439b23291567a99c14c62e0bbf0a6_1780552979_7277.jpg
+- 论文/DOI：https://doi.org/10.1016/j.engappai.2026.115273
+
 - 图形摘要：Seoul National University Hyperautonomy AI Lab 作者发布图，原图上方标题为 **Graph Construction (Time-Frequency Graph)**。
 - 论文方法术语：Lee et al. (2026) 正文/摘要称该构建方法为 **frequency-band graph (FBG)**。
 - 本版处理：保留原图标题，并在副标题标明论文术语“Frequency-band graph (FBG) construction”。不再用论文术语替换原图标题。
