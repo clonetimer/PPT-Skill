@@ -28,7 +28,7 @@
     "archetype": "schematic_led_pipeline",
     "output_mode": "presentation",
     "source": "docs/C01_V73_SOURCE.md",
-    "source_locator": "Author-published graphical abstract upper panel, exact title 'Graph Construction (Time-Frequency Graph)'; article text uses frequency-band graph (FBG)",
+    "source_locator": "Author-lab graphical abstract upper panel, exact title Graph Construction (Time-Frequency Graph); public abstract for FBG method terminology; publisher high-resolution image not directly accessed",
     "evidence_status": "source_visible_redraw",
     "evidence_scope": "Sensor signals, OCF/notch filter, qualitative fault-sensitivity cue, band-pass subgraphs, frequency direction and total graph. Sensor glyphs, waveforms, graph coordinates and inter-band links are schematic.",
     "unverified": [
