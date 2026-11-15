@@ -13,6 +13,7 @@ Generate **one finished presentation slide image**, not a photo of a screen, a s
 - Do not invent measurements, results, citations, labels, arrows, causal relations, or technical details.
 - Do not move speaker notes onto the slide. Speaker notes are context for the design only.
 - If a source does not establish a detail, omit it or retain the supplied schematic/evidence-boundary wording.
+- When a source topology contract is supplied, preserve every listed directed edge, node, label, axis direction, layer count and class-output constraint. Do not simplify them away.
 
 ## Visual composition
 - Establish a clear title, one dominant visual message, and a deliberate reading path.

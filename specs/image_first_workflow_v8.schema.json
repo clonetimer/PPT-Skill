@@ -365,7 +365,8 @@
         "on_slide",
         "speaker_notes",
         "evidence",
-        "visual_constraints"
+        "visual_constraints",
+        "source_figure"
       ],
       "properties": {
         "claim": {
@@ -414,6 +415,16 @@
           "items": {
             "type": "string"
           }
+        },
+        "source_figure": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sourceFigure"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "additionalProperties": false
@@ -978,6 +989,93 @@
               "type": "null"
             }
           ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "sourceFigure": {
+      "type": "object",
+      "required": [
+        "figure_spec_ref",
+        "figure_spec_sha256",
+        "figure_id",
+        "figure_version",
+        "topology_ref",
+        "topology_sha256",
+        "source_text",
+        "critical_labels",
+        "critical_edges",
+        "required_nodes",
+        "geometry_contract",
+        "readout_label_discrepancy"
+      ],
+      "properties": {
+        "figure_spec_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "figure_spec_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "figure_id": {
+          "type": "string"
+        },
+        "figure_version": {
+          "type": "string"
+        },
+        "topology_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "topology_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source_text": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "critical_labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "critical_edges": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "required_nodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "geometry_contract": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "readout_label_discrepancy": {
+          "type": "string"
         }
       },
       "additionalProperties": false

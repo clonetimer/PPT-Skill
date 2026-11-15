@@ -11,6 +11,7 @@ from PIL import Image
 
 from audit_image_first_reconstruction import inspect_reconstruction, sha256_file
 from compare_image_first_renders import compare_images
+from image_first_source_contract import load_source_figure_contract
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "specs/image_first_workflow_v8.schema.json"
@@ -98,11 +99,16 @@ def _validate_deck_lock(root: Path, manifest: dict) -> dict:
     if index != manifest["slide_index"]:
         raise WorkflowValidationError("DECK_SLIDE_INDEX_MISMATCH")
     lock = manifest["content_lock"]
+    try:
+        source_figure = load_source_figure_contract(root, slide)
+    except (ValueError, FileNotFoundError, json.JSONDecodeError) as exc:
+        raise WorkflowValidationError(f"SOURCE_FIGURE_CONTRACT_INVALID:{exc}") from exc
     expected = {
         "claim": slide["claim"],
         "on_slide": slide["on_slide"],
         "speaker_notes": slide["speaker_notes"],
-        "evidence": slide["evidence"]
+        "evidence": slide["evidence"],
+        "source_figure": source_figure
     }
     for key, value in expected.items():
         if lock[key] != value:

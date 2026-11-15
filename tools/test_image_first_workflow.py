@@ -18,6 +18,7 @@ from audit_image_first_reconstruction import inspect_reconstruction
 from build_image2_slide_prompt import build_prompt
 from compare_image_first_renders import compare_images
 from create_image_first_manifest import create_manifest
+from image_first_source_contract import load_source_figure_contract
 from validate_image_first_workflow import (
     WorkflowValidationError,
     validate_manifest,
@@ -46,6 +47,7 @@ class ImageFirstWorkflowTests(unittest.TestCase):
         (self.root / "specs").mkdir()
         (self.root / "prompts").mkdir()
         (self.root / "docs").mkdir()
+        (self.root / "figure_specs").mkdir()
         shutil.copy2(
             REPO_ROOT / "specs/image_first_workflow_v8.schema.json",
             self.root / "specs/image_first_workflow_v8.schema.json"
@@ -55,6 +57,33 @@ class ImageFirstWorkflowTests(unittest.TestCase):
             self.root / "prompts/image2_slide_prompt_template.md"
         )
         (self.root / "docs/source.md").write_text("Source evidence.\n", encoding="utf-8")
+        figure_spec = {
+            "id": "source_figure_demo",
+            "version": "1.0",
+            "semantic_edges": [["input", "gcn_1"]],
+            "elements": [
+                {"type": "text", "text": "Demo figure title", "semantic_id": "title"},
+                {"type": "text", "text": "Legacy SR paths", "semantic_id": "legacy_readout"},
+                {"type": "text", "text": "Source annotation", "semantic_role": "annotation"}
+            ]
+        }
+        topology = {
+            "critical_labels": {"title": "Demo figure title", "legacy_readout": "IR layer"},
+            "critical_edges": [["input", "gcn_1"], ["input", "ea"], ["ea", "gcn_1"]],
+            "required_nodes": ["input", "gcn_1", "ea"],
+            "geometry_contract": {
+                "frequency_axis": {"label": "Frequency", "direction": "vertical_downward"},
+                "input_graph": {"node_count": 12, "within_band_edge_count": 8,
+                                "band_row_count": 4, "inter_band_link_count": 9}
+            },
+            "readout_label_discrepancy": "Author-lab shows IR; public abstract uses SR. Unresolved."
+        }
+        (self.root / "figure_specs/source_figure.json").write_text(
+            json.dumps(figure_spec, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        (self.root / "specs/topology.json").write_text(
+            json.dumps(topology, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
         deck = {
             "schema_version": "7.6.0-dev",
             "deck": {"topic": "Test deck", "audience": "research committee",
@@ -65,7 +94,8 @@ class ImageFirstWorkflowTests(unittest.TestCase):
                 "claim": "The test method has two linked stages.",
                 "evidence": [{"source": "docs/source.md", "status": "source_visible"}],
                 "layout": "left_to_right_process",
-                "figure_ref": None,
+                "figure_ref": "figure_specs/source_figure.json",
+                "topology_ref": "specs/topology.json",
                 "on_slide": ["Two-stage method", "Stage A", "Stage B"],
                 "speaker_notes": "PRIVATE SPEAKER NOTES MUST NOT APPEAR IN THE IMAGE PROMPT."
             }]
@@ -169,10 +199,15 @@ class ImageFirstWorkflowTests(unittest.TestCase):
 
     def test_prompt_uses_locked_copy_and_never_renders_speaker_notes(self):
         deck = json.loads(self.deck_path.read_text(encoding="utf-8"))
-        prompt = build_prompt(deck, deck["slides"][0])
+        source_figure = load_source_figure_contract(self.root, deck["slides"][0])
+        prompt = build_prompt(deck, deck["slides"][0], source_figure=source_figure)
         self.assertIn("Two-stage method", prompt)
         self.assertIn("Stage A", prompt)
         self.assertIn("Stage B", prompt)
+        self.assertIn("IR layer", prompt)
+        self.assertIn("input → ea", prompt)
+        self.assertIn("vertical arrow pointing downward", prompt)
+        self.assertNotIn("Legacy SR paths", prompt)
         self.assertNotIn("PRIVATE SPEAKER NOTES MUST NOT APPEAR", prompt)
         self.assertIn("Presenter notes intentionally withheld", prompt)
 
@@ -180,6 +215,9 @@ class ImageFirstWorkflowTests(unittest.TestCase):
         self.assertTrue(self.prompt_path.is_file())
         self.assertTrue(self.manifest_path.is_file())
         self.assertEqual(self.manifest["stage_a"]["status"], "planned")
+        source_figure = self.manifest["content_lock"]["source_figure"]
+        self.assertEqual(source_figure["figure_spec_sha256"], digest(self.root / "figure_specs/source_figure.json"))
+        self.assertEqual(source_figure["topology_sha256"], digest(self.root / "specs/topology.json"))
         self.assertEqual(
             self.manifest["stage_a"]["prompt"]["rendered_asset"]["sha256"],
             digest(self.prompt_path)
@@ -189,6 +227,17 @@ class ImageFirstWorkflowTests(unittest.TestCase):
             self.root / "specs/image_first_workflow_v8.schema.json"
         )
         self.assertEqual(result["stage"], "STAGE_A_PLANNED")
+
+    def test_source_topology_change_invalidates_the_content_lock(self):
+        (self.root / "specs/topology.json").write_text(
+            json.dumps({"critical_edges": [["input", "wrong_node"]]}, indent=2) + "\n",
+            encoding="utf-8"
+        )
+        with self.assertRaisesRegex(WorkflowValidationError, "CONTENT_LOCK_MISMATCH:source_figure"):
+            validate_manifest(
+                self.manifest_path, self.root,
+                self.root / "specs/image_first_workflow_v8.schema.json"
+            )
 
     def test_stage_b_cannot_start_before_human_approved_target(self):
         self.manifest["stage_a"]["status"] = "generated"

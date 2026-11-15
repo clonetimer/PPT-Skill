@@ -64,17 +64,19 @@ Stage A 必须由人工批准后才能进入 Stage B。批准检查：
 | `tools/compare_image_first_renders.py` | 计算目标图与渲染图的图像差异指标 |
 | `tools/validate_image_first_workflow.py` | 校验状态迁移、来源锁定、文件哈希和验收门槛 |
 
-每页一个 manifest。它通过 `deck_spec_ref`、`slide_id` 和 `slide_index` 绑定既有 DeckSpec，并复制一份不可随意漂移的 `content_lock`。验证器会逐项比对 claim、on-slide 文案、speaker notes 和 evidence；内容锁不一致时直接失败。
+每页一个 manifest。它通过 `deck_spec_ref`、`slide_id` 和 `slide_index` 绑定既有 DeckSpec，并复制一份不可随意漂移的 `content_lock`。当页面引用 FigureSpec 和拓扑契约时，manifest 还会锁定两份源文件的 SHA-256、关键标签、必需节点、所有有向边及几何约束；Image2 prompt 会显式包含这些信息。验证器逐项比对 claim、on-slide 文案、speaker notes、evidence 和源图契约；任何源文件或拓扑变化都会使旧 manifest 失效。演讲备注仅保存在 manifest，不进入图像生成提示词。
 
 ## 3. 开始 Stage A
 
-以现有 FBG-SEANet 方法页为例：
+以现有 FBG-SEANet 方法页为例。DeckSpec 的 `figure_ref` 指向仓库中已提交的 V7.4 FigureSpec，`topology_ref` 指向 V7.5 的源拓扑契约；二者组合表达当前 C01 的布局/样式基线与更新后的科学拓扑，不依赖 CI 临时生成文件：
 
 ```bash
 python tools/create_image_first_manifest.py \
   specs/deck_spec_v76.example.json s02 \
   --output-dir dist/image_first/fbg-seanet-s02
 ```
+
+生成的提示词包含关键有向关系与几何硬约束，例如 `Total graph → Input`、`Input → Energy-assisted module → first GCN`、垂直向下的 Frequency 方向、4 个 total-graph band layers、12-node input graph，以及 5 个方形分类输出（第二个高亮）。这些约束来自源拓扑契约，而不是由 Image2 自行推断。
 
 生成：
 - `dist/image_first/fbg-seanet-s02/image2_prompt.md`

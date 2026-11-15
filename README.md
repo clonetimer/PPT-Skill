@@ -10,6 +10,8 @@ Create a per-slide prompt and manifest:
 python tools/create_image_first_manifest.py specs/deck_spec_v76.example.json s02 --output-dir dist/image_first/fbg-seanet-s02
 ```
 
+DeckSpec slides may bind a committed FigureSpec through `figure_ref` and a versioned directed-topology contract through `topology_ref`. The prompt builder includes source labels, required nodes, directed edges, and geometry constraints; the manifest locks both source-file SHA-256 hashes and rejects stale contracts. Speaker notes remain presenter-only.
+
 After Image2 generation and human approval, rebuild the slide as editable PPTX, export its preview, then run:
 
 ```bash

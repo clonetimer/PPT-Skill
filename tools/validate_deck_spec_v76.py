@@ -48,6 +48,9 @@ def validate(path: Path = EXAMPLE):
             assert (ROOT / item["source"]).is_file()
         if slide["figure_ref"]:
             assert (ROOT / slide["figure_ref"]).is_file()
+        if slide.get("topology_ref"):
+            assert slide.get("figure_ref"), "topology_ref requires a figure_ref"
+            assert (ROOT / slide["topology_ref"]).is_file()
     boundary = next(slide for slide in slides if slide["role"] == "evidence_boundary")
     assert len(boundary["evidence_blocks"]) == 3
     assert [block["metric"] for block in boundary["evidence_blocks"]] == ["18", "3", "3"]
