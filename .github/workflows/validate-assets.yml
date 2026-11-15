@@ -134,6 +134,7 @@ jobs:
           python tools/test_repair_case_artifacts.py
           python tools/test_repair_case_deck01_round1.py
           python tools/test_prepare_no_repair_candidates.py
+          python tools/test_package_15_final_candidates.py
           python tools/validate_output_profiles.py
           python tools/test_output_profiles.py
           python tools/check_scientific_accessibility.py
@@ -167,6 +168,8 @@ jobs:
           python tools/prepare_15_figure_initial_cohort.py dist --c01-seanet-initial dist/repair_cases/C01_SEANet/rounds/first_pass.pptx --deck01-initial dist/repair_cases/DECK01/rounds/first_pass.pptx --output-dir dist/initial_pass
       - name: Preserve diagnosed no-repair candidates
         run: python tools/prepare_no_repair_candidates.py dist/initial_pass dist/accepted_repairs
+      - name: Package complete 15-task final candidates
+        run: python tools/package_15_final_candidates.py --output dist/PPT-Skill_15_final_candidates_v76.zip
       - name: Prepare separate review stages
         run: |
           python tools/prepare_scientific_review_bundle.py --stage initial --output dist/scientific_review_initial_v76.zip
@@ -174,6 +177,12 @@ jobs:
       - name: Prepare 15-figure initial versus repair review
         run: |
           python tools/fifteen_figure_review_packet.py dist/initial_pass dist/accepted_repairs --output-dir dist/15_figure_repair_review
+      - name: Upload complete 15-task final candidate package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-v7.6-final-candidate-package
+          path: dist/PPT-Skill_15_final_candidates_v76.zip
+          if-no-files-found: error
       - name: Upload 15-figure repair-review ledger
         uses: actions/upload-artifact@v4
         with:
