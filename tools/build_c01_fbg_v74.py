@@ -44,17 +44,17 @@ def build_spec() -> dict:
     ]
     for object_id, value, x, y, width in labels:
         element = by_id[object_id]
-        element.update(text=value, x=x, y=y, w=width, h=.36, size=8.2, align="left")
+        element.update(text=value, x=x, y=y, w=width, h=.40, size=9.5, align="left")
 
     # Keep the original OCF waveform sequence and add the source-visible qualitative cue.
     by_id["el_0011"]["text"] = "Operational component\nremoved"
     by_id["el_0011"].update(y=4.48, h=.48, size=9.5)
-    by_id["el_0041"]["text"] = "Fault sensitivity cues clearer (qualitative)"
-    by_id["el_0041"].update(x=4.54, y=5.08, w=1.43, h=.20, size=8.8)
+    by_id["el_0041"]["text"] = "Fault-sensitivity cues\nclearer (qualitative)"
+    by_id["el_0041"].update(x=4.54, y=5.00, w=1.43, h=.38, size=9.5)
     extra = [
         {
             "type":"text","text":"Fault sensitivity","x":4.62,"y":3.45,"w":1.27,"h":.18,
-            "size":9.0,"font":"Times New Roman","color":"#43525B","align":"center",
+            "size":9.5,"font":"Times New Roman","color":"#43525B","align":"center",
             "id":"el_0042","semantic_role":"annotation","evidence_ref":"source_1"
         },
         {
