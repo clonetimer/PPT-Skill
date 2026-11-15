@@ -33,6 +33,7 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertEqual(TASK_FILENAMES["Q03"],"Q03_iris_mean_ci.pptx")
         self.assertEqual(TASK_FILENAMES["Q03P"],"Q03_iris_mean_ci_nature.pptx")
         self.assertEqual(TASK_FILENAMES["C01_SEANet"],"C01_SEANet_graph_level_v73.pptx")
+        self.assertEqual(TASK_FINAL_FILENAMES["C01_FBG"],"C01_FBG_construction_v74.pptx")
         self.assertEqual(TASK_FINAL_FILENAMES["C01_SEANet"],"C01_SEANet_graph_level_v74.pptx")
         self.assertEqual(TASK_FILENAMES["C01_composite"],"C01_composite_defense_slide_v74.pptx")
         self.assertEqual(TASK_FINAL_FILENAMES["C01_composite"],"C01_composite_defense_slide_v75.pptx")
@@ -41,6 +42,21 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertEqual(TASK_COMPANION_FILENAMES["Q07"],("Q08_wine_strip.pptx",))
         self.assertEqual(len(TASK_FILENAMES),15)
 
+
+
+    def test_c01_fbg_v73_initial_is_compared_with_v74_source_corrected_repair(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);initial=root/"initial";final=root/"final";out=root/"out"
+            initial.mkdir();final.mkdir()
+            deck(initial/"C01_FBG_construction_v73.pptx","initial")
+            deck(final/"C01_FBG_construction_v74.pptx","repaired")
+            result=build_packet(initial,final,out)
+        row=next(x for x in result["tasks"] if x["task_id"]=="C01_FBG")
+        self.assertEqual(row["status"],"REPAIR_COMPARISON_READY")
+        self.assertEqual(row["initial"],"C01_FBG_construction_v73.pptx")
+        self.assertEqual(row["final"],"C01_FBG_construction_v74.pptx")
+        self.assertIn("figure_spec_diff",row["diff"])
+        self.assertGreater(row["diff"]["figure_spec_diff"]["modified"],0)
 
     def test_c01_seanet_v73_initial_is_compared_with_v74_final(self):
         with tempfile.TemporaryDirectory() as folder:
