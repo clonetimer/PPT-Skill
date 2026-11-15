@@ -41,9 +41,9 @@
     {
       "id": "s02", "role": "method", "claim": "FBG construction feeds a two-branch graph-level diagnosis path.",
       "evidence": [{"source": "docs/C01_V73_SOURCE.md", "status": "source_visible"}],
-      "layout": "composite_method", "figure_ref": "figure_specs/c01/C01_composite_defense_slide.json",
-      "on_slide": ["Frequency-band graph", "Graph-level diagnosis"],
-      "speaker_notes": "Walk through OCF and band subgraphs. In SEANet, EA feeds the first GCN, first pooling branches to the lower SR, and both SR paths merge before Dense classification. State that sensor glyphs and adjacency are schematic."
+      "layout": "composite_method", "figure_ref": "figure_specs/c01/C01_composite_defense_slide_v75.json",
+      "on_slide": ["Frequency-band graph", "Graph-level diagnosis", "fault class"],
+      "speaker_notes": "Walk through OCF and band subgraphs. In SEANet, EA feeds the first GCN, first pooling branches to the lower SR, and both SR paths merge before Dense classification and five independent class-output squares (second highlighted orange). State that the input graph icon, sensor glyphs and adjacency are schematic."
     },
     {
       "id": "s03", "role": "evidence_boundary", "claim": "The redraw preserves method topology while leaving numerical adjacency unasserted.",

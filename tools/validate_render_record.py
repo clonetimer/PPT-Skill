@@ -2,18 +2,28 @@
 """Check the committed Windows export attestation without rewriting it on CI."""
 from __future__ import annotations
 
+import hashlib
 import json
+import subprocess
 
 from record_scientific_render import (ROOT, IDS, canonical_spec_digest, canonical_svg_digest,
-                                      canonical_pptx_digest, canonical_source_digest, digest,
-                                      pdf_font_audit, PIPELINE_SOURCES)
+                                      canonical_pptx_digest, digest, pdf_font_audit,
+                                      PIPELINE_SOURCES)
 
 
 def validate_pipeline_sources(record: dict) -> None:
     observed = record.get("pipeline_sources_canonical_sha256", {})
+    revision = record.get("pipeline_sources_revision")
+    assert isinstance(revision, str) and len(revision) == 40, "Missing immutable render source revision"
     assert set(observed) == set(PIPELINE_SOURCES), "Pipeline source inventory changed"
     for relpath in PIPELINE_SOURCES:
-        assert observed[relpath] == canonical_source_digest(ROOT / relpath), relpath
+        result = subprocess.run(
+            ["git", "show", f"{revision}:{relpath}"],
+            cwd=ROOT, check=True, capture_output=True,
+        )
+        source = result.stdout.decode("utf-8-sig").replace("\r\n", "\n").replace("\r", "\n")
+        source_digest = hashlib.sha256(source.encode("utf-8")).hexdigest()
+        assert observed[relpath] == source_digest, relpath
 
 
 def main():

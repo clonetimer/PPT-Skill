@@ -1,0 +1,1200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/clonetimer/PPT-Skill/specs/source_figure_layout.schema.json",
+  "title": "Source-observed scientific figure layout evidence",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "source",
+    "page",
+    "figure_region_pt",
+    "figure_region_source",
+    "coordinate_system",
+    "panel_detection",
+    "layout_elements",
+    "stroke_segment_candidates",
+    "clipping_regions",
+    "image_assets",
+    "style_profile",
+    "warnings",
+    "requires_human_review"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": [
+        "1.0.0",
+        "1.1.0"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "filename",
+        "sha256",
+        "page_index"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "page_index": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "page": {
+      "type": "object",
+      "required": [
+        "width_pt",
+        "height_pt",
+        "aspect_ratio"
+      ],
+      "properties": {
+        "width_pt": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height_pt": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "aspect_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "figure_region_pt": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "number"
+      }
+    },
+    "figure_region_source": {
+      "enum": [
+        "explicit_user_crop",
+        "full_page_default"
+      ]
+    },
+    "coordinate_system": {
+      "type": "object",
+      "required": [
+        "units",
+        "origin",
+        "normalized_region"
+      ],
+      "properties": {
+        "units": {
+          "const": "PDF points"
+        },
+        "origin": {
+          "const": "top-left"
+        },
+        "normalized_region": {
+          "type": "string"
+        }
+      }
+    },
+    "panel_detection": {
+      "type": "object",
+      "required": [
+        "status",
+        "marker_count",
+        "panels",
+        "unmatched_large_rectangles",
+        "candidate_status",
+        "unlabeled_panel_candidates",
+        "alignment_groups",
+        "raster_gutter_candidates",
+        "raster_gutter_candidate_status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "EXPLICIT_MARKERS_FOUND",
+            "PARTIAL_PANEL_BOUNDARIES",
+            "NO_CONFIRMED_PANEL_BOUNDARIES",
+            "NO_EXPLICIT_PANEL_MARKERS"
+          ]
+        },
+        "marker_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "panels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/panel"
+          }
+        },
+        "unresolved_markers": {
+          "type": "array"
+        },
+        "unmatched_large_rectangles": {
+          "type": "array"
+        },
+        "candidate_status": {
+          "enum": [
+            "CANDIDATES_FOUND",
+            "NO_GEOMETRIC_CANDIDATES"
+          ]
+        },
+        "unlabeled_panel_candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/panelCandidate"
+          }
+        },
+        "alignment_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/alignmentGroup"
+          }
+        },
+        "raster_gutter_candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rasterGutter"
+          }
+        },
+        "raster_gutter_candidate_status": {
+          "enum": [
+            "CANDIDATES_FOUND",
+            "NO_DOMINANT_IMAGE_GUTTERS"
+          ]
+        },
+        "visual_evidence_status": {
+          "enum": [
+            "NOT_REQUESTED",
+            "COMPLETED"
+          ]
+        },
+        "visual_region_candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/visualRegionCandidate"
+          }
+        },
+        "ocr_panel_markers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ocrPanelMarker"
+          }
+        },
+        "panel_hypotheses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/panelHypothesis"
+          }
+        },
+        "visual_alignment_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/visualAlignmentGroup"
+          }
+        },
+        "source_object_ownership": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceObjectOwnership"
+          }
+        }
+      }
+    },
+    "layout_elements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/layoutElement"
+      }
+    },
+    "stroke_segment_candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/edgeCandidate"
+      }
+    },
+    "clipping_regions": {
+      "type": "array"
+    },
+    "image_assets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/imageAsset"
+      }
+    },
+    "style_profile": {
+      "type": "object",
+      "required": [
+        "palette",
+        "font_families",
+        "font_size_tiers_pt",
+        "stroke_widths_pt",
+        "dash_patterns"
+      ],
+      "properties": {
+        "palette": {
+          "type": "array"
+        },
+        "font_families": {
+          "type": "object"
+        },
+        "font_size_tiers_pt": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "stroke_widths_pt": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "dash_patterns": {
+          "type": "object"
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requires_human_review": {
+      "const": true
+    },
+    "visual_evidence": {
+      "type": "object",
+      "required": [
+        "backend",
+        "status",
+        "engine",
+        "paddleocr_version",
+        "layout_model",
+        "ocr_detection_model",
+        "ocr_recognition_model",
+        "requested_dpi",
+        "effective_dpi",
+        "raster_size_px",
+        "warnings"
+      ],
+      "properties": {
+        "backend": {
+          "enum": [
+            "none",
+            "paddleocr"
+          ]
+        },
+        "status": {
+          "enum": [
+            "NOT_REQUESTED",
+            "COMPLETED"
+          ]
+        },
+        "engine": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "paddleocr_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "layout_model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ocr_detection_model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ocr_recognition_model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requested_dpi": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "effective_dpi": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "raster_size_px": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "panel": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "order",
+        "bbox_pt",
+        "bbox_normalized",
+        "boundary_source",
+        "confidence",
+        "confidence_basis"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "boundary_source": {
+          "type": "string"
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        }
+      }
+    },
+    "layoutElement": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "bbox_pt",
+        "bbox_normalized",
+        "semantic_role",
+        "confidence",
+        "confidence_basis"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "source_order": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "semantic_role": {
+          "type": "string"
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        }
+      }
+    },
+    "edgeCandidate": {
+      "type": "object",
+      "required": [
+        "id",
+        "start_pt",
+        "end_pt",
+        "start_normalized",
+        "end_normalized",
+        "directedness",
+        "confidence",
+        "confidence_basis"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "start_pt": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number"
+          }
+        },
+        "end_pt": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number"
+          }
+        },
+        "start_normalized": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number"
+          }
+        },
+        "end_normalized": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number"
+          }
+        },
+        "directedness": {
+          "enum": [
+            "undetermined",
+            "directed",
+            "undirected"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        }
+      }
+    },
+    "imageAsset": {
+      "type": "object",
+      "required": [
+        "id",
+        "source_order",
+        "xref",
+        "source_kind",
+        "sha256",
+        "bbox_pt",
+        "bbox_normalized",
+        "panel_candidate",
+        "confidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source_order": {
+          "type": "integer"
+        },
+        "xref": {
+          "type": "integer"
+        },
+        "source_kind": {
+          "enum": [
+            "xref",
+            "image_block"
+          ]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "panel_candidate": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "raster_gutter_candidate_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "panelCandidate": {
+      "type": "object",
+      "required": [
+        "id",
+        "candidate_type",
+        "bbox_pt",
+        "bbox_normalized",
+        "confidence",
+        "confidence_basis",
+        "review_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "candidate_type": {
+          "enum": [
+            "source_enclosure",
+            "nested_source_enclosure",
+            "interstitial_band"
+          ]
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "area_fraction": {
+          "type": "number"
+        },
+        "source_order": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "parent_candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "alignment_group_id": {
+          "type": "string"
+        },
+        "between_candidate_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        },
+        "review_status": {
+          "const": "needs_human_review"
+        }
+      }
+    },
+    "alignmentGroup": {
+      "type": "object",
+      "required": [
+        "id",
+        "axis",
+        "member_candidate_ids",
+        "confidence",
+        "confidence_basis",
+        "review_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "axis": {
+          "enum": [
+            "vertical_stack",
+            "horizontal_row"
+          ]
+        },
+        "member_candidate_ids": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        },
+        "review_status": {
+          "const": "needs_human_review"
+        }
+      }
+    },
+    "rasterGutter": {
+      "type": "object",
+      "required": [
+        "id",
+        "source_image_id",
+        "axis",
+        "start_pt",
+        "end_pt",
+        "width_pt",
+        "normalized_interval",
+        "mean_ink_fraction",
+        "confidence",
+        "confidence_basis",
+        "review_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source_image_id": {
+          "type": "string"
+        },
+        "axis": {
+          "enum": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        "start_pt": {
+          "type": "number"
+        },
+        "end_pt": {
+          "type": "number"
+        },
+        "width_pt": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "normalized_interval": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number"
+          }
+        },
+        "mean_ink_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        },
+        "review_status": {
+          "const": "needs_human_review"
+        }
+      }
+    },
+    "visualRegionCandidate": {
+      "type": "object",
+      "required": [
+        "id",
+        "candidate_type",
+        "model_label",
+        "model_score",
+        "bbox_pt",
+        "bbox_normalized",
+        "parent_candidate_id",
+        "depth",
+        "source_object_ids",
+        "owned_source_object_ids",
+        "source_object_count",
+        "ownership_coverage",
+        "confidence_score",
+        "confidence",
+        "confidence_basis",
+        "review_status",
+        "needs_human_review",
+        "evidence_source"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "candidate_type": {
+          "enum": [
+            "visual_region",
+            "nested_visual_region"
+          ]
+        },
+        "model_label": {
+          "type": "string"
+        },
+        "model_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "parent_candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_object_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "owned_source_object_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_object_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ownership_coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        },
+        "review_status": {
+          "const": "needs_human_review"
+        },
+        "needs_human_review": {
+          "const": true
+        },
+        "evidence_source": {
+          "type": "string"
+        }
+      }
+    },
+    "ocrPanelMarker": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "text",
+        "marker_style",
+        "ocr_score",
+        "bbox_pt",
+        "bbox_normalized",
+        "candidate_type",
+        "confidence",
+        "confidence_basis",
+        "needs_human_review",
+        "anchor_status",
+        "matched_region_candidate_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1
+        },
+        "text": {
+          "type": "string"
+        },
+        "marker_style": {
+          "enum": [
+            "parenthesized",
+            "punctuated",
+            "bare"
+          ]
+        },
+        "ocr_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "candidate_type": {
+          "const": "ocr_panel_marker"
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        },
+        "needs_human_review": {
+          "const": true
+        },
+        "anchor_status": {
+          "enum": [
+            "UNRESOLVED",
+            "ANCHORED_CANDIDATE"
+          ]
+        },
+        "matched_region_candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "panelHypothesis": {
+      "type": "object",
+      "required": [
+        "id",
+        "candidate_id",
+        "candidate_type",
+        "region_candidate_id",
+        "marker_candidate_id",
+        "label",
+        "marker_text",
+        "bbox_pt",
+        "bbox_normalized",
+        "confidence_score",
+        "confidence",
+        "confidence_basis",
+        "needs_human_review",
+        "review_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "candidate_id": {
+          "type": "string"
+        },
+        "candidate_type": {
+          "const": "label_anchored_visual_region"
+        },
+        "region_candidate_id": {
+          "type": "string"
+        },
+        "marker_candidate_id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "marker_text": {
+          "type": "string"
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "bbox_normalized": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "confidence_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "confidence_basis": {
+          "type": "string"
+        },
+        "needs_human_review": {
+          "const": true
+        },
+        "review_status": {
+          "const": "needs_human_review"
+        }
+      }
+    },
+    "visualAlignmentGroup": {
+      "type": "object",
+      "required": [
+        "id",
+        "candidate_type",
+        "axis",
+        "parent_candidate_id",
+        "member_candidate_ids",
+        "bbox_pt",
+        "confidence_score",
+        "confidence",
+        "needs_human_review",
+        "confidence_basis"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "candidate_type": {
+          "const": "visual_alignment_group"
+        },
+        "axis": {
+          "enum": [
+            "horizontal_row",
+            "vertical_stack"
+          ]
+        },
+        "parent_candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "member_candidate_ids": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "bbox_pt": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "confidence_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "needs_human_review": {
+          "const": true
+        },
+        "confidence_basis": {
+          "type": "string"
+        }
+      }
+    },
+    "sourceObjectOwnership": {
+      "type": "object",
+      "required": [
+        "source_object_id",
+        "candidate_id",
+        "source_order",
+        "overlap_ratio",
+        "status",
+        "ownership_scope",
+        "reason"
+      ],
+      "properties": {
+        "source_object_id": {
+          "type": "string"
+        },
+        "candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_order": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "overlap_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "status": {
+          "enum": [
+            "ASSIGNED",
+            "CONTAINER_ONLY",
+            "UNRESOLVED"
+          ]
+        },
+        "ownership_scope": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "region",
+            "container",
+            null
+          ]
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

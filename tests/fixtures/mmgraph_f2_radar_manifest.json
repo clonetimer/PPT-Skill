@@ -1,0 +1,90 @@
+{
+  "source": "https://arxiv.org/abs/2611.10657",
+  "table": "Table 3, token-level F1 means (%)",
+  "geometry_rule": "r(method,dataset)=F1(method,dataset)/F1(MMGraph-Agent,dataset)",
+  "radars": [
+    {
+      "name": "knowledge_and_web",
+      "bbox_inches": [
+        4.4,
+        0.58,
+        5.86,
+        1.8
+      ],
+      "axes": [
+        {
+          "dataset": "DocBench"
+        },
+        {
+          "dataset": "MMLongBench-Doc"
+        },
+        {
+          "dataset": "ViDoSeek"
+        },
+        {
+          "average_of": [
+            "2Wiki",
+            "HotpotQA",
+            "Musique",
+            "NQ",
+            "PopQA",
+            "TriviaQA"
+          ]
+        },
+        {
+          "dataset": "FVQA"
+        },
+        {
+          "dataset": "InfoSeek"
+        },
+        {
+          "dataset": "MMSearch"
+        },
+        {
+          "dataset": "SimpleVQA"
+        },
+        {
+          "dataset": "LiveVQA"
+        }
+      ]
+    },
+    {
+      "name": "knowledge_plus_web",
+      "bbox_inches": [
+        6.18,
+        0.58,
+        7.69,
+        1.8
+      ],
+      "axes": [
+        {
+          "dataset": "MedXpertQA"
+        },
+        {
+          "dataset": "FinMME"
+        },
+        {
+          "dataset": "We-Math2.0"
+        },
+        {
+          "dataset": "R-Bench"
+        },
+        {
+          "dataset": "MicroVQA"
+        },
+        {
+          "dataset": "EEmo-Bench"
+        },
+        {
+          "dataset": "ArtQuest"
+        },
+        {
+          "dataset": "AstroLLaVA"
+        },
+        {
+          "dataset": "GeoGrid-Bench"
+        }
+      ]
+    }
+  ]
+}

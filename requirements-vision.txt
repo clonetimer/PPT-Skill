@@ -1,0 +1,4 @@
+# Optional visual evidence backend; never installed by the base PPT-Skill workflow.
+# Use Python 3.11 or 3.12 in a separate environment.
+paddleocr>=3.7.0,<4
+onnxruntime>=1.23,<2

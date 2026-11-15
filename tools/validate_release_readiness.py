@@ -40,7 +40,7 @@ def prepare_template() -> dict:
         "benchmark_sha256": sha256(benchmark_path),
         "reviewers": {},
         "tasks": {task["id"]: {
-            "required_discipline": task["discipline"], "reviewer_id": "",
+            "required_discipline": task["discipline"], "reviewer_id": "", "repair_rounds": 0,
             "source_sha256": sha256(ROOT / task["source"]),
             "input_sha256": sha256(ROOT / task["input"]),
             "related_inputs_sha256": {path: sha256(ROOT / path)
@@ -57,7 +57,9 @@ def prepare_template() -> dict:
     }
 
 
-def validate_review(review: dict) -> None:
+def validate_review(review: dict | Path) -> None:
+    if isinstance(review, (str, Path)):
+        review = json.loads(Path(review).read_text(encoding="utf-8"))
     benchmark_path = ROOT / "specs/research_figure_benchmark_v76.json"
     benchmark = json.loads(benchmark_path.read_text(encoding="utf-8"))
     require(review.get("benchmark_sha256") == sha256(benchmark_path), "Benchmark changed since review")
@@ -66,6 +68,8 @@ def validate_review(review: dict) -> None:
     for reviewer_id, reviewer in reviewers.items():
         require(bool(reviewer_id and reviewer.get("name") and reviewer.get("date")),
                 f"{reviewer_id}: reviewer identity and date required")
+        require(reviewer.get("human") is True,
+                f"{reviewer_id}: reviewer must be explicitly identified as human")
         require(isinstance(reviewer.get("disciplines"), list) and bool(reviewer["disciplines"]),
                 f"{reviewer_id}: reviewer disciplines required")
         require(reviewer.get("independent_of_build") is True, f"{reviewer_id}: independence required")
@@ -83,6 +87,8 @@ def validate_review(review: dict) -> None:
         require(result.get("required_discipline") == task["discipline"], f"{task_id}: discipline changed")
         reviewer_id = result.get("reviewer_id")
         require(reviewer_id in reviewers, f"{task_id}: assigned reviewer required")
+        require(type(result.get("repair_rounds")) is int and result.get("repair_rounds", -1) >= 0,
+                f"{task_id}: repair round count must be a non-negative integer")
         require(task["discipline"] in reviewers[reviewer_id]["disciplines"],
                 f"{task_id}: reviewer field does not cover {task['discipline']}")
         require(result.get("source_checked") is True, f"{task_id}: source check required")

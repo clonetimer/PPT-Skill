@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "basis": "Source, task contract, current editable output, generated preview and automated audit. This is a triage record, not independent human acceptance.",
+  "policy": {
+    "no_repair_means": "No source-critical defect was confirmed in the current inspection; preserve the artifact unchanged and retain human final-size/domain review as pending.",
+    "ci_is_not_human_acceptance": true,
+    "final_human_review": "PENDING"
+  },
+  "tasks": {
+    "B01": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "Guarded reconfiguration, feedback loop and mode states are explicit. This is an engineering adaptation, not a reproduction of a published figure; no unsupported mission timing is added."
+    },
+    "F07": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "The 40×40 grid and L=5 temporal stack are shown as schematic; channel-to-cell coordinates are not asserted."
+    },
+    "C01_FBG": {
+      "status": "REPAIR_EXECUTED",
+      "note": "One source-grounded repair round restores the exact author-graphic title Time-Frequency Graph while retaining the paper term FBG in a subtitle; adds the frequency-direction arrow, ordinal subgraph labels, ellipsis, and qualitative fault-sensitivity cues. Numerical cutoffs, waveform values and adjacency remain schematic; independent domain/final-size review is pending."
+    },
+    "C01_SEANet": {
+      "status": "REPAIR_EXECUTED",
+      "note": "Two source-grounded repair rounds restore the stacked input, source-like pooling silhouettes, parallel readout path, Dense output and five class squares. The author-lab image appears to label both readout blocks IR layer while the public abstract uses SR; both labels are preserved as IR and the discrepancy disclosed as unresolved. Independent domain/final-size review remains pending."
+    },
+    "C01_composite": {
+      "status": "REPAIR_EXECUTED",
+      "note": "Two source-grounded repair rounds restore four input band-subgraphs, the cross-panel Total graph-to-Input route, source-like pooling quadrilaterals and five independent class-output squares. The author-lab image appears to label both readout blocks IR layer while the public abstract uses SR; both labels are preserved as IR and the discrepancy disclosed as unresolved. Independent domain/final-size review remains pending."
+    },
+    "Q01": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "All 150 source flowers are plotted; 48 repeated-coordinate observations across 24 groups are visibly separated with disclosed display-only offsets; axes use centimetres and species use color plus shape."
+    },
+    "Q02": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "All 50 observations per species are separated; horizontal offsets are disclosed as display-only and the sepal-length overlap remains visible."
+    },
+    "Q03": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "All 150 raw points and species means are shown with 95% within-species bootstrap intervals (2,000 resamples, seed 76)."
+    },
+    "Q03P": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "The publication-size panel preserves the Q03 data and bootstrap summaries at 183×100 mm with editable Arial text in the 5–7 pt range. Physical final-size review remains pending; no speculative geometry change is made before that review."
+    },
+    "Q04": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "Actual and predicted axes are identified; all 150 deterministic leave-one-out 1-NN predictions and cell counts are displayed."
+    },
+    "Q05": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "The same 150 leave-one-out folds are used for both feature sets; 144 versus 143 correct predictions and denominators are visible. The caption correctly limits the result to a descriptive demonstrator."
+    },
+    "Q06": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "All 50 setosa observations are shown; five ranked groups contain ten flowers each and have within-bin 95% bootstrap intervals. The line is described as connected bin means, not a fitted model."
+    },
+    "Q07": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "Both scatter and categorical distribution outputs retain all 178 samples; cultivar codes use color and shape, source-unreported units remain unreported, and no cultivar names are invented.",
+      "delivery_issue": {
+        "status": "BUNDLE_FIX_REQUIRED",
+        "finding": "The previously supplied final-candidate ZIP contained the Q07 scatter PPTX but omitted the required Q08 distribution PPTX, although the build pipeline already generates Q08.",
+        "correction": "The initial cohort and final candidate package now include Q07 scatter and Q08 categorical distribution as a paired two-artifact deliverable, with separate previews, source-linked data, and SHA-256 entries.",
+        "validation": "CI packaging test requires Q07_wine_scatter.pptx, Q08_wine_strip.pptx, Q08_wine_strip.svg, Q08_wine_strip.pdf, and Q08_wine_strip.preview.png."
+      }
+    },
+    "I01": {
+      "status": "NO_CONFIRMED_DEFECT",
+      "note": "The raw image hash, processing log, 0.107 µm/px calibration, 10 µm scale bar and 363,000-pixel histogram are linked; pixels are not described as biological replicates."
+    },
+    "DECK01": {
+      "status": "REPAIR_EXECUTED",
+      "note": "The first-pass evidence-boundary slide contained only two vague labels and substantial unused space. Round 01 replaces it with three evidence cards for checked routes, schematic substitutions and pending human review gates."
+    }
+  }
+}

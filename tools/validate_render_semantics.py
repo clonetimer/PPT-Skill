@@ -20,6 +20,10 @@ LEGACY = [
     ("C01_SEANet_graph_level", "figure_specs/c01/C01_SEANet_graph_level.json", "examples/C01_SEANet_graph_level_v73.svg", "dist/C01_SEANet_graph_level_v73.pptx", None),
     ("C01_composite_defense_slide", "figure_specs/c01/C01_composite_defense_slide.json", "examples/C01_composite_defense_slide_v74.svg", "dist/C01_composite_defense_slide_v74.pptx", "dist/C01_composite_defense_slide_v74_preview.pdf"),
 ]
+CURRENT_ONLY = [
+    ("C01_SEANet_graph_level_v74", "figure_specs/c01/C01_SEANet_graph_level_v74.json", "examples/C01_SEANet_graph_level_v74.svg", "dist/C01_SEANet_graph_level_v74.pptx", "dist/C01_SEANet_graph_level_v74.pdf"),
+    ("C01_composite_defense_slide_v75", "figure_specs/c01/C01_composite_defense_slide_v75.json", "examples/C01_composite_defense_slide_v75.svg", "dist/C01_composite_defense_slide_v75.pptx", "dist/C01_composite_defense_slide_v75_preview.pdf"),
+]
 
 
 def normalize(value):
@@ -28,7 +32,7 @@ def normalize(value):
 
 
 def main():
-    paths = LEGACY + [
+    paths = LEGACY + CURRENT_ONLY + [
         (figure_id, f"figure_specs/{'image' if figure_id.startswith('I') else 'quant'}/{figure_id}.json",
          f"examples/{figure_id}.svg", f"dist/{figure_id}.pptx", f"dist/{figure_id}.pdf")
         for figure_id in IDS

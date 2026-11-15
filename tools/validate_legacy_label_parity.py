@@ -14,6 +14,14 @@ from validate_render_semantics import LEGACY, NS, ROOT, normalize
 
 BASE = "7ea999d677a30db1bfcb9497a4d0c3d89403f350"  # Last pre-V7.6 commit.
 APPROVED_C01_CORRECTIONS = {
+    "F07_telemetry_embedding": (
+        ["Subsystem and function informed parameter ordering",
+         "Occupancy is schematic; exact channel coordinates are not shown."],
+        ["Illustrative ordering by subsystem and function",
+         "Occupancy is schematic; no channel-to-cell mapping is asserted."]),
+    "B01_engineering_fdir": (
+        ["0.1s"],
+        ["Engineering concept schematic · no mission-specific timing is asserted."]),
     "C01_FBG_construction": (
         ["Graph construction (time-frequency graph)"],
         ["Graph construction (frequency-band graph)", "Fault cues clearer"]),

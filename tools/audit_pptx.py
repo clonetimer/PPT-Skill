@@ -43,10 +43,20 @@ def audit(path):
                     for r in p.runs:
                         if r.font.size:sizes.append(round(r.font.size.pt,1))
                         if r.font.name:fonts[r.font.name]+=1
-        ov=sum(overlaps(a,b) for j,a in enumerate(texts) for b in texts[j+1:])
+        overlap_pairs=[]
+        for j,a in enumerate(texts):
+            for b in texts[j+1:]:
+                if overlaps(a,b):
+                    overlap_pairs.append({
+                        "shape_a":a.name,"shape_b":b.name,
+                        "text_a":a.text[:160],"text_b":b.text[:160],
+                        "a_bbox_emu":[a.left,a.top,a.width,a.height],
+                        "b_bbox_emu":[b.left,b.top,b.width,b.height],
+                    })
+        ov=len(overlap_pairs)
         slides.append({"slide":i,"recursive_shape_count":sum(counts.values()),"shape_types":dict(counts),
                        "picture_objects":pics,"svg_picture_objects":svgpics,"non_svg_picture_objects":pics-svgpics,
-                       "out_of_bounds":oob,"text_box_overlaps":ov,
+                       "out_of_bounds":oob,"text_box_overlaps":ov,"overlap_pairs":overlap_pairs,
                        "min_font_pt":min(sizes) if sizes else None,"max_font_pt":max(sizes) if sizes else None,
                        "fonts":dict(fonts)})
     with zipfile.ZipFile(path) as z:

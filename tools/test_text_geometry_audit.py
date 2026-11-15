@@ -1,0 +1,210 @@
+"""Source-aware audit for text overlap, clipping, font and glyph fidelity."""
+from __future__ import annotations
+
+from pathlib import Path
+import tempfile
+import unittest
+
+import fitz
+from pptx import Presentation
+from pptx.enum.shapes import MSO_SHAPE_TYPE
+
+from pdf_figure_import import convert_pdf_page
+from audit_text_geometry import audit_text_geometry
+
+
+def make_two_spans(path: Path, *, overlap: bool = False):
+    doc = fitz.open()
+    page = doc.new_page(width=240, height=120)
+    page.insert_text((40, 50), "A", fontsize=12, fontname="helv")
+    page.insert_text((40 if overlap else 48, 50), "B", fontsize=12, fontname="tiro")
+    doc.save(path)
+    doc.close()
+
+
+class TextGeometryAuditTests(unittest.TestCase):
+    def test_source_intentional_overlap_is_not_reported_as_introduced(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp)/"source.pdf", Path(tmp)/"source.pptx"
+            make_two_spans(source, overlap=True)
+            convert_pdf_page(source, output)
+            report = audit_text_geometry(source, output)
+            self.assertGreaterEqual(report["source_overlap_count"], 1)
+            self.assertEqual(report["introduced_overlap_count"], 0)
+            self.assertEqual(report["status"], "PASS")
+
+    def test_candidate_only_overlap_is_a_hard_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp)/"source.pdf", Path(tmp)/"candidate.pptx"
+            make_two_spans(source)
+            convert_pdf_page(source, output)
+            deck = Presentation(output)
+            text_shapes = [s for s in deck.slides[0].shapes
+                           if s.shape_type == MSO_SHAPE_TYPE.TEXT_BOX and s.text.strip()]
+            text_shapes[1].left = text_shapes[0].left
+            deck.save(output)
+            report = audit_text_geometry(source, output)
+            self.assertGreater(report["introduced_overlap_count"], 0)
+            self.assertEqual(report["status"], "FAIL")
+
+    def test_candidate_text_corruption_is_reported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp)/"math.pdf", Path(tmp)/"math.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=240, height=120)
+            fontfile = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+            if not Path(fontfile).exists():
+                self.skipTest("DejaVu Sans fixture font is unavailable")
+            page.insert_text((30, 60), "θₜ → β²", fontsize=14,
+                             fontfile=fontfile, fontname="DejaVuSans")
+            doc.save(source)
+            doc.close()
+            convert_pdf_page(source, output)
+            deck = Presentation(output)
+            shape = next(s for s in deck.slides[0].shapes
+                         if s.shape_type == MSO_SHAPE_TYPE.TEXT_BOX and s.text.strip())
+            shape.text = "theta_t -> beta2"
+            deck.save(output)
+            report = audit_text_geometry(source, output)
+            self.assertEqual(report["text_mismatch_count"], 1)
+            self.assertEqual(report["status"], "FAIL")
+
+    def test_candidate_only_out_of_bounds_is_reported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp)/"source.pdf", Path(tmp)/"source.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=240, height=120)
+            page.insert_text((30, 50), "Inside", fontsize=12)
+            doc.save(source)
+            doc.close()
+            convert_pdf_page(source, output)
+            deck = Presentation(output)
+            shape = next(s for s in deck.slides[0].shapes
+                         if s.shape_type == MSO_SHAPE_TYPE.TEXT_BOX and s.text.strip())
+            shape.left = deck.slide_width + 10000
+            deck.save(output)
+            report = audit_text_geometry(source, output)
+            self.assertEqual(report["introduced_out_of_bounds_count"], 1)
+            self.assertEqual(report["status"], "FAIL")
+
+    def test_source_clipped_text_is_not_misreported_as_new_overflow(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp)/"cropped.pdf", Path(tmp)/"cropped.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=120, height=80)
+            page.insert_text((108, 40), "clipped", fontsize=12)
+            doc.save(source)
+            doc.close()
+            convert_pdf_page(source, output)
+            report = audit_text_geometry(source, output)
+            self.assertGreaterEqual(report["source_out_of_bounds_count"], 1)
+            self.assertEqual(report["introduced_out_of_bounds_count"], 0)
+            self.assertEqual(report["status"], "PASS")
+
+    def test_low_visibility_source_footer_is_excluded_from_import_and_audit(self):
+        from pdf_figure_import import _span_visible_fraction
+        span = {"bbox": (6.0, 283.2, 16.0, 293.2)}
+        page_rect = fitz.Rect(0, 0, 505, 284.1)
+        self.assertAlmostEqual(_span_visible_fraction(span, page_rect), .09, delta=.002)
+        self.assertLess(_span_visible_fraction(span, page_rect), .2)
+
+    def test_report_records_font_substitution_and_math_codepoints(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp)/"math.pdf", Path(tmp)/"math.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=240, height=120)
+            fontfile = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+            if not Path(fontfile).exists():
+                self.skipTest("DejaVu Sans fixture font is unavailable")
+            page.insert_text((30, 60), "θₜ → β²", fontsize=14,
+                             fontfile=fontfile, fontname="DejaVuSans")
+            doc.save(source)
+            doc.close()
+            convert_pdf_page(source, output)
+            report = audit_text_geometry(source, output)
+            self.assertEqual(report["text_mismatch_count"], 0)
+            self.assertGreaterEqual(report["math_glyph_count"], 4)
+            self.assertTrue(report["font_mappings"])
+
+
+    def test_font_size_mutation_is_reported_even_when_text_and_bounds_match(self):
+        from pptx.util import Pt
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp)/"source.pdf", Path(tmp)/"candidate.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=300, height=180)
+            page.insert_text((40, 80), "Fixed-size label", fontsize=12, fontname="helv")
+            doc.save(source)
+            doc.close()
+            convert_pdf_page(source, output)
+            deck = Presentation(output)
+            shape = next(s for s in deck.slides[0].shapes if s.has_text_frame and s.text.strip())
+            shape.text_frame.paragraphs[0].runs[0].font.size = Pt(10)
+            deck.save(output)
+            report = audit_text_geometry(source, output)
+        self.assertEqual(report["status"], "FAIL")
+        self.assertEqual(report["font_size_mismatch_count"], 1)
+        self.assertAlmostEqual(report["font_size_mismatches"][0]["source_size_pt"], 12, delta=.01)
+        self.assertEqual(report["font_size_mismatches"][0]["candidate_run_sizes_pt"], [10.0])
+
+    def test_unmapped_control_glyph_is_flagged_for_manual_review(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp)/"unmapped.pdf", Path(tmp)/"unmapped.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=240, height=120)
+            page.insert_text((30, 60), "A\x00B", fontsize=12, fontname="helv")
+            doc.save(source)
+            doc.close()
+            convert_pdf_page(source, output)
+            report = audit_text_geometry(source, output)
+            self.assertGreaterEqual(report["suspicious_glyph_count"], 1)
+            self.assertEqual(report["text_mismatch_count"], 0)
+            self.assertEqual(report["status"], "NEEDS_REVIEW")
+            self.assertEqual(report["glyph_substitution_count"], 1)
+
+
+class TextDirectionAuditTests(unittest.TestCase):
+    def test_autofit_mutation_is_rejected_before_host_can_reflow_source_text(self):
+        from pptx.enum.text import MSO_AUTO_SIZE
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp) / "source.pdf", Path(tmp) / "candidate.pptx"
+            make_two_spans(source)
+            convert_pdf_page(source, output)
+            deck = Presentation(output)
+            shape = next(s for s in deck.slides[0].shapes if s.has_text_frame and s.text.strip())
+            shape.text_frame.auto_size = MSO_AUTO_SIZE.TEXT_TO_FIT_SHAPE
+            deck.save(output)
+            report = audit_text_geometry(source, output)
+            self.assertEqual(report["status"], "FAIL")
+            self.assertEqual(report["autofit_mismatch_count"], 1)
+
+    def test_reflecting_rotation_fails_even_when_aabb_is_unchanged(self):
+        import math
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp) / "source.pdf", Path(tmp) / "candidate.pptx"
+            doc = fitz.open()
+            page = doc.new_page(width=400, height=300)
+            origin = fitz.Point(120, 150)
+            page.insert_text(origin, "Rotated label", fontsize=12, fontname="helv",
+                             morph=(origin, fitz.Matrix(1, 1).prerotate(30)))
+            line = next(l for b in page.get_text("dict")["blocks"] for l in b.get("lines", []))
+            expected_angle = math.degrees(math.atan2(line["dir"][1], line["dir"][0])) % 360
+            doc.save(source)
+            doc.close()
+            convert_pdf_page(source, output)
+            deck = Presentation(output)
+            shape = next(s for s in deck.slides[0].shapes if s.has_text_frame and s.text.strip())
+            shape.rotation = expected_angle
+            deck.save(output)
+            good = audit_text_geometry(source, output)
+            self.assertEqual(good["status"], "PASS")
+            shape.rotation = (-expected_angle) % 360
+            deck.save(output)
+            bad = audit_text_geometry(source, output)
+            self.assertEqual(bad["introduced_overlap_count"], 0)
+            self.assertEqual(bad["status"], "FAIL")
+            self.assertEqual(bad["rotation_mismatch_count"], 1)
+
+
+if __name__ == "__main__":
+    unittest.main()

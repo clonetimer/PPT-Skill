@@ -1,0 +1,488 @@
+#!/usr/bin/env python3
+"""Evidence-aware, fail-closed source-PDF / FigureSpec to editable PPTX pipeline."""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+from audit_office2016_compat import audit_pptx
+from audit_figure_spec import audit_figure_spec_semantics, audit_figurespec_output
+from figure_first_pass_gate import (
+    source_profile, candidate_profile, compare_rendered_pages,
+    _export_with_libreoffice,
+)
+from reproduction_release_gate import classify_release
+from extract_source_layout import extract_source_layout
+from source_layout_review import validate_source_layout_review, recommend_source_route
+from source_layout_constraints import compile_reviewed_layout_constraints
+from apply_reviewed_geometry import apply_reviewed_geometry
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _write_json(path: Path, value: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def _empty_candidate() -> dict:
+    return {
+        "shape_count": 0, "native_vectors": 0, "text_objects": 0,
+        "picture_objects": 0, "full_page_pictures": 0, "out_of_bounds": 0,
+        "slide_pt": [0.0, 0.0],
+    }
+
+
+def _clear_previous_outputs(destination: Path) -> None:
+    for name in (
+        "candidate_editable.pptx", "candidate.svg", "source_preflight.json", "source_layout.json",
+        "source_layout_review_audit.json", "source_layout_constraints.json",
+        "reviewed_figure_spec.json", "source_geometry_application_audit.json",
+        "reconstruction_routes.json", "source_composition_manifest.json",
+        "source_composition_pptx_audit.json", "reconstruction_quality_metrics.json",
+        "source_candidate_diff.png",
+        "import_report.json", "semantic_audit.json", "structure_audit.json",
+        "text_geometry_audit.json", "visual_audit.json",
+        "office2016_ooxml_preflight.json", "quality_report.json",
+        "delivery_manifest.json", "pipeline_error.json",
+    ):
+        target = destination / name
+        if target.is_file():
+            target.unlink()
+    rendered = destination / "rendered"
+    if rendered.exists():
+        shutil.rmtree(rendered)
+
+
+def run_pipeline(source_pdf: Path, destination: Path, *, mode: str = "import",
+                 figure_spec: Path | None = None, render_host: str = "auto",
+                 approvals: dict | None = None, require_native: bool = True,
+                 require_office_host: bool = True,
+                 max_drawings: int = 10000,
+                 max_source_segments: int = 100000,
+                 max_vertices: int = 250000,
+                 max_seconds: float = 60.0,
+                 page_index: int = 0,
+                 figure_region: tuple[float, float, float, float] | None = None,
+                 source_layout_review: Path | None = None,
+                 source_layout_bindings: Path | None = None) -> dict:
+    source_pdf = Path(source_pdf).resolve()
+    destination = Path(destination).resolve()
+    if not source_pdf.is_file():
+        raise FileNotFoundError(f"Source PDF missing: {source_pdf}")
+    if mode not in ("import", "figurespec"):
+        raise ValueError("mode must be import or figurespec")
+    if mode == "figurespec" and (figure_spec is None or not Path(figure_spec).is_file()):
+        raise ValueError("FigureSpec mode requires an existing --figure-spec")
+    if source_layout_review is not None and not Path(source_layout_review).is_file():
+        raise FileNotFoundError(f"SourceLayout review file missing: {source_layout_review}")
+    if render_host not in ("auto", "none"):
+        raise ValueError("render_host must be auto or none")
+    if min(max_drawings, max_source_segments, max_vertices) <= 0 or max_seconds <= 0:
+        raise ValueError("All PDF import resource budgets must be positive")
+
+    destination.mkdir(parents=True, exist_ok=True)
+    _clear_previous_outputs(destination)
+    figure_spec = Path(figure_spec).resolve() if figure_spec else None
+    source_layout_review = Path(source_layout_review).resolve() if source_layout_review else None
+    source_layout_bindings = Path(source_layout_bindings).resolve() if source_layout_bindings else None
+    candidate = destination / "candidate_editable.pptx"
+    source_info = {}
+    source_layout = {}
+    source_layout_error = None
+    source_route_recommendation = None
+    source_layout_review_audit = None
+    source_layout_constraints = None
+    source_layout_geometry_application = None
+    reconstruction_routes = None
+    source_composition_manifest = None
+    source_composition_pptx_audit = None
+    reconstruction_quality_metrics = None
+    source_layout_review_error = None
+    import_report = {}
+    semantic_audit = None
+    structure = None
+    text_geometry = None
+    visual = None
+    office = {"status": "FAIL", "failures": ["CANDIDATE_NOT_CREATED"], "warnings": []}
+    candidate_info = _empty_candidate()
+    error = None
+    rendered_pdf = None
+    render_error = None
+
+    try:
+        source_info = source_profile(source_pdf, page=page_index, figure_region=figure_region)
+        _write_json(destination / "source_preflight.json", source_info)
+        try:
+            source_layout = extract_source_layout(
+                source_pdf, page_index=page_index, figure_region=figure_region
+            )
+            _write_json(destination / "source_layout.json", source_layout)
+            source_route_recommendation = recommend_source_route(source_layout)
+            if source_layout_review is not None:
+                try:
+                    source_layout_review_audit = validate_source_layout_review(
+                        destination / "source_layout.json", source_layout_review
+                    )
+                    _write_json(destination / "source_layout_review_audit.json",
+                                source_layout_review_audit)
+                    if source_layout_review_audit["status"] == "INVALID":
+                        source_layout_review_error = (
+                            "SOURCE_LAYOUT_REVIEW_INVALID: " +
+                            "; ".join(source_layout_review_audit["errors"])
+                        )
+                        error = source_layout_review_error
+                    elif source_layout_review_audit["status"] == "VALIDATED_WITH_ACCEPTED_FACTS":
+                        source_layout_constraints = compile_reviewed_layout_constraints(
+                            destination / "source_layout.json",
+                            source_layout_review,
+                            destination / "source_layout_constraints.json",
+                        )
+                        if mode == "import":
+                            from source_reconstruction_router import build_reconstruction_routes
+                            from source_region_composer import build_source_composition_manifest
+                            reconstruction_routes = build_reconstruction_routes(
+                                destination / "source_layout.json", source_layout_review
+                            )
+                            _write_json(destination / "reconstruction_routes.json", reconstruction_routes)
+                            source_composition_manifest = build_source_composition_manifest(
+                                destination / "source_layout.json",
+                                source_layout_review,
+                                destination / "reconstruction_routes.json",
+                            )
+                            _write_json(destination / "source_composition_manifest.json", source_composition_manifest)
+                except Exception as exc:
+                    source_layout_review_error = (
+                        f"SOURCE_LAYOUT_REVIEW_INVALID: {type(exc).__name__}: {exc}"
+                    )
+                    error = source_layout_review_error
+        except Exception as exc:
+            source_layout_error = f"{type(exc).__name__}: {exc}"
+    except Exception as exc:
+        error = f"SOURCE_PREFLIGHT_ERROR: {type(exc).__name__}: {exc}"
+
+    if error is None:
+        try:
+            if mode == "import":
+                from pdf_figure_import import convert_pdf_page
+                import_report = convert_pdf_page(
+                    source_pdf, candidate, page_index=page_index,
+                    figure_region=figure_region,
+                    max_drawings=max_drawings,
+                    max_source_segments=max_source_segments,
+                    max_vertices=max_vertices,
+                    max_seconds=max_seconds,
+                )
+                _write_json(destination / "import_report.json", import_report)
+            else:
+                figure_spec_for_render = figure_spec
+                if source_layout_bindings is not None:
+                    if source_layout_constraints is None:
+                        raise ValueError("REVIEWED_SOURCE_LAYOUT_BINDINGS_REQUIRED")
+                    source_layout_geometry_application = apply_reviewed_geometry(
+                        figure_spec,
+                        destination / "source_layout_constraints.json",
+                        source_layout_bindings,
+                        destination / "reviewed_figure_spec.json",
+                    )
+                    _write_json(destination / "source_geometry_application_audit.json",
+                                source_layout_geometry_application)
+                    figure_spec_for_render = destination / "reviewed_figure_spec.json"
+                renderer = Path(__file__).with_name("render_figure_spec.py")
+                command = [
+                    sys.executable, str(renderer), str(figure_spec_for_render),
+                    "--svg", str(destination / "candidate.svg"),
+                    "--pptx", str(candidate),
+                ]
+                subprocess.run(command, check=True, capture_output=True, text=True, timeout=180)
+                semantic_audit = audit_figure_spec_semantics(figure_spec_for_render)
+                _write_json(destination / "semantic_audit.json", semantic_audit)
+                output_audits = audit_figurespec_output(figure_spec_for_render, candidate)
+                structure = output_audits["structure"]
+                text_geometry = output_audits["text_geometry"]
+                _write_json(destination / "structure_audit.json", structure)
+                _write_json(destination / "text_geometry_audit.json", text_geometry)
+        except Exception as exc:
+            error = f"{type(exc).__name__}: {exc}"
+            _write_json(destination / "pipeline_error.json", {
+                "error": error, "route": mode,
+                "source_sha256": sha256(source_pdf),
+            })
+
+    if candidate.is_file():
+        try:
+            candidate_info = candidate_profile(candidate)
+        except Exception as exc:
+            error = error or f"CANDIDATE_PROFILE_ERROR: {type(exc).__name__}: {exc}"
+            candidate_info = _empty_candidate()
+        try:
+            office = audit_pptx(candidate)
+        except Exception as exc:
+            office = {"status": "FAIL", "failures": [f"{type(exc).__name__}: {exc}"], "warnings": []}
+        _write_json(destination / "office2016_ooxml_preflight.json", office)
+
+        if mode == "import" and error is None:
+            try:
+                from audit_imported_pdf_figure import audit_figure
+                from audit_text_geometry import audit_text_geometry
+                structure = audit_figure(
+                    source_pdf, candidate, page_index=page_index, figure_region=figure_region
+                )
+                text_geometry = audit_text_geometry(
+                    source_pdf, candidate, page_index=page_index, figure_region=figure_region
+                )
+                _write_json(destination / "structure_audit.json", structure)
+                _write_json(destination / "text_geometry_audit.json", text_geometry)
+            except Exception as exc:
+                error = f"IMPORT_AUDIT_ERROR: {type(exc).__name__}: {exc}"
+
+        if render_host == "auto" and error is None:
+            try:
+                rendered_pdf = _export_with_libreoffice(candidate, destination / "rendered")
+                if rendered_pdf is None:
+                    render_error = "NO_SUPPORTED_PDF_RENDERER"
+                elif mode == "import":
+                    visual = compare_rendered_pages(
+                        source_pdf, rendered_pdf,
+                        preview=destination / "source_candidate_diff.png",
+                        source_page_index=page_index,
+                        source_region=figure_region,
+                        candidate_page_index=0,
+                    )
+                    visual.update({
+                        "status": "PASS",
+                        "evidence_type": "source_comparison",
+                        "renderer": "LibreOffice PDF export",
+                        "rendered_pdf_sha256": sha256(rendered_pdf),
+                    })
+                else:
+                    # FigureSpec is a scientific reinterpretation and may be
+                    # intentionally re-laid-out; source SSIM is not its fidelity
+                    # contract. Rendering success is technical evidence only.
+                    visual = {
+                        "status": "PASS",
+                        "evidence_type": "candidate_render",
+                        "renderer": "LibreOffice PDF export",
+                        "rendered_pdf_sha256": sha256(rendered_pdf),
+                        "requires_visual_review": False,
+                        "comparison": "not_applicable_for_relaid_out_figurespec",
+                    }
+                _write_json(destination / "visual_audit.json", visual)
+            except Exception as exc:
+                render_error = f"{type(exc).__name__}: {exc}"
+        elif render_host == "none":
+            render_error = "RENDER_HOST_DISABLED"
+
+        if mode == "import" and source_composition_manifest is not None:
+            if source_composition_manifest.get("status") == "COMPOSITION_PLAN_READY":
+                from audit_source_composition_pptx import audit_imported_pptx_against_composition
+                from reconstruction_quality_metrics import evaluate_reconstruction_quality
+                source_composition_pptx_audit = audit_imported_pptx_against_composition(
+                    destination / "source_composition_manifest.json", candidate
+                )
+                _write_json(destination / "source_composition_pptx_audit.json", source_composition_pptx_audit)
+                reconstruction_quality_metrics = evaluate_reconstruction_quality(
+                    destination / "source_composition_manifest.json",
+                    candidate,
+                    destination / "visual_audit.json" if (destination / "visual_audit.json").is_file() else None,
+                )
+                _write_json(destination / "reconstruction_quality_metrics.json", reconstruction_quality_metrics)
+            else:
+                _write_json(destination / "source_composition_pptx_audit.json", {
+                    "status": "BLOCKED",
+                    "reason": "SOURCE_COMPOSITION_MANIFEST_BLOCKED",
+                    "blockers": source_composition_manifest.get("blockers", []),
+                    "execution_authorized": False,
+                })
+
+    release = classify_release(
+        route=mode,
+        candidate=candidate_info,
+        import_report=import_report,
+        structure=structure,
+        text_geometry=text_geometry,
+        visual=visual,
+        office=office if candidate.is_file() else None,
+        semantic_audit=semantic_audit,
+        approvals=approvals,
+        source_risks=(
+            list(source_info.get("risk_flags", [])) +
+            ([{"code": "SOURCE_LAYOUT_EXTRACTION_FAILED", "severity": "high"}]
+             if source_layout_error else [])
+        ),
+        error=error,
+        require_native=require_native,
+        require_office_host=require_office_host,
+    )
+
+    manifest = {
+        "schema_version": 2,
+        "route": mode,
+        "status": release["status"],
+        "full_release_accepted": release["full_accepted"],
+        "blockers": release["blockers"],
+        "pending_approvals": release["pending_approvals"],
+        "reconstruction_class": (
+            import_report.get("reconstruction_class") if mode == "import"
+            else "figurespec_science_grounded_reinterpretation"
+        ),
+        "source": {"path": str(source_pdf), "sha256": sha256(source_pdf),
+                   "page_index": page_index,
+                   "figure_region_pt": list(figure_region) if figure_region else None},
+        "source_layout": ({
+            "path": str(destination / "source_layout.json"),
+            "sha256": sha256(destination / "source_layout.json"),
+            "figure_region_pt": source_layout.get("figure_region_pt"),
+            "panel_detection": source_layout.get("panel_detection"),
+            "layout_element_count": len(source_layout.get("layout_elements", [])),
+            "stroke_segment_candidate_count": len(source_layout.get("stroke_segment_candidates", [])),
+            "image_asset_count": len(source_layout.get("image_assets", [])),
+        } if source_layout else None),
+        "source_layout_error": source_layout_error,
+        "source_route_recommendation": source_route_recommendation,
+        "source_layout_review": ({
+            "path": str(source_layout_review),
+            "sha256": sha256(source_layout_review),
+            "audit_path": str(destination / "source_layout_review_audit.json"),
+            "audit_sha256": (
+                sha256(destination / "source_layout_review_audit.json")
+                if (destination / "source_layout_review_audit.json").is_file() else None
+            ),
+            "status": source_layout_review_audit["status"] if source_layout_review_audit else "INVALID",
+            "accepted_region_count": source_layout_review_audit["accepted_region_count"] if source_layout_review_audit else 0,
+            "accepted_panel_count": source_layout_review_audit["accepted_panel_count"] if source_layout_review_audit else 0,
+            "pending_count": source_layout_review_audit["pending_count"] if source_layout_review_audit else 0,
+        } if source_layout_review else None),
+        "accepted_source_layout_facts": ({
+            "regions": source_layout_review_audit["accepted_source_layout_regions"],
+            "panels": source_layout_review_audit["accepted_source_panels"],
+        } if source_layout_review_audit else {"regions": [], "panels": []}),
+        "source_layout_constraints": ({
+            "path": str(destination / "source_layout_constraints.json"),
+            "sha256": sha256(destination / "source_layout_constraints.json"),
+            "constraint_count": source_layout_constraints["constraint_count"],
+            "source_panel_constraint_count": source_layout_constraints["source_panel_constraint_count"],
+            "region_constraint_count": source_layout_constraints["region_constraint_count"],
+            "scope": "human-reviewed geometric evidence only; not semantic approval",
+        } if source_layout_constraints else None),
+        "source_layout_bindings": ({
+            "path": str(source_layout_bindings),
+            "sha256": sha256(source_layout_bindings),
+        } if source_layout_bindings and source_layout_bindings.is_file() else None),
+        "source_layout_geometry_application": ({
+            "path": str(destination / "reviewed_figure_spec.json"),
+            "sha256": sha256(destination / "reviewed_figure_spec.json"),
+            "bound_element_count": source_layout_geometry_application["bound_element_count"],
+            "scientific_relations_verified": False,
+        } if source_layout_geometry_application else None),
+        "source_layout_review_error": source_layout_review_error,
+        "source_composition": ({
+            "routes_path": str(destination / "reconstruction_routes.json"),
+            "routes_sha256": sha256(destination / "reconstruction_routes.json"),
+            "manifest_path": str(destination / "source_composition_manifest.json"),
+            "manifest_sha256": sha256(destination / "source_composition_manifest.json"),
+            "status": source_composition_manifest["status"],
+            "blockers": source_composition_manifest.get("blockers", []),
+        } if source_composition_manifest else None),
+        "candidate": ({
+            "path": str(candidate), "sha256": sha256(candidate),
+            **candidate_info,
+        } if candidate.is_file() else None),
+        "figure_spec": ({
+            "path": str(figure_spec), "sha256": sha256(figure_spec),
+        } if figure_spec else None),
+        "rendered_pdf": ({
+            "path": str(rendered_pdf), "sha256": sha256(rendered_pdf),
+        } if rendered_pdf and rendered_pdf.is_file() else None),
+        "reports": {
+            "source_preflight": source_info,
+            "source_layout_review": source_layout_review_audit,
+            "import": import_report or None,
+            "structure": structure,
+            "text_geometry": text_geometry,
+            "semantic": semantic_audit,
+            "visual": visual,
+            "office_ooxml": office if candidate.is_file() else None,
+            "source_composition_pptx_audit": source_composition_pptx_audit,
+            "reconstruction_quality_metrics": reconstruction_quality_metrics,
+        },
+        "error": error,
+        "render_error": render_error,
+        "approvals": approvals or {},
+        "office2016_host_test": "not run",
+        "scientific_review": "required unless explicitly approved",
+        "visual_review": "required unless explicitly approved",
+        "rights_review": "required unless explicitly cleared",
+        "final_release_approved": release["full_accepted"],
+        "evidence_class": (
+            "source-visible imported object reconstruction" if mode == "import"
+            else "FigureSpec science-grounded reinterpretation"
+        ),
+    }
+    _write_json(destination / "quality_report.json", release)
+    _write_json(destination / "delivery_manifest.json", manifest)
+    return manifest
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("source_pdf", type=Path)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--mode", choices=["import", "figurespec"], default="import")
+    parser.add_argument("--figure-spec", type=Path)
+    parser.add_argument("--render-host", choices=["auto", "none"], default="auto")
+    parser.add_argument("--approvals-json", type=Path,
+                        help="explicit human approval record; never inferred by automation")
+    parser.add_argument("--allow-source-picture-only", action="store_true",
+                        help="report SOURCE_PICTURE_ONLY instead of rejecting non-native recovery")
+    parser.add_argument("--no-require-office-host", action="store_true",
+                        help="disable the PowerPoint host approval gate for non-release diagnostics")
+    parser.add_argument("--max-drawings", type=int, default=10000)
+    parser.add_argument("--max-source-segments", type=int, default=100000)
+    parser.add_argument("--max-vertices", type=int, default=250000)
+    parser.add_argument("--max-seconds", type=float, default=60.0)
+    parser.add_argument("--page", type=int, default=1, help="1-based source PDF page")
+    parser.add_argument("--region", type=float, nargs=4, metavar=("X0", "Y0", "X1", "Y1"),
+                        help="optional figure crop in PDF points")
+    parser.add_argument("--source-layout-review", type=Path,
+                        help="optional human-reviewed SourceLayout decisions JSON")
+    parser.add_argument("--source-layout-bindings", type=Path,
+                        help="explicit geometry binding map for a reviewed FigureSpec")
+    args = parser.parse_args()
+    approvals = json.loads(args.approvals_json.read_text(encoding="utf-8")) if args.approvals_json else None
+    result = run_pipeline(
+        args.source_pdf, args.output, mode=args.mode,
+        figure_spec=args.figure_spec, render_host=args.render_host,
+        approvals=approvals, require_native=not args.allow_source_picture_only,
+        require_office_host=not args.no_require_office_host,
+        max_drawings=args.max_drawings,
+        max_source_segments=args.max_source_segments,
+        max_vertices=args.max_vertices,
+        max_seconds=args.max_seconds,
+        page_index=args.page - 1,
+        figure_region=tuple(args.region) if args.region else None,
+        source_layout_review=args.source_layout_review,
+        source_layout_bindings=args.source_layout_bindings,
+    )
+    print(json.dumps({
+        "status": result["status"],
+        "full_release_accepted": result["full_release_accepted"],
+        "manifest": str(args.output / "delivery_manifest.json"),
+        "blockers": result["blockers"],
+        "pending_approvals": result["pending_approvals"],
+    }, ensure_ascii=False))
+    if result["status"] in {"STRUCTURE_FAIL", "UNSUPPORTED_SOURCE", "RESOURCE_LIMIT"}:
+        sys.exit(1)
+    if result["status"] != "FULL_ACCEPTED":
+        sys.exit(2)
+
+
+if __name__ == "__main__":
+    main()
