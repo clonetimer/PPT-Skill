@@ -100,7 +100,7 @@ def build_spec() -> dict:
         "terminology": "The article text calls the proposed construction a frequency-band graph (FBG). The figure title and paper-method term are both retained and distinguished.",
         "evidence": "Source-visible structural redraw. Sensor photographs and waveforms are editable vector stand-ins; graph coordinates and inter-band links are schematic."
     }
-    spec["claim"] = (
+    spec["evidence_status"] = "source_visible_redraw"\n    spec["scientific_source_ref"] = "docs/C01_V73_SOURCE.md"\n    spec["claim"] = (
         "Sensor signals pass through OCF notch filtering; band-pass filters create one subgraph per frequency band; "
         "the subgraphs are connected into a total graph."
     )
