@@ -13,7 +13,7 @@ The Stage 1 package correctly named the visible lower panel “Graph-level fault
 The repository's task contract separates three deliverables:
 
 - `C01_FBG`: frequency-band graph construction (sensor signals, OCF/notch filtering, band subgraphs and total graph).
-- `C01_SEANet`: graph-level diagnosis (input graph, GCN/pooling, EA and SR branches, summation and Dense classification).
+- `C01_SEANet`: graph-level diagnosis (input graph, GCN/pooling, EA and readout branches, summation and Dense classification).
 - `C01_composite`: the combined two-panel method overview and cross-panel information flow.
 
 Therefore the absence of the upper FBG-construction panel is **not, by itself, a defect in the C01-SEANet lower-panel deliverable**. Do not merge the FBG panel into the SEANet figure; that would duplicate the separately scoped C01-FBG deliverable. The SEANet figure must, however, disclose that it is an excerpt and point to the companion C01-FBG figure. The composite figure remains responsible for showing the complete two-panel connection.
@@ -65,3 +65,8 @@ The five squares remain separate native PowerPoint shapes; the semantic grouping
 ## Decision
 
 **Proceed with the source-grounded local repair of C01-SEANet as a component excerpt; do not misrepresent it as the complete graphical abstract.** The two-panel completeness requirement is assigned to C01_composite, which must be independently reviewed together with its upper FBG panel and Total graph → SEANet input connection. The Stage 1 12/24 FAIL remains frozen; a new blind final-review packet must declare these separate scopes.
+
+
+## 2026-11-15 source-label clarification
+
+The accessible author-lab graphical abstract appears to label both readout blocks IR layer, while the public abstract uses sensitivity-aware readout (SR). The discrepancy is unresolved. The current source-reconciled standalone and composite preserve the visible IR label and disclose the abstract terminology; they do not claim a final terminology correction. The publisher high-resolution graphical abstract was not directly accessed.
