@@ -24,6 +24,8 @@ UNBLIND_EXTRA = {
     "docs/15_FIGURE_DIAGNOSTIC_LEDGER_V76.md",
     "docs/B01_STATE_TRANSITION_AND_AUTHORITY_TABLE_V76.md",
     "docs/B01_STATE_TRANSITIONS_V76.csv",
+    "dist/quantitative_reproduction_audit_v76.json",
+    "dist/quantitative_point_traceability_v76.csv",
     "docs/LOCAL_REPAIR_CASE_TEMPLATE_V76.md",
     "docs/C01_LITERATURE_COMPARISON_2026-11-07.md",
     "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md",
