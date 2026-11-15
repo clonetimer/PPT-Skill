@@ -40,11 +40,11 @@
     ]
   },
   "C01_SEANet_graph_level": {
-    "claim": "GCN/pooling and energy-assisted SR paths converge at the summation node.",
+    "claim": "The SEANet graph-level diagnosis path combines the main GCN/pooling route with an energy-assisted readout branch before Dense classification.",
     "archetype": "schematic_led_composite",
     "output_mode": "presentation",
     "source": "docs/C01_V73_SOURCE.md",
-    "source_locator": "Author-published graphical abstract, Paper-grounded statements, and Terminology",
+    "source_locator": "Author-lab graphical abstract, lower Graph-level fault diagnosis framework panel; public abstract terminology checked separately; IR/SR discrepancy unresolved",
     "evidence_status": "source_visible_redraw",
     "evidence_scope": "Visible graph-level method topology; node coordinates are schematic.",
     "unverified": [
@@ -58,7 +58,7 @@
     "archetype": "schematic_led_composite",
     "output_mode": "presentation",
     "source": "docs/C01_V73_SOURCE.md",
-    "source_locator": "Author-published graphical abstract, Paper-grounded statements, and Source boundary",
+    "source_locator": "Author-lab graphical abstract, both visible panels and cross-panel Total graph → Input route; public abstract method description checked separately",
     "evidence_status": "source_visible_redraw",
     "evidence_scope": "Paper-grounded labels and visible process sequence; layout and several glyphs are adaptations.",
     "unverified": [
