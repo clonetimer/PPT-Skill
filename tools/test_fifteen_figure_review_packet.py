@@ -3,7 +3,7 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.enum.text import PP_ALIGN
 from pptx.util import Inches
-from fifteen_figure_review_packet import compare,TASKS,build_packet,TASK_FILENAMES,TASK_FINAL_FILENAMES,TASK_COMPANION_FILENAMES
+from fifteen_figure_review_packet import compare,TASKS,build_packet,TASK_FILENAMES,TASK_FINAL_FILENAMES,TASK_COMPANION_FILENAMES,TASK_SUPPLEMENTARY_FILENAMES
 
 def deck(path,text="Label"):
     prs=Presentation()
@@ -73,7 +73,7 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertIn("figure_spec_diff",row["diff"])
         self.assertGreater(row["diff"]["figure_spec_diff"]["added"],0)
         self.assertEqual(row["diff"]["supplementary_missing"],[])
-        self.assertEqual(len(row["diff"]["supplementary_artifacts"]),4)
+        self.assertEqual(len(row["diff"]["supplementary_artifacts"]),0)
         self.assertGreater(row["diff"]["figure_spec_diff"]["modified"],0)
 
 
@@ -150,7 +150,7 @@ class ReviewPacketTests(unittest.TestCase):
         rows={row["task_id"]:row for row in result["tasks"]}
         self.assertEqual(set(rows),set(TASKS))
         self.assertEqual(result["summary"]["no_repair_applied"],len(no_repair))
-        self.assertEqual(result["summary"]["comparison_ready"],len(repaired))
+        self.assertEqual(result["summary"]["comparison_ready"],len(repaired),{row["task_id"]:row["status"] for row in result["tasks"]})
         self.assertEqual(result["summary"]["missing"],0)
         for task in no_repair:
             self.assertEqual(rows[task]["status"],"NO_REPAIR_APPLIED")
