@@ -18,6 +18,7 @@ def prepare(initial_dir: Path, final_dir: Path) -> dict:
     initial_dir, final_dir = Path(initial_dir), Path(final_dir)
     ledger = json.loads(LEDGER.read_text(encoding="utf-8"))
     copied, preserved = [], []
+    companion_copied, companion_preserved = [], []
     for task_id, diagnosis in ledger["tasks"].items():
         if diagnosis["status"] != "NO_CONFIRMED_DEFECT":
             continue
@@ -42,15 +43,17 @@ def prepare(initial_dir: Path, final_dir: Path) -> dict:
             if companion_final.exists():
                 if sha256_file(companion_final)!=sha256_file(companion_initial):
                     raise ValueError(f"REFUSE_TO_OVERWRITE_EXISTING_COMPANION_REPAIR:{task_id}:{filename}")
-                preserved.append(f"{task_id}:{filename}")
+                companion_preserved.append({"task_id":task_id,"filename":filename})
             else:
                 shutil.copy2(companion_initial,companion_final)
-                copied.append(f"{task_id}:{filename}")
+                companion_copied.append({"task_id":task_id,"filename":filename})
     report = {
         "schema_version": "1.0.0",
         "no_confirmed_defect_tasks": copied + preserved,
         "copied": copied,
         "already_preserved": preserved,
+        "companion_copied": companion_copied,
+        "companion_already_preserved": companion_preserved,
         "policy": "Byte-identical candidates are marked NO_REPAIR_APPLIED, never as repaired or human-accepted.",
     }
     write_json(final_dir / "no_repair_candidate_manifest.json", report)
