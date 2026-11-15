@@ -27,6 +27,8 @@ TASK_FILENAMES={
  "DECK01":"DECK01_c01_defense.pptx",
 }
 TASK_FINAL_FILENAMES={**TASK_FILENAMES,"C01_SEANet":"C01_SEANet_graph_level_v74.pptx","C01_composite":"C01_composite_defense_slide_v75.pptx","DECK01":"DECK01_c01_defense_v76.pptx"}
+# Q07 is a two-artifact deliverable: scatter (Q07) plus categorical distribution (Q08).
+TASK_COMPANION_FILENAMES={"Q07":("Q08_wine_strip.pptx",)}
 TASK_SPEC_FILENAMES={"C01_SEANet":{"initial":"tests/fixtures/C01_SEANet_graph_level_initial_v73.json","final":"figure_specs/c01/C01_SEANet_graph_level_v74.json"},"C01_composite":{"initial":"figure_specs/c01/C01_composite_defense_slide.json","final":"figure_specs/c01/C01_composite_defense_slide_v75.json"}}
 TASK_DECK_SPEC_FILENAMES={"DECK01":{"initial":"specs/deck_spec_v75.example.json","final":"specs/deck_spec_v76.example.json"}}
 ROOT=Path(__file__).resolve().parents[1]
@@ -107,13 +109,28 @@ def build_packet(initial_dir,final_dir,output_dir):
   if not final.is_file():
    rows.append({**base,"status":"NO_FINAL_REPAIR_ARTIFACT","initial":initial_filename});continue
   diff=compare(initial,final)
+  companion_diffs=[]
+  companion_missing=[]
+  for companion_filename in TASK_COMPANION_FILENAMES.get(task,()):
+   companion_initial=initial_dir/companion_filename
+   companion_final=final_dir/companion_filename
+   if not companion_initial.is_file() or not companion_final.is_file():
+    companion_missing.append({"filename":companion_filename,
+      "initial_exists":companion_initial.is_file(),"final_exists":companion_final.is_file()})
+    continue
+   companion_diffs.append({"filename":companion_filename,
+      "diff":compare(companion_initial,companion_final)})
+  diff["companion_artifacts"]=companion_diffs
+  diff["companion_missing"]=companion_missing
   if task in TASK_SPEC_FILENAMES:
    spec_paths=TASK_SPEC_FILENAMES[task]
    diff["figure_spec_diff"]=compare_specs(ROOT/spec_paths["initial"],ROOT/spec_paths["final"])
   if task in TASK_DECK_SPEC_FILENAMES:
    spec_paths=TASK_DECK_SPEC_FILENAMES[task]
    diff["deck_spec_diff"]=compare_json(ROOT/spec_paths["initial"],ROOT/spec_paths["final"])
-  status="NO_REPAIR_APPLIED" if diff["byte_identical"] else "REPAIR_COMPARISON_READY"
+  status=("MISSING_COMPANION_ARTIFACT" if companion_missing else
+          "NO_REPAIR_APPLIED" if diff["byte_identical"] and all(x["diff"]["byte_identical"] for x in companion_diffs)
+          else "REPAIR_COMPARISON_READY")
   rows.append({**base,"status":status,"initial":initial_filename,"final":final_filename,"diff":diff})
  packet={"schema_version":"1.0.0","population":len(TASKS),"tasks":rows,
   "summary":{"comparison_ready":sum(x["status"]=="REPAIR_COMPARISON_READY" for x in rows),
