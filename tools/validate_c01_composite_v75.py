@@ -38,6 +38,18 @@ def validate():
         raise AssertionError("INPUT_CONTAINER_TOPOLOGY_NODE_MISSING")
     if by_id["el_0067"].get("semantic_id") != "input_label" or by_id["el_0067"].get("text") != "Input":
         raise AssertionError("INPUT_LABEL_SEMANTIC_NODE_MISSING")
+    poolings=[e for e in elements if e["type"]=="polygon" and e.get("semantic_id") in {"pooling_1","pooling_2"}]
+    if len(poolings)!=2:
+        raise AssertionError("BOTH_POOLING_MODULES_MUST_USE_SOURCE_LIKE_POLYGONS")
+    for pooling in poolings:
+        points=pooling["points"]
+        if len(points)!=4 or abs(points[1][1]-points[0][1])<.05 or abs(points[2][1]-points[3][1])<.05:
+            raise AssertionError("POOLING_QUADRILATERAL_MUST_HAVE_SLOPED_TOP_AND_BOTTOM_EDGES")
+    labels=[e.get("text","") for e in elements if e["type"]=="text"]
+    if labels.count("IR layer")!=2:
+        raise AssertionError("COMPOSITE_MUST_PRESERVE_TWO_SOURCE_VISIBLE_IR_LABELS")
+    if not any("public abstract uses SR" in label and "unresolved" in label.lower() for label in labels):
+        raise AssertionError("COMPOSITE_IR_SR_TERMINOLOGY_BOUNDARY_MISSING")
     if (by_id["el_0120"]["type"] != "graph"
             or len(by_id["el_0120"]["nodes"]) != 12
             or len(by_id["el_0120"]["edges"]) != 8):
@@ -75,6 +87,8 @@ def validate():
         raise AssertionError("UNEXPECTEDLY_LOW_EDITABLE_OBJECT_COUNT")
     if any(s.shape_type == MSO_SHAPE_TYPE.PICTURE for s in shapes):
         raise AssertionError("RASTERIZED_COMPOSITE_NOT_ALLOWED")
+    if sum(s.shape_type == MSO_SHAPE_TYPE.FREEFORM for s in shapes) < 4:
+        raise AssertionError("TWO_POOLING_QUADRILATERALS_AND_SHADOWS_MUST_REMAIN_EDITABLE_FREEFORMS")
     missing_alt = [s.name for s in shapes if not (_descr(s) or "").strip()]
     if missing_alt:
         raise AssertionError("MISSING_ALT_TEXT:" + ",".join(missing_alt))
