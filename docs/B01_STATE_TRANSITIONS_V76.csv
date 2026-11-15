@@ -1,0 +1,5 @@
+from_state,to_state,visible_label,asserted_semantics,not_asserted
+NORMAL,RECONFIG,fault,"fault event path shown","detection threshold; isolation algorithm; timing"
+RECONFIG,DEGRADED,rec.,"reconfiguration path shown","universal automatic degradation rule"
+GUARDED_PATH,SAFE,safety / resource guard,"safety/resource guard path shown","exact predicate; priority; recovery logic"
+SAFE,NORMAL,not shown,"no transition asserted","automatic reset or recovery"
