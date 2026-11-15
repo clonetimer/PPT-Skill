@@ -59,6 +59,9 @@ class Package15FinalCandidatesTests(unittest.TestCase):
                         path.write_bytes(b"artifact")
                 (root/"dist/quantitative_reproduction_audit_v76.json").write_text("{}")
                 (root/"dist/quantitative_point_traceability_v76.csv").write_text("chart_id,source_row\\n")
+                for name in ("C01_composite_explainer_v76.pptx","C01_composite_explainer_v76.pdf",
+                             "C01_composite_explainer_v76_slide_1.png","C01_composite_explainer_v76_slide_2.png"):
+                    path=root/"dist/accepted_repairs"/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(b"supplement")
                 with self.assertRaisesRegex(FileNotFoundError, "FINAL_CANDIDATE_ARTIFACTS_MISSING"):
                     build(root / "dist" / "candidate.zip", root)
             finally:
