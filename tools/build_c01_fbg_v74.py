@@ -122,7 +122,7 @@ def build_spec() -> dict:
     spec["evidence_records"] = [{
         "id":"source_1",
         "source":"docs/C01_V73_SOURCE.md",
-        "source_file_sha256":"f8d7089684b4d6f4cced0b387c495c46ba629da2",
+        "source_file_sha256":"08fb792243f10a8f386f415d4dd7952491beb637198e7983b70f11ce0b102f04",
         "source_locator":"Author-published graphical abstract, upper Graph Construction (Time-Frequency Graph) panel; article abstract and method description for FBG terminology",
         "status":"source_visible_redraw",
         "scope":"Sensor signals, OCF/notch filter, qualitative fault-sensitivity cue, band-pass subgraphs, frequency direction and total graph. Sensor glyphs, waveforms and graph coordinates are schematic.",
