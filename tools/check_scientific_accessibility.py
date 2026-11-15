@@ -15,6 +15,7 @@ IDS = ["Q01_iris_scatter", "Q02_iris_strip", "Q03_iris_mean_ci", "Q03_iris_mean_
 SCHEMATIC_SPECS = ["figure_specs/B01_engineering_fdir.json",
                    "figure_specs/F07_telemetry_embedding.json",
                    "figure_specs/c01/C01_FBG_construction.json",
+                   "figure_specs/c01/C01_FBG_construction_v74.json",
                    "figure_specs/c01/C01_SEANet_graph_level.json",
                    "figure_specs/c01/C01_SEANet_graph_level_v74.json",
                    "figure_specs/c01/C01_composite_defense_slide.json",
