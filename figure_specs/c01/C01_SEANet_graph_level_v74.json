@@ -1250,7 +1250,7 @@
   ],
   "schema_version": "7.6.0-dev",
   "figure_contract": {
-    "claim": "The SEANet graph-level diagnosis path combines the main GCN/pooling route with an energy-assisted SR branch before Dense classification.",
+    "claim": "The SEANet graph-level diagnosis path combines the main GCN/pooling route with an energy-assisted readout branch before Dense classification.",
     "archetype": "schematic_led_composite",
     "output_mode": "presentation",
     "unverified": [
@@ -1265,7 +1265,7 @@
       "id": "source_1",
       "source": "docs/C01_V73_SOURCE.md",
       "source_file_sha256": "08fb792243f10a8f386f415d4dd7952491beb637198e7983b70f11ce0b102f04",
-      "source_locator": "Author-published graphical abstract — lower Graph-level fault diagnosis framework panel; article-grounded EA/SR terminology",
+      "source_locator": "Author-lab graphical abstract — lower Graph-level fault diagnosis framework panel; public abstract terminology checked separately; IR/SR discrepancy unresolved",
       "status": "source_visible_redraw",
       "scope": "Standalone excerpt of the lower SEANet graph-level diagnosis panel, not the complete two-panel graphical abstract. The upper FBG construction panel is a separate C01_FBG deliverable; the complete two-panel connection is C01_composite. The accessible author-lab image appears to label the two readout blocks IR layer; the public abstract uses SR terminology. This discrepancy is not resolved. Input graph topology is schematic, not a numerical adjacency matrix.",
       "reuse": "derivative_redraw_only"
