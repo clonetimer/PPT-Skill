@@ -22,6 +22,9 @@ class Package15FinalCandidatesTests(unittest.TestCase):
                         path.write_bytes((task_id + ":" + relative).encode("utf-8"))
                 (root/"dist/quantitative_reproduction_audit_v76.json").write_text("{}")
                 (root/"dist/quantitative_point_traceability_v76.csv").write_text("chart_id,source_row\\n")
+                for name in ("C01_composite_explainer_v76.pptx","C01_composite_explainer_v76.pdf",
+                             "C01_composite_explainer_v76_slide_1.png","C01_composite_explainer_v76_slide_2.png"):
+                    path=root/"dist/accepted_repairs"/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(b"supplement")
                 output = root / "dist" / "candidate.zip"
                 result = build(output, root)
                 self.assertEqual(result["status"], "PASS")
@@ -37,6 +40,7 @@ class Package15FinalCandidatesTests(unittest.TestCase):
                     self.assertIn("SHA256_MANIFEST.json", names)
                     self.assertIn("03_审计证据/quantitative_reproduction_audit_v76.json", names)
                     self.assertIn("03_审计证据/quantitative_point_traceability_v76.csv", names)
+                    self.assertIn("02_最终候选版/C01_composite/02_两页演示版/C01_composite_explainer_v76.pptx", names)
             finally:
                 validate_research_benchmark.ROOT = old_root
 
