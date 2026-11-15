@@ -20,6 +20,8 @@ class Package15FinalCandidatesTests(unittest.TestCase):
                         path = root / relative
                         path.parent.mkdir(parents=True, exist_ok=True)
                         path.write_bytes((task_id + ":" + relative).encode("utf-8"))
+                (root/"dist/quantitative_reproduction_audit_v76.json").write_text("{}")
+                (root/"dist/quantitative_point_traceability_v76.csv").write_text("chart_id,source_row\\n")
                 output = root / "dist" / "candidate.zip"
                 result = build(output, root)
                 self.assertEqual(result["status"], "PASS")
@@ -33,6 +35,8 @@ class Package15FinalCandidatesTests(unittest.TestCase):
                     self.assertIn("02_最终候选版/Q07/02_分布/Q08_wine_strip.svg", names)
                     self.assertIn("02_最终候选版/Q07/02_分布/Q08_wine_strip.pdf", names)
                     self.assertIn("SHA256_MANIFEST.json", names)
+                    self.assertIn("03_审计证据/quantitative_reproduction_audit_v76.json", names)
+                    self.assertIn("03_审计证据/quantitative_point_traceability_v76.csv", names)
             finally:
                 validate_research_benchmark.ROOT = old_root
 
@@ -49,6 +53,8 @@ class Package15FinalCandidatesTests(unittest.TestCase):
                         path = root / relative
                         path.parent.mkdir(parents=True, exist_ok=True)
                         path.write_bytes(b"artifact")
+                (root/"dist/quantitative_reproduction_audit_v76.json").write_text("{}")
+                (root/"dist/quantitative_point_traceability_v76.csv").write_text("chart_id,source_row\\n")
                 with self.assertRaisesRegex(FileNotFoundError, "FINAL_CANDIDATE_ARTIFACTS_MISSING"):
                     build(root / "dist" / "candidate.zip", root)
             finally:
