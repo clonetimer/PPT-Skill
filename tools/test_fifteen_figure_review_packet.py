@@ -40,6 +40,7 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertEqual(TASK_FILENAMES["DECK01"],"DECK01_c01_defense.pptx")
         self.assertEqual(TASK_FINAL_FILENAMES["DECK01"],"DECK01_c01_defense_v76.pptx")
         self.assertEqual(TASK_COMPANION_FILENAMES["Q07"],("Q08_wine_strip.pptx",))
+        self.assertEqual(TASK_SUPPLEMENTARY_FILENAMES["C01_composite"][0],"C01_composite_explainer_v76.pptx")
         self.assertEqual(len(TASK_FILENAMES),15)
 
 
@@ -71,6 +72,8 @@ class ReviewPacketTests(unittest.TestCase):
         self.assertEqual(row["final"],"C01_SEANet_graph_level_v74.pptx")
         self.assertIn("figure_spec_diff",row["diff"])
         self.assertGreater(row["diff"]["figure_spec_diff"]["added"],0)
+        self.assertEqual(row["diff"]["supplementary_missing"],[])
+        self.assertEqual(len(row["diff"]["supplementary_artifacts"]),4)
         self.assertGreater(row["diff"]["figure_spec_diff"]["modified"],0)
 
 
@@ -80,6 +83,8 @@ class ReviewPacketTests(unittest.TestCase):
             initial.mkdir();final.mkdir()
             deck(initial/"C01_composite_defense_slide_v74.pptx","initial")
             deck(final/"C01_composite_defense_slide_v75.pptx","repaired")
+            for name in TASK_SUPPLEMENTARY_FILENAMES["C01_composite"]:
+                path=final/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(b"supplementary")
             result=build_packet(initial,final,out)
         row=next(x for x in result["tasks"] if x["task_id"]=="C01_composite")
         self.assertEqual(row["status"],"REPAIR_COMPARISON_READY")
