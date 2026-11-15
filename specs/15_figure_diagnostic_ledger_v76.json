@@ -57,7 +57,13 @@
     },
     "Q07": {
       "status": "NO_CONFIRMED_DEFECT",
-      "note": "Both scatter and categorical distribution outputs retain all 178 samples; cultivar codes use color and shape, source-unreported units remain unreported, and no cultivar names are invented."
+      "note": "Both scatter and categorical distribution outputs retain all 178 samples; cultivar codes use color and shape, source-unreported units remain unreported, and no cultivar names are invented.",
+      "delivery_issue": {
+        "status": "BUNDLE_FIX_REQUIRED",
+        "finding": "The previously supplied final-candidate ZIP contained the Q07 scatter PPTX but omitted the required Q08 distribution PPTX, although the build pipeline already generates Q08.",
+        "correction": "The initial cohort and final candidate package now include Q07 scatter and Q08 categorical distribution as a paired two-artifact deliverable, with separate previews, source-linked data, and SHA-256 entries.",
+        "validation": "CI packaging test requires Q07_wine_scatter.pptx, Q08_wine_strip.pptx, Q08_wine_strip.svg, Q08_wine_strip.pdf, and Q08_wine_strip.preview.png."
+      }
     },
     "I01": {
       "status": "NO_CONFIRMED_DEFECT",
