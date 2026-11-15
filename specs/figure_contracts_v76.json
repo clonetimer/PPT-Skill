@@ -25,7 +25,7 @@
   },
   "C01_FBG_construction": {
     "claim": "Sensor signals pass through OCF/notch filtering; band-pass filters create one subgraph per frequency band; the subgraphs are connected into a total graph.",
-    "archetype": "schematic_led_pipeline",
+    "archetype": "schematic_led_composite",
     "output_mode": "presentation",
     "source": "docs/C01_V73_SOURCE.md",
     "source_locator": "Author-lab graphical abstract upper panel, exact title Graph Construction (Time-Frequency Graph); public abstract for FBG method terminology; publisher high-resolution image not directly accessed",
