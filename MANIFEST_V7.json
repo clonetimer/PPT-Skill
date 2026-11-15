@@ -125,7 +125,10 @@
       "tools/build_c01_fbg_v74.py",
       "tools/validate_c01_fbg_v74.py",
       "tools/repair_case_c01_fbg_round1.py",
-      "tools/test_repair_case_c01_fbg_round1.py"
+      "tools/test_repair_case_c01_fbg_round1.py",
+      "tools/build_c01_composite_explainer_v76.py",
+      "tools/validate_c01_composite_explainer_v76.py",
+      "tools/test_c01_composite_explainer_v76.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -200,7 +203,11 @@
       "dist/quantitative_point_traceability_v76.csv",
       "dist/C01_FBG_construction_v74.pptx",
       "dist/C01_FBG_construction_v74.pdf",
-      "dist/C01_FBG_construction_v74.preview.png"
+      "dist/C01_FBG_construction_v74.preview.png",
+      "dist/C01_composite_explainer_v76.pptx",
+      "dist/C01_composite_explainer_v76.pdf",
+      "dist/C01_composite_explainer_v76_slide_1.png",
+      "dist/C01_composite_explainer_v76_slide_2.png"
     ],
     "planning_specs": [
       "specs/deck_spec_v75.example.json",
