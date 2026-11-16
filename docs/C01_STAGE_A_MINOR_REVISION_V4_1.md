@@ -50,3 +50,15 @@ CI can validate source contracts, prompt constraints and structural consistency.
 ## CI verification
 
 CI #663 PASS: https://github.com/clonetimer/PPT-Skill/actions/runs/43857218000. The workflow validates 13 V4.1-specific regression tests, generates and validates the source-locked Image2 prompt/manifest, and validates all 142 FigureSpec elements. The CI manifest status `planned` describes the repository-side prompt workflow; the actual PNG candidate is distributed separately in the human-review package and is not embedded in the CI manifest. Human Stage-A approval remains pending.
+
+
+## Latest verification snapshot
+
+- CI #665: PASS — https://github.com/clonetimer/PPT-Skill/actions/runs/43864427483.
+- V4.1 regression tests: 14/14 PASS, including a geometric assertion that the ellipsis and non-attached dashed continuation rails lie in the B₃/B_N inter-row gap.
+- FigureSpec: 142 evidence-linked elements.
+- FigureSpec SHA-256: `1b3d7d97f00df6b6c1cf4411e370cf352da1cb0086080a4695eb68b51d3b8c28`.
+- Topology Contract SHA-256: `2e37c0f88979fbea7be76ee596872e199b2101e5efd47e5103fc7dd1e29b188b`.
+- Candidate PNG SHA-256: `056ba83af5ceedf3dec73deff1cb134a0fc9c6b1e27b38c46b3580ec261b7a12`.
+
+The PNG is distributed in the human-review package rather than committed into the repository workspace. Accordingly, the generated CI prompt workflow manifest remains `stage_a.status=planned` and `target_image=null`; this does not mean the separately packaged visual candidate is absent. Stage B remains `not_started` pending explicit human approval.

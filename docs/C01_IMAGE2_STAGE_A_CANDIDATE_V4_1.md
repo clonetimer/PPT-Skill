@@ -7,7 +7,9 @@
 **Bytes:** 1,823,791.  
 **SHA-256:** `056ba83af5ceedf3dec73deff1cb134a0fc9c6b1e27b38c46b3580ec261b7a12`.  
 **Source contract:** FigureSpec V4.1 + Topology Contract V4.1.  
-**CI baseline:** #663 PASS — https://github.com/clonetimer/PPT-Skill/actions/runs/43857218000.
+**CI baseline:** #665 PASS — https://github.com/clonetimer/PPT-Skill/actions/runs/43864427483.
+**V4.1 FigureSpec SHA-256:** `1b3d7d97f00df6b6c1cf4411e370cf352da1cb0086080a4695eb68b51d3b8c28`.
+**V4.1 Topology Contract SHA-256:** `2e37c0f88979fbea7be76ee596872e199b2101e5efd47e5103fc7dd1e29b188b`.
 
 ## V4.1 visual changes
 
@@ -40,3 +42,8 @@ Stage B remains locked. No editable PPTX, parity score or PowerPoint 2016 host r
 ## CI / candidate-image handoff boundary
 
 CI #663 validates the V4.1 FigureSpec, topology, DeckSpec, Image2 prompt and generated workflow manifest. The CI manifest remains `stage_a.status=planned` with `target_image=null` because the candidate PNG is supplied in the external human-review bundle rather than committed into the repository workspace. The candidate itself is generated and checksum-verified as recorded above; this distinction is intentional. Stage B remains `not_started`.
+
+
+## Latest source-contract verification
+
+CI #665 validates the continuation rails in the B₃/B_N inter-row gap, rather than merely checking that a marker exists. The 14-test V4.1 suite passes. The repository-side CI manifest remains `planned` because it records the prompt/content-lock build and does not embed the separately distributed candidate PNG; the human-review package includes the PNG and its SHA-256.
