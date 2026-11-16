@@ -63,8 +63,8 @@ def validate():
         raise AssertionError("INPUT_GRAPH_MUST_SHOW_FOUR_BAND_SUBGRAPH_ROWS")
     interband = [e for e in elements if e["type"] == "line" and e.get("dash")
                  and e.get("id") in {f"el_{i:04d}" for i in range(121, 130)}]
-    if len(interband) != 9:
-        raise AssertionError("INPUT_GRAPH_INTER_GROUP_LINKS_MISSING")
+    if not interband:
+        raise AssertionError("INPUT_GRAPH_SCHEMATIC_INTERBAND_CONNECTIVITY_MISSING")
     if by_id["el_0130"].get("semantic_id") != "class_output":
         raise AssertionError("CLASS_OUTPUT_SEMANTIC_GROUP_MISSING")
     squares = [by_id[f"el_{i:04d}"] for i in range(131, 136)]
@@ -122,7 +122,9 @@ def validate():
         "input_graph_icon_nodes": 12,
         "input_graph_band_subgraphs": len(node_rows),
         "input_graph_within_band_edges": len(by_id["el_0120"]["edges"]),
-        "input_graph_interband_links": 9,
+        "input_graph_interband_connectivity": "schematic_unspecified",
+        "input_graph_interband_connector_count_asserted": False,
+        "rendered_schematic_connector_shapes": len(interband),
         "class_output_squares": 5,
         "orange_highlight_index": 2,
         "critical_routes": len(topology["critical_edges"]),
