@@ -113,6 +113,16 @@ def _geometry_instructions(contract: dict) -> list[str]:
             "or any fixed number of actual sensors."
         )
 
+    diagnosis = contract.get("diagnosis_branch", {})
+    if diagnosis:
+        lines.append(
+            "Graph-level diagnosis topology: draw exactly one GCN₁ block and one GCN₂ block. "
+            "The Energy-assisted module is a separate auxiliary block: Input → Energy-assisted module, "
+            "and Energy-assisted module → the same single GCN₁. Do not add a second GCN₁ to the auxiliary branch. "
+            "The lower IR readout branch leaves the output of pooling₁; the main IR readout follows pooling₂. "
+            "Both IR readout branches merge at the circular + operator."
+        )
+
     fusion = contract.get("fusion", {})
     if fusion.get("symbol") == "+":
         lines.append(
