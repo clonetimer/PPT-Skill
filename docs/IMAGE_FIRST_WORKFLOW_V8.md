@@ -70,15 +70,15 @@ Stage A 必须由人工批准后才能进入 Stage B。批准检查：
 
 ## 3. 开始 Stage A
 
-以现有 FBG-SEANet 方法页为例。DeckSpec 的 `figure_ref` 指向仓库中已提交的 V7.4 FigureSpec，`topology_ref` 指向 V7.5 的源拓扑契约；二者组合表达当前 C01 的布局/样式基线与更新后的科学拓扑，不依赖 CI 临时生成文件：
+以现有 FBG-SEANet 方法页为例。DeckSpec 的 figure_ref 指向 figure_specs/c01/C01_composite_defense_slide_image_first_v8.json，topology_ref 指向 specs/c01_composite_expected_topology_v8.json。二者锁定 V8 视觉结构与证据边界：频带数量 N 可变；四个可见频带仅为代表性示例；B_i 与 Total graph 每层的三节点结构是视觉一致性示意；输入图为 12 节点、4×3、8 条行内实线；所有虚线跨层/跨行连接均为示意，不声明精确数量或数值邻接矩阵；五个分类输出为示例，不代表固定类别数：
 
 ```bash
 python tools/create_image_first_manifest.py \
-  specs/deck_spec_v76.example.json s02 \
+  specs/deck_spec_v8.example.json s02 \
   --output-dir dist/image_first/fbg-seanet-s02
 ```
 
-生成的提示词包含关键有向关系与几何硬约束，例如 `Total graph → Input`、`Input → Energy-assisted module → first GCN`、垂直向下的 Frequency 方向、4 个 total-graph band layers、12-node input graph，以及 5 个方形分类输出（第二个高亮）。这些约束来自源拓扑契约，而不是由 Image2 自行推断。
+生成的提示词包含 18 条关键有向方法关系、Total graph → Input、Input → Energy-assisted module → first GCN、垂直向下的 Frequency 方向、B₁、B₂、B₃、…、Bₙ 变量频带标签、每个 B_i/Total graph 可见层的三节点示意、12-node / 4×3 Input 图、8 条行内实线，以及五个示意分类输出（第二个高亮）。虚线跨层/跨行连接明确标注为示意，不规定精确数量；图形不代表数值邻接矩阵。
 
 生成：
 - `dist/image_first/fbg-seanet-s02/image2_prompt.md`

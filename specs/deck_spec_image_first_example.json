@@ -1,0 +1,26 @@
+{
+  "deck": {
+    "topic": "Two-stage slide generation",
+    "audience": "research committee"
+  },
+  "slides": [
+    {
+      "id": "s01",
+      "role": "method",
+      "claim": "A reviewed visual target is reconstructed as an editable slide.",
+      "evidence": [
+        {
+          "source": "docs/C01_V73_SOURCE.md",
+          "status": "source_visible"
+        }
+      ],
+      "layout": "left_to_right_process",
+      "on_slide": [
+        "Two-stage slide generation",
+        "Stage A: Image2 target",
+        "Stage B: editable PPTX"
+      ],
+      "speaker_notes": "Presenter-only context: explain that Stage A is reviewed before Stage B begins."
+    }
+  ]
+}

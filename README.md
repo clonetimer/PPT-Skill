@@ -7,10 +7,10 @@ For visually complex defense slides, generate and review a single Image2 target 
 Create a per-slide prompt and manifest:
 
 ```bash
-python tools/create_image_first_manifest.py specs/deck_spec_v76.example.json s02 --output-dir dist/image_first/fbg-seanet-s02
+python tools/create_image_first_manifest.py specs/deck_spec_v8.example.json s02 --output-dir dist/image_first/fbg-seanet-s02
 ```
 
-DeckSpec slides may bind a committed FigureSpec through `figure_ref` and a versioned directed-topology contract through `topology_ref`. The prompt builder includes source labels, required nodes, directed edges, and geometry constraints; the manifest locks both source-file SHA-256 hashes and rejects stale contracts. Speaker notes remain presenter-only.
+DeckSpec slides bind the C01 V8 Image-first FigureSpec and topology contract. The prompt builder includes source labels, required nodes, directed method edges, variable-N band labels, and schematic geometry constraints; the manifest locks both source-file SHA-256 hashes and rejects stale contracts. The four visible band examples do not imply a fixed four-band algorithm. Dashed internal graph links are schematic: no exact count or numerical adjacency is asserted. Speaker notes remain presenter-only.
 
 After Image2 generation, place the 1920 × 1080 target PNG inside the per-slide output directory and record it with the Stage-A helpers:
 

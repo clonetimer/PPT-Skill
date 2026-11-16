@@ -73,8 +73,17 @@ class ImageFirstWorkflowTests(unittest.TestCase):
             "required_nodes": ["input", "gcn_1", "ea"],
             "geometry_contract": {
                 "frequency_axis": {"label": "Frequency", "direction": "vertical_downward"},
-                "input_graph": {"node_count": 12, "within_band_edge_count": 8,
-                                "band_row_count": 4, "inter_band_link_count": 9}
+                "band_count": {"symbol": "N", "variable": True,
+                               "displayed_examples": ["B1", "B2", "B3", "…", "BN"]},
+                "band_subgraphs": {"nodes_per_subgraph": 3,
+                                   "edge_motif": "schematic three-node path"},
+                "total_graph": {"visible_example_rows": 4, "nodes_per_visible_row": 3,
+                                "inter_row_links": "schematic_unspecified"},
+                "input_graph": {"node_count": 12, "band_row_count": 4, "nodes_per_row": 3,
+                                "within_row_edge_count": 8, "inter_row_links": "schematic_unspecified"},
+                "class_outputs": {"displayed_count": 5, "shape": "square",
+                                  "count_semantics": "illustrative_not_fixed",
+                                  "highlighted_index": 2, "highlight_color": "#DCA16C"}
             },
             "readout_label_discrepancy": "Author-lab shows IR; public abstract uses SR. Unresolved."
         }
@@ -207,6 +216,12 @@ class ImageFirstWorkflowTests(unittest.TestCase):
         self.assertIn("IR layer", prompt)
         self.assertIn("input → ea", prompt)
         self.assertIn("vertical arrow pointing downward", prompt)
+        self.assertIn("Frequency-band count is N and is variable", prompt)
+        self.assertIn("do not mean a fixed four-band algorithm", prompt)
+        self.assertIn("exact count is not asserted", prompt)
+        self.assertIn("illustrative example, not a fixed class count", prompt)
+        self.assertNotIn("9 dashed inter-band links", prompt)
+        self.assertNotIn("None dashed", prompt)
         self.assertNotIn("Legacy SR paths", prompt)
         self.assertNotIn("PRIVATE SPEAKER NOTES MUST NOT APPEAR", prompt)
         self.assertIn("Presenter notes intentionally withheld", prompt)

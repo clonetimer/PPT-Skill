@@ -21,28 +21,53 @@ def _geometry_instructions(contract: dict) -> list[str]:
     lines = []
     frequency = contract.get("frequency_axis", {})
     if frequency.get("direction") == "vertical_downward":
-        lines.append("Frequency axis: draw a vertical arrow pointing downward at the right edge; do not turn it into a horizontal left-to-right axis.")
+        lines.append(
+            "Frequency axis: draw a vertical arrow pointing downward at the right edge; "
+            "do not turn it into a horizontal left-to-right axis."
+        )
+
+    bands = contract.get("band_count", {})
+    if bands.get("variable"):
+        examples = ", ".join(bands.get("displayed_examples", ["B₁", "B₂", "B₃", "…", "Bₙ"]))
+        lines.append(
+            f"Frequency-band count is N and is variable. Show representative labels {examples}; "
+            "make clear that the four visible examples do not mean a fixed four-band algorithm."
+        )
+
+    subgraphs = contract.get("band_subgraphs", {})
+    if subgraphs:
+        lines.append(
+            f"Each displayed B_i subgraph uses {subgraphs.get('nodes_per_subgraph')} nodes. "
+            "Use a simple, consistent schematic motif; do not imply the drawn internal links "
+            "are a recovered numerical adjacency."
+        )
+
     total = contract.get("total_graph", {})
     if total:
         lines.append(
-            f"Total graph: show {total.get('band_layer_count')} aligned band layers and "
-            f"{total.get('inter_band_link_count')} dashed inter-band links as schematic structure."
+            f"Total graph: show {total.get('visible_example_rows')} representative visible rows "
+            f"with {total.get('nodes_per_visible_row')} nodes per row. The total number of bands "
+            "remains N. Use only a few sparse dashed cross-band connectors; explicitly state that "
+            "their exact count is not asserted."
         )
+
     input_graph = contract.get("input_graph", {})
     if input_graph:
         lines.append(
-            f"Input graph icon: show {input_graph.get('node_count')} nodes in "
-            f"{input_graph.get('band_row_count')} rows, with "
-            f"{input_graph.get('within_band_edge_count')} within-band edges and "
-            f"{input_graph.get('inter_band_link_count')} dashed inter-band links."
+            f"Input graph: show {input_graph.get('node_count')} nodes in "
+            f"{input_graph.get('band_row_count')} rows of {input_graph.get('nodes_per_row')} nodes, "
+            f"with {input_graph.get('within_row_edge_count')} solid within-row edges. "
+            "Use sparse dashed inter-row links as illustration only; do not count or label them."
         )
+
     outputs = contract.get("class_outputs", {})
     if outputs:
         lines.append(
-            f"Class outputs: show {outputs.get('count')} {outputs.get('shape')} markers; "
-            f"highlight only output {outputs.get('highlighted_index')} using "
-            f"{outputs.get('highlight_color')}."
+            f"Class outputs: show {outputs.get('displayed_count')} square markers only as an "
+            "illustrative example, not a fixed class count. Highlight only output "
+            f"{outputs.get('highlighted_index')} using {outputs.get('highlight_color')}."
         )
+
     readouts = contract.get("readout_blocks", {})
     if readouts:
         lines.append(
@@ -79,6 +104,7 @@ def build_prompt(deck: dict, slide: dict, reference_paths: list[str] | None = No
     lines.extend([
         "- Preserve all source-supported quantities, units, labels, formulas, arrow directions, and relationships.",
         "- Do not invent experimental results, numerical values, citations, mechanisms, or causal links.",
+        "- Do not turn schematic graph connectivity into a precise edge count or numerical adjacency matrix.",
         "- Keep unverified or schematic elements explicitly identified as schematic."
     ])
 
@@ -117,7 +143,10 @@ def build_prompt(deck: dict, slide: dict, reference_paths: list[str] | None = No
                 source_figure["readout_label_discrepancy"],
                 "Preserve the author-lab visible labels and disclose the discrepancy; do not silently harmonize the terms."
             ])
-        lines.append("Do not simplify away a critical node, route, branch, frequency direction, or class-output marker to make the slide look cleaner.")
+        lines.append(
+            "Do not simplify away a critical node, route, branch, frequency direction, "
+            "or class-output marker to make the slide look cleaner."
+        )
 
     lines.extend([
         "",
@@ -127,6 +156,7 @@ def build_prompt(deck: dict, slide: dict, reference_paths: list[str] | None = No
         "- Create a clear title hierarchy, one dominant visual message, and an intentional reading path.",
         "- Use a clean grid, consistent alignment, generous whitespace, restrained color, and strong projection-scale contrast.",
         "- Prefer separable geometry: text regions, rectangles, circles, lines, arrows, chart marks, and simple icons.",
+        "- Keep the Reading guide and Evidence boundary readable at presentation distance; avoid dense paragraphs.",
         "- Avoid dense textures, complex 3D effects, microtext, excessive decoration, and full-slide raster backgrounds.",
         "- If the content cannot fit legibly, simplify the composition or split the slide; never shrink labels to micro-size.",
         "",

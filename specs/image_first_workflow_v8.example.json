@@ -1,229 +1,29 @@
 {
   "schema_version": "8.0.0-dev",
-  "workflow_id": "fbg-seanet-s02",
+  "workflow_id": "generic-image-first-example",
   "mode": "image_first",
-  "deck_spec_ref": "specs/deck_spec_v76.example.json",
-  "slide_id": "s02",
-  "slide_index": 2,
+  "deck_spec_ref": "specs/deck_spec_image_first_example.json",
+  "slide_id": "s01",
+  "slide_index": 1,
   "content_lock": {
-    "claim": "FBG construction feeds a two-branch graph-level diagnosis path.",
+    "claim": "A reviewed visual target is reconstructed as an editable slide.",
     "on_slide": [
-      "FBG-SEANet: frequency-band graph construction and diagnosis",
-      "Graph-level fault diagnosis framework",
-      "fault class"
+      "Two-stage slide generation",
+      "Stage A: Image2 target",
+      "Stage B: editable PPTX"
     ],
-    "speaker_notes": "Walk through OCF and band subgraphs. In SEANet, the total graph feeds Input; Input branches to the energy-assisted module, which feeds the first GCN; first pooling branches to the second readout path, and both readout paths merge before Dense classification and five independent square class-output markers (second highlighted orange). The frequency axis points downward. State that the input graph icon, sensor glyphs and adjacency are schematic. The author-lab figure labels both readout blocks IR layer while the public abstract uses SR; this discrepancy remains unresolved.",
+    "speaker_notes": "Presenter-only context: explain that Stage A is reviewed before Stage B begins.",
     "evidence": [
       {
         "source": "docs/C01_V73_SOURCE.md",
         "status": "source_visible"
       }
     ],
+    "source_figure": null,
     "visual_constraints": [
-      "Keep the FBG construction and SEANet diagnosis paths scientifically separate but visually connected.",
-      "Use the source-grounded route direction and preserve the evidence boundary.",
-      "Do not convert speaker notes into visible text.",
-      "Preserve the FigureSpec and topology-contract source labels, required nodes, directed edges and geometry constraints."
-    ],
-    "source_figure": {
-      "figure_spec_ref": "figure_specs/c01/C01_composite_defense_slide.json",
-      "figure_spec_sha256": "fa9d5f62323d120d85f051491888853f2c227fd8a140ee312132fffd76e8d4c0",
-      "figure_id": "C01_composite_defense_slide",
-      "figure_version": "7.4.0",
-      "topology_ref": "specs/c01_composite_expected_topology_v75.json",
-      "topology_sha256": "8638eb930aee670fa2549d02e571f294fd620b65141537bd8debc2f8d5e6affb",
-      "source_text": [
-        "FBG-SEANet: frequency-band graph construction and diagnosis",
-        "01  Frequency-band graph",
-        "Sensor signals",
-        "band-pass filters",
-        "connected bands",
-        "Sensor 1",
-        "Sensor 2",
-        "Sensor M-1",
-        "Sensor M",
-        "Notch filter",
-        "Operational\ncomponent removed",
-        "Fault cues clearer",
-        "Inter-band links schematic",
-        "02  Graph-level diagnosis",
-        "Input",
-        "pooling",
-        "class",
-        "Reading guide",
-        "1",
-        "Filter",
-        "Remove operational components from sensor signals.",
-        "2",
-        "Construct",
-        "Build frequency-specific subgraphs and connect them.",
-        "3",
-        "Diagnose",
-        "Evidence boundary",
-        "Sensor glyphs and graph adjacency are schematic vector redraws.",
-        "Lee et al., EAAI 179 (2026), 115273\nDOI: 10.1016/j.engappai.2026.115273",
-        "Source-visible structural redraw · not a numerical adjacency matrix",
-        "GCN",
-        "IR layer",
-        "Energy-assisted module",
-        "+",
-        "Dense",
-        "OCF / notch filter",
-        "Band subgraphs",
-        "Total graph",
-        "B₁",
-        "B₂",
-        "B₃",
-        "Bq",
-        "fault class"
-      ],
-      "critical_labels": {
-        "gcn_1": "GCN",
-        "gcn_2": "GCN",
-        "sr_main": "IR layer",
-        "ea": "Energy-assisted module",
-        "sr_ea": "IR layer",
-        "sum": "+",
-        "dense": "Dense",
-        "ocf": "OCF / notch filter",
-        "band_group": "Band subgraphs",
-        "total_graph": "Total graph",
-        "band_1": "B₁",
-        "band_2": "B₂",
-        "band_3": "B₃",
-        "band_4": "Bq",
-        "class_output_label": "fault class",
-        "input_label": "Input",
-        "label_pooling_1": "pooling",
-        "label_pooling_2": "pooling"
-      },
-      "critical_edges": [
-        [
-          "input",
-          "gcn_1"
-        ],
-        [
-          "gcn_1",
-          "pooling_1"
-        ],
-        [
-          "pooling_1",
-          "gcn_2"
-        ],
-        [
-          "gcn_2",
-          "pooling_2"
-        ],
-        [
-          "pooling_2",
-          "sr_main"
-        ],
-        [
-          "sr_main",
-          "sum"
-        ],
-        [
-          "input",
-          "ea"
-        ],
-        [
-          "ea",
-          "gcn_1"
-        ],
-        [
-          "pooling_1",
-          "sr_ea"
-        ],
-        [
-          "sr_ea",
-          "sum"
-        ],
-        [
-          "sum",
-          "dense"
-        ],
-        [
-          "ocf",
-          "band_group"
-        ],
-        [
-          "total_graph",
-          "input"
-        ],
-        [
-          "band_1",
-          "total_graph"
-        ],
-        [
-          "band_2",
-          "total_graph"
-        ],
-        [
-          "band_3",
-          "total_graph"
-        ],
-        [
-          "band_4",
-          "total_graph"
-        ],
-        [
-          "dense",
-          "class_output"
-        ]
-      ],
-      "required_nodes": [
-        "input",
-        "input_graph_schematic",
-        "gcn_1",
-        "pooling_1",
-        "gcn_2",
-        "pooling_2",
-        "sr_main",
-        "ea",
-        "sr_ea",
-        "sum",
-        "dense",
-        "ocf",
-        "band_group",
-        "total_graph",
-        "band_1",
-        "band_2",
-        "band_3",
-        "band_4",
-        "class_output",
-        "class_output_label",
-        "input_label"
-      ],
-      "geometry_contract": {
-        "frequency_axis": {
-          "label": "Frequency",
-          "direction": "vertical_downward"
-        },
-        "total_graph": {
-          "band_layer_count": 4,
-          "inter_band_link_count": 9
-        },
-        "input_graph": {
-          "node_count": 12,
-          "within_band_edge_count": 8,
-          "band_row_count": 4,
-          "inter_band_link_count": 9
-        },
-        "class_outputs": {
-          "count": 5,
-          "shape": "square",
-          "highlighted_index": 2,
-          "highlight_color": "#DCA16C"
-        },
-        "readout_blocks": {
-          "count": 2,
-          "author_lab_visible_label": "IR layer",
-          "public_abstract_label": "SR",
-          "resolved": false
-        }
-      },
-      "readout_label_discrepancy": "Author-lab graphical abstract appears to label both readout blocks IR layer; public abstract uses SR. Unresolved; do not silently harmonize."
-    }
+      "Keep presenter notes out of the visible image.",
+      "Do not start Stage B before a human approves Stage A."
+    ]
   },
   "stage_a": {
     "status": "planned",

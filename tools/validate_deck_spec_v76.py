@@ -2,6 +2,7 @@
 """Validate the v7.6 DeckSpec and its source-backed evidence cards."""
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -60,4 +61,7 @@ def validate(path: Path = EXAMPLE):
 
 
 if __name__ == "__main__":
-    validate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("deck_spec", nargs="?", type=Path, default=EXAMPLE)
+    args = parser.parse_args()
+    validate(args.deck_spec)
