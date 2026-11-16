@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,13 +20,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install validation dependencies
-        run: python -m pip install --disable-pip-version-check python-pptx jsonschema Pillow numpy pypdf
+        run: python -m pip install --disable-pip-version-check python-pptx jsonschema Pillow numpy pypdf fonttools
       - name: Install experimental PDF figure recovery dependencies
         run: python -m pip install --disable-pip-version-check PyMuPDF reportlab
       - name: Install LibreOffice rendering tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y libreoffice-impress poppler-utils
+          sudo apt-get install -y --no-install-recommends libreoffice-impress poppler-utils fonts-dejavu-core fonts-liberation fonts-noto-core fonts-noto-cjk
       - name: Test editable PDF figure recovery and Office portability
         run: |
           python tools/test_pdf_figure_import.py
@@ -75,6 +75,10 @@ jobs:
           python tools/test_c01_image_first_v4_1.py
           python tools/test_c01_image_first_v4_3.py
           python tools/test_figure_spec_pptx_provenance.py
+          python tools/test_figure_ast_writers.py
+          python tools/test_text_layout_metrics.py
+          python tools/test_render_with_libreoffice.py
+          python tools/test_compare_rendered_images.py
       - name: Validate committed Image-first example before generated specs are rebuilt
         run: |
           python tools/validate_deck_spec_v76.py specs/deck_spec_v8.example.json
@@ -101,6 +105,14 @@ jobs:
           python tools/build_c01_seanet_v74.py
           python tools/build_c01_composite_v75.py
           python tools/build_c01_image_first_source_figure_v8.py
+      - name: Build C01 AST dual-writer and LibreOffice parity pilot
+        run: |
+          mkdir -p dist/ast_pilot
+          python tools/render_figure_spec.py figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json --svg dist/ast_pilot/legacy.svg --pptx dist/ast_pilot/legacy.pptx
+          python tools/render_figure_ast.py figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json --svg dist/ast_pilot/ast.svg --pptx dist/ast_pilot/ast.pptx --ast-json dist/ast_pilot/figure_ast.json --preserve-source-ids
+          python tools/render_with_libreoffice.py dist/ast_pilot/legacy.pptx --output-dir dist/ast_pilot/legacy_render --profile profiles/renderer/lo_headless_v1.json
+          python tools/render_with_libreoffice.py dist/ast_pilot/ast.pptx --output-dir dist/ast_pilot/ast_render --profile profiles/renderer/lo_headless_v1.json
+          python tools/compare_rendered_images.py dist/ast_pilot/legacy_render/legacy-slide-1.png dist/ast_pilot/ast_render/ast-slide-1.png --diff dist/ast_pilot/legacy_vs_ast_diff.png --output dist/ast_pilot/legacy_vs_ast_metrics.json
       - name: Execute C01-FBG source-grounded repair
         run: |
           python tools/repair_case_c01_fbg_round1.py --output-dir dist/repair_cases/C01_FBG --accepted-output dist/accepted_repairs/C01_FBG_construction_v74.pptx
@@ -393,6 +405,13 @@ jobs:
             dist/quantitative_point_traceability_v76.csv
             dist/skill_tests/generalization/*.svg
             dist/skill_tests/generalization/*.pptx
+          if-no-files-found: error
+
+      - name: Upload AST and canonical renderer pilot evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-ast-renderer-pilot
+          path: dist/ast_pilot/*
           if-no-files-found: error
 
   windows-script-parser:
