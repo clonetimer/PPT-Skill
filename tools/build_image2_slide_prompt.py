@@ -113,8 +113,7 @@ def _geometry_instructions(contract: dict) -> list[str]:
             "or any fixed number of actual sensors."
         )
 
-    diagnosis = contract.get("diagnosis_branch", {})
-    if diagnosis:
+    if contract.get("readout_blocks") and contract.get("fusion"):
         lines.append(
             "Graph-level diagnosis topology: draw exactly one GCN₁ block and one GCN₂ block. "
             "The Energy-assisted module is a separate auxiliary block: Input → Energy-assisted module, "
