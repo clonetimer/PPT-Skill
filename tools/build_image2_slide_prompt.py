@@ -55,7 +55,7 @@ def _geometry_instructions(contract: dict) -> list[str]:
     if input_graph:
         lines.append(
             f"Input graph: show {input_graph.get('node_count')} nodes in "
-            f"{input_graph.get('band_row_count')} rows of {input_graph.get('nodes_per_row')} nodes, "
+            f"{input_graph.get('row_count')} rows of {input_graph.get('nodes_per_row')} nodes, "
             f"with {input_graph.get('within_row_edge_count')} solid within-row edges. "
             "Use sparse dashed inter-row links as illustration only; do not count or label them."
         )
