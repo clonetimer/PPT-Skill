@@ -115,6 +115,9 @@ jobs:
           cp docs/C01_STAGE_A_TECHNICAL_REVIEW_2026-11-16.md dist/image_first/fbg-seanet-s02/source/
           cp docs/C01_STAGE_A_REMEDIATION_2026-11-16.md dist/image_first/fbg-seanet-s02/source/
           cp docs/C01_STAGE_A_REVIEW_PACKAGE_README_V3.md dist/image_first/fbg-seanet-s02/source/
+          cp specs/deck_spec_v8.example.json dist/image_first/fbg-seanet-s02/source/
+          cp docs/C01_IMAGE2_STAGE_A_CANDIDATE_V3.md dist/image_first/fbg-seanet-s02/source/
+          cp docs/C01_STAGE_B_RECONSTRUCTION_PLAN_V8.md dist/image_first/fbg-seanet-s02/source/
       - name: Execute C01 composite multi-round source-grounded repair
         run: |
           python tools/repair_case_c01_composite_round2.py --output-dir dist/repair_cases/C01_composite --accepted-output dist/accepted_repairs/C01_composite_defense_slide_v75.pptx
