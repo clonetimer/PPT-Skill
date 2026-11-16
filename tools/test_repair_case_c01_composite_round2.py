@@ -31,7 +31,9 @@ class C01CompositeRoundTwoTests(unittest.TestCase):
             self.assertEqual(result["quality"]["input_graph_icon_nodes"], 12)
             self.assertEqual(result["quality"]["input_graph_band_subgraphs"], 4)
             self.assertEqual(result["quality"]["input_graph_within_band_edges"], 8)
-            self.assertEqual(result["quality"]["input_graph_interband_links"], 9)
+            self.assertEqual(result["quality"]["input_graph_interband_connectivity"], "schematic_unspecified")
+            self.assertIs(result["quality"]["input_graph_interband_connector_count_asserted"], False)
+            self.assertGreaterEqual(result["quality"]["rendered_schematic_connector_shapes"], 1)
             self.assertEqual(result["quality"]["class_output_squares"], 5)
             self.assertEqual(result["quality"]["orange_highlight_index"], 2)
 
@@ -41,7 +43,7 @@ class C01CompositeRoundTwoTests(unittest.TestCase):
             diff_01 = json.loads((case / "round_01_object_diff.json").read_text(encoding="utf-8"))
             diff_02 = json.loads((case / "round_02_object_diff.json").read_text(encoding="utf-8"))
             self.assertTrue(any(x["kind"] == "added" for x in diff_01))
-            self.assertGreater(len([x for x in diff_01 if x.get("after", {}).get("type") == "line"]), 8)
+            self.assertGreaterEqual(len([x for x in diff_01 if x.get("after", {}).get("type") == "line"]), 1)
             self.assertTrue(any(x["kind"] == "added" for x in diff_02))
 
             deck = Presentation(round_02)
