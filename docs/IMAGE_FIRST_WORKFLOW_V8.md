@@ -183,6 +183,6 @@ V8 首批以 C01 的 FBG-SEANet 方法页作为试点：先生成一张 Image2 �
 
 ## Native-object provenance preflight
 
-The FigureSpec renderer records stable PowerPoint shape names for source elements and their semantic IDs. The audit utility `tools/audit_figure_spec_pptx.py` maps source FigureSpec element IDs to native editable PowerPoint shapes and reports source-element coverage, semantic-object counts and object inventory.
+The FigureSpec renderer records stable PowerPoint shape names for source elements and their semantic IDs when invoked with `--preserve-source-ids`. Default rendering preserves the existing canonical PPTX outputs. The audit utility `tools/audit_figure_spec_pptx.py` maps source FigureSpec element IDs to native editable PowerPoint shapes and reports source-element coverage, semantic-object counts and object inventory.
 
 The renderer regression suite is `tools/test_figure_spec_pptx_provenance.py`. This is a reusable Stage-B tooling qualification; it does not build or accept the C01 target slide. The C01 Stage-B gate remains human Stage-A approval.

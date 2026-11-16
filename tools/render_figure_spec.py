@@ -37,14 +37,15 @@ def clean_theme(p):
    b.writestr(i,d)
  t.replace(p)
 def pts(e):return [(e["x"]+x*e["w"],e["y"]+y*e["h"]) for x,y in e["nodes"]]
-def tag_shape(shape,e,part):
+def tag_shape(shape,e,part,enabled=False):
+ if not enabled:return shape
  role=e.get("semantic_id") or e.get("semantic_role") or "element"
  element_id=e.get("id") or "generated"
  shape.name=f"{role}__{element_id}__{part}"
  return shape
-def addtext(sl,e,df):
+def addtext(sl,e,df,preserve_source_ids=False):
  s=sl.shapes.add_textbox(Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]))
- tag_shape(s,e,"text")
+ tag_shape(s,e,"text",preserve_source_ids)
  f=s.text_frame;f.clear();f.word_wrap=True;f.margin_left=Inches(.02);f.margin_right=Inches(.02);f.margin_top=Inches(.008);f.margin_bottom=Inches(.008);f.vertical_anchor=MSO_ANCHOR.MIDDLE
  al={"left":PP_ALIGN.LEFT,"center":PP_ALIGN.CENTER,"right":PP_ALIGN.RIGHT}[e.get("align","center")]
  for j,t in enumerate(e["text"].split("\n")):
@@ -52,14 +53,14 @@ def addtext(sl,e,df):
   r=p.add_run();r.text=t;r.font.name=e.get("font",df);r.font.size=Pt(e.get("size",14));r.font.bold=e.get("bold",False);r.font.italic=e.get("italic",False);r.font.color.rgb=rgb(e.get("color","#28343C"))
  if e.get("rotation"):s.rotation=e["rotation"]
  nofx(s)
-def addline(sl,e,part="line"):
- s=sl.shapes.add_connector(MSO_CONNECTOR.STRAIGHT,Inches(e["x1"]),Inches(e["y1"]),Inches(e["x2"]),Inches(e["y2"]));tag_shape(s,e,part);c=rgb(e.get("color","#43525B"));s.line.color.rgb=c;s.line.width=Pt(e.get("sw",1))
+def addline(sl,e,part="line",preserve_source_ids=False):
+ s=sl.shapes.add_connector(MSO_CONNECTOR.STRAIGHT,Inches(e["x1"]),Inches(e["y1"]),Inches(e["x2"]),Inches(e["y2"]));tag_shape(s,e,part,preserve_source_ids);c=rgb(e.get("color","#43525B"));s.line.color.rgb=c;s.line.width=Pt(e.get("sw",1))
  if e.get("dash"):s.line.dash_style=MSO_LINE_DASH_STYLE.DASH
  nofx(s)
  if e.get("arrow"):
   ang=math.degrees(math.atan2(e["y2"]-e["y1"],e["x2"]-e["x1"]));z=e.get("arrow_size",.105)
-  q=sl.shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE,Inches(e["x2"]-z/2),Inches(e["y2"]-z/2),Inches(z),Inches(z));tag_shape(q,e,"arrowhead");q.rotation=ang+90;q.fill.solid();q.fill.fore_color.rgb=c;q.line.color.rgb=c;nofx(q)
-def render(spec,svg,pptx):
+  q=sl.shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE,Inches(e["x2"]-z/2),Inches(e["y2"]-z/2),Inches(z),Inches(z));tag_shape(q,e,"arrowhead",preserve_source_ids);q.rotation=ang+90;q.fill.solid();q.fill.fore_color.rgb=c;q.line.color.rgb=c;nofx(q)
+def render(spec,svg,pptx,preserve_source_ids=False):
  w=spec["canvas"]["width_in"]*DPI;h=spec["canvas"]["height_in"]*DPI;df=spec.get("style",{}).get("font","Times New Roman")
  out=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{w:.0f}" height="{h:.0f}" viewBox="0 0 {w:.0f} {h:.0f}">','<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#43525B"/></marker></defs>',f'<rect width="{w:.0f}" height="{h:.0f}" fill="#FFFFFF"/>']
  prs=Presentation();prs.slide_width=Inches(spec["canvas"]["width_in"]);prs.slide_height=Inches(spec["canvas"]["height_in"]);sl=prs.slides.add_slide(prs.slide_layouts[6]);sl.background.fill.solid();sl.background.fill.fore_color.rgb=rgb("#FFFFFF")
@@ -70,21 +71,21 @@ def render(spec,svg,pptx):
    if not image_path.is_absolute():image_path=Path(__file__).resolve().parents[1]/image_path
    data=image_path.read_bytes();mime="image/png" if image_path.suffix.lower()==".png" else "image/jpeg"
    out.append(f'<image x="{e["x"]*DPI}" y="{e["y"]*DPI}" width="{e["w"]*DPI}" height="{e["h"]*DPI}" href="data:{mime};base64,{base64.b64encode(data).decode()}"/>')
-   picture=sl.shapes.add_picture(str(image_path),Inches(e["x"]),Inches(e["y"]),width=Inches(e["w"]),height=Inches(e["h"]));tag_shape(picture,e,"picture")
+   picture=sl.shapes.add_picture(str(image_path),Inches(e["x"]),Inches(e["y"]),width=Inches(e["w"]),height=Inches(e["h"]));tag_shape(picture,e,"picture",preserve_source_ids)
   elif t=="text":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];fs=e.get("size",14)*DPI/72;ls=e["text"].split("\n");a=e.get("align","center");anc={"left":"start","center":"middle","right":"end"}[a];tx=x if a=="left" else x+ww/2 if a=="center" else x+ww;lh=fs*1.18;by=y+hh/2-(len(ls)-1)*lh/2+fs*.35
    sp="".join(f'<tspan x="{tx}" dy="{0 if j==0 else lh}">{escape(v)}</tspan>' for j,v in enumerate(ls))
    rot=f' transform="rotate({e["rotation"]} {(x+ww/2):.3f} {(y+hh/2):.3f})"' if e.get("rotation") else ''
-   out.append(f'<text x="{tx}" y="{by}" text-anchor="{anc}" dominant-baseline="middle" font-family="{escape("Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" if e.get("font",df)=="Microsoft YaHei" else e.get("font",df))}" font-size="{fs}" fill="{e.get("color","#28343C")}"'+(' font-weight="700"' if e.get("bold") else '')+(' font-style="italic"' if e.get("italic") else '')+rot+f'>{sp}</text>');addtext(sl,e,df)
+   out.append(f'<text x="{tx}" y="{by}" text-anchor="{anc}" dominant-baseline="middle" font-family="{escape("Noto Sans CJK SC, DejaVu Sans, Microsoft YaHei, sans-serif" if e.get("font",df)=="Microsoft YaHei" else e.get("font",df))}" font-size="{fs}" fill="{e.get("color","#28343C")}"'+(' font-weight="700"' if e.get("bold") else '')+(' font-style="italic"' if e.get("italic") else '')+rot+f'>{sp}</text>');addtext(sl,e,df,preserve_source_ids)
   elif t=="rect":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];dash=' stroke-dasharray="8 6"' if e.get("dash") else ''
    out.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{hh}" rx="{e.get("radius",0)*DPI}" fill="{e.get("fill","#FFFFFF")}" stroke="{e.get("stroke","#43525B")}" stroke-width="{e.get("sw",1)*DPI/72}"{dash}/>')
-   s=sl.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE if e.get("radius",0)>0 else MSO_SHAPE.RECTANGLE,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));tag_shape(s,e,"rect");s.fill.solid();s.fill.fore_color.rgb=rgb(e.get("fill","#FFFFFF"));s.line.color.rgb=rgb(e.get("stroke","#43525B"));s.line.width=Pt(e.get("sw",1))
+   s=sl.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE if e.get("radius",0)>0 else MSO_SHAPE.RECTANGLE,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));tag_shape(s,e,"rect",preserve_source_ids);s.fill.solid();s.fill.fore_color.rgb=rgb(e.get("fill","#FFFFFF"));s.line.color.rgb=rgb(e.get("stroke","#43525B"));s.line.width=Pt(e.get("sw",1))
    if e.get("dash"):s.line.dash_style=MSO_LINE_DASH_STYLE.DASH
    nofx(s)
   elif t=="trapezoid":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];out.append(f'<polygon points="{x+ww*.13},{y} {x+ww*.87},{y} {x+ww},{y+hh} {x},{y+hh}" fill="{e["fill"]}" stroke="{e["stroke"]}" stroke-width="{e.get("sw",1)*DPI/72}"/>')
-   s=sl.shapes.add_shape(MSO_SHAPE.TRAPEZOID,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));tag_shape(s,e,"trapezoid");s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb(e["stroke"]);s.line.width=Pt(e.get("sw",1));nofx(s)
+   s=sl.shapes.add_shape(MSO_SHAPE.TRAPEZOID,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));tag_shape(s,e,"trapezoid",preserve_source_ids);s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb(e["stroke"]);s.line.width=Pt(e.get("sw",1));nofx(s)
   elif t=="line":
    x1,y1,x2,y2=[e[k]*DPI for k in ("x1","y1","x2","y2")];dash=' stroke-dasharray="8 6"' if e.get("dash") else '';ar=' marker-end="url(#ar)"' if e.get("arrow") else ''
    if e.get("arrow") and e.get("arrow_size"):
@@ -96,10 +97,10 @@ def render(spec,svg,pptx):
      ux,uy=(x2-x1)/length,(y2-y1)/length;px,py=-uy,ux
      points=f'{x2},{y2} {x2-ux*z+px*z/2},{y2-uy*z+py*z/2} {x2-ux*z-px*z/2},{y2-uy*z-py*z/2}'
      out.append(f'<polygon points="{points}" fill="{e.get("color","#43525B")}"/>')
-   addline(sl,e)
+   addline(sl,e,preserve_source_ids=preserve_source_ids)
   elif t=="polyline":
    out.append('<polyline points="'+" ".join(f'{x*DPI},{y*DPI}' for x,y in e["points"])+f'" fill="none" stroke="{e["color"]}" stroke-width="{e.get("sw",1.2)*DPI/72}" stroke-linecap="round" stroke-linejoin="round"/>')
-   for i,(a,b) in enumerate(zip(e["points"][:-1],e["points"][1:]),1):addline(sl,{**e,"x1":a[0],"y1":a[1],"x2":b[0],"y2":b[1]},f"segment-{i:02d}")
+   for i,(a,b) in enumerate(zip(e["points"][:-1],e["points"][1:]),1):addline(sl,{"id":e.get("id"),"semantic_id":e.get("semantic_id"),"semantic_role":e.get("semantic_role"),"x1":a[0],"y1":a[1],"x2":b[0],"y2":b[1],"color":e["color"],"sw":e.get("sw",1.2)},f"segment-{i:02d}",preserve_source_ids)
   elif t=="polygon":
    ps=e["points"]
    out.append('<polygon points="'+" ".join(f'{x*DPI},{y*DPI}' for x,y in ps)+f'" fill="{e.get("fill","#FFFFFF")}" stroke="{e.get("stroke","#43525B")}" stroke-width="{e.get("sw",1)*DPI/72}"/>')
@@ -107,10 +108,10 @@ def render(spec,svg,pptx):
    # Milliinch coordinates preserve the source polygon instead of a 1-inch box.
    b=sl.shapes.build_freeform(start_x=round(ps[0][0]*1000),start_y=round(ps[0][1]*1000),scale=Inches(.001))
    b.add_line_segments([(round(x*1000),round(y*1000)) for x,y in ps[1:]],close=True)
-   s=b.convert_to_shape();tag_shape(s,e,"polygon");s.fill.solid();s.fill.fore_color.rgb=rgb(e.get("fill","#FFFFFF"));s.line.color.rgb=rgb(e.get("stroke","#43525B"));s.line.width=Pt(e.get("sw",1));nofx(s)
+   s=b.convert_to_shape();tag_shape(s,e,"polygon",preserve_source_ids);s.fill.solid();s.fill.fore_color.rgb=rgb(e.get("fill","#FFFFFF"));s.line.color.rgb=rgb(e.get("stroke","#43525B"));s.line.width=Pt(e.get("sw",1));nofx(s)
   elif t=="ellipse":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];out.append(f'<ellipse cx="{x+ww/2}" cy="{y+hh/2}" rx="{ww/2}" ry="{hh/2}" fill="{e["fill"]}" stroke="{e["stroke"]}" stroke-width="{e.get("sw",1)*DPI/72}"/>')
-   s=sl.shapes.add_shape(MSO_SHAPE.OVAL,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));tag_shape(s,e,"ellipse");s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb(e["stroke"]);s.line.width=Pt(e.get("sw",1));nofx(s)
+   s=sl.shapes.add_shape(MSO_SHAPE.OVAL,Inches(e["x"]),Inches(e["y"]),Inches(e["w"]),Inches(e["h"]));tag_shape(s,e,"ellipse",preserve_source_ids);s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb(e["stroke"]);s.line.width=Pt(e.get("sw",1));nofx(s)
   elif t=="grid" or t=="stack_grid":
    x,y,ww,hh=[e[k]*DPI for k in ("x","y","w","h")];rows,cols=int(e["rows"]),int(e["cols"]);stroke=e.get("stroke","#D7DEE3");border=e.get("border","#98A6AF")
    if t=="stack_grid":
@@ -123,10 +124,10 @@ def render(spec,svg,pptx):
    if t=="stack_grid":
     off=e.get("offset",.16)
     for layer in range(int(e.get("layers",5))-1,0,-1):
-     b=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x+off*layer),Inches(y-off*layer),Inches(ww),Inches(hh));tag_shape(b,e,f"stack-layer-{layer}");b.fill.solid();b.fill.fore_color.rgb=rgb("#FFFFFF");b.line.color.rgb=rgb(e.get("border","#98A6AF"));b.line.width=Pt(.8);nofx(b)
-   bg=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x),Inches(y),Inches(ww),Inches(hh));tag_shape(bg,e,"grid-base");bg.fill.solid();bg.fill.fore_color.rgb=rgb(e.get("fill","#FBFCFD"));bg.line.color.rgb=rgb(e.get("border","#98A6AF"));bg.line.width=Pt(.8);nofx(bg)
-   for c in range(1,cols):addline(sl,{**e,"x1":x+ww*c/cols,"y1":y,"x2":x+ww*c/cols,"y2":y+hh},f"grid-column-{c:02d}")
-   for r in range(1,rows):addline(sl,{**e,"x1":x,"y1":y+hh*r/rows,"x2":x+ww,"y2":y+hh*r/rows},f"grid-row-{r:02d}")
+     b=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x+off*layer),Inches(y-off*layer),Inches(ww),Inches(hh));tag_shape(b,e,f"stack-layer-{layer}",preserve_source_ids);b.fill.solid();b.fill.fore_color.rgb=rgb("#FFFFFF");b.line.color.rgb=rgb(e.get("border","#98A6AF"));b.line.width=Pt(.8);nofx(b)
+   bg=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x),Inches(y),Inches(ww),Inches(hh));tag_shape(bg,e,"grid-base",preserve_source_ids);bg.fill.solid();bg.fill.fore_color.rgb=rgb(e.get("fill","#FBFCFD"));bg.line.color.rgb=rgb(e.get("border","#98A6AF"));bg.line.width=Pt(.8);nofx(bg)
+   for c in range(1,cols):addline(sl,{"id":e.get("id"),"semantic_id":e.get("semantic_id"),"semantic_role":e.get("semantic_role"),"x1":x+ww*c/cols,"y1":y,"x2":x+ww*c/cols,"y2":y+hh,"color":e.get("stroke","#D7DEE3"),"sw":e.get("sw",.4)},f"grid-column-{c:02d}",preserve_source_ids)
+   for r in range(1,rows):addline(sl,{"id":e.get("id"),"semantic_id":e.get("semantic_id"),"semantic_role":e.get("semantic_role"),"x1":x,"y1":y+hh*r/rows,"x2":x+ww,"y2":y+hh*r/rows,"color":e.get("stroke","#D7DEE3"),"sw":e.get("sw",.4)},f"grid-row-{r:02d}",preserve_source_ids)
   elif t=="sensor":
    x,y,z=e["x"],e["y"],e.get("scale",1);v=e.get("variant",0);c=e.get("color","#43525B")
    if v==0:
@@ -143,18 +144,18 @@ def render(spec,svg,pptx):
     s=sl.shapes.add_shape(MSO_SHAPE.PARALLELOGRAM,Inches(x+z*.015),Inches(y+z*.04),Inches(z*.19),Inches(z*.19))
    else:
     s=sl.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,Inches(x+z*.06),Inches(y+z*.025),Inches(z*.09),Inches(z*.24))
-   tag_shape(s,e,"sensor-body");s.fill.solid();s.fill.fore_color.rgb=rgb("#E8F0F3");s.line.color.rgb=rgb(c);nofx(s)
-   addline(sl,{**e,"x1":x+z*.10,"y1":y+z*.20,"x2":x+z*.10,"y2":y+z*.30,"color":c,"sw":1},"sensor-stem")
-   b=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x+z*.015),Inches(y+z*.30),Inches(z*.18),Inches(z*.045));tag_shape(b,e,"sensor-foot");b.fill.solid();b.fill.fore_color.rgb=rgb("#FFFFFF");b.line.color.rgb=rgb(c);nofx(b)
+   tag_shape(s,e,"sensor-body",preserve_source_ids);s.fill.solid();s.fill.fore_color.rgb=rgb("#E8F0F3");s.line.color.rgb=rgb(c);nofx(s)
+   addline(sl,{"id":e.get("id"),"semantic_id":e.get("semantic_id"),"semantic_role":e.get("semantic_role"),"x1":x+z*.10,"y1":y+z*.20,"x2":x+z*.10,"y2":y+z*.30,"color":c,"sw":1},"sensor-stem",preserve_source_ids)
+   b=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(x+z*.015),Inches(y+z*.30),Inches(z*.18),Inches(z*.045));tag_shape(b,e,"sensor-foot",preserve_source_ids);b.fill.solid();b.fill.fore_color.rgb=rgb("#FFFFFF");b.line.color.rgb=rgb(c);nofx(b)
   elif t=="graph":
    ps=pts(e)
    for i,(a,b) in enumerate(e["edges"],1):
-    x1,y1=ps[a];x2,y2=ps[b];out.append(f'<line x1="{x1*DPI}" y1="{y1*DPI}" x2="{x2*DPI}" y2="{y2*DPI}" stroke="{e["edge"]}" stroke-width="{e.get("sw",.75)*DPI/72}"/>');addline(sl,{**e,"x1":x1,"y1":y1,"x2":x2,"y2":y2,"color":e["edge"],"sw":e.get("sw",.75)},f"edge-{i:02d}")
+    x1,y1=ps[a];x2,y2=ps[b];out.append(f'<line x1="{x1*DPI}" y1="{y1*DPI}" x2="{x2*DPI}" y2="{y2*DPI}" stroke="{e["edge"]}" stroke-width="{e.get("sw",.75)*DPI/72}"/>');addline(sl,{"id":e.get("id"),"semantic_id":e.get("semantic_id"),"semantic_role":e.get("semantic_role"),"x1":x1,"y1":y1,"x2":x2,"y2":y2,"color":e["edge"],"sw":e.get("sw",.75)},f"edge-{i:02d}",preserve_source_ids)
    for i,(x,y) in enumerate(ps,1):
     rr=e.get("r",.045);out.append(f'<circle cx="{x*DPI}" cy="{y*DPI}" r="{rr*DPI}" fill="{e["fill"]}" stroke="#43525B" stroke-width="1.1"/>')
-    s=sl.shapes.add_shape(MSO_SHAPE.OVAL,Inches(x-rr),Inches(y-rr),Inches(2*rr),Inches(2*rr));tag_shape(s,e,f"node-{i:02d}");s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb("#43525B");s.line.width=Pt(.55);nofx(s)
+    s=sl.shapes.add_shape(MSO_SHAPE.OVAL,Inches(x-rr),Inches(y-rr),Inches(2*rr),Inches(2*rr));tag_shape(s,e,f"node-{i:02d}",preserve_source_ids);s.fill.solid();s.fill.fore_color.rgb=rgb(e["fill"]);s.line.color.rgb=rgb("#43525B");s.line.width=Pt(.55);nofx(s)
  out.append("</svg>");Path(svg).parent.mkdir(parents=True,exist_ok=True);Path(svg).write_text("\n".join(out),encoding="utf-8")
  Path(pptx).parent.mkdir(parents=True,exist_ok=True);prs.save(pptx);clean_theme(Path(pptx))
 def main():
- a=argparse.ArgumentParser();a.add_argument("spec",type=Path);a.add_argument("--svg",type=Path,required=True);a.add_argument("--pptx",type=Path,required=True);x=a.parse_args();render(json.loads(x.spec.read_text(encoding="utf-8")),x.svg,x.pptx)
+ a=argparse.ArgumentParser();a.add_argument("spec",type=Path);a.add_argument("--svg",type=Path,required=True);a.add_argument("--pptx",type=Path,required=True);a.add_argument("--preserve-source-ids",action="store_true");x=a.parse_args();render(json.loads(x.spec.read_text(encoding="utf-8")),x.svg,x.pptx,preserve_source_ids=x.preserve_source_ids)
 if __name__=="__main__":main()

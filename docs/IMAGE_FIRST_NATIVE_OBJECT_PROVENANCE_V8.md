@@ -6,7 +6,7 @@ Image-first Stage B must produce a slide whose text, panels, graph glyphs, arrow
 
 ## Renderer naming contract
 
-`tools/render_figure_spec.py` now writes stable native PowerPoint shape names in the form:
+`tools/render_figure_spec.py` writes stable native PowerPoint shape names when the opt-in `--preserve-source-ids` flag is enabled. Default rendering remains byte-compatible with the existing canonical PPTX baselines. The opt-in names use the form:
 
 `semantic_id__source_element_id__part`
 
@@ -29,7 +29,7 @@ The names do not alter visible geometry or text. They provide a stable handle fo
 Run:
 
 ```bash
-python tools/render_figure_spec.py path/to/figure_spec.json --svg dist/figure.svg --pptx dist/figure.pptx
+python tools/render_figure_spec.py path/to/figure_spec.json --svg dist/figure.svg --pptx dist/figure.pptx --preserve-source-ids
 python tools/audit_figure_spec_pptx.py path/to/figure_spec.json dist/figure.pptx --report dist/object_provenance.json
 ```
 
@@ -45,10 +45,11 @@ The audit is read-only. It does not edit the FigureSpec or PPTX.
 ## Regression coverage
 
 `tools/test_figure_spec_pptx_provenance.py` verifies:
-1. semantic IDs and source element IDs survive rendering;
-2. composite graph, polyline and arrow elements receive deterministic part names;
-3. every supported source element is mapped by the audit;
-4. duplicate source element IDs are rejected.
+1. semantic IDs and source element IDs survive opt-in provenance rendering;
+2. default rendering leaves legacy shape names and canonical outputs unchanged;
+3. composite graph, polyline and arrow elements receive deterministic part names;
+4. every supported source element is mapped by the audit;
+5. duplicate source element IDs are rejected.
 
 ## Gate boundary
 

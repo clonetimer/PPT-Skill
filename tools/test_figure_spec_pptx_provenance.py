@@ -71,7 +71,7 @@ class FigureSpecPptxProvenanceTests(unittest.TestCase):
         self.temp.cleanup()
 
     def test_renderer_preserves_source_ids_and_semantic_ids(self):
-        render(self.spec, self.svg_path, self.pptx_path)
+        render(self.spec, self.svg_path, self.pptx_path, preserve_source_ids=True)
         deck = Presentation(str(self.pptx_path))
         names = [shape.name for shape in deck.slides[0].shapes]
         self.assertTrue(any(name.startswith("slide_title__el_title__") for name in names))
@@ -84,7 +84,7 @@ class FigureSpecPptxProvenanceTests(unittest.TestCase):
         self.assertTrue(any(name.startswith("decision__el_triangle__polygon") for name in names))
 
     def test_object_audit_maps_every_source_element(self):
-        render(self.spec, self.svg_path, self.pptx_path)
+        render(self.spec, self.svg_path, self.pptx_path, preserve_source_ids=True)
         report = audit_figure_spec_pptx(self.spec_path, self.pptx_path)
         self.assertEqual(report["status"], "pass")
         self.assertEqual(report["source_element_count"], len(self.spec["elements"]))
@@ -95,8 +95,15 @@ class FigureSpecPptxProvenanceTests(unittest.TestCase):
         self.assertGreater(report["object_inventory"]["native_text_shapes"], 0)
         self.assertGreater(report["object_inventory"]["native_connectors"], 0)
 
-    def test_duplicate_source_element_ids_are_rejected(self):
+    def test_default_renderer_keeps_legacy_shape_names(self):
         render(self.spec, self.svg_path, self.pptx_path)
+        deck = Presentation(str(self.pptx_path))
+        names = [shape.name for shape in deck.slides[0].shapes]
+        self.assertFalse(any("el_title" in name for name in names))
+        self.assertFalse(any("el_graph" in name for name in names))
+
+    def test_duplicate_source_element_ids_are_rejected(self):
+        render(self.spec, self.svg_path, self.pptx_path, preserve_source_ids=True)
         duplicated = json.loads(self.spec_path.read_text(encoding="utf-8"))
         duplicated["elements"][1]["id"] = duplicated["elements"][0]["id"]
         self.spec_path.write_text(json.dumps(duplicated), encoding="utf-8")
