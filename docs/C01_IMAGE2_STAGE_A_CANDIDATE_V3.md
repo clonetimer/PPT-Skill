@@ -7,8 +7,8 @@
 **Bytes:** 266,044  
 **SHA-256:** `0a1d079218cc73d87d5045f0c3cd1303d0bc53237670271dfacb61919fb58337`  
 **Source contract:** FigureSpec V8 + Topology Contract V8  
-**CI baseline:** [#653 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43821517775)  
-**Source commit:** `3b23186f17b9db484ff9ac4f7f5fa071393b5c58`
+**CI baseline:** [#654 PASS](https://github.com/clonetimer/PPT-Skill/actions/runs/43824609144)  
+**Source commit:** `8810d1e1f6b9c2640b01c947cfa87cf7d4bc2cf9`
 
 ## V3 visual triage
 
