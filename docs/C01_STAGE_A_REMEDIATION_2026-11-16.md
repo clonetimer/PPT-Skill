@@ -8,9 +8,9 @@
 | P1-1：B_i 子图与 Total graph / Input 节点数不一致 | B_i 子图和 Total graph 可见层统一为 3 节点示意；Input 保留 12 节点、4×3。明确三节点图标是视觉一致性设计，不是恢复的数值邻接。 | 已写入 V8 FigureSpec / Topology Contract；待新图复审 |
 | P1-2：频带数容易被误读为固定四带 | 标签改为 B₁、B₂、B₃、…、Bₙ；说明 N 可变，四个可见条目只是代表性展示。 | 已写入 V8 FigureSpec / DeckSpec / Prompt |
 | P1-3：缺少拓扑锁定材料，精确九条未核实 | 新增 V8 拓扑核验文件；列出 18 条方法级有向关系，并与图内部虚线连接明确区分；撤销精确九条声明，内部虚线统一为 schematic_unspecified。 | 已形成 V8 拓扑审计材料；不再声称精确九条已核验 |
-| P2-4：五类输出可能被误认为固定类别数 | 增加 “5-class illustrative output” 说明；只高亮 C₂。 | 已写入 V8 约束；待新图复审 |
+| P2-4：五类输出可能被误认为固定类别数 | 增加 “5-class illustrative output” 说明；只高亮 C₂。 | V3 候选图已呈现；待人工复审 |
 | P2-5：IR / SR 术语差异 | 继续保留两个 IR layer 标签，并披露公开摘要使用 SR；不宣称二者等价。 | 已保留 |
-| P2-6：右侧文字密集、虚线交叉多 | 减少示意虚线密度，扩大 Evidence boundary 文本区域，并在 1080p 下复核。 | 目标图待生成与投影审查 |
+| P2-6：右侧文字密集、虚线交叉多 | 减少示意虚线密度，扩大 Evidence boundary 文本区域，并在 1080p 下复核。 | V3 已生成并完成初步视觉预检；投影距离仍待人工验收 |
 | 包内容完整性：README 引用文件未随 ZIP 交付 | V3 评审包包含技术预审原文、候选说明、V8 FigureSpec、V8 Topology Contract、源证据记录和整改记录。 | 纳入 V3 包装清单 |
 
 ## 证据口径
