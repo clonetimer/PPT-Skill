@@ -143,6 +143,8 @@ class C01ImageFirstV41Tests(unittest.TestCase):
         self.assertIn("must not depict a specific B₃-to-B_N edge", prompt)
         self.assertIn("Band-pass filtering yields signals in each frequency band", prompt)
         self.assertIn("Fault classification", prompt)
+        self.assertIn("Input graph: show 12 nodes in 4 rows of 3 nodes", prompt)
+        self.assertNotIn("None rows", prompt)
         self.assertIn("exactly once in the Evidence boundary panel", prompt)
 
     def test_stage_A_is_not_approved_and_stage_B_is_not_started(self):
