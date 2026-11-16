@@ -1285,8 +1285,9 @@
       "sw": 0.8,
       "radius": 0.035,
       "id": "el_0066",
-      "semantic_role": "layout_shape",
-      "evidence_ref": "source_1"
+      "semantic_role": "scientific_object",
+      "evidence_ref": "source_1",
+      "semantic_id": "input"
     },
     {
       "type": "text",
@@ -1299,7 +1300,7 @@
       "bold": true,
       "align": "left",
       "color": "#28343C",
-      "semantic_id": "input",
+      "semantic_id": "input_label",
       "id": "el_0067",
       "semantic_role": "scientific_label",
       "evidence_ref": "source_1"
@@ -1786,7 +1787,8 @@
       "arrow": true,
       "id": "el_0089",
       "semantic_role": "connector",
-      "evidence_ref": "source_1"
+      "evidence_ref": "source_1",
+      "semantic_link": "dense__class_output"
     },
     {
       "type": "text",

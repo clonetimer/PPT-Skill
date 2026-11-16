@@ -17,8 +17,11 @@ def _text(spec: dict, element_id: str) -> dict:
 
 def _add_input_graph(spec: dict) -> None:
     elements = spec["elements"]
+    input_box = _text(spec, "el_0066")
+    input_box.update(semantic_id="input", semantic_role="scientific_object")
     label = _text(spec, "el_0067")
-    label.update(x=0.75, y=5.29, w=0.43, h=0.27, align="left")
+    label.update(x=0.75, y=5.29, w=0.43, h=0.27, align="left",
+                 semantic_id="input_label", semantic_role="scientific_label")
 
     graph = {
         "type": "graph",
@@ -88,9 +91,8 @@ def _add_class_outputs(spec: dict) -> None:
         })
     if ["dense", "class_output"] not in spec["semantic_edges"]:
         spec["semantic_edges"].append(["dense", "class_output"])
-    for element in elements:
-        if element.get("semantic_link") == "dense__class_output":
-            element["semantic_link"] = "dense__class_output"
+    class_route = next(e for e in elements if e.get("id") == "el_0089")
+    class_route.update(semantic_link="dense__class_output", semantic_role="connector")
 
 
 def build_spec(source_spec: dict | None = None) -> dict:

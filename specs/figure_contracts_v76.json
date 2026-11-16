@@ -199,5 +199,22 @@
       "Pixel-level source-image match",
       "Exact source node coordinates"
     ]
+  },
+  "C01_composite_defense_slide_image_first_v8": {
+    "claim": "The slide explains frequency-band graph construction and the two-branch graph-level diagnosis path.",
+    "archetype": "schematic_led_composite",
+    "output_mode": "presentation",
+    "source": "docs/C01_V73_SOURCE.md",
+    "source_locator": "Author-published graphical abstract, both visible panels and cross-panel Total graph → Input route; public abstract method description checked separately; V8 schematic boundary and variable-N construction",
+    "evidence_status": "source_visible_redraw",
+    "evidence_scope": "C01 Image-first Stage-A target. Frequency-band count N is variable; four visible bands are representative. Three-node B_i and Total graph motifs are visual-consistency schematics. Input is a 12-node four-by-three schematic with eight within-row links. Dashed cross-band and inter-row links are illustrative; exact counts and numerical adjacency are not asserted. Five class outputs are illustrative, not fixed. IR/SR terminology remains unresolved.",
+    "unverified": [
+      "Numerical adjacency matrix",
+      "Exact number of dashed inter-band or inter-row links",
+      "Fixed frequency-band count",
+      "Fixed class-output count",
+      "Pixel-level source-image match",
+      "Exact source node coordinates"
+    ]
   }
 }

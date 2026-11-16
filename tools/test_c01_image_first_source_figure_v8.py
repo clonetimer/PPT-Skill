@@ -6,6 +6,7 @@ import json
 import unittest
 
 from build_c01_image_first_source_figure_v8 import build_spec
+from scientific_ir import ROOT, validate_expected_topology, validate_spec
 
 
 class C01ImageFirstSourceFigureV8Tests(unittest.TestCase):
@@ -56,6 +57,22 @@ class C01ImageFirstSourceFigureV8Tests(unittest.TestCase):
     def test_readout_label_boundary_is_preserved(self):
         labels = [e.get("text") for e in self.elements if e.get("semantic_id") in {"sr_main", "sr_ea"}]
         self.assertEqual(labels, ["IR layer", "IR layer"])
+
+    def test_registered_evidence_and_all_18_directed_routes_validate(self):
+        validate_spec(self.spec)
+        topology = json.loads(
+            (ROOT / "specs/c01_composite_expected_topology_v8.json").read_text(encoding="utf-8")
+        )
+        validate_expected_topology(self.spec, topology)
+        self.assertEqual(len(topology["critical_edges"]), 18)
+        routes = {e.get("semantic_link") for e in self.elements if e.get("semantic_link")}
+        self.assertIn("dense__class_output", routes)
+
+    def test_input_container_and_label_have_distinct_semantic_ids(self):
+        container = next(e for e in self.elements if e.get("semantic_id") == "input")
+        label = next(e for e in self.elements if e.get("semantic_id") == "input_label")
+        self.assertEqual(container["type"], "rect")
+        self.assertEqual(label["text"], "Input")
 
 
 if __name__ == "__main__":

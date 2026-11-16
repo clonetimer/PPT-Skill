@@ -11,7 +11,8 @@ SCHEMA = ROOT / "specs/figure_spec_v76.schema.json"
 INITIAL_SEANET_TOPOLOGY = ROOT / "specs/c01_standalone_initial_topology_v73.json"
 TOPOLOGIES = (ROOT / "specs/c01_expected_topology_v76.json",
               ROOT / "specs/c01_standalone_expected_topology_v76.json",
-              ROOT / "specs/c01_composite_expected_topology_v75.json")
+              ROOT / "specs/c01_composite_expected_topology_v75.json",
+              ROOT / "specs/c01_composite_expected_topology_v8.json")
 
 
 def check_all():

@@ -19,8 +19,8 @@
     "band_4": "Bₙ",
     "class_output_label": "fault class",
     "input_label": "Input",
-    "label_pooling_1": "pooling",
-    "label_pooling_2": "pooling"
+    "pooling_1": "pooling",
+    "pooling_2": "pooling"
   },
   "critical_edges": [
     [
