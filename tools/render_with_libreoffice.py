@@ -111,13 +111,21 @@ def validate_lock(profile: dict[str, Any], observed: dict[str, Any]) -> list[str
         return []
     expected = profile.get("expected", {})
     mismatches = []
-    for key in ("libreoffice_version", "poppler_version", "fontconfig_version"):
+    for key in ("libreoffice_version", "poppler_version", "pdfinfo_version", "fontconfig_version"):
         value = expected.get(key)
         if value and value != observed.get(key):
             mismatches.append(f"{key}:expected={value}:actual={observed.get(key)}")
     for key, value in expected.get("package_versions", {}).items():
         if observed.get("package_versions", {}).get(key) != value:
             mismatches.append(f"package:{key}:expected={value}:actual={observed.get('package_versions', {}).get(key)}")
+    for key in ("locale", "timezone", "dpi"):
+        value = expected.get(key)
+        if value is not None and value != observed.get(key):
+            mismatches.append(f"{key}:expected={value}:actual={observed.get(key)}")
+    expected_os = expected.get("os_release_pretty_name")
+    actual_os = observed.get("os_release", {}).get("PRETTY_NAME")
+    if expected_os and expected_os != actual_os:
+        mismatches.append(f"os_release:expected={expected_os}:actual={actual_os}")
     for family, value in expected.get("font_files", {}).items():
         actual = observed.get("font_files", {}).get(family, {})
         if actual.get("sha256") != value:
@@ -168,7 +176,7 @@ def render_pptx(input_pptx: str | Path, output_dir: str | Path,
     png_paths = sorted(out_dir.glob(f"{source.stem}-slide-*.png"))
     if len(png_paths) != page_count:
         raise RuntimeError(f"PNG_PAGE_COUNT_MISMATCH:expected={page_count}:actual={len(png_paths)}")
-    requested_fonts = collect_requested_fonts(source)
+    requested_fonts = sorted(set(collect_requested_fonts(source)) | set(profile.get("font_probe_families", [])))
     font_files = resolve_fonts(requested_fonts)
     packages = installed_package_versions(profile.get("required_packages", []))
     observed = {
