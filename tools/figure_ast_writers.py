@@ -91,7 +91,7 @@ class SvgWriter:
             elif kind == "text":
                 x, y, w, h = [float(e[k]) * self.dpi for k in ("x", "y", "w", "h")]
                 size = float(e.get("size", 14)) * self.dpi / 72.0
-                lines = str(e["text"]).split("\\n")
+                lines = str(e["text"]).split("\n")
                 align = e.get("align", "center")
                 anchor = {"left": "start", "center": "middle", "right": "end"}[align]
                 tx = x if align == "left" else x + w / 2 if align == "center" else x + w
@@ -206,7 +206,7 @@ class SvgWriter:
             else:
                 raise ValueError(f"UNSUPPORTED_SVG_PRIMITIVE:{kind}")
         parts.append("</svg>")
-        output.write_text("\\n".join(parts) + "\\n", encoding="utf-8")
+        output.write_text("\n".join(parts) + "\n", encoding="utf-8")
         return {"writer": "svg", "nodes": len(ast.nodes), "output": str(output)}
 
 
@@ -260,7 +260,7 @@ class DrawingMLWriter:
         frame.margin_bottom = Inches(.008)
         frame.vertical_anchor = MSO_ANCHOR.MIDDLE
         align = {"left": PP_ALIGN.LEFT, "center": PP_ALIGN.CENTER, "right": PP_ALIGN.RIGHT}[e.get("align", "center")]
-        for index, line in enumerate(str(e["text"]).split("\\n")):
+        for index, line in enumerate(str(e["text"]).split("\n")):
             paragraph = frame.paragraphs[0] if index == 0 else frame.add_paragraph()
             paragraph.alignment = align
             paragraph.space_before = Pt(0)
