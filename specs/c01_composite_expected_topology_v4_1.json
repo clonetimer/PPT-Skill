@@ -153,7 +153,7 @@
       "within_row_edge_motif": "two solid links per row, schematic",
       "inter_row_links": "schematic_unspecified",
       "note": "Four visible rows represent B₁, B₂, B₃ and B_N; total band count remains N. A vertical ellipsis and non-attached dashed continuation rail are positioned specifically in the gap between B₃ and B_N; no B₃-to-B_N node edge is asserted.",
-      "continuation_marker": "vertical ellipsis and two short dashed rail segments placed in the B₃/B_N inter-row gap, left of all graph nodes and without node endpoints"
+      "continuation_marker": "vertical ellipsis and two short dashed rail segments placed in the B₃/B_N inter-row gap, left of all graph nodes; no node endpoints"
     },
     "input_graph": {
       "node_count": 12,
