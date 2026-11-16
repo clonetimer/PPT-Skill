@@ -26,3 +26,14 @@
 ## 放行门槛
 
 本整改记录、CI 通过或 AI 预审通过均不等于人类 Stage A 签核。只有项目指定的人类审查人检查新目标图、确认六项 Stage A 检查全部通过且无阻断问题后，Stage B 才可解锁。
+
+
+## V4.1 Minor Revision (2026-11-16)
+
+- Replaced lowercase `Bₙ` with uppercase `B_N` consistently. The author-lab source figure labels the final item “Sub graph N: Nth band”; `B_N` is the redraw's normalized label, not a claim about literal source typography.
+- Added a non-attached vertical ellipsis and dashed continuation rail between B₃ and B_N. No B₃-to-B_N node-to-node edge is asserted.
+- Separated “Filtering: obtain signals in each frequency band” from “Graph construction: build one subgraph per band, then connect the subgraphs into the total graph.”
+- Made the five class output markers near-square and added “Fault classification”; only C₂ remains highlighted.
+- Removed the duplicate central IR/SR banner; retained the discrepancy once in Evidence boundary.
+- Updated V4.1 FigureSpec, Topology Contract, DeckSpec, Image2 prompt constraints and regression tests.
+- Status: V4.1 ready for final human Stage-A review; no formal approval yet; Stage B remains locked.

@@ -13,7 +13,8 @@ TOPOLOGIES = (ROOT / "specs/c01_expected_topology_v76.json",
               ROOT / "specs/c01_standalone_expected_topology_v76.json",
               ROOT / "specs/c01_composite_expected_topology_v75.json",
               ROOT / "specs/c01_composite_expected_topology_v8.json",
-              ROOT / "specs/c01_composite_expected_topology_v4.json")
+              ROOT / "specs/c01_composite_expected_topology_v4.json",
+              ROOT / "specs/c01_composite_expected_topology_v4_1.json")
 
 
 def check_all():

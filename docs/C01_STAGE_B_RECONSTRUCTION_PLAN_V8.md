@@ -86,3 +86,15 @@ Stage B begins only when the Stage-A manifest records:
 - no remaining blocking issues.
 
 Until then, no PPTX reconstruction or parity result is claimed.
+
+
+## V4.1 Minor Revision carry-forward
+
+Before Stage B begins, the approved V4.1 target and its source contract must agree on:
+- the normalized `B_N` label for the Nth band (the author-lab source image itself labels it “Sub graph N: Nth band”);
+- one representative dashed inter-band example plus a non-attached ellipsis/continuation rail between B₃ and B_N, with no specific B₃-to-B_N node edge;
+- two distinct explanation stages: per-band signal extraction by filtering, followed by per-band subgraph construction and total-graph connection;
+- five near-square illustrative class outputs with the label “Fault classification”;
+- one IR/SR terminology note in the Evidence boundary only.
+
+The source contract is versioned as `C01_composite_defense_slide_image_first_v4_1`. The Stage-B renderer must reconstruct every line, graph node, label and output marker as an editable native PowerPoint object and preserve source-object provenance. The V4.1 PNG is still pending Stage-A approval; this section is a preparation constraint, not a Stage-B start signal.

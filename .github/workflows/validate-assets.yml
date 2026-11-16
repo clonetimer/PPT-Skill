@@ -72,10 +72,12 @@ jobs:
           python tools/test_image_first_stage_a.py
           python tools/test_c01_image_first_source_figure_v8.py
           python tools/test_c01_image_first_v4.py
+          python tools/test_c01_image_first_v4_1.py
           python tools/test_figure_spec_pptx_provenance.py
       - name: Validate committed Image-first example before generated specs are rebuilt
         run: |
           python tools/validate_deck_spec_v76.py specs/deck_spec_v8.example.json
+          python tools/validate_deck_spec_v76.py specs/deck_spec_v8_v4_1.example.json
           python tools/validate_image_first_workflow.py specs/image_first_workflow_v8.example.json
       - name: Build B01/F07
         run: |
@@ -115,6 +117,14 @@ jobs:
           cp specs/c01_composite_expected_topology_v4.json dist/image_first/fbg-seanet-s02-v4/source/
           cp specs/deck_spec_v8_v4.example.json dist/image_first/fbg-seanet-s02-v4/source/
           cp docs/C01_STAGE_A_MAJOR_REVISION_V4.md dist/image_first/fbg-seanet-s02-v4/source/
+          python tools/create_image_first_manifest.py specs/deck_spec_v8_v4_1.example.json s02 --output-dir dist/image_first/fbg-seanet-s02-v4-1
+          python tools/validate_image_first_workflow.py dist/image_first/fbg-seanet-s02-v4-1/workflow.json
+          mkdir -p dist/image_first/fbg-seanet-s02-v4-1/source
+          cp figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json dist/image_first/fbg-seanet-s02-v4-1/source/
+          cp specs/c01_composite_expected_topology_v4_1.json dist/image_first/fbg-seanet-s02-v4-1/source/
+          cp specs/deck_spec_v8_v4_1.example.json dist/image_first/fbg-seanet-s02-v4-1/source/
+          cp docs/C01_STAGE_A_MINOR_REVISION_V4_1.md dist/image_first/fbg-seanet-s02-v4-1/source/
+          cp docs/C01_IMAGE2_STAGE_A_CANDIDATE_V4_1.md dist/image_first/fbg-seanet-s02-v4-1/source/
           mkdir -p dist/image_first/fbg-seanet-s02/source
           cp figure_specs/c01/C01_composite_defense_slide_image_first_v8.json dist/image_first/fbg-seanet-s02/source/
           cp specs/c01_composite_expected_topology_v8.json dist/image_first/fbg-seanet-s02/source/
@@ -159,6 +169,9 @@ jobs:
           python -m json.tool specs/deck_spec_v76.example.json > /dev/null
           python -m json.tool specs/deck_spec_v8.example.json > /dev/null
           python -m json.tool specs/deck_spec_v8_v4.example.json > /dev/null
+          python -m json.tool specs/deck_spec_v8_v4_1.example.json > /dev/null
+          python -m json.tool figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json > /dev/null
+          python -m json.tool specs/c01_composite_expected_topology_v4_1.json > /dev/null
           python -m json.tool specs/deck_spec_v76.schema.json > /dev/null
           python -m json.tool specs/15_figure_diagnostic_ledger_v76.json > /dev/null
           python -m json.tool specs/image_first_workflow_v8.schema.json > /dev/null
@@ -319,6 +332,12 @@ jobs:
         with:
           name: ppt-skill-v8-c01-image-first-stage-a-v4
           path: dist/image_first/fbg-seanet-s02-v4/*
+          if-no-files-found: error
+      - name: Upload C01 V4.1 Image-first Stage A prompt and source contracts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-v8-c01-image-first-stage-a-v4-1
+          path: dist/image_first/fbg-seanet-s02-v4-1/*
           if-no-files-found: error
       - name: Upload generated vector assets
         uses: actions/upload-artifact@v4

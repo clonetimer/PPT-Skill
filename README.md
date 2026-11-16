@@ -396,3 +396,8 @@ python tools/reproduce_research_figure.py .\paper.pdf --output .\qa\figure --mod
 ```
 
 The pipeline keeps the first-pass PPTX immutable for that run and produces object, text, raster, order, geometry, and optional visual evidence. A blocked composition manifest remains a blocker; it is not silently bypassed. Scientific and Office 2016 approval remain separate.
+
+
+### C01 V4.1 Minor Revision
+
+The latest C01 Image-first candidate is V4.1 (Minor Revision). It standardizes the Nth band label as B_N, adds a non-attached continuation marker between B₃ and B_N, separates per-band signal extraction from graph construction in the Reading guide, makes class outputs near-square and labels them Fault classification, and keeps the IR/SR note in one place. Its source FigureSpec and Topology Contract are separately versioned; Stage A still requires human sign-off.

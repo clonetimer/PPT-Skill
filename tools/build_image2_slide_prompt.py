@@ -68,6 +68,36 @@ def _geometry_instructions(contract: dict) -> list[str]:
             f"{outputs.get('highlighted_index')} using {outputs.get('highlight_color')}."
         )
 
+    continuation = contract.get("continuation_marker", "")
+    if continuation:
+        lines.append(
+            "For omitted intermediate bands, show a vertical ellipsis and short dashed continuation rail "
+            "between B₃ and B_N. The rail must not touch any node and must not depict a specific B₃-to-B_N edge."
+        )
+
+    construction = contract.get("construction_stages", {})
+    if construction:
+        lines.append(
+            "Keep the two construction stages distinct: "
+            + construction.get("filtering", "")
+            + " Then "
+            + construction.get("graph_construction", "")
+        )
+
+    class_shape = contract.get("class_outputs", {})
+    if class_shape:
+        lines.append(
+            f"Class markers must be {class_shape.get('shape', 'square')} and include the exact label "
+            f"'{class_shape.get('label', 'Fault classification')}'. Keep all five as illustrative outputs."
+        )
+
+    readout_note = contract.get("readout_note_placement", "")
+    if readout_note:
+        lines.append(
+            "Place the IR/SR terminology discrepancy exactly once in the Evidence boundary panel; "
+            "do not duplicate it as a central banner or second annotation."
+        )
+
     readouts = contract.get("readout_blocks", {})
     if readouts:
         lines.append(
