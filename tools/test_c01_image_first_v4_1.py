@@ -42,7 +42,7 @@ class C01ImageFirstV41Tests(unittest.TestCase):
         note = self.topology["geometry_contract"]["total_graph"]["note"]
         self.assertIn("B_N", note)
         self.assertIn("Nth", self.topology["evidence_boundary"][0] + " " + " ".join(self.topology["evidence_boundary"]))
-        self.assertIn("not the literal", " ".join(self.spec["figure_contract"]["unverified"]) + " " + self.spec["figure_contract"]["evidence_scope"])
+        self.assertIn("not a claim that the source figure prints the literal string B_N", self.spec["figure_contract"]["evidence_scope"])
 
     def test_filtering_and_graph_construction_are_separate_stages(self):
         visible = self.slide["on_slide"]
