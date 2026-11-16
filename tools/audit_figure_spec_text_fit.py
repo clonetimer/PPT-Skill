@@ -4,7 +4,7 @@ from __future__ import annotations
 import argparse, json
 from pathlib import Path
 from typing import Any
-from text_layout_metrics import FontMetrics, contrast_ratio, resolve_font_file
+from text_layout_metrics import FontMetrics, contrast_ratio, fit_textbox_height, resolve_font_file
 
 
 def _background_for(elements: list[dict], index: int, text: dict) -> str:
@@ -34,7 +34,14 @@ def audit_spec(spec: dict[str, Any]) -> dict:
             if key not in cache:
                 cache[key]=FontMetrics(font_path)
             metrics=cache[key]
-            measured=metrics.measure(element["text"],float(element.get("size",14)),float(element["w"]),float(element["h"]))
+            font_size=float(element.get("size",14))
+            width_in=float(element["w"])
+            height_in=float(element["h"])
+            measured=metrics.measure(element["text"],font_size,width_in,height_in)
+            height_search=fit_textbox_height(
+                metrics,element["text"],font_size,width_in,
+                min_height_pt=1.0,max_height_pt=max(72.0,height_in*72.0*4.0)
+            )
             background=_background_for(elements,index,element)
             foreground=element.get("color","#28343C")
             ratio=contrast_ratio(foreground,background)
@@ -50,6 +57,9 @@ def audit_spec(spec: dict[str, Any]) -> dict:
                 "required_height_pt":round(measured["required_height_pt"],3),
                 "available_height_pt":round(measured["available_height_pt"],3),
                 "fits_estimate":measured["fits"],
+                "binary_search_minimum_height_pt":round(height_search["height_pt"],3) if height_search["fits"] else None,
+                "additional_height_needed_pt":round(max(0.0,(height_search["height_pt"] or 0.0)-height_in*72.0),3) if height_search["fits"] else None,
+                "height_search_reason":height_search["reason"],
                 "foreground":foreground,
                 "background_estimate":background,
                 "contrast_ratio":round(ratio,3),
