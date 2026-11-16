@@ -234,7 +234,7 @@ def run_case(output_dir: Path, accepted_output: Path) -> dict:
         "rounds": [
             {
                 "round": 1, "path": str(round_01.relative_to(output_dir)), "sha256": sha(round_01),
-                "operation": "restore four stacked band subgraphs and nine dashed inter-band connectors inside Input block",
+                "operation": "restore four stacked band-subgraph rows and illustrative dashed inter-band connectors inside Input block; exact count is not asserted",
                 "object_diff": str((output_dir / "round_01_object_diff.json").relative_to(output_dir)),
                 "quality_audit": round_01_audit, "accepted": True, "rejected": False,
             },
