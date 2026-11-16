@@ -56,7 +56,7 @@ class FontMetrics:
             self.collection.close()
 
     def glyph_advance_pt(self, char: str, font_size_pt: float) -> float:
-        if char in "\\r\\n":
+        if char in "\r\n":
             return 0.0
         codepoint = ord(char)
         glyph_name = self.cmap.get(codepoint)
@@ -77,12 +77,12 @@ class FontMetrics:
         if max_width_pt <= 0:
             raise ValueError("TEXT_WIDTH_MUST_BE_POSITIVE")
         lines: list[str] = []
-        for paragraph in str(text).split("\\n"):
+        for paragraph in str(text).split("\n"):
             if paragraph == "":
                 lines.append("")
                 continue
             current = ""
-            for token in re.findall(r"\\s+|\\S+", paragraph):
+            for token in re.findall(r"\s+|\S+", paragraph):
                 if token.isspace():
                     if current and self.text_width_pt(current + token, font_size_pt) <= max_width_pt:
                         current += token
