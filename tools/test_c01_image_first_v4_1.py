@@ -148,6 +148,26 @@ class C01ImageFirstV41Tests(unittest.TestCase):
         self.assertIn("exactly once in the Evidence boundary panel", prompt)
         self.assertIn("Do not add a second GCN₁ to the auxiliary branch", prompt)
         self.assertIn("lower IR readout branch leaves the output of pooling₁", prompt)
+        self.assertIn("exactly one representative dashed connector between adjacent visible rows B₁ and B₂", prompt)
+        self.assertIn("Do not draw any edge from B₃ to B_N", prompt)
+        self.assertIn("two short non-attached dashed rail marks", prompt)
+        self.assertIn("at least one visibly dashed inter-row connector between adjacent rows", prompt)
+        self.assertIn("one continuous, traceable orthogonal connector", prompt)
+        self.assertIn("A lower-only text card, detached arrow, or disconnected continuation mark does NOT satisfy", prompt)
+        self.assertIn("exactly one clear directed arrow", prompt)
+
+    def test_reviewed_visual_blockers_are_explicit_in_topology_contract(self):
+        total = self.topology["geometry_contract"]["total_graph"]
+        self.assertEqual(total["representative_inter_band_connector_count"], 1)
+        self.assertEqual(total["representative_connector_route"], "B1 to B2 only")
+        self.assertEqual(total["forbidden_route"], "B3 to B_N")
+        self.assertEqual(self.topology["geometry_contract"]["input_graph"]["minimum_visible_inter_row_links"], 1)
+        route = self.topology["geometry_contract"]["cross_panel_connector"]
+        self.assertEqual(route["continuity"], "single_traceable_orthogonal_path_from_total_graph_to_input")
+        self.assertTrue(route["arrowhead_at_input"])
+        self.assertTrue(route["lower_only_text_card_insufficient"])
+        self.assertEqual(self.topology["geometry_contract"]["output_transition"]["arrow_count"], 1)
+        self.assertFalse(self.topology["geometry_contract"]["output_transition"]["detached_or_duplicate_arrows"])
 
     def test_stage_A_is_not_approved_and_stage_B_is_not_started(self):
         self.assertIn("pending", self.spec["evidence_status"])

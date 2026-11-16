@@ -151,17 +151,21 @@
       "visible_example_rows": 4,
       "nodes_per_visible_row": 3,
       "within_row_edge_motif": "two solid links per row, schematic",
-      "inter_row_links": "schematic_unspecified",
+      "inter_row_links": "exactly one representative dashed connector between adjacent visible rows B1 and B2; no direct B3-to-B_N node edge; continuation marks are non-attached and schematic",
       "note": "Four visible rows represent B₁, B₂, B₃ and B_N; total band count remains N. A vertical ellipsis and non-attached dashed continuation rail are positioned specifically in the gap between B₃ and B_N; no B₃-to-B_N node edge is asserted.",
-      "continuation_marker": "vertical ellipsis and two short dashed rail segments placed in the B₃/B_N inter-row gap, left of all graph nodes; no node endpoints"
+      "continuation_marker": "vertical ellipsis and two short dashed rail segments placed in the B₃/B_N inter-row gap, left of all graph nodes; no node endpoints",
+      "representative_inter_band_connector_count": 1,
+      "representative_connector_route": "B1 to B2 only",
+      "forbidden_route": "B3 to B_N"
     },
     "input_graph": {
       "node_count": 12,
       "row_count": 4,
       "nodes_per_row": 3,
       "within_row_edge_count": 8,
-      "inter_row_links": "schematic_unspecified",
-      "note": "Twelve-node, four-by-three input glyph is a source-visible schematic; dashed inter-row links are illustrative and are not a numerical adjacency matrix."
+      "inter_row_links": "one or more sparse dashed inter-row links; schematic_unspecified",
+      "note": "Twelve-node, four-by-three input glyph is a source-visible schematic; dashed inter-row links are illustrative and are not a numerical adjacency matrix.",
+      "minimum_visible_inter_row_links": 1
     },
     "class_outputs": {
       "displayed_count": 5,
@@ -205,6 +209,9 @@
     },
     "cross_panel_connector": {
       "route": "outer_left_margin",
+      "continuity": "single_traceable_orthogonal_path_from_total_graph_to_input",
+      "arrowhead_at_input": true,
+      "lower_only_text_card_insufficient": true,
       "avoid_heading": true
     },
     "inter_band_links": "one representative dashed connector plus non-attached continuation marker; schematic only; no exact edge count or numerical adjacency asserted",
@@ -212,7 +219,12 @@
       "filtering": "Band-pass filtering yields signals in each frequency band.",
       "graph_construction": "Graph construction forms one subgraph per band and connects the subgraphs into the total graph."
     },
-    "readout_note_placement": "single note in Evidence boundary; no duplicate central banner"
+    "readout_note_placement": "single note in Evidence boundary; no duplicate central banner",
+    "output_transition": {
+      "route": "dense_to_class_output",
+      "arrow_count": 1,
+      "detached_or_duplicate_arrows": false
+    }
   },
   "evidence_boundary": [
     "N is variable; four visible band examples do not mean a fixed four-band algorithm.",

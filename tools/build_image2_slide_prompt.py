@@ -51,13 +51,22 @@ def _geometry_instructions(contract: dict) -> list[str]:
             "their exact count is not asserted."
         )
 
+        lines.append(
+            "Total-graph edge semantics are strict: solid links run horizontally within each row only; "
+            "inter-band links are dashed. Show exactly one representative dashed connector between "
+            "adjacent visible rows B₁ and B₂. Do not draw any edge from B₃ to B_N. In the B₃/B_N gap, "
+            "place a vertical ellipsis and two short non-attached dashed rail marks to the left of all "
+            "graph nodes; none of these continuation marks may touch a node."
+        )
+
     input_graph = contract.get("input_graph", {})
     if input_graph:
         lines.append(
             f"Input graph: show {input_graph.get('node_count')} nodes in "
             f"{input_graph.get('row_count')} rows of {input_graph.get('nodes_per_row')} nodes, "
             f"with {input_graph.get('within_row_edge_count')} solid within-row edges. "
-            "Use sparse dashed inter-row links as illustration only; do not count or label them."
+            "Add at least one visibly dashed inter-row connector between adjacent rows; these links "
+            "are schematic only, must not be counted or labelled, and do not encode numerical adjacency."
         )
 
     outputs = contract.get("class_outputs", {})
@@ -149,8 +158,18 @@ def _geometry_instructions(contract: dict) -> list[str]:
     crosspanel = contract.get("cross_panel_connector", {})
     if crosspanel.get("avoid_heading"):
         lines.append(
-            "Route Total graph → Input through the left outer whitespace gutter, "
-            "never across the second section heading, its title bar, or the reading guide."
+            "Draw one continuous, traceable orthogonal connector from the Total graph panel to the Input panel. "
+            "Route it around the lower outer edge of the upper panel, through the left outer whitespace gutter, "
+            "then right into Input with a clear arrowhead. Never cross the second section heading, its title bar, "
+            "or the Reading guide. A lower-only text card, detached arrow, or disconnected continuation mark "
+            "does NOT satisfy this route."
+        )
+
+    output_transition = contract.get("output_transition", {})
+    if output_transition:
+        lines.append(
+            "Dense → Fault classification must use exactly one clear directed arrow. Remove any detached, "
+            "floating, or duplicate arrow above or beside the primary output connector."
         )
 
     return lines
