@@ -151,13 +151,17 @@ def render_pptx(input_pptx: str | Path, output_dir: str | Path,
     })
     with tempfile.TemporaryDirectory(prefix="ppt-skill-lo-profile-") as user_profile:
         profile_uri = Path(user_profile).resolve().as_uri()
-        run_command([
-            "soffice", f"-env:UserInstallation={profile_uri}",
-            "--headless", "--nologo", "--nodefault", "--nofirststartwizard",
-            "--convert-to", "pdf", "--outdir", str(out_dir), str(source),
+        conversion = run_command([
+            "soffice", "--headless", "--nologo", "--nodefault", "--nofirststartwizard",
+            f"-env:UserInstallation={profile_uri}",
+            "--convert-to", "pdf:impress_pdf_Export", "--outdir", str(out_dir), str(source),
         ], env=env, timeout=240)
     if not pdf_path.is_file():
-        raise RuntimeError(f"LIBREOFFICE_PDF_NOT_CREATED:{pdf_path}")
+        candidates = [str(path.name) for path in out_dir.glob("*.pdf")]
+        raise RuntimeError(
+            f"LIBREOFFICE_PDF_NOT_CREATED:{pdf_path}; candidates={candidates}; "
+            f"stdout={conversion.stdout[-2000:]}; stderr={conversion.stderr[-2000:]}"
+        )
     page_count, page_size = pdf_page_count(pdf_path)
     prefix = out_dir / f"{source.stem}-slide"
     run_command(["pdftoppm","-png","-r",str(render_dpi),"-f","1","-l",str(page_count),str(pdf_path),str(prefix)], timeout=240)
