@@ -190,6 +190,24 @@ def binary_search_min_height(probe: Callable[[float], bool], min_height_pt: floa
     return {"fits": True, "height_pt": high, "iterations": used, "reason": "binary_search_minimum_height"}
 
 
+def fit_textbox_height(metrics: FontMetrics, text: str, font_size_pt: float,
+                       width_in: float, min_height_pt: float, max_height_pt: float,
+                       margins_pt: tuple[float, float, float, float] = (1.44, 1.44, .576, .576),
+                       line_spacing: float = 1.0, tolerance_pt: float = .25) -> dict:
+    """Binary-search the minimum height using a font-metric overflow probe.
+
+    The same probe interface can be replaced by a calibrated LibreOffice render probe.
+    """
+    def probe(height_pt: float) -> bool:
+        result = metrics.measure(
+            text, font_size_pt, width_in, height_pt / 72.0, margins_pt, line_spacing
+        )
+        return bool(result["fits"])
+    return binary_search_min_height(
+        probe, min_height_pt, max_height_pt, tolerance_pt=tolerance_pt
+    )
+
+
 def luminance(hex_color: str) -> float:
     value = hex_color.strip().lstrip("#")
     if len(value) != 6:
