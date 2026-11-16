@@ -2,7 +2,7 @@
 """Tests for font metrics, fit solvers and WCAG contrast calculations."""
 from __future__ import annotations
 import shutil, unittest
-from text_layout_metrics import FontMetrics, binary_search_min_height, contrast_ratio, fit_font_size, resolve_font_file
+from text_layout_metrics import FontMetrics, binary_search_min_height, contrast_ratio, fit_font_size, fit_textbox_height, resolve_font_file
 
 
 class TextLayoutMetricsTests(unittest.TestCase):
@@ -42,6 +42,16 @@ class TextLayoutMetricsTests(unittest.TestCase):
         self.assertTrue(result["fits"])
         self.assertGreaterEqual(result["height_pt"],24.0)
         self.assertLessEqual(result["height_pt"],24.5)
+
+    def test_textbox_height_is_solved_by_binary_search(self):
+        result = fit_textbox_height(
+            self.metrics, "A compact scientific label", 14, 1.2,
+            min_height_pt=2, max_height_pt=80,
+        )
+        self.assertTrue(result["fits"])
+        self.assertGreater(result["height_pt"], 2)
+        self.assertLessEqual(result["height_pt"], 80)
+        self.assertEqual(result["reason"], "binary_search_minimum_height")
 
     def test_wcag_contrast_ratio(self):
         self.assertAlmostEqual(contrast_ratio("#000000","#FFFFFF"),21.0,places=4)
