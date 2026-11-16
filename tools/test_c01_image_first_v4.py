@@ -6,6 +6,8 @@ import json
 import unittest
 
 from scientific_ir import ROOT, validate_expected_topology, validate_spec
+from build_image2_slide_prompt import build_prompt, load_slide
+from image_first_source_contract import load_source_figure_contract
 
 
 FIGURE = ROOT / "figure_specs/c01/C01_composite_defense_slide_image_first_v4.json"
@@ -102,6 +104,18 @@ class C01ImageFirstV4Tests(unittest.TestCase):
             e["text"] for e in self.elements if e.get("semantic_id") in {"sr_main","sr_ea"}
         ]
         self.assertEqual(readouts, ["IR layer","IR layer"])
+
+    def test_image2_prompt_includes_hard_symbol_sensor_and_legend_constraints(self):
+        deck, slide = load_slide(ROOT / "specs/deck_spec_v8_v4.example.json", "s02")
+        source = load_source_figure_contract(ROOT, slide)
+        prompt = build_prompt(deck, slide, source_figure=source)
+        self.assertIn("Sensor dimension M is variable", prompt)
+        self.assertIn("Sensor #M−1", prompt)
+        self.assertIn("circular + operator", prompt)
+        self.assertIn("NEVER replace it with the Greek Sigma (Σ)", prompt)
+        self.assertIn("distinct Before and After waveform sketches", prompt)
+        self.assertIn("dashed line = inter-band connection", prompt)
+        self.assertIn("left outer whitespace gutter", prompt)
 
     def test_review_status_remains_unapproved(self):
         self.assertIn("pending", self.spec["evidence_status"])

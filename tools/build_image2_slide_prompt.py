@@ -74,6 +74,46 @@ def _geometry_instructions(contract: dict) -> list[str]:
             f"Readout blocks: show {readouts.get('count')} blocks, both labelled "
             f"'{readouts.get('author_lab_visible_label')}'."
         )
+    sensors = contract.get("sensor_count", {})
+    if sensors.get("variable"):
+        labels = ", ".join(sensors.get("labels", []))
+        lines.append(
+            f"Sensor dimension M is variable. Display these source-visible labels exactly: {labels}. "
+            "The small illustrated graph has schematic nodes and must NOT imply M=3 "
+            "or any fixed number of actual sensors."
+        )
+
+    fusion = contract.get("fusion", {})
+    if fusion.get("symbol") == "+":
+        lines.append(
+            "The two readout branches MUST merge at a circular + operator. "
+            "Render the literal plus sign '+'; NEVER replace it with the Greek Sigma (Σ), "
+            "a summation word, or another fusion glyph."
+        )
+
+    ocf = contract.get("ocf_signal_example", {})
+    if ocf.get("before_after") and ocf.get("illustrative"):
+        lines.append(
+            "Show distinct Before and After waveform sketches inside the OCF/notch filter. "
+            "Label them as illustrative, not measured signals; do not invent numerical results."
+        )
+
+    legend = contract.get("inter_band_legend", {})
+    if legend:
+        lines.append(
+            "Include a small graph-edge legend: solid line = intra-band connection; "
+            "dashed line = inter-band connection. Draw a clear representative diagonal "
+            "cross-band dashed connector; it is schematic, NOT a recovered numerical "
+            "adjacency and has no asserted exact edge count."
+        )
+
+    crosspanel = contract.get("cross_panel_connector", {})
+    if crosspanel.get("avoid_heading"):
+        lines.append(
+            "Route Total graph → Input through the left outer whitespace gutter, "
+            "never across the second section heading, its title bar, or the reading guide."
+        )
+
     return lines
 
 
