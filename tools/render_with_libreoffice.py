@@ -147,7 +147,7 @@ def render_pptx(input_pptx: str | Path, output_dir: str | Path,
         "LANG": str(profile.get("locale", "C.UTF-8")),
         "LC_ALL": str(profile.get("locale", "C.UTF-8")),
         "TZ": str(profile.get("timezone", "UTC")),
-        "SAL_USE_VCLPLUGIN": "gen",
+        "SAL_USE_VCLPLUGIN": "svp",
     })
     with tempfile.TemporaryDirectory(prefix="ppt-skill-lo-profile-") as user_profile:
         profile_uri = Path(user_profile).resolve().as_uri()
