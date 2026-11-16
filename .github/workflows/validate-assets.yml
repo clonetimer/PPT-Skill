@@ -79,6 +79,7 @@ jobs:
           python tools/test_text_layout_metrics.py
           python tools/test_render_with_libreoffice.py
           python tools/test_compare_rendered_images.py
+          python tools/test_validate_ast_parity.py
       - name: Validate committed Image-first example before generated specs are rebuilt
         run: |
           python tools/validate_deck_spec_v76.py specs/deck_spec_v8.example.json
@@ -112,7 +113,7 @@ jobs:
           python tools/render_figure_ast.py figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json --svg dist/ast_pilot/ast.svg --pptx dist/ast_pilot/ast.pptx --ast-json dist/ast_pilot/figure_ast.json --preserve-source-ids
           python tools/render_with_libreoffice.py dist/ast_pilot/legacy.pptx --output-dir dist/ast_pilot/legacy_render --profile profiles/renderer/lo_headless_v1.json
           python tools/render_with_libreoffice.py dist/ast_pilot/ast.pptx --output-dir dist/ast_pilot/ast_render --profile profiles/renderer/lo_headless_v1.json
-          python tools/compare_rendered_images.py dist/ast_pilot/legacy_render/legacy-slide-1.png dist/ast_pilot/ast_render/ast-slide-1.png --diff dist/ast_pilot/legacy_vs_ast_diff.png --output dist/ast_pilot/legacy_vs_ast_metrics.json
+          python tools/validate_ast_parity.py --legacy-pptx dist/ast_pilot/legacy.pptx --ast-pptx dist/ast_pilot/ast.pptx --legacy-png dist/ast_pilot/legacy_render/legacy-slide-1.png --ast-png dist/ast_pilot/ast_render/ast-slide-1.png --diff dist/ast_pilot/legacy_vs_ast_diff.png --output dist/ast_pilot/legacy_vs_ast_metrics.json
       - name: Execute C01-FBG source-grounded repair
         run: |
           python tools/repair_case_c01_fbg_round1.py --output-dir dist/repair_cases/C01_FBG --accepted-output dist/accepted_repairs/C01_FBG_construction_v74.pptx
