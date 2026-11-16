@@ -7,7 +7,7 @@
 **Bytes:** 1,823,791.  
 **SHA-256:** `056ba83af5ceedf3dec73deff1cb134a0fc9c6b1e27b38c46b3580ec261b7a12`.  
 **Source contract:** FigureSpec V4.1 + Topology Contract V4.1.  
-**CI baseline before V4.1 integration:** #660 PASS; V4.1 CI pending.
+**CI baseline:** #663 PASS — https://github.com/clonetimer/PPT-Skill/actions/runs/43857218000.
 
 ## V4.1 visual changes
 
@@ -35,3 +35,8 @@ V4.1 began as an ImageGen/Image2-style slide-image iteration based on the V4 vis
 6. Explicit Stage-A approval.
 
 Stage B remains locked. No editable PPTX, parity score or PowerPoint 2016 host round trip is claimed by this candidate record.
+
+
+## CI / candidate-image handoff boundary
+
+CI #663 validates the V4.1 FigureSpec, topology, DeckSpec, Image2 prompt and generated workflow manifest. The CI manifest remains `stage_a.status=planned` with `target_image=null` because the candidate PNG is supplied in the external human-review bundle rather than committed into the repository workspace. The candidate itself is generated and checksum-verified as recorded above; this distinction is intentional. Stage B remains `not_started`.

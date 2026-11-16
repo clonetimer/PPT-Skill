@@ -53,6 +53,24 @@ class C01ImageFirstV41Tests(unittest.TestCase):
         )
         self.assertNotIn("Band-pass filters form frequency-band subgraphs", visible)
 
+    def test_continuation_marker_is_positioned_between_B3_and_BN(self):
+        b3 = next(e for e in self.elements if e.get("id") == "el_0037")
+        bn = next(e for e in self.elements if e.get("id") == "el_0045")
+        gap_top = b3["y"] + b3["h"]
+        gap_bottom = bn["y"]
+        upper = self.by_id["el_0209"]
+        ellipsis = self.by_id["el_0210"]
+        lower = self.by_id["el_0211"]
+        self.assertLessEqual(gap_top - 0.04, upper["y1"])
+        self.assertLessEqual(upper["y2"], gap_bottom)
+        self.assertGreaterEqual(ellipsis["y"], gap_top - 0.01)
+        self.assertLessEqual(ellipsis["y"] + ellipsis["h"], gap_bottom + 0.01)
+        self.assertGreaterEqual(lower["y1"], gap_top)
+        self.assertLessEqual(lower["y2"], gap_bottom + 0.04)
+        self.assertTrue(all(rail["x1"] == rail["x2"] for rail in (upper, lower)))
+        self.assertTrue(all("semantic_link" not in rail for rail in (upper, lower)))
+        self.assertNotIn(("band_3", "band_4"), set(map(tuple, self.spec["semantic_edges"])))
+
     def test_total_graph_has_one_example_edge_and_non_attached_continuation(self):
         examples = [e for e in self.elements if e.get("semantic_id") == "inter_band_example"]
         rails = [e for e in self.elements if e.get("semantic_id", "").startswith("inter_band_continuation_rail_")]

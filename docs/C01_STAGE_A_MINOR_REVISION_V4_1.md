@@ -45,3 +45,8 @@ The V4.1 candidate is ready to be considered for final human Stage-A sign-off. T
 - Feasibility of native editable PowerPoint reconstruction
 
 CI can validate source contracts, prompt constraints and structural consistency. It cannot certify physical projection readability or an actual PowerPoint 2016 open/save/reopen round trip. Those remain separate human/host checks. Until approval is explicitly recorded, Stage A remains pending and Stage B remains not_started.
+
+
+## CI verification
+
+CI #663 PASS: https://github.com/clonetimer/PPT-Skill/actions/runs/43857218000. The workflow validates 13 V4.1-specific regression tests, generates and validates the source-locked Image2 prompt/manifest, and validates all 142 FigureSpec elements. The CI manifest status `planned` describes the repository-side prompt workflow; the actual PNG candidate is distributed separately in the human-review package and is not embedded in the CI manifest. Human Stage-A approval remains pending.
