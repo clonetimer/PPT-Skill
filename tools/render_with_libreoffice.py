@@ -87,10 +87,10 @@ def resolve_fonts(font_names: list[str]) -> dict[str, dict[str, str]]:
 
 def pdf_page_count(pdf_path: Path) -> tuple[int, str]:
     result = run_command(["pdfinfo", "-box", str(pdf_path)])
-    match = re.search(r"^Pages:\\s+(\\d+)", result.stdout, re.MULTILINE)
+    match = re.search(r"^Pages:\s+(\d+)", result.stdout, re.MULTILINE)
     if not match:
         raise RuntimeError("PDFINFO_PAGE_COUNT_NOT_FOUND")
-    page_size = re.search(r"^Page size:\\s+(.+)$", result.stdout, re.MULTILINE)
+    page_size = re.search(r"^Page size:\s+(.+)$", result.stdout, re.MULTILINE)
     return int(match.group(1)), page_size.group(1).strip() if page_size else "unknown"
 
 
@@ -204,7 +204,7 @@ def render_pptx(input_pptx: str | Path, output_dir: str | Path,
         },
     }
     record_path = out_dir / "render_record.json"
-    record_path.write_text(json.dumps(record,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+    record_path.write_text(json.dumps(record,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     if mismatches:
         raise RuntimeError("RENDER_PROFILE_LOCK_MISMATCH:" + ";".join(mismatches))
     return record
