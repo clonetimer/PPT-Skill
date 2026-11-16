@@ -1,0 +1,209 @@
+#!/usr/bin/env python3
+"""FontTools-based text measurement, binary-search fit solvers and WCAG contrast helpers."""
+from __future__ import annotations
+from dataclasses import dataclass
+import math, re, shutil, subprocess, unicodedata
+from pathlib import Path
+from typing import Callable
+from fontTools.ttLib import TTCollection, TTFont
+
+
+class MissingGlyphError(ValueError):
+    pass
+
+
+def resolve_font_file(family_or_path: str) -> Path:
+    candidate = Path(family_or_path)
+    if candidate.is_file():
+        return candidate.resolve()
+    if not shutil.which("fc-match"):
+        raise FileNotFoundError(f"FONT_NOT_FOUND_AND_FC_MATCH_UNAVAILABLE:{family_or_path}")
+    result = subprocess.run(
+        ["fc-match", "-f", "%{file}\\n", family_or_path],
+        capture_output=True, text=True, check=True,
+    )
+    lines = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    if not lines or not Path(lines[0]).is_file():
+        raise FileNotFoundError(f"FONT_RESOLUTION_FAILED:{family_or_path}")
+    return Path(lines[0]).resolve()
+
+
+class FontMetrics:
+    def __init__(self, font_path: str | Path):
+        self.path = Path(font_path).resolve()
+        if self.path.suffix.lower() == ".ttc":
+            self.collection = TTCollection(str(self.path), lazy=True)
+            self.font = self.collection.fonts[0]
+        else:
+            self.collection = None
+            self.font = TTFont(str(self.path), lazy=True)
+        self.units_per_em = int(self.font["head"].unitsPerEm)
+        self.cmap = self.font.getBestCmap() or {}
+        self.hmtx = self.font["hmtx"].metrics
+        os2 = self.font["OS/2"]
+        if getattr(os2, "sTypoAscender", 0) or getattr(os2, "sTypoDescender", 0):
+            ascender = int(os2.sTypoAscender)
+            descender = int(os2.sTypoDescender)
+            line_gap = int(getattr(os2, "sTypoLineGap", 0))
+        else:
+            hhea = self.font["hhea"]
+            ascender, descender, line_gap = int(hhea.ascent), int(hhea.descent), int(hhea.lineGap)
+        self.line_height_units = max(1, ascender - descender + line_gap)
+
+    def close(self) -> None:
+        self.font.close()
+        if self.collection is not None:
+            self.collection.close()
+
+    def glyph_advance_pt(self, char: str, font_size_pt: float) -> float:
+        if char in "\\r\\n":
+            return 0.0
+        codepoint = ord(char)
+        glyph_name = self.cmap.get(codepoint)
+        if glyph_name is None:
+            if unicodedata.category(char).startswith("M"):
+                return 0.0
+            raise MissingGlyphError(f"MISSING_GLYPH:U+{codepoint:04X}:{char!r}:{self.path.name}")
+        advance = self.hmtx.get(glyph_name, (0, 0))[0]
+        return float(advance) / self.units_per_em * float(font_size_pt)
+
+    def text_width_pt(self, text: str, font_size_pt: float) -> float:
+        return sum(self.glyph_advance_pt(char, font_size_pt) for char in text)
+
+    def line_height_pt(self, font_size_pt: float, line_spacing: float = 1.0) -> float:
+        return self.line_height_units / self.units_per_em * float(font_size_pt) * float(line_spacing)
+
+    def wrap(self, text: str, font_size_pt: float, max_width_pt: float) -> list[str]:
+        if max_width_pt <= 0:
+            raise ValueError("TEXT_WIDTH_MUST_BE_POSITIVE")
+        lines: list[str] = []
+        for paragraph in str(text).split("\\n"):
+            if paragraph == "":
+                lines.append("")
+                continue
+            current = ""
+            for token in re.findall(r"\\s+|\\S+", paragraph):
+                if token.isspace():
+                    if current and self.text_width_pt(current + token, font_size_pt) <= max_width_pt:
+                        current += token
+                    continue
+                if current and self.text_width_pt(current + token, font_size_pt) <= max_width_pt:
+                    current += token
+                    continue
+                if current:
+                    lines.append(current.rstrip())
+                    current = ""
+                for char in token:
+                    candidate = current + char
+                    if current and self.text_width_pt(candidate, font_size_pt) > max_width_pt:
+                        lines.append(current)
+                        current = char
+                    else:
+                        current = candidate
+            lines.append(current.rstrip())
+        return lines
+
+    def measure(self, text: str, font_size_pt: float, width_in: float,
+                height_in: float,
+                margins_pt: tuple[float, float, float, float] = (1.44, 1.44, .576, .576),
+                line_spacing: float = 1.0) -> dict:
+        left, right, top, bottom = margins_pt
+        available_width = float(width_in) * 72.0 - left - right
+        available_height = float(height_in) * 72.0 - top - bottom
+        lines = self.wrap(text, font_size_pt, available_width)
+        line_height = self.line_height_pt(font_size_pt, line_spacing)
+        required_height = len(lines) * line_height
+        return {
+            "font_path": str(self.path),
+            "font_size_pt": float(font_size_pt),
+            "lines": lines,
+            "line_count": len(lines),
+            "max_line_width_pt": max((self.text_width_pt(line, font_size_pt) for line in lines), default=0.0),
+            "line_height_pt": line_height,
+            "required_height_pt": required_height + top + bottom,
+            "available_height_pt": float(height_in) * 72.0,
+            "fits": required_height <= available_height + 1e-6,
+        }
+
+
+@dataclass(frozen=True)
+class FitResult:
+    fits: bool
+    selected_font_size_pt: float | None
+    required_height_pt: float
+    available_height_pt: float
+    line_count: int
+    iterations: int
+    reason: str
+
+
+def fit_font_size(metrics: FontMetrics, text: str, width_in: float, height_in: float,
+                  preferred_size_pt: float, min_size_pt: float,
+                  margins_pt: tuple[float, float, float, float] = (1.44, 1.44, .576, .576),
+                  line_spacing: float = 1.0, iterations: int = 24) -> FitResult:
+    """Find the largest fitting font size; applying the shrink remains an explicit caller policy."""
+    if min_size_pt <= 0 or preferred_size_pt < min_size_pt:
+        raise ValueError("INVALID_FONT_SIZE_BOUNDS")
+    preferred = metrics.measure(text, preferred_size_pt, width_in, height_in, margins_pt, line_spacing)
+    if preferred["fits"]:
+        return FitResult(True, preferred_size_pt, preferred["required_height_pt"],
+                         preferred["available_height_pt"], preferred["line_count"], 0,
+                         "preferred_size_fits")
+    smallest = metrics.measure(text, min_size_pt, width_in, height_in, margins_pt, line_spacing)
+    if not smallest["fits"]:
+        return FitResult(False, None, smallest["required_height_pt"],
+                         smallest["available_height_pt"], smallest["line_count"], 0,
+                         "minimum_size_does_not_fit")
+    low, high, last = float(min_size_pt), float(preferred_size_pt), smallest
+    used = 0
+    for used in range(1, iterations + 1):
+        mid = (low + high) / 2.0
+        measured = metrics.measure(text, mid, width_in, height_in, margins_pt, line_spacing)
+        if measured["fits"]:
+            low, last = mid, measured
+        else:
+            high = mid
+    return FitResult(True, low, last["required_height_pt"], last["available_height_pt"],
+                     last["line_count"], used, "binary_search_max_fitting_size")
+
+
+def binary_search_min_height(probe: Callable[[float], bool], min_height_pt: float,
+                             max_height_pt: float, tolerance_pt: float = .25,
+                             iterations: int = 24) -> dict:
+    """Find minimum textbox height accepted by a render/overflow probe.
+
+    The probe may use fast font metrics or a calibrated LibreOffice render check.
+    """
+    if min_height_pt <= 0 or max_height_pt < min_height_pt:
+        raise ValueError("INVALID_HEIGHT_BOUNDS")
+    if not probe(max_height_pt):
+        return {"fits": False, "height_pt": None, "iterations": 0, "reason": "max_height_overflows"}
+    low, high, used = float(min_height_pt), float(max_height_pt), 0
+    for used in range(1, iterations + 1):
+        if high - low <= tolerance_pt:
+            break
+        mid = (low + high) / 2.0
+        if probe(mid):
+            high = mid
+        else:
+            low = mid
+    return {"fits": True, "height_pt": high, "iterations": used, "reason": "binary_search_minimum_height"}
+
+
+def luminance(hex_color: str) -> float:
+    value = hex_color.strip().lstrip("#")
+    if len(value) != 6:
+        raise ValueError(f"INVALID_HEX_COLOR:{hex_color}")
+    channels = [int(value[i:i+2], 16) / 255.0 for i in (0, 2, 4)]
+    linear = [c / 12.92 if c <= .04045 else ((c + .055) / 1.055) ** 2.4 for c in channels]
+    return .2126 * linear[0] + .7152 * linear[1] + .0722 * linear[2]
+
+
+def contrast_ratio(foreground: str, background: str) -> float:
+    a, b = luminance(foreground), luminance(background)
+    lighter, darker = max(a, b), min(a, b)
+    return (lighter + .05) / (darker + .05)
+
+
+def resolve_font_path(family_or_path: str) -> Path:
+    return resolve_font_file(family_or_path)
