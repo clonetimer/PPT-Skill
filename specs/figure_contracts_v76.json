@@ -216,5 +216,26 @@
       "Pixel-level source-image match",
       "Exact source node coordinates"
     ]
+  },
+  "C01_composite_defense_slide_image_first_v4": {
+    "claim": "The slide explains frequency-band graph construction and the two-branch graph-level diagnosis path.",
+    "archetype": "schematic_led_composite",
+    "output_mode": "presentation",
+    "source": "docs/C01_V73_SOURCE.md",
+    "source_locator": "Author-lab method graphic and publisher Highlights/Abstract used as separate evidence. V4 reflects Major Revision (sensor dimension M, + fusion, inter-band legend, OCF illustrative before/after).",
+    "evidence_status": "source_visible_redraw",
+    "evidence_scope": "C01 Image-first V4 Stage-A candidate. M sensor count and N band count vary independently; graph node placement and links are schematic. The OCF waveforms are illustrative not measured. The fusion operator is the exact author-graphic +. Total graph → Input is routed outside the section heading. Five outputs illustrative. IR in author-lab graphic vs SR in published abstract remains unresolved. This is a presentation slide, not journal publication-ready artwork.",
+    "unverified": [
+      "Numerical adjacency matrix",
+      "Exact number of dashed inter-band or inter-row links",
+      "Fixed frequency-band count",
+      "Fixed class-output count",
+      "Pixel-level source-image match",
+      "Exact source node coordinates",
+      "Specific OCF before-and-after waveform values",
+      "Numerical relationship between sensor count M and illustrative graph-node glyphs",
+      "IR versus SR nomenclature equivalence in full text",
+      "Publisher-ready figure layout"
+    ]
   }
 }
