@@ -86,7 +86,7 @@ def main() -> None:
     parser.add_argument("--strict",action="store_true")
     args=parser.parse_args()
     report=audit_spec(json.loads(args.figure_spec.read_text(encoding="utf-8")))
-    serialized=json.dumps(report,ensure_ascii=False,indent=2)+"\\n"
+    serialized=json.dumps(report,ensure_ascii=False,indent=2)+"\n"
     if args.output:
         args.output.parent.mkdir(parents=True,exist_ok=True)
         args.output.write_text(serialized,encoding="utf-8")
