@@ -55,7 +55,7 @@ class C01ImageFirstV41Tests(unittest.TestCase):
 
     def test_total_graph_has_one_example_edge_and_non_attached_continuation(self):
         examples = [e for e in self.elements if e.get("semantic_id") == "inter_band_example"]
-        rails = [e for e in self.elements if e.get("semantic_id") == "inter_band_continuation_rail"]
+        rails = [e for e in self.elements if e.get("semantic_id", "").startswith("inter_band_continuation_rail_")]
         ellipses = [e for e in self.elements if e.get("semantic_id") == "inter_band_continuation_ellipsis"]
         self.assertEqual(len(examples), 1)
         self.assertTrue(examples[0]["dash"])

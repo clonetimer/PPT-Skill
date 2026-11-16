@@ -8,7 +8,7 @@
   "style": {
     "font": "Times New Roman"
   },
-  "evidence_status": "V4.1 presentation Stage-A candidate after Minor Revision; awaiting human sign-off",
+  "evidence_status": "V4.1 pending final human Stage-A sign-off after Minor Revision",
   "source": "DOI:10.1016/j.engappai.2026.115273",
   "semantic_edges": [
     [
@@ -2551,7 +2551,7 @@
       "color": "#43525B",
       "sw": 0.8,
       "dash": true,
-      "semantic_id": "inter_band_continuation_rail",
+      "semantic_id": "inter_band_continuation_rail_upper",
       "semantic_role": "schematic_connector",
       "evidence_ref": "source_1"
     },
@@ -2581,7 +2581,7 @@
       "color": "#43525B",
       "sw": 0.8,
       "dash": true,
-      "semantic_id": "inter_band_continuation_rail",
+      "semantic_id": "inter_band_continuation_rail_lower",
       "semantic_role": "schematic_connector",
       "evidence_ref": "source_1"
     }

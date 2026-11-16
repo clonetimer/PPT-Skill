@@ -68,7 +68,7 @@ def _geometry_instructions(contract: dict) -> list[str]:
             f"{outputs.get('highlighted_index')} using {outputs.get('highlight_color')}."
         )
 
-    continuation = contract.get("continuation_marker", "")
+    continuation = contract.get("continuation_marker") or contract.get("total_graph", {}).get("continuation_marker", "")
     if continuation:
         lines.append(
             "For omitted intermediate bands, show a vertical ellipsis and short dashed continuation rail "

@@ -223,7 +223,8 @@
     "M and N vary independently; displayed graph nodes are schematic and are not a fixed sensor count.",
     "OCF before/after traces illustrate the filtering mechanism and are not measured results.",
     "The author-lab fusion operator is +, not Σ.",
-    "The presentation layout is not a journal-ready figure; journal profile requires a separate layout and caption."
+    "The presentation layout is not a journal-ready figure; journal profile requires a separate layout and caption.",
+    "The author-lab source graphic labels the final example “Sub graph N: Nth band”; B_N is the redraw's normalized label, not literal source typography."
   ],
   "version": "8.0.1-dev"
 }
