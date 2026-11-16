@@ -146,6 +146,8 @@ class C01ImageFirstV41Tests(unittest.TestCase):
         self.assertIn("Input graph: show 12 nodes in 4 rows of 3 nodes", prompt)
         self.assertNotIn("None rows", prompt)
         self.assertIn("exactly once in the Evidence boundary panel", prompt)
+        self.assertIn("Do not add a second GCN₁ to the auxiliary branch", prompt)
+        self.assertIn("lower IR readout branch leaves the output of pooling₁", prompt)
 
     def test_stage_A_is_not_approved_and_stage_B_is_not_started(self):
         self.assertIn("pending", self.spec["evidence_status"])
