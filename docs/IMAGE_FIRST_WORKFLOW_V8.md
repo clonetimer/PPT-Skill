@@ -179,3 +179,10 @@ Stage B：
 | 复杂页面中的局部装饰插图 | image-first 局部素材 + 原生 PPTX | 插图可作为独立素材，文字与关系仍保持可编辑 |
 
 V8 首批以 C01 的 FBG-SEANet 方法页作为试点：先生成一张 Image2 目标效果图，经人工确认后再重建 PPTX。试点通过后再扩展到研究背景、总体技术路线和结果页。
+
+
+## Native-object provenance preflight
+
+The FigureSpec renderer records stable PowerPoint shape names for source elements and their semantic IDs. The audit utility `tools/audit_figure_spec_pptx.py` maps source FigureSpec element IDs to native editable PowerPoint shapes and reports source-element coverage, semantic-object counts and object inventory.
+
+The renderer regression suite is `tools/test_figure_spec_pptx_provenance.py`. This is a reusable Stage-B tooling qualification; it does not build or accept the C01 target slide. The C01 Stage-B gate remains human Stage-A approval.

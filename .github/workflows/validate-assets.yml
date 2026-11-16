@@ -71,6 +71,7 @@ jobs:
           python tools/test_image_first_workflow.py
           python tools/test_image_first_stage_a.py
           python tools/test_c01_image_first_source_figure_v8.py
+          python tools/test_figure_spec_pptx_provenance.py
       - name: Validate committed Image-first example before generated specs are rebuilt
         run: |
           python tools/validate_deck_spec_v76.py specs/deck_spec_v8.example.json

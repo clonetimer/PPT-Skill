@@ -42,6 +42,9 @@
 
 ## 3. Semantic object IDs
 
+The shared FigureSpec renderer now preserves each source element ID and semantic ID in the native PowerPoint shape name using the convention `semantic_id__source_element_id__part`. Composite source elements (graph nodes/edges, polyline segments, sensor components and arrowheads) receive deterministic part suffixes. The read-only `tools/audit_figure_spec_pptx.py` produces a source-element-to-native-object map and object inventory. This is a renderer capability/preflight only; it does not start C01 Stage B or approve the target image.
+
+
 Use stable semantic IDs for the critical objects:
 
 sensor_signals, ocf, bandpass, band_1–band_4, total_graph, frequency_axis, input, input_graph_schematic, gcn_1, pooling_1, gcn_2, pooling_2, ea, sr_main, sr_ea, sum, dense, class_output, reading_guide, evidence_boundary.
