@@ -7,11 +7,36 @@
   "dpi": 144,
   "locale": "C.UTF-8",
   "timezone": "UTC",
-  "required_packages": ["libreoffice-impress","poppler-utils","fonts-dejavu-core","fonts-liberation","fonts-noto-core","fonts-noto-cjk"],
-  "expected": {"libreoffice_version":null,"poppler_version":null,"fontconfig_version":null,"package_versions":{},"font_files":{}},
+  "required_packages": [
+    "libreoffice-impress",
+    "poppler-utils",
+    "fonts-dejavu-core",
+    "fonts-liberation",
+    "fonts-noto-core",
+    "fonts-noto-cjk"
+  ],
+  "expected": {
+    "libreoffice_version": null,
+    "poppler_version": null,
+    "pdfinfo_version": null,
+    "fontconfig_version": null,
+    "package_versions": {},
+    "font_files": {},
+    "os_release_pretty_name": null,
+    "locale": "C.UTF-8",
+    "timezone": "UTC",
+    "dpi": 144
+  },
   "notes": [
     "Capture exact runtime and resolved font-file hashes in CI first; promote lock_status to enforce only after reviewing the captured baseline.",
     "PNG hashes are the canonical visual comparison output. PDF hashes are retained as artifact provenance and may include renderer metadata.",
     "PowerPoint 2016 host round-trip remains a separate compatibility gate."
+  ],
+  "font_probe_families": [
+    "Times New Roman",
+    "Arial",
+    "Microsoft YaHei",
+    "DejaVu Sans",
+    "Noto Sans CJK SC"
   ]
 }
