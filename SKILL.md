@@ -18,7 +18,7 @@ Produce technically accurate, readable academic-defense presentations. Select vi
 1. Scientific topology, terminology, equations and evidence boundaries take priority.
 2. Prefer editable vector graphics and native PowerPoint text/shapes. When source-matched fidelity calls for a distinctive icon that native shapes would distort, use a provenance-recorded, licensed SVG asset (with a high-resolution transparent raster fallback if the PowerPoint renderer cannot embed that SVG). Keep scientific nodes, edges, labels and annotations editable.
 3. Preserve source composition, panel order, proportions, arrows, branches, operators and line grammar.
-4. Do not invent layers, edges, node mappings, equations or downstream blocks unsupported by the source.
+4. Do not invent layers, edges, node mappings, equations, labels or downstream blocks unsupported by the source. A visually plausible annotation is still an unsupported claim when the source does not show it.
 5. Split dense mechanisms before shrinking labels.
 6. Shadows are off by default. Reproduce them only when visible in the selected source, using explicit source-specific shapes; never inherit the PowerPoint theme shadow.
 7. Distinguish source-visible redraws, paper/code-grounded reconstructions and domain adaptations.
