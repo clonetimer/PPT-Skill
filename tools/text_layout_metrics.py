@@ -39,9 +39,13 @@ def resolve_font_file(family_or_path: str) -> Path:
 
 
 class FontMetrics:
-    def __init__(self, font_path: str | Path, face_index: int = 0):
+    def __init__(self, font_path: str | Path, face_index: int = 0,
+                 fallback_enabled: bool = True):
         self.path = Path(font_path).resolve()
         self.face_index = int(face_index)
+        self.fallback_enabled = bool(fallback_enabled)
+        self._fallback_metrics: dict[str, FontMetrics] = {}
+        self.fallback_fonts: dict[str, dict[str, str | int]] = {}
         if self.path.suffix.lower() == ".ttc":
             self.collection = TTCollection(str(self.path), lazy=True)
             if self.face_index < 0 or self.face_index >= len(self.collection.fonts):
@@ -68,6 +72,34 @@ class FontMetrics:
         self.units_per_em = int(self.font["head"].unitsPerEm)
         self.cmap = self.font.getBestCmap() or {}
         self.hmtx = self.font["hmtx"].metrics
+
+    def _fallback_for_char(self, char: str) -> "FontMetrics | None":
+        if not self.fallback_enabled:
+            return None
+        key = f"U+{ord(char):04X}"
+        if key in self._fallback_metrics:
+            return self._fallback_metrics[key]
+        family = self.family_name or self.path.stem
+        try:
+            path, face_index, resolved_family = resolve_font_face(
+                f"{family}:charset={ord(char):x}"
+            )
+        except (FileNotFoundError, ValueError):
+            return None
+        if path == self.path and face_index == self.face_index:
+            return None
+        fallback = FontMetrics(path, face_index=face_index, fallback_enabled=False)
+        if ord(char) not in fallback.cmap:
+            fallback.close()
+            return None
+        self._fallback_metrics[key] = fallback
+        self.fallback_fonts[key] = {
+            "requested_family": family,
+            "resolved_family": resolved_family or fallback.family_name,
+            "font_file": str(path),
+            "font_face_index": face_index,
+        }
+        return fallback
         os2 = self.font["OS/2"]
         if getattr(os2, "sTypoAscender", 0) or getattr(os2, "sTypoDescender", 0):
             ascender = int(os2.sTypoAscender)
@@ -79,6 +111,9 @@ class FontMetrics:
         self.line_height_units = max(1, ascender - descender + line_gap)
 
     def close(self) -> None:
+        for fallback in self._fallback_metrics.values():
+            fallback.close()
+        self._fallback_metrics.clear()
         if self.collection is not None:
             self.collection.close()
         else:
@@ -92,6 +127,9 @@ class FontMetrics:
         if glyph_name is None:
             if unicodedata.category(char).startswith("M"):
                 return 0.0
+            fallback = self._fallback_for_char(char)
+            if fallback is not None:
+                return fallback.glyph_advance_pt(char, font_size_pt)
             raise MissingGlyphError(f"MISSING_GLYPH:U+{codepoint:04X}:{char!r}:{self.path.name}")
         advance = self.hmtx.get(glyph_name, (0, 0))[0]
         return float(advance) / self.units_per_em * float(font_size_pt)
