@@ -9,7 +9,7 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.util import Inches, Pt
 
-from calibrate_text_fit_against_pdf import calibrate
+from calibrate_text_fit_against_pdf import _match_text, calibrate
 from render_with_libreoffice import render_pptx
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,6 +17,41 @@ PROFILE = ROOT / "profiles/renderer/lo_headless_v1.json"
 
 
 class PdfTextCalibrationTests(unittest.TestCase):
+    def test_match_text_recovers_a_missing_pdf_space_without_matching_inside_a_word(self):
+        chars = [
+            {"c": value, "bbox": (index * 5.0, 10.0, index * 5.0 + 4.0, 18.0),
+             "origin": (index * 5.0, 18.0), "font": "LiberationSans", "size": 8.0}
+            for index, value in enumerate("Apatch")
+        ]
+        block = {
+            "block_index": -1,
+            "normalized_text": "Apatch",
+            "char_map": chars,
+        }
+        matched, kind = _match_text(
+            "A patch", [block], (0.0, 0.0, 40.0, 30.0)
+        )
+        self.assertIsNotNone(matched)
+        self.assertEqual(kind, "whitespace_insensitive_exact")
+        self.assertEqual("".join(item["c"] for item in matched["chars"]), "Apatch")
+
+        longer = {
+            **block,
+            "normalized_text": "Apatches",
+            "char_map": chars + [{
+                "c": "e", "bbox": (30.0, 10.0, 34.0, 18.0),
+                "origin": (30.0, 18.0), "font": "LiberationSans", "size": 8.0,
+            }, {
+                "c": "s", "bbox": (35.0, 10.0, 39.0, 18.0),
+                "origin": (35.0, 18.0), "font": "LiberationSans", "size": 8.0,
+            }],
+        }
+        matched, kind = _match_text(
+            "A patch", [longer], (0.0, 0.0, 50.0, 30.0)
+        )
+        self.assertIsNone(matched)
+        self.assertEqual(kind, "not_found")
+
     def test_adjacent_text_boxes_and_split_subscript_glyphs_are_matched(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
