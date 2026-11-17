@@ -228,7 +228,7 @@ class FontMetrics:
             ink_tops: list[float] = []
             ink_bottoms: list[float] = []
             for char in line:
-                if char.isspace() or char in "\\r\\n":
+                if char.isspace():
                     continue
                 ink = self.glyph_ink_offsets_pt(char, font_size_pt)
                 if ink is None:
