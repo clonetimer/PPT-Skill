@@ -12,31 +12,59 @@ class MissingGlyphError(ValueError):
     pass
 
 
-def resolve_font_file(family_or_path: str) -> Path:
+def resolve_font_face(family_or_path: str) -> tuple[Path, int, str]:
+    """Resolve a font family to an exact file and TTC face index via fontconfig."""
     candidate = Path(family_or_path)
     if candidate.is_file():
-        return candidate.resolve()
+        return candidate.resolve(), 0, ""
     if not shutil.which("fc-match"):
         raise FileNotFoundError(f"FONT_NOT_FOUND_AND_FC_MATCH_UNAVAILABLE:{family_or_path}")
     result = subprocess.run(
-        ["fc-match", "-f", "%{file}\\n", family_or_path],
+        ["fc-match", "-f", "%{family[0]}\\n%{index}\\n%{file}\\n", family_or_path],
         capture_output=True, text=True, check=True,
     )
-    lines = [line.strip() for line in result.stdout.splitlines() if line.strip()]
-    if not lines or not Path(lines[0]).is_file():
+    lines = [line.strip() for line in result.stdout.splitlines()]
+    if len(lines) < 3 or not lines[2] or not Path(lines[2]).is_file():
         raise FileNotFoundError(f"FONT_RESOLUTION_FAILED:{family_or_path}")
-    return Path(lines[0]).resolve()
+    try:
+        face_index = int(lines[1] or "0")
+    except ValueError as error:
+        raise ValueError(f"INVALID_FONT_FACE_INDEX:{family_or_path}:{lines[1]}") from error
+    return Path(lines[2]).resolve(), face_index, lines[0]
+
+
+def resolve_font_file(family_or_path: str) -> Path:
+    """Compatibility wrapper returning the resolved font file only."""
+    return resolve_font_face(family_or_path)[0]
 
 
 class FontMetrics:
-    def __init__(self, font_path: str | Path):
+    def __init__(self, font_path: str | Path, face_index: int = 0):
         self.path = Path(font_path).resolve()
+        self.face_index = int(face_index)
         if self.path.suffix.lower() == ".ttc":
             self.collection = TTCollection(str(self.path), lazy=True)
-            self.font = self.collection.fonts[0]
+            if self.face_index < 0 or self.face_index >= len(self.collection.fonts):
+                self.collection.close()
+                raise ValueError(f"FONT_FACE_INDEX_OUT_OF_RANGE:{self.face_index}:{self.path.name}")
+            self.font = self.collection.fonts[self.face_index]
         else:
+            if self.face_index != 0:
+                raise ValueError(f"FONT_FACE_INDEX_REQUIRES_TTC:{self.face_index}:{self.path.name}")
             self.collection = None
             self.font = TTFont(str(self.path), lazy=True)
+        names = self.font["name"].names
+        self.family_name = ""
+        for record in names:
+            if record.nameID in (16, 1):
+                try:
+                    value = record.toUnicode()
+                except Exception:
+                    continue
+                if value:
+                    self.family_name = value
+                    if record.nameID == 16:
+                        break
         self.units_per_em = int(self.font["head"].unitsPerEm)
         self.cmap = self.font.getBestCmap() or {}
         self.hmtx = self.font["hmtx"].metrics
@@ -51,9 +79,10 @@ class FontMetrics:
         self.line_height_units = max(1, ascender - descender + line_gap)
 
     def close(self) -> None:
-        self.font.close()
         if self.collection is not None:
             self.collection.close()
+        else:
+            self.font.close()
 
     def glyph_advance_pt(self, char: str, font_size_pt: float) -> float:
         if char in "\r\n":
