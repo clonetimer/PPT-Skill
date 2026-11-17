@@ -46,3 +46,13 @@ python tools/run_blind10_post_p0.py \
 ```
 
 This command performs the technical PDF-import route only. FigureSpec reconstruction, source-grounded scientific topology review, multi-round repair, expert acceptance and native Office 2016 round-trip remain distinct follow-up gates.
+
+## CI confirmation for the batch-runner increment (2026-11-17)
+
+- Full Linux validation workflow #842 completed **SUCCESS** after the batch runner and its tests were wired into CI.
+- The combined editable-PDF/Office-portability test step passed; repository tool compilation passed.
+- Windows PowerShell parser job passed. This validates script syntax only; it does not execute Microsoft PowerPoint or prove Office 2016 host compatibility.
+- PP-DocLayoutV3 / PP-OCRv6 real-inference job remained **SKIPPED** because its workflow condition is restricted to PR #10. Do not count this as a successful model inference test.
+- The preceding #841 run was cancelled by a newer push; #842 is the authoritative completed run for this increment.
+
+The next blocking work is no longer CI wiring: execute the batch runner in an environment containing the ten private PDFs and retain the actual per-paper PPTX/manifests/previews. CI uses mocked inputs and cannot supply this evidence.
