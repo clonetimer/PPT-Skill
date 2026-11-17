@@ -137,7 +137,7 @@ For text marks inside a constrained structural gap:
 4. Keep the frame within the measured gap with a small geometric tolerance, and preserve the independent topology test.
 5. Run the strict LibreOffice glyph calibration after the topology test; both must pass. Do not weaken either gate to make the other pass.
 
-The C01 correction keeps the marker inside the B₃/B_N gap (y=3.126 in, h=0.128 in) and reduces its font size to 6.5 pt. The intended visual meaning remains a non-attached continuation marker, not a B₃-to-B_N edge.
+The C01 correction keeps the marker inside the B₃/B_N gap (y=3.127 in, h=0.127 in) and reduces its font size to 6 pt, leaving explicit tolerance at both gap boundaries. The intended visual meaning remains a non-attached continuation marker, not a B₃-to-B_N edge.
 
 
 ### Source-first correction for constrained output annotations
