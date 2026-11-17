@@ -145,3 +145,15 @@ The C01 correction keeps the marker inside the B₃/B_N gap (y=3.127 in, h=0.127
 The C01 render audit also exposed five tiny `C₁`–`C₅` labels added beside the five class-output squares. Inspection of the author-lab source image shows five unlabeled squares, with the classification caption placed separately. The individual class labels were not required by the topology contract and were not source-supported.
 
 The correct repair was not to keep shrinking the invented labels until they fit. Remove unsupported annotations, preserve the five source-visible square marks and the classification caption, and encode the absence of per-square labels in the evidence contract and regression test. This improves source fidelity and removes unnecessary tiny text from the slide.
+
+
+### Evidence-hash maintenance after source-record edits
+
+A later C01 regression exposed a separate provenance failure: adding a source-grounded clarification to `docs/C01_V73_SOURCE.md` changed the bytes of the registered source record, but the FigureSpec's `EvidenceRecord.source_file_sha256` still contained the previous hash. The scientific IR validator correctly failed closed before running downstream geometry/render tests.
+
+Whenever a referenced local evidence file changes:
+1. Update the evidence file first.
+2. Recompute SHA-256 from the exact committed file bytes (including line endings).
+3. Update every FigureSpec EvidenceRecord that references that file.
+4. Run the source-evidence validator before the full workflow.
+Do not weaken the provenance check or reuse a stale hash. A source-grounded clarification is still a source change and must remain hash-bound.
