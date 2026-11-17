@@ -21,3 +21,28 @@ The first PR added a reproducible audit utility and a report, but the audit was 
 - Added `tools/test_audit_blind10_sources.py` with positive and fail-closed cases.
 - Added the test to `.github/workflows/validate-assets.yml`.
 - Next execution remains the exact ten-crop post-P0 reproduction, with immutable first-pass outputs, per-paper manifests, PPTX previews, object audits, local repair rounds and a final evidence ledger.
+
+## Second increment: reproducible post-P0 batch execution
+
+A successful source preflight alone left the team without an executable next step. The ten-paper run is now represented by `tools/run_blind10_post_p0.py`, which:
+
+- Revalidates all ten frozen source PDFs and crops before starting any generation.
+- Refuses to overwrite a nonempty output directory, preserving prior evidence.
+- Creates an isolated directory and delivery manifest per figure.
+- Uses source-picture-preserving recovery for the three crops known to have no PDF vector drawing records (Wind Turbine, HarnessMM and IIoT); the other seven require native editable import.
+- Records technical pipeline statuses and manifest hashes separately from scientific human acceptance and PowerPoint 2016 host validation.
+- Continues after a per-paper exception and records it as `PIPELINE_EXCEPTION`, so one pathological PDF does not erase the remaining cohort's evidence.
+- Does not calculate a strict reproduction pass rate from technical generation statuses.
+
+Regression tests cover all-ten dispatch after successful preflight, fail-closed preflight blocking, and immutable non-overwrite behavior. The new test is wired into the main CI workflow.
+
+### Operational command
+
+```bash
+python tools/run_blind10_post_p0.py \
+  --source-dir ./ten_papers \
+  --manifest tests/fixtures/blind10_source_regions_2026-11-14.json \
+  --output-dir dist/blind10_post_p0
+```
+
+This command performs the technical PDF-import route only. FigureSpec reconstruction, source-grounded scientific topology review, multi-round repair, expert acceptance and native Office 2016 round-trip remain distinct follow-up gates.
