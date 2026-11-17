@@ -1,3 +1,5 @@
+- Added fail-closed regression tests for Blind10 source admission (missing source, hash mismatch, invalid crop/page and missing caption) and wired them into the main validation workflow. Recorded the evidence boundary: source preflight is not figure-reproduction acceptance; the inspected ten-paper cohort remains development regression only. See `docs/DEVELOPMENT_EXPERIENCE_2026-11-17.md`.
+
 # Changelog
 
 - Corrected FigureAST corpus result classification: contrast/text-fit preflight findings now produce REVIEW rather than a false clean PASS; rendered calibration/parity failures remain FAIL. Corpus summaries report PASS, REVIEW and FAIL/ERROR separately. Recorded the U-Net rotated-dimension-label calibration gap as unresolved rather than weakening text matching.
