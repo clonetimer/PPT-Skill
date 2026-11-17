@@ -13,6 +13,7 @@ from figure_ast_writers import render_ast
 from render_with_libreoffice import render_pptx
 from validate_ast_parity import validate
 from calibrate_text_fit_against_pdf import calibrate as calibrate_text_fit
+from audit_figure_spec_text_fit import audit_spec as audit_text_fit_preflight
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FIGURES = ("Mamba_Figure1", "Swin_Figure2")
@@ -40,6 +41,8 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
     expected_round_trip.setdefault("id", "unnamed-figure")
     if round_trip != expected_round_trip:
         raise AssertionError(f"AST_SPEC_ROUND_TRIP_MISMATCH:{figure_name}")
+
+    text_preflight = audit_text_fit_preflight(source_spec)
 
     figure_dir = output_root / figure_name
     ast_dir = figure_dir / "ast"
@@ -70,6 +73,12 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
     parity_path = figure_dir / "parity.json"
     parity_path.write_text(json.dumps(parity, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+    text_preflight_path = figure_dir / "text_fit_preflight.json"
+    text_preflight_path.write_text(
+        json.dumps(text_preflight, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
     text_calibration = calibrate_text_fit(ast_pptx, Path(ast_record["outputs"]["pdf"]["path"]))
     text_calibration_path = figure_dir / "text_fit_calibration.json"
     text_calibration_path.write_text(
@@ -86,6 +95,16 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
         "status": "PASS" if parity["status"] == "PASS" and text_calibration["status"] == "PASS" else "FAIL",
         "parity_status": parity["status"],
         "text_fit_status": text_calibration["status"],
+        "text_fit_preflight": {
+            "status": text_preflight["status"],
+            "text_elements": text_preflight["text_elements"],
+            "estimated_overflow_count": text_preflight["estimated_overflow_count"],
+            "contrast_fail_count": text_preflight["contrast_fail_count"],
+            "elements_with_additional_height": [
+                item["element_id"] for item in text_preflight["elements"]
+                if item.get("additional_height_needed_pt", 0) > 0
+            ],
+        },
         "element_count": len(ast.nodes),
         "primitive_counts": primitive_counts,
         "source_spec_sha256": ast.source_sha256,
@@ -125,6 +144,7 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
             "ast_render_record": str((ast_render_dir / "render_record.json").relative_to(ROOT)),
             "parity": str(parity_path.relative_to(ROOT)),
             "text_fit_calibration": str(text_calibration_path.relative_to(ROOT)),
+            "text_fit_preflight": str(text_preflight_path.relative_to(ROOT)),
             "diff": str(diff_png.relative_to(ROOT)),
         },
         "render_result": render_result,
@@ -169,6 +189,7 @@ def main() -> None:
             "raster": item["raster"],
             "parity_status": item["parity_status"],
             "text_fit_status": item["text_fit_status"],
+            "text_fit_preflight": item["text_fit_preflight"],
             "text_fit_calibration": item["text_fit_calibration"],
             "issues": item["issues"],
         } for item in results],
