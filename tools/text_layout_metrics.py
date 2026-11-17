@@ -72,6 +72,15 @@ class FontMetrics:
         self.units_per_em = int(self.font["head"].unitsPerEm)
         self.cmap = self.font.getBestCmap() or {}
         self.hmtx = self.font["hmtx"].metrics
+        os2 = self.font["OS/2"]
+        if getattr(os2, "sTypoAscender", 0) or getattr(os2, "sTypoDescender", 0):
+            ascender = int(os2.sTypoAscender)
+            descender = int(os2.sTypoDescender)
+            line_gap = int(getattr(os2, "sTypoLineGap", 0))
+        else:
+            hhea = self.font["hhea"]
+            ascender, descender, line_gap = int(hhea.ascent), int(hhea.descent), int(hhea.lineGap)
+        self.line_height_units = max(1, ascender - descender + line_gap)
 
     def _fallback_for_char(self, char: str) -> "FontMetrics | None":
         if not self.fallback_enabled:
@@ -100,15 +109,6 @@ class FontMetrics:
             "font_face_index": face_index,
         }
         return fallback
-        os2 = self.font["OS/2"]
-        if getattr(os2, "sTypoAscender", 0) or getattr(os2, "sTypoDescender", 0):
-            ascender = int(os2.sTypoAscender)
-            descender = int(os2.sTypoDescender)
-            line_gap = int(getattr(os2, "sTypoLineGap", 0))
-        else:
-            hhea = self.font["hhea"]
-            ascender, descender, line_gap = int(hhea.ascent), int(hhea.descent), int(hhea.lineGap)
-        self.line_height_units = max(1, ascender - descender + line_gap)
 
     def close(self) -> None:
         for fallback in self._fallback_metrics.values():
