@@ -53,6 +53,19 @@ class C01ImageFirstSourceFigureV8Tests(unittest.TestCase):
         self.assertEqual([i for i, e in enumerate(squares, start=1) if e["fill"] == "#DCA16C"], [2])
         self.assertEqual(self.spec["image_first_v8_contract"]["class_outputs"],
                          "five_output_illustrative_example")
+        self.assertEqual(
+            [e for e in self.elements if e.get("semantic_role") == "illustrative_class_label"],
+            [],
+            "The author source has five unlabeled output squares; do not invent C₁–C₅ labels.",
+        )
+        self.assertEqual(
+            self.spec["image_first_v8_contract"]["class_output_labeling"],
+            "unlabeled_source_visible_squares",
+        )
+        topology = json.loads(
+            (ROOT / "specs/c01_composite_expected_topology_v8.json").read_text(encoding="utf-8")
+        )
+        self.assertIn("unlabeled source-visible squares", topology["geometry_contract"]["class_outputs"]["labeling"])
 
     def test_readout_label_boundary_is_preserved(self):
         labels = [e.get("text") for e in self.elements if e.get("semantic_id") in {"sr_main", "sr_ea"}]
