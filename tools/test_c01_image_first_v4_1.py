@@ -63,8 +63,9 @@ class C01ImageFirstV41Tests(unittest.TestCase):
         lower = self.by_id["el_0211"]
         self.assertLessEqual(gap_top - 0.04, upper["y1"])
         self.assertLessEqual(upper["y2"], gap_bottom)
-        self.assertGreaterEqual(ellipsis["y"], gap_top - 0.01)
+        self.assertGreaterEqual(ellipsis["y"], gap_top - 0.009)
         self.assertLessEqual(ellipsis["y"] + ellipsis["h"], gap_bottom + 0.01)
+        self.assertLessEqual(ellipsis["size"], 6.5)
         self.assertGreaterEqual(lower["y1"], gap_top)
         self.assertLessEqual(lower["y2"], gap_bottom + 0.04)
         self.assertTrue(all(rail["x1"] == rail["x2"] for rail in (upper, lower)))
@@ -114,6 +115,18 @@ class C01ImageFirstV41Tests(unittest.TestCase):
         label = next(e for e in self.elements if e.get("semantic_id") == "class_output_label")
         self.assertEqual(label["text"], "Fault classification")
         self.assertEqual(self.topology["critical_labels"]["class_output_label"], "Fault classification")
+        main_panel = self.by_id["el_0003"]
+        panel_right = main_panel["x"] + main_panel["w"]
+        self.assertLessEqual(label["x"] + label["w"], panel_right)
+        self.assertEqual(
+            [e for e in self.elements if e.get("semantic_role") == "illustrative_class_label"],
+            [],
+            "The author source shows five unlabeled class-output squares; do not invent C₁…C₅ labels.",
+        )
+        for output in outputs:
+            self.assertGreaterEqual(output["x"], main_panel["x"])
+            self.assertLessEqual(output["x"] + output["w"], panel_right)
+            self.assertAlmostEqual(output["w"], output["h"], places=9)
 
     def test_IR_SR_difference_is_disclosed_once(self):
         visible = self.slide["on_slide"]
