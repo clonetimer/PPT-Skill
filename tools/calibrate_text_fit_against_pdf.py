@@ -201,6 +201,7 @@ def calibrate(pptx_path: Path, pdf_path: Path, tolerance_pt: float = 1.5) -> dic
                     "font_family_requested": family,
                     "font_family_resolved": resolved_family or metrics.family_name,
                     "font_face_index": face_index,
+                    "font_fallbacks": dict(metrics.fallback_fonts),
                     "font_size_pt": font_size,
                     "metric_status": metric_status,
                     "missing_glyph_error": missing_glyph_error,
