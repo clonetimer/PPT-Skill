@@ -118,6 +118,13 @@ class C01ImageFirstV41Tests(unittest.TestCase):
         main_panel = self.by_id["el_0003"]
         panel_right = main_panel["x"] + main_panel["w"]
         self.assertLessEqual(label["x"] + label["w"], panel_right)
+        class_output_group = self.by_id["el_0130"]
+        self.assertAlmostEqual(
+            label["x"] + label["w"],
+            class_output_group["x"] + class_output_group["w"],
+            places=9,
+            msg="Classification caption should align to the output-group right edge.",
+        )
         self.assertEqual(
             [e for e in self.elements if e.get("semantic_role") == "illustrative_class_label"],
             [],
