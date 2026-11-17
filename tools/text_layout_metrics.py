@@ -223,7 +223,28 @@ class FontMetrics:
         available_height = float(height_in) * 72.0 - top - bottom
         lines = self.wrap(text, font_size_pt, available_width)
         line_height = self.line_height_pt(font_size_pt, line_spacing)
-        required_height = len(lines) * line_height
+        line_ink_heights: list[float] = []
+        for line in lines:
+            ink_tops: list[float] = []
+            ink_bottoms: list[float] = []
+            for char in line:
+                if char.isspace() or char in "\\r\\n":
+                    continue
+                ink = self.glyph_ink_offsets_pt(char, font_size_pt)
+                if ink is None:
+                    top_offset, bottom_offset = self.glyph_vertical_offsets_pt(char, font_size_pt)
+                    ink_tops.append(-top_offset)
+                    ink_bottoms.append(-bottom_offset)
+                else:
+                    _, ink_bottom, _, ink_top = ink
+                    ink_tops.append(ink_top)
+                    ink_bottoms.append(ink_bottom)
+            if ink_tops and ink_bottoms:
+                line_ink_heights.append(max(ink_tops) - min(ink_bottoms))
+            else:
+                line_ink_heights.append(line_height)
+        ink_height = max(line_ink_heights, default=0.0)
+        required_content_height = ink_height + max(0, len(lines) - 1) * line_height
         return {
             "font_path": str(self.path),
             "font_size_pt": float(font_size_pt),
@@ -231,9 +252,10 @@ class FontMetrics:
             "line_count": len(lines),
             "max_line_width_pt": max((self.text_width_pt(line, font_size_pt) for line in lines), default=0.0),
             "line_height_pt": line_height,
-            "required_height_pt": required_height + top + bottom,
+            "ink_height_pt": ink_height,
+            "required_height_pt": required_content_height + top + bottom,
             "available_height_pt": float(height_in) * 72.0,
-            "fits": required_height <= available_height + 1e-6,
+            "fits": required_content_height <= available_height + 1e-6,
         }
 
 
