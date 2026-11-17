@@ -216,11 +216,21 @@ def _rendered_geometry(
         if char.isspace():
             continue
         size = float(item.get("size") or default_size_pt)
-        top_offset, bottom_offset = metrics.glyph_vertical_offsets_pt(char, size)
-        x0, _, x1, _ = item["bbox"]
-        baseline_y = float(item["origin"][1])
-        boxes.append((x0, baseline_y + top_offset, x1, baseline_y + bottom_offset))
-        baselines.append(baseline_y)
+        baseline_x, baseline_y = item["origin"]
+        ink = metrics.glyph_ink_offsets_pt(char, size)
+        if ink is not None:
+            left, bottom, right, top = ink
+            boxes.append((
+                float(baseline_x) + left,
+                float(baseline_y) - top,
+                float(baseline_x) + right,
+                float(baseline_y) - bottom,
+            ))
+        else:
+            top_offset, bottom_offset = metrics.glyph_vertical_offsets_pt(char, size)
+            x0, _, x1, _ = item["bbox"]
+            boxes.append((x0, baseline_y + top_offset, x1, baseline_y + bottom_offset))
+        baselines.append(float(baseline_y))
     if not boxes:
         raise ValueError("PDF_MATCH_HAS_NO_VISIBLE_GLYPHS")
     unique_baselines: list[float] = []
@@ -363,7 +373,7 @@ def calibrate(pptx_path: Path, pdf_path: Path, tolerance_pt: float = 1.5) -> dic
             "LibreOffice PDF text extraction is the measurement source; this is not a Microsoft PowerPoint host test.",
             "Mixed-font text boxes are estimated using their first non-empty source run; per-glyph fallback is recorded and used for vertical glyph extents.",
             "The fontTools estimator is a fast unshaped estimate; PDF baseline positions calibrate its line count and glyph vertical placement.",
-            "PDF character x extents are retained while vertical extents are reconstructed from the selected font face metrics to avoid oversized font-wide PDF bounding boxes."
+            "Text ink geometry is reconstructed from selected font glyph outlines and PDF character baselines; font metrics are used only when an outline is unavailable."
         ],
         "elements": results,
     }
