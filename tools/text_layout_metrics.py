@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import math, re, shutil, subprocess, unicodedata
 from pathlib import Path
 from typing import Callable
+from fontTools.pens.boundsPen import BoundsPen
 from fontTools.ttLib import TTCollection, TTFont
 
 
@@ -46,6 +47,7 @@ class FontMetrics:
         self.fallback_enabled = bool(fallback_enabled)
         self._fallback_metrics: dict[str, FontMetrics] = {}
         self.fallback_fonts: dict[str, dict[str, str | int]] = {}
+        self._glyph_ink_bounds: dict[int, tuple[float, float, float, float] | None] = {}
         if self.path.suffix.lower() == ".ttc":
             self.collection = TTCollection(str(self.path), lazy=True)
             if self.face_index < 0 or self.face_index >= len(self.collection.fonts):
@@ -136,6 +138,33 @@ class FontMetrics:
         top = -float(metrics.ascender_units) / metrics.units_per_em * float(font_size_pt)
         bottom = -float(metrics.descender_units) / metrics.units_per_em * float(font_size_pt)
         return top, bottom
+
+    def glyph_ink_offsets_pt(
+        self, char: str, font_size_pt: float
+    ) -> tuple[float, float, float, float] | None:
+        """Return exact glyph-outline offsets (left, bottom, right, top) from its baseline."""
+        metrics = self._font_for_char(char)
+        codepoint = ord(char)
+        if codepoint not in metrics._glyph_ink_bounds:
+            glyph_name = metrics.cmap.get(codepoint)
+            if glyph_name is None:
+                metrics._glyph_ink_bounds[codepoint] = None
+            else:
+                glyph_set = metrics.font.getGlyphSet()
+                pen = BoundsPen(glyph_set)
+                glyph_set[glyph_name].draw(pen)
+                metrics._glyph_ink_bounds[codepoint] = pen.bounds
+        bounds = metrics._glyph_ink_bounds[codepoint]
+        if bounds is None:
+            return None
+        scale = float(font_size_pt) / metrics.units_per_em
+        x_min, y_min, x_max, y_max = bounds
+        return (
+            float(x_min) * scale,
+            float(y_min) * scale,
+            float(x_max) * scale,
+            float(y_max) * scale,
+        )
 
     def glyph_advance_pt(self, char: str, font_size_pt: float) -> float:
         if char in "\r\n":
