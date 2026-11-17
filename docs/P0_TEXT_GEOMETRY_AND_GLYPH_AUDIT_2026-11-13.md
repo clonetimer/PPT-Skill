@@ -203,3 +203,15 @@ CI execution discipline:
 - Use one Git tree/commit for a coherent multi-file change rather than one Contents-API commit per file.
 - Run PR validation against the PR's actual base family (main and feat/*); use concurrency cancellation so obsolete runs do not compete with the latest revision.
 - Keep a manual workflow_dispatch path for controlled revalidation. CI remains a regression guard; the primary acceptance evidence remains the real paper-figure reproduction and its scientific/visual review.
+
+
+### Six-paper FigureAST corpus expansion (2026-11-17)
+
+The next visual-parity experiment is now source-backed across six papers and six distinct families: Mamba, Swin Transformer, Graph Attention Networks, CLIP, ResNet and U-Net. The new four-paper expansion uses the committed source PDFs and their recorded SHA-256 values; Mamba and Swin retain their arXiv source locators. CLIP's dog photograph is explicitly declared as a CC0 replacement, not the paper's original photograph.
+
+The experiment rebuilds the legacy SVG/PPTX and the FigureAST SVG/DrawingML PPTX from the exact same FigureSpec before comparing them under the pinned LibreOffice profile. This removes stale pre-generated PPTX files as a confounder. The report records per-paper source evidence, primitive inventory, native shape/picture counts, text-fit preflight, glyph-level post-render calibration and raster differences.
+
+The boundary between CI and research is explicit:
+- source evidence hashes, FigureAST semantic round-trip and supported primitive coverage are hard tests;
+- cross-paper raster parity is a non-blocking research experiment whose full results (including per-figure errors) are retained as an artifact;
+- a parity failure is evidence to inspect and improve the renderer, not a reason to silently relax thresholds or block unrelated product validation.

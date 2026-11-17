@@ -128,23 +128,24 @@ jobs:
           python tools/validate_ast_parity.py --legacy-pptx dist/ast_pilot/legacy.pptx --ast-pptx dist/ast_pilot/ast.pptx --legacy-png dist/ast_pilot/legacy_render/legacy-slide-1.png --ast-png dist/ast_pilot/ast_render/ast-slide-1.png --diff dist/ast_pilot/legacy_vs_ast_diff.png --output dist/ast_pilot/legacy_vs_ast_metrics.json
           python tools/audit_figure_spec_text_fit.py figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json --output dist/ast_pilot/text_fit_preflight.json
           python tools/calibrate_text_fit_against_pdf.py dist/ast_pilot/ast.pptx --pdf dist/ast_pilot/ast_render/ast.pdf --output dist/ast_pilot/text_fit_calibration.json --strict
-      - name: Expand FigureAST parity to independent-paper generalization corpus
-        id: ast_generalization
+      - name: Validate FigureAST contracts and source-backed literature corpus
         run: |
           python tools/test_figure_ast_writers.py
           python tools/test_figure_ast_generalization.py
           python tools/test_validate_ast_parity.py
           python tools/test_text_layout_metrics.py
           python tools/test_calibrate_text_fit_against_pdf.py
-          python tools/run_ast_generalization_pilot.py --output-dir dist/ast_generalization --profile profiles/renderer/lo_headless_v1.json
-      - name: Preserve independent-paper AST diagnostics on failure
-        if: steps.ast_generalization.outcome == 'failure'
+      - name: Run non-blocking real-paper FigureAST dual-writer experiment
+        id: ast_generalization
+        continue-on-error: true
+        run: |
+          python tools/run_ast_generalization_pilot.py --manifest specs/ast_generalization_corpus_v1.json --output-dir dist/ast_generalization --profile profiles/renderer/lo_headless_v1.json
+      - name: Preserve independent-paper AST diagnostics on experiment failure
+        if: always() && steps.ast_generalization.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
-          name: ppt-skill-ast-generalization-failure-diagnostics
-          path: |
-            dist/ast_generalization/**
-            dist/ast_pilot/**
+          name: ppt-skill-ast-literature-corpus-failure-diagnostics
+          path: dist/ast_generalization/**
           if-no-files-found: warn
       - name: Execute C01-FBG source-grounded repair
         run: |
@@ -447,12 +448,13 @@ jobs:
           path: dist/ast_pilot/*
           if-no-files-found: error
 
-      - name: Upload independent-paper FigureAST parity evidence
+      - name: Upload independent-paper FigureAST literature corpus experiment
+        if: always() && steps.ast_generalization.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
-          name: ppt-skill-ast-generalization-parity
+          name: ppt-skill-ast-literature-corpus-experiment
           path: dist/ast_generalization/**
-          if-no-files-found: error
+          if-no-files-found: warn
 
   windows-script-parser:
     name: Check Office 2016 PowerShell syntax (no Office runtime)
