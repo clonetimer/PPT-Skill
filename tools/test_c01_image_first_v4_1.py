@@ -8,6 +8,7 @@ import unittest
 from scientific_ir import ROOT, validate_expected_topology, validate_spec
 from build_image2_slide_prompt import build_prompt, load_slide
 from image_first_source_contract import load_source_figure_contract
+from text_layout_metrics import contrast_ratio
 
 FIGURE = ROOT / "figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json"
 TOPOLOGY = ROOT / "specs/c01_composite_expected_topology_v4_1.json"
@@ -115,6 +116,18 @@ class C01ImageFirstV41Tests(unittest.TestCase):
                 label,
             )
         self.assertTrue(self.topology["geometry_contract"]["sensor_count"]["variable"])
+
+    def test_frequency_band_labels_meet_normal_text_contrast(self):
+        expected = {
+            "band_1": "#4B6B7B",
+            "band_2": "#496E63",
+            "band_3": "#865F2B",
+            "band_4": "#66577D",
+        }
+        for semantic_id, color in expected.items():
+            label = next(e for e in self.elements if e.get("semantic_id") == semantic_id and e["type"] == "text")
+            self.assertEqual(label["color"], color)
+            self.assertGreaterEqual(contrast_ratio(color, "#FFFFFF"), 4.5)
 
     def test_author_visible_fusion_operator_is_plus(self):
         fusion = next(e for e in self.elements if e.get("semantic_id") == "sum")
