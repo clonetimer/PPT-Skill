@@ -35,7 +35,7 @@
     ],
     "source_figure": {
       "figure_spec_ref": "figure_specs/c01/C01_composite_defense_slide_image_first_v8.json",
-      "figure_spec_sha256": "713606290b0e54fb0dcaf15b6f4fa13ecffa2c11bbf086dcc01c85472ea51825",
+      "figure_spec_sha256": "868450f93a57531fd8e1760e2412ecc5302a82a75527f401bb18f4ab83d4a8cb",
       "figure_id": "C01_composite_defense_slide_image_first_v8",
       "figure_version": "8.0.0-dev",
       "topology_ref": "specs/c01_composite_expected_topology_v8.json",
