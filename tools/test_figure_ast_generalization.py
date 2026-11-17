@@ -8,6 +8,7 @@ import unittest
 from pathlib import Path
 
 from figure_ast import FigureAST
+from run_ast_generalization_pilot import classify_figure_quality
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "specs/ast_generalization_corpus_v1.json"
@@ -80,6 +81,24 @@ class FigureAstGeneralizationTests(unittest.TestCase):
         self.assertIn("grid", observed_types)
         self.assertIn("ellipse", observed_types)
         self.assertIn("polygon", observed_types)
+
+    def test_preflight_contrast_findings_are_review_not_silent_pass(self):
+        self.assertEqual(
+            classify_figure_quality("PASS", "PASS", "REVISE"),
+            ("REVIEW", "REVIEW"),
+        )
+
+    def test_rendered_text_calibration_failure_remains_hard_failure(self):
+        self.assertEqual(
+            classify_figure_quality("PASS", "FAIL", "REVISE"),
+            ("FAIL", "FAIL"),
+        )
+
+    def test_clean_parity_and_text_quality_pass(self):
+        self.assertEqual(
+            classify_figure_quality("PASS", "PASS", "PASS_ESTIMATE"),
+            ("PASS", "PASS"),
+        )
 
     def test_clip_replacement_photo_is_not_misrepresented_as_original_paper_art(self):
         clip = next(entry for entry in self.figures if entry["id"] == "MLC01_clip_overview")

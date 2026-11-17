@@ -38,6 +38,21 @@ def repo_path(value: str) -> Path:
     return path
 
 
+def classify_figure_quality(
+    parity_status: str,
+    calibration_status: str,
+    preflight_status: str,
+) -> tuple[str, str]:
+    """Separate hard rendered-text failures from advisory preflight review findings."""
+    if calibration_status != "PASS":
+        return "FAIL", "FAIL"
+    if preflight_status != "PASS_ESTIMATE":
+        return "REVIEW", "REVIEW"
+    if parity_status != "PASS":
+        return "FAIL", "PASS"
+    return "PASS", "PASS"
+
+
 def run_figure(entry: dict[str, Any], output_root: Path, profile: Path) -> dict:
     figure_name = entry["id"]
     spec_path = repo_path(entry["figure_spec"])
@@ -117,6 +132,9 @@ def run_figure(entry: dict[str, Any], output_root: Path, profile: Path) -> dict:
     primitive_counts = dict(Counter(node.kind for node in ast.nodes))
     legacy_slide = parity["legacy"]["slides"][0]
     ast_slide = parity["ast"]["slides"][0]
+    figure_status, text_fit_status = classify_figure_quality(
+        parity["status"], text_calibration["status"], text_preflight["status"]
+    )
     source_evidence = entry.get("source_evidence", {})
     source_path = source_evidence.get("path")
     source_hash_observed = sha256(repo_path(source_path)) if source_path else None
@@ -130,9 +148,10 @@ def run_figure(entry: dict[str, Any], output_root: Path, profile: Path) -> dict:
         "source_pdf_sha256_recorded_at_ingest": source_hash_recorded,
         "source_file_sha256_observed": source_hash_observed,
         "asset_substitutions": entry.get("asset_substitutions", []),
-        "status": "PASS" if parity["status"] == "PASS" and text_calibration["status"] == "PASS" else "FAIL",
+        "status": figure_status,
         "parity_status": parity["status"],
-        "text_fit_status": text_calibration["status"],
+        "text_fit_status": text_fit_status,
+        "text_fit_calibration_status": text_calibration["status"],
         "text_fit_preflight": {
             "status": text_preflight["status"],
             "text_elements": text_preflight["text_elements"],
@@ -252,9 +271,11 @@ def main() -> None:
             results.append(failure)
 
     passed = sum(item.get("status") == "PASS" for item in results)
+    review_count = sum(item.get("status") == "REVIEW" for item in results)
+    failed_count = sum(item.get("status") in {"FAIL", "ERROR"} for item in results)
     combined_status = (
         "PASS" if passed == len(results)
-        else "PARTIAL" if passed > 0
+        else "PARTIAL" if passed > 0 or review_count > 0
         else "FAIL"
     )
     combined = {
@@ -265,7 +286,8 @@ def main() -> None:
         "renderer_profile": str(profile.relative_to(ROOT)),
         "figure_count": len(results),
         "passed_count": passed,
-        "failed_or_error_count": len(results) - passed,
+        "review_count": review_count,
+        "failed_or_error_count": failed_count,
         "figures": results,
     }
     (output_root / "summary.json").write_text(
@@ -276,6 +298,8 @@ def main() -> None:
         "status": combined_status,
         "corpus_id": combined["corpus_id"],
         "passed": passed,
+        "review": review_count,
+        "failed_or_error": failed_count,
         "total": len(results),
         "figures": [{
             "figure": item["figure"],

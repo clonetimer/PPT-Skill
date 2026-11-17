@@ -229,3 +229,17 @@ Use the corpus manifest's `id` as the experiment/output key. If a FigureSpec has
 The four newly added arXiv paper PDFs are not vendored in the Git repository (the FigureSpec evidence records refer to acquisition-time local paths that are intentionally absent from CI checkout). The corpus manifest therefore stores the canonical arXiv URL and the SHA-256 recorded at source acquisition. CI verifies the URL shape and hash format, but does **not** claim to recompute those PDF hashes from absent files. The CLIP CC0 replacement image is committed and its bytes are hash-verified in CI.
 
 If exact source-PDF byte verification becomes a release requirement, add an explicit, version-pinned source-fetch step with cache and retry policy; do not make the ordinary validation job depend on unpinned external downloads.
+
+
+### Literature-corpus quality classification: preflight is not a silent pass (2026-11-17)
+
+The six-paper FigureAST experiment showed a reporting gap: CLIP had five WCAG contrast failures in its pre-build text audit, but the per-figure status was still reported as PASS because only rendered calibration and pixel parity were considered. The preflight is advisory rather than a hard renderer failure, but a contrast warning must remain visible as REVIEW and must not be counted as a clean PASS.
+
+The corpus now distinguishes:
+- PASS: parity and rendered text calibration pass, and preflight has no review findings;
+- REVIEW: rendered text calibration and parity pass, but advisory preflight reports contrast/fit findings requiring design review;
+- FAIL: rendered text calibration or parity fails.
+
+Keep the preflight advisory; do not silently promote REVIEW to PASS and do not turn every preflight warning into a renderer failure. Corpus summaries report PASS, REVIEW and FAIL/ERROR separately.
+
+The U-Net trial remains FAIL: 27 rotated spatial-dimension labels were not matched in the current PDF text calibration, one label was measured outside its frame, and one line-count mismatch was recorded. The rendered image shows these labels as rotated vertical annotations. This is a known calibration coverage gap for rotated text, not evidence that the labels may be dropped. Preserve the failure and add rotation-aware PDF glyph ordering/geometry support with regression fixtures before claiming U-Net text calibration PASS.

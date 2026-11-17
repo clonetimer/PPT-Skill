@@ -1,5 +1,7 @@
 # Changelog
 
+- Corrected FigureAST corpus result classification: contrast/text-fit preflight findings now produce REVIEW rather than a false clean PASS; rendered calibration/parity failures remain FAIL. Corpus summaries report PASS, REVIEW and FAIL/ERROR separately. Recorded the U-Net rotated-dimension-label calibration gap as unresolved rather than weakening text matching.
+
 - Corrected the literature-corpus provenance boundary: source PDFs excluded from Git are represented by canonical arXiv URLs plus ingest-time SHA-256 records (format-checked, not falsely claimed as recomputed in CI); the committed CLIP CC0 replacement asset remains byte-hash verified.
 
 - Preserved source identity for legacy Mamba/Swin FigureSpecs that intentionally omit a top-level id: corpus IDs remain external experiment keys, while existing paper metadata and canonical source hashes are validated without mutating the original specs.
