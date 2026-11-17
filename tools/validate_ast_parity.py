@@ -5,6 +5,7 @@ import argparse, json
 from collections import Counter
 from pathlib import Path
 from pptx import Presentation
+from pptx.enum.shapes import MSO_SHAPE_TYPE
 from compare_rendered_images import compare
 
 
@@ -17,7 +18,7 @@ def inspect_pptx(path: Path) -> dict:
             "shape_count":len(shapes),
             "shape_types":dict(Counter(str(shape.shape_type) for shape in shapes)),
             "texts":[shape.text for shape in shapes if getattr(shape,"has_text_frame",False) and shape.text.strip()],
-            "pictures":sum(str(shape.shape_type)=="13" for shape in shapes),
+            "pictures":sum(shape.shape_type==MSO_SHAPE_TYPE.PICTURE for shape in shapes),
             "bounds":[[shape.left,shape.top,shape.width,shape.height] for shape in shapes],
             "within_canvas":all(shape.left>=0 and shape.top>=0 and shape.left+shape.width<=deck.slide_width and shape.top+shape.height<=deck.slide_height for shape in shapes),
         })
