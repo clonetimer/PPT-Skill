@@ -45,15 +45,17 @@ def _line_char_records(line: dict[str, Any]) -> list[dict[str, Any]]:
                 "font": str(span.get("font", "")),
                 "size": float(span.get("size", 14.0)),
             })
-    records.sort(key=lambda item: (item["bbox"][0], item["bbox"][1]))
+    records.sort(key=lambda item: (round(item["origin"][1] / 0.75), item["bbox"][0]))
 
     non_whitespace = [item for item in records if not item["c"].isspace()]
     filtered: list[dict[str, Any]] = []
     for item in records:
         if item["c"].isspace():
             x0, y0, x1, y1 = item["bbox"]
+            baseline = item["origin"][1]
             placeholder = any(
-                min(x1, other["bbox"][2]) - max(x0, other["bbox"][0]) > 0.5
+                abs(other["origin"][1] - baseline) <= 0.75
+                and min(x1, other["bbox"][2]) - max(x0, other["bbox"][0]) > 0.5
                 and min(y1, other["bbox"][3]) - max(y0, other["bbox"][1]) > 0.5
                 for other in non_whitespace
             )
@@ -98,17 +100,25 @@ def extract_pdf_text_blocks(pdf_path: Path) -> list[list[dict[str, Any]]]:
             for block_index, block in enumerate(page.get_text("rawdict").get("blocks", [])):
                 if block.get("type") != 0:
                     continue
-                line_records = [
-                    records for line in block.get("lines", [])
-                    if (records := _line_char_records(line))
+                spans = [
+                    span for line in block.get("lines", [])
+                    for span in line.get("spans", [])
                 ]
-                if not line_records:
+                records = _line_char_records({"spans": spans})
+                if not records:
                     continue
+                baseline_groups: dict[int, list[dict[str, Any]]] = {}
+                for item in records:
+                    baseline_key = round(item["origin"][1] / 0.75)
+                    baseline_groups.setdefault(baseline_key, []).append(item)
                 flattened: list[dict[str, Any] | None] = []
-                for line_index, records in enumerate(line_records):
-                    if line_index:
+                for group_index, baseline_key in enumerate(sorted(baseline_groups)):
+                    if group_index:
                         flattened.append(None)
-                    flattened.extend(records)
+                    flattened.extend(sorted(
+                        baseline_groups[baseline_key],
+                        key=lambda item: item["bbox"][0],
+                    ))
                 raw_text, char_map = _collapse_with_map(flattened)
                 normalized = normalize_text(raw_text)
                 if not normalized:
@@ -118,7 +128,7 @@ def extract_pdf_text_blocks(pdf_path: Path) -> list[list[dict[str, Any]]]:
                     "text": raw_text,
                     "normalized_text": normalized,
                     "char_map": char_map,
-                    "line_count": len(line_records),
+                    "line_count": len(baseline_groups),
                 })
             pages.append(page_blocks)
     finally:
