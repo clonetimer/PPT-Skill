@@ -34,6 +34,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends libreoffice-impress poppler-utils fonts-dejavu-core fonts-liberation fonts-noto-core fonts-noto-cjk
       - name: Test editable PDF figure recovery and Office portability
         run: |
+          python tools/test_audit_blind10_sources.py
           python tools/test_pdf_figure_import.py
           python tools/test_pdf_crop_assets.py
           python tools/test_pdf_import_budgets.py
