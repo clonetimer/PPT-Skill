@@ -179,3 +179,10 @@ The repair now synchronizes four artifacts:
 - the Image-first manifest's source_figure lock (FigureSpec SHA-256, topology SHA-256, source text, labels, edges and geometry contract).
 
 A new regression compares build_spec() with the committed V8 FigureSpec exactly. The Image-first workflow validator independently checks the manifest lock against the committed FigureSpec and topology. Do not accept a fix that only changes the generated artifact or only changes the content lock.
+
+
+### Color-coded scientific labels must pass text contrast independently of their marks
+
+The C01 preflight correctly flagged four frequency-band labels (B₁, B₂, B₃ and B_N) because their original pastel text colors were below the 4.5:1 normal-text contrast target on white. The corresponding graph/signal colors remain useful as categorical cues, but a text label cannot inherit the lower 3:1 threshold used for essential non-text graphics.
+
+The repair darkens only the four text-label colors while retaining their hue families and leaving graph fills and signal traces unchanged. The new regression checks each label's contrast ratio directly; the V4.1 preflight now has no contrast failures. The same colors are inherited by the V8 builder, committed V8 FigureSpec and Image-first source-figure lock, which is refreshed after the visual change.
