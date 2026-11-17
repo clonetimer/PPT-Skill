@@ -213,11 +213,39 @@ def _match_text(
                     if compact_start < 0:
                         break
                     compact_end = compact_start + len(compact_needle)
-                    before = compact_haystack[compact_start - 1] if compact_start else ""
-                    after = compact_haystack[compact_end] if compact_end < len(compact_haystack) else ""
-                    if not (before.isalnum() or after.isalnum()):
-                        source_start = compact_to_source[compact_start]
-                        source_end = compact_to_source[compact_end - 1] + 1
+                    source_start = compact_to_source[compact_start]
+                    source_end = compact_to_source[compact_end - 1] + 1
+                    first_char = block["char_map"][source_start]
+                    last_char = block["char_map"][source_end - 1]
+
+                    def is_same_frame_continuation(compact_index: int, boundary_char: dict[str, Any], side: str) -> bool:
+                        source_index = compact_to_source[compact_index]
+                        neighbor = block["char_map"][source_index]
+                        if neighbor is None or not neighbor["c"].isalnum():
+                            return False
+                        if abs(neighbor["origin"][1] - boundary_char["origin"][1]) > 0.75:
+                            return False
+                        left, top, right, bottom = frame_bbox
+                        nx0, ny0, nx1, ny1 = neighbor["bbox"]
+                        if not (
+                            nx1 >= left - 1.5 and nx0 <= right + 1.5
+                            and ny1 >= top - 1.5 and ny0 <= bottom + 1.5
+                        ):
+                            return False
+                        bx0, _, bx1, _ = boundary_char["bbox"]
+                        if side == "before":
+                            return bx0 - nx1 <= 1.5
+                        return nx0 - bx1 <= 1.5
+
+                    before_continues = (
+                        compact_start > 0
+                        and is_same_frame_continuation(compact_start - 1, first_char, "before")
+                    )
+                    after_continues = (
+                        compact_end < len(compact_to_source)
+                        and is_same_frame_continuation(compact_end, last_char, "after")
+                    )
+                    if not (before_continues or after_continues):
                         matches.append((source_start, source_end, True))
                     compact_start += len(compact_needle)
 
