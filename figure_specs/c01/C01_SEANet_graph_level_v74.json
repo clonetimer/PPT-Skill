@@ -1264,7 +1264,7 @@
     {
       "id": "source_1",
       "source": "docs/C01_V73_SOURCE.md",
-      "source_file_sha256": "4e49357e23555a4c38c4506510c9431c299f237b17cb7bc911a84de35a259ed1",
+      "source_file_sha256": "f2822108be5bbbaa1fa6123d2440f3f93d2bac5f4bcba39e74355bce449107b6",
       "source_locator": "Author-lab graphical abstract — lower Graph-level fault diagnosis framework panel; public abstract terminology checked separately; IR/SR discrepancy unresolved",
       "status": "source_visible_redraw",
       "scope": "Standalone excerpt of the lower SEANet graph-level diagnosis panel, not the complete two-panel graphical abstract. The upper FBG construction panel is a separate C01_FBG deliverable; the complete two-panel connection is C01_composite. The accessible author-lab image appears to label the two readout blocks IR layer; the public abstract uses SR terminology. This discrepancy is not resolved. Input graph topology is schematic, not a numerical adjacency matrix.",
