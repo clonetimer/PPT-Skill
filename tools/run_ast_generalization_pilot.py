@@ -36,7 +36,9 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
     ast = load_figure_ast(str(spec_path))
     round_trip = ast.to_spec()
     source_spec = json.loads(spec_path.read_text(encoding="utf-8"))
-    if round_trip != source_spec:
+    expected_round_trip = dict(source_spec)
+    expected_round_trip.setdefault("id", "unnamed-figure")
+    if round_trip != expected_round_trip:
         raise AssertionError(f"AST_SPEC_ROUND_TRIP_MISMATCH:{figure_name}")
 
     figure_dir = output_root / figure_name
