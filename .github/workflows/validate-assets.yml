@@ -122,6 +122,13 @@ jobs:
           python tools/test_text_layout_metrics.py
           python tools/test_calibrate_text_fit_against_pdf.py
           python tools/run_ast_generalization_pilot.py --output-dir dist/ast_generalization --profile profiles/renderer/lo_headless_v1.json
+      - name: Preserve independent-paper AST diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-ast-generalization-failure-diagnostics
+          path: dist/ast_generalization/**
+          if-no-files-found: warn
       - name: Execute C01-FBG source-grounded repair
         run: |
           python tools/repair_case_c01_fbg_round1.py --output-dir dist/repair_cases/C01_FBG --accepted-output dist/accepted_repairs/C01_FBG_construction_v74.pptx
