@@ -28,14 +28,42 @@
       "fonts-noto-core": "20201225-2",
       "fonts-noto-cjk": "1:20230817+repack1-3"
     },
-    "font_files": {},
+    "font_files": {
+      "Arial": {
+        "resolved_family": "Liberation Sans",
+        "font_index": 0,
+        "sha256": "4659bc0c58c5028dd488ec928d41d9265db43d9b669fc14ca8b0832daca7b144"
+      },
+      "DejaVu Sans": {
+        "resolved_family": "DejaVu Sans",
+        "font_index": 0,
+        "sha256": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280"
+      },
+      "Microsoft YaHei": {
+        "resolved_family": "Noto Sans",
+        "font_index": 0,
+        "sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d"
+      },
+      "Noto Sans CJK SC": {
+        "resolved_family": "Noto Sans CJK SC",
+        "font_index": 2,
+        "sha256": "b76b0433203017ca80401b2ee0dd69350349871c4b19d504c34dbdd80541690a"
+      },
+      "Times New Roman": {
+        "resolved_family": "Liberation Serif",
+        "font_index": 0,
+        "sha256": "705903ae1382f0150f115d6f10a30f5b2f3d6ade649c474afe6366c39174fb65"
+      }
+    },
     "os_release_pretty_name": "Ubuntu 24.04.5 LTS",
     "locale": "C.UTF-8",
     "timezone": "UTC",
     "dpi": 144
   },
   "notes": [
-    "Capture exact runtime and resolved font-file hashes in CI first; promote lock_status to enforce only after reviewing the captured baseline.",
+    "Captured Ubuntu 24.04.5 / LibreOffice 24.2.7.2 / Poppler 24.02.0 runtime and package baseline is enforced in CI.",
+    "Requested font family, resolved font family, TTC face index and font-file SHA-256 are recorded; the five baseline families above are enforced.",
+    "Additional font families used by a figure are recorded in render_record.json; add them to expected.font_files after reviewing a canonical CI capture before relying on them as locked fonts.",
     "PNG hashes are the canonical visual comparison output. PDF hashes are retained as artifact provenance and may include renderer metadata.",
     "PowerPoint 2016 host round-trip remains a separate compatibility gate."
   ],
@@ -44,6 +72,7 @@
     "Arial",
     "Microsoft YaHei",
     "DejaVu Sans",
-    "Noto Sans CJK SC"
+    "Noto Sans CJK SC",
+    "Cambria Math"
   ]
 }
