@@ -54,6 +54,7 @@ def audit_spec(spec: dict[str, Any]) -> dict:
                 "font_family_resolved":resolved_family or metrics.family_name,
                 "font_face_index":face_index,
                 "font_file":str(font_path),
+                "font_fallbacks":dict(metrics.fallback_fonts),
                 "font_size_pt":float(element.get("size",14)),
                 "line_count":measured["line_count"],
                 "required_height_pt":round(measured["required_height_pt"],3),
