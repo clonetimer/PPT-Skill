@@ -162,7 +162,8 @@
       "count_semantics": "illustrative_not_fixed",
       "shape": "square",
       "highlighted_index": 2,
-      "highlight_color": "#DCA16C"
+      "highlight_color": "#DCA16C",
+      "labeling": "unlabeled source-visible squares; do not invent C₁–C₅ labels"
     },
     "readout_blocks": {
       "count": 2,
