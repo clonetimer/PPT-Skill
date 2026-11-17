@@ -51,3 +51,30 @@ The mature-case review supports three engineering changes: a backend-neutral AST
 5. Text-fit estimates compared with LO render probes; false-negative overflow rate measured.
 6. Existing C01 and 15-task regression suite remains green.
 7. PowerPoint 2016 host round-trip is still separately recorded as pending until executed on a real Office host.
+
+
+## Implementation evidence — 2026-11-17
+
+The first cross-paper implementation gate has passed in GitHub Actions #752.
+
+| Corpus figure | AST nodes | Native PPTX shapes | Raster changed pixels | Text matches | Rendered text outside frame |
+|---|---:|---:|---:|---:|---:|
+| Mamba Figure 1 | 57 | 70 | 0 | 16/16 | 0 |
+| Swin Figure 2 | 27 | 56 | 0 | 8/8 | 0 |
+
+Both figures were rendered with the pinned LibreOffice profile and compared with the legacy FigureSpec renderer. The AST and legacy PNGs are byte-identical in this run; both generated PPTX files contain zero picture objects. The text calibration report records zero missing text, zero line-count mismatches, zero unavailable font metrics and zero false-negative overflow cases for both figures.
+
+The calibration implementation now:
+- matches PDF characters across page-level text blocks instead of assuming a PDF block is one PowerPoint text frame;
+- reconstructs multiline source text from distinct PDF baselines;
+- resolves per-character fallback fonts for subscripts and other missing glyphs;
+- measures glyph outline bounds at the PDF character baseline;
+- preserves real whitespace and uses a bounded whitespace-insensitive fallback only when extraction drops it;
+- checks same-frame alphanumeric continuation to prevent partial-word matches;
+- records exact unmatched and out-of-frame strings in the pilot summary.
+
+The workflow also preserves the AST generalization directory as a failure artifact. The associated development lessons and regression requirements are recorded in `docs/P0_TEXT_GEOMETRY_AND_GLYPH_AUDIT_2026-11-13.md`.
+
+### Remaining P0 boundary
+
+This is a successful pilot, not yet a production-default renderer switch. The current FigureSpec font-metric audit is advisory and does not automatically alter authored text boxes. The next implementation step is to record pre-build fit estimates beside the post-render calibration results on the same cross-paper corpus, measure false-positive/false-negative behavior, and only then decide which preflight conditions can become hard gates. Real Microsoft PowerPoint 2016 open/save/reopen remains a separate host test.
