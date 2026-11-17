@@ -35,6 +35,22 @@ class PdfTextCalibrationTests(unittest.TestCase):
         self.assertEqual(kind, "whitespace_insensitive_exact")
         self.assertEqual("".join(item["c"] for item in matched["chars"]), "Apatch")
 
+        neighboring_box_chars = [
+            {"c": value, "bbox": (-30.0 + index * 4.0, 10.0, -26.0 + index * 4.0, 18.0),
+             "origin": (-30.0 + index * 4.0, 18.0), "font": "LiberationSans", "size": 8.0}
+            for index, value in enumerate("Neighbor")
+        ]
+        neighboring_box = {
+            "block_index": -1,
+            "normalized_text": "NeighborApatch",
+            "char_map": neighboring_box_chars + chars,
+        }
+        matched, kind = _match_text(
+            "A patch", [neighboring_box], (0.0, 0.0, 40.0, 30.0)
+        )
+        self.assertIsNotNone(matched, "an adjacent independent text box must not block the match")
+        self.assertEqual(kind, "whitespace_insensitive_exact")
+
         longer = {
             **block,
             "normalized_text": "Apatches",
