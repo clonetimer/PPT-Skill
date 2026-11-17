@@ -80,6 +80,21 @@ class TextLayoutMetricsTests(unittest.TestCase):
         finally:
             metrics.close()
 
+    def test_glyph_vertical_offsets_use_the_selected_fallback_face(self):
+        path, face_index, _ = resolve_font_face("Cambria Math")
+        metrics = FontMetrics(path, face_index=face_index)
+        try:
+            base_top, base_bottom = metrics.glyph_vertical_offsets_pt("h", 14)
+            sub_top, sub_bottom = metrics.glyph_vertical_offsets_pt("ₜ", 14)
+            self.assertLess(base_top, 0)
+            self.assertGreater(base_bottom, 0)
+            self.assertLess(sub_top, 0)
+            self.assertGreater(sub_bottom, 0)
+            self.assertIn("U+209C", metrics.fallback_fonts)
+            self.assertNotEqual((base_top, base_bottom), (sub_top, sub_bottom))
+        finally:
+            metrics.close()
+
     def test_wcag_contrast_ratio(self):
         self.assertAlmostEqual(contrast_ratio("#000000","#FFFFFF"),21.0,places=4)
         self.assertLess(contrast_ratio("#777777","#FFFFFF"),4.5)
