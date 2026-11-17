@@ -104,6 +104,7 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
             "missing_text_count": text_calibration["missing_text_count"],
             "rendered_text_outside_frame_count": text_calibration["rendered_text_outside_frame_count"],
             "line_count_mismatch_count": text_calibration["line_count_mismatch_count"],
+            "font_metric_unavailable_count": text_calibration["font_metric_unavailable_count"],
             "font_metric_false_negative_overflow_count": text_calibration["font_metric_false_negative_overflow_count"],
         },
         "artifacts": {
