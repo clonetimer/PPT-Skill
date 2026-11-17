@@ -1,5 +1,7 @@
 # Changelog
 
+- Fixed the V8 committed-manifest content-lock drift by refreshing the FigureSpec SHA-256 from the final committed source file (the topology hash and semantic fields were already current). The validator now names exact stale source-lock fields and writes a machine-readable failure report; CI uploads it at the first manifest gate. Reduced redundant feature-push runs, enabled PR-base validation for feat/*, concurrency cancellation and manual dispatch; related source, lock, test, workflow and experience updates are delivered as one commit.
+
 ## V7.6.0-dev — Scientific evidence and data channels
 - Rechecked C01 against the author-lab graphical abstract, added explicit band-pass and OCF-effect labels, replaced the star aggregation sketch with connected frequency-band layers, and drew the total-graph-to-SEANet input route. The publisher high-resolution image was not directly accessible; earlier claims of publisher-image inspection are retracted. PowerPoint refreshes every deck PNG alongside PDF export.
 - Corrected C01's EA and lower-readout routing and restored Dense classification using the author-lab source image and public abstract. Preserved the author-lab visible IR layer label while disclosing the unresolved SR wording in the public abstract. Added source-like pooling quadrilaterals, visible-route checks, editable output squares and explicit source-evidence boundaries.

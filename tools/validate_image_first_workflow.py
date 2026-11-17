@@ -111,7 +111,18 @@ def _validate_deck_lock(root: Path, manifest: dict) -> dict:
         "source_figure": source_figure
     }
     for key, value in expected.items():
-        if lock[key] != value:
+        observed = lock.get(key)
+        if observed != value:
+            if isinstance(value, dict) and isinstance(observed, dict):
+                fields = sorted(set(value) | set(observed))
+                mismatched = [
+                    field for field in fields
+                    if observed.get(field) != value.get(field)
+                ]
+                detail = ",".join(mismatched)
+                raise WorkflowValidationError(
+                    f"CONTENT_LOCK_MISMATCH:{key}:{detail}"
+                )
             raise WorkflowValidationError(f"CONTENT_LOCK_MISMATCH:{key}")
     for item in lock["evidence"]:
         if not _resolve(root, item["source"]).is_file():
@@ -287,8 +298,30 @@ def main() -> None:
     parser.add_argument("manifest", type=Path)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--schema", type=Path, default=SCHEMA)
+    parser.add_argument(
+        "--diagnostics",
+        type=Path,
+        default=Path("dist/validation_diagnostics/image_first_workflow_failure.json"),
+        help="Write a machine-readable failure report here before exiting non-zero.",
+    )
     args = parser.parse_args()
-    report = validate_manifest(args.manifest, args.root, args.schema)
+    try:
+        report = validate_manifest(args.manifest, args.root, args.schema)
+    except WorkflowValidationError as exc:
+        diagnostic_path = args.diagnostics
+        if not diagnostic_path.is_absolute():
+            diagnostic_path = args.root / diagnostic_path
+        diagnostic_path.parent.mkdir(parents=True, exist_ok=True)
+        diagnostic_path.write_text(
+            json.dumps({
+                "status": "FAIL",
+                "manifest": str(args.manifest),
+                "error_type": type(exc).__name__,
+                "error": str(exc),
+            }, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        raise
     print(json.dumps(report, ensure_ascii=False, indent=2))
 
 

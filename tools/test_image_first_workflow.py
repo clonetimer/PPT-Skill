@@ -254,6 +254,18 @@ class ImageFirstWorkflowTests(unittest.TestCase):
                 self.root / "specs/image_first_workflow_v8.schema.json"
             )
 
+    def test_source_figure_lock_reports_the_exact_stale_hash_field(self):
+        self.manifest["content_lock"]["source_figure"]["figure_spec_sha256"] = "0" * 64
+        self._save()
+        with self.assertRaisesRegex(
+            WorkflowValidationError,
+            "CONTENT_LOCK_MISMATCH:source_figure:figure_spec_sha256",
+        ):
+            validate_manifest(
+                self.manifest_path, self.root,
+                self.root / "specs/image_first_workflow_v8.schema.json"
+            )
+
     def test_stage_b_cannot_start_before_human_approved_target(self):
         self.manifest["stage_a"]["status"] = "generated"
         self.manifest["stage_a"]["target_image"] = {

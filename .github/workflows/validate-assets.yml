@@ -2,12 +2,17 @@ name: Validate vector assets
 
 on:
   push:
-    branches: [main, "feature/**", "codex/**"]
-  pull_request:
     branches: [main]
+  pull_request:
+    branches: [main, "feat/**"]
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
@@ -84,7 +89,14 @@ jobs:
         run: |
           python tools/validate_deck_spec_v76.py specs/deck_spec_v8.example.json
           python tools/validate_deck_spec_v76.py specs/deck_spec_v8_v4_1.example.json
-          python tools/validate_image_first_workflow.py specs/image_first_workflow_v8.example.json
+          python tools/validate_image_first_workflow.py specs/image_first_workflow_v8.example.json --diagnostics dist/validation_diagnostics/image_first_workflow_failure.json
+      - name: Upload committed Image-first validation diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-first-content-lock-validation-diagnostics
+          path: dist/validation_diagnostics/**
+          if-no-files-found: warn
       - name: Build B01/F07
         run: |
           python tools/build_v71_examples.py
@@ -117,6 +129,7 @@ jobs:
           python tools/audit_figure_spec_text_fit.py figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json --output dist/ast_pilot/text_fit_preflight.json
           python tools/calibrate_text_fit_against_pdf.py dist/ast_pilot/ast.pptx --pdf dist/ast_pilot/ast_render/ast.pdf --output dist/ast_pilot/text_fit_calibration.json --strict
       - name: Expand FigureAST parity to independent-paper generalization corpus
+        id: ast_generalization
         run: |
           python tools/test_figure_ast_writers.py
           python tools/test_figure_ast_generalization.py
@@ -125,7 +138,7 @@ jobs:
           python tools/test_calibrate_text_fit_against_pdf.py
           python tools/run_ast_generalization_pilot.py --output-dir dist/ast_generalization --profile profiles/renderer/lo_headless_v1.json
       - name: Preserve independent-paper AST diagnostics on failure
-        if: failure()
+        if: steps.ast_generalization.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: ppt-skill-ast-generalization-failure-diagnostics

@@ -186,3 +186,20 @@ A new regression compares build_spec() with the committed V8 FigureSpec exactly.
 The C01 preflight correctly flagged four frequency-band labels (B₁, B₂, B₃ and B_N) because their original pastel text colors were below the 4.5:1 normal-text contrast target on white. The corresponding graph/signal colors remain useful as categorical cues, but a text label cannot inherit the lower 3:1 threshold used for essential non-text graphics.
 
 The repair darkens only the four text-label colors while retaining their hue families and leaving graph fills and signal traces unchanged. The new regression checks each label's contrast ratio directly; the V4.1 preflight now has no contrast failures. The same colors are inherited by the V8 builder, committed V8 FigureSpec and Image-first source-figure lock, which is refreshed after the visual change.
+
+
+### Image-first source-lock drift and CI execution discipline (2026-11-17)
+
+The V8 example manifest failed at the first committed-manifest gate with `CONTENT_LOCK_MISMATCH:source_figure`. Investigation showed that the figure SHA-256 had been captured before the final FigureSpec edits; the topology hash and all non-hash source text, labels, edges, required nodes and geometry contract already matched.
+
+Corrective rules:
+1. Treat `content_lock.source_figure` as a derived record, not manually maintained prose. Regenerate its FigureSpec and topology SHA-256 values from the exact committed UTF-8 files after the final source edits.
+2. Commit the FigureSpec, topology contract and manifest lock together. Do not update the lock before the last builder/source change.
+3. Keep the validator read-only and fail-closed, but report the exact mismatched source-lock fields (for example, `figure_spec_sha256`) rather than only the parent object name.
+4. Persist a machine-readable diagnostic before returning non-zero, and upload it immediately after the committed-manifest gate. A later-stage artifact step cannot recover diagnostics for a failure that occurs before those later build directories exist.
+5. Scope AST failure artifacts to the AST pilot step itself; do not run a later artifact upload merely because an earlier, unrelated step failed.
+
+CI execution discipline:
+- Use one Git tree/commit for a coherent multi-file change rather than one Contents-API commit per file.
+- Run PR validation against the PR's actual base family (main and feat/*); use concurrency cancellation so obsolete runs do not compete with the latest revision.
+- Keep a manual workflow_dispatch path for controlled revalidation. CI remains a regression guard; the primary acceptance evidence remains the real paper-figure reproduction and its scientific/visual review.
