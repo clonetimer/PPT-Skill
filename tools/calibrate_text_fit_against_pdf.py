@@ -125,14 +125,14 @@ def calibrate(pptx_path: Path, pdf_path: Path, tolerance_pt: float = 1.5) -> dic
     if len(deck.slides) != len(pdf_pages):
         raise ValueError(f"SLIDE_COUNT_MISMATCH:pptx={len(deck.slides)}:pdf={len(pdf_pages)}")
 
-    default_font = deck.slide_master.text_styles.title_style.font.name or "Arial"
+    default_font = "Arial"
     metric_cache: dict[str, FontMetrics] = {}
     results: list[dict[str, Any]] = []
+    pdf_document = fitz.open(pdf_path)
     try:
         for slide_index, (slide, blocks) in enumerate(zip(deck.slides, pdf_pages), 1):
-            page = fitz.open(pdf_path)[slide_index - 1]
+            page = pdf_document[slide_index - 1]
             page_width, page_height = float(page.rect.width), float(page.rect.height)
-            page.close()
             used_blocks: set[int] = set()
             for shape_index, shape in enumerate(slide.shapes, 1):
                 if not getattr(shape, "has_text_frame", False) or not shape.text.strip():
@@ -204,6 +204,7 @@ def calibrate(pptx_path: Path, pdf_path: Path, tolerance_pt: float = 1.5) -> dic
                     "status": status,
                 })
     finally:
+        pdf_document.close()
         for metrics in metric_cache.values():
             metrics.close()
 
