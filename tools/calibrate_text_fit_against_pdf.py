@@ -12,7 +12,7 @@ from typing import Any
 import fitz
 from pptx import Presentation
 
-from text_layout_metrics import FontMetrics, resolve_font_face
+from text_layout_metrics import FontMetrics, MissingGlyphError, resolve_font_face
 
 EMU_PER_POINT = 12700.0
 
@@ -179,9 +179,18 @@ def calibrate(pptx_path: Path, pdf_path: Path, tolerance_pt: float = 1.5) -> dic
                         shape.text_frame.margin_bottom,
                     )
                 )
-                estimate = metrics.measure(
-                    shape.text, font_size, frame_width_in, frame_height_in, margins_pt=margins
-                )
+                metric_status = "MEASURED"
+                missing_glyph_error = None
+                try:
+                    estimate = metrics.measure(
+                        shape.text, font_size, frame_width_in, frame_height_in, margins_pt=margins
+                    )
+                except MissingGlyphError as error:
+                    # The PDF renderer may apply per-glyph fallback even when the requested face lacks a glyph.
+                    # Preserve the rendered geometry result and record the fast-estimator limitation explicitly.
+                    estimate = None
+                    metric_status = "MISSING_GLYPH_IN_REQUESTED_FACE"
+                    missing_glyph_error = str(error)
                 status = "PASS" if inside else "TEXT_OUTSIDE_FRAME"
                 results.append({
                     "slide": slide_index,
@@ -193,10 +202,12 @@ def calibrate(pptx_path: Path, pdf_path: Path, tolerance_pt: float = 1.5) -> dic
                     "font_family_resolved": resolved_family or metrics.family_name,
                     "font_face_index": face_index,
                     "font_size_pt": font_size,
-                    "estimated_line_count": estimate["line_count"],
+                    "metric_status": metric_status,
+                    "missing_glyph_error": missing_glyph_error,
+                    "estimated_line_count": estimate["line_count"] if estimate else None,
                     "actual_line_count": block["line_count"],
-                    "line_count_match": estimate["line_count"] == block["line_count"],
-                    "estimated_fits": estimate["fits"],
+                    "line_count_match": estimate["line_count"] == block["line_count"] if estimate else None,
+                    "estimated_fits": estimate["fits"] if estimate else None,
                     "frame_bbox_pt": [round(v, 3) for v in frame],
                     "rendered_text_bbox_pt": [round(v, 3) for v in actual],
                     "rendered_text_within_frame": inside,
@@ -211,6 +222,7 @@ def calibrate(pptx_path: Path, pdf_path: Path, tolerance_pt: float = 1.5) -> dic
     missing = [item for item in results if item["match"] == "not_found"]
     outside = [item for item in results if item.get("status") == "TEXT_OUTSIDE_FRAME"]
     line_mismatch = [item for item in results if item.get("line_count_match") is False]
+    metric_unavailable = [item for item in results if item.get("metric_status") != "MEASURED"]
     false_negative = [
         item for item in outside if item.get("estimated_fits") is True
     ]
@@ -228,6 +240,7 @@ def calibrate(pptx_path: Path, pdf_path: Path, tolerance_pt: float = 1.5) -> dic
         "missing_text_count": len(missing),
         "rendered_text_outside_frame_count": len(outside),
         "line_count_mismatch_count": len(line_mismatch),
+        "font_metric_unavailable_count": len(metric_unavailable),
         "font_metric_false_negative_overflow_count": len(false_negative),
         "font_metric_false_positive_overflow_count": len(false_positive),
         "method": "PDF text-span bounding boxes compared with native PPTX text-frame geometry; fontTools estimate compared against extracted rendered line count.",
