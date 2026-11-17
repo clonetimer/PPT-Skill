@@ -215,3 +215,10 @@ The boundary between CI and research is explicit:
 - source evidence hashes, FigureAST semantic round-trip and supported primitive coverage are hard tests;
 - cross-paper raster parity is a non-blocking research experiment whose full results (including per-figure errors) are retained as an artifact;
 - a parity failure is evidence to inspect and improve the renderer, not a reason to silently relax thresholds or block unrelated product validation.
+
+
+### Corpus identity versus source FigureSpec identity (2026-11-17)
+
+The six-paper corpus includes two established generalization FigureSpecs (Mamba and Swin) that intentionally predate the explicit top-level `id` field. Their stable paper/figure identity is already recorded in `meta.paper`, `meta.source` and `meta.figure`. Do not rewrite source material solely to add a new identifier for the experiment.
+
+Use the corpus manifest's `id` as the experiment/output key. If a FigureSpec has an explicit `id`, verify it matches; if it does not, validate its existing paper metadata and let FigureAST normalize its internal ID to `unnamed-figure`. The canonical source hash must remain bound to the unmodified source spec.

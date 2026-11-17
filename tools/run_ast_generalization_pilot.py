@@ -45,8 +45,11 @@ def run_figure(entry: dict[str, Any], output_root: Path, profile: Path) -> dict:
         raise FileNotFoundError(f"FIGURE_SPEC_NOT_FOUND:{entry['figure_spec']}")
 
     source_spec = json.loads(spec_path.read_text(encoding="utf-8"))
-    if str(source_spec.get("id", "unnamed-figure")) != figure_name:
-        raise AssertionError(f"FIGURE_ID_MISMATCH:{figure_name}")
+    # Some established FigureSpecs predate explicit IDs. Keep the corpus ID external
+    # rather than mutating source content merely to satisfy the experiment manifest.
+    source_id = source_spec.get("id")
+    if source_id is not None and str(source_id) != figure_name:
+        raise AssertionError(f"FIGURE_ID_MISMATCH:{figure_name}:{source_id}")
 
     ast = load_figure_ast(str(spec_path))
     round_trip = ast.to_spec()

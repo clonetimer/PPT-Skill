@@ -1,5 +1,7 @@
 # Changelog
 
+- Preserved source identity for legacy Mamba/Swin FigureSpecs that intentionally omit a top-level id: corpus IDs remain external experiment keys, while existing paper metadata and canonical source hashes are validated without mutating the original specs.
+
 - Added a six-paper source-backed FigureAST corpus (Mamba, Swin, GAT, CLIP, ResNet, U-Net). Core semantic/source-provenance tests remain hard gates; legacy-vs-AST visual parity is a non-blocking experiment with retained per-paper artifacts. The legacy baseline is rebuilt from the same FigureSpec before comparison, and CLIP's CC0 replacement image is explicitly disclosed.
 
 - Fixed the V8 committed-manifest content-lock drift by refreshing the FigureSpec SHA-256 from the final committed source file (the topology hash and semantic fields were already current). The validator now names exact stale source-lock fields and writes a machine-readable failure report; CI uploads it at the first manifest gate. Reduced redundant feature-push runs, enabled PR-base validation for feat/*, concurrency cancellation and manual dispatch; related source, lock, test, workflow and experience updates are delivered as one commit.

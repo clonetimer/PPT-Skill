@@ -57,7 +57,14 @@ class FigureAstGeneralizationTests(unittest.TestCase):
             with self.subTest(figure=entry["id"]):
                 path = ROOT / entry["figure_spec"]
                 spec = json.loads(path.read_text(encoding="utf-8"))
-                self.assertEqual(spec.get("id"), entry["id"])
+                if spec.get("id") is not None:
+                    self.assertEqual(spec["id"], entry["id"])
+                else:
+                    self.assertEqual(
+                        spec.get("meta", {}).get("paper"),
+                        entry["paper_title"],
+                        "Legacy source FigureSpecs without explicit IDs are identified by the corpus manifest.",
+                    )
                 ast = FigureAST.from_spec(spec)
                 expected_round_trip = dict(spec)
                 expected_round_trip.setdefault("id", "unnamed-figure")
