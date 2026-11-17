@@ -83,7 +83,9 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
     summary = {
         "figure": figure_name,
         "paper": source_spec.get("meta", {}).get("paper"),
-        "status": parity["status"],
+        "status": "PASS" if parity["status"] == "PASS" and text_calibration["status"] == "PASS" else "FAIL",
+        "parity_status": parity["status"],
+        "text_fit_status": text_calibration["status"],
         "element_count": len(ast.nodes),
         "primitive_counts": primitive_counts,
         "source_spec_sha256": ast.source_sha256,
@@ -157,6 +159,9 @@ def main() -> None:
             "legacy_shapes": item["legacy_shape_count"],
             "ast_shapes": item["ast_shape_count"],
             "raster": item["raster"],
+            "parity_status": item["parity_status"],
+            "text_fit_status": item["text_fit_status"],
+            "text_fit_calibration": item["text_fit_calibration"],
             "issues": item["issues"],
         } for item in results],
     }, ensure_ascii=False, indent=2))
