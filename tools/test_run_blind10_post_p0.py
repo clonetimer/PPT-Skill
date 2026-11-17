@@ -82,5 +82,66 @@ class Blind10PostP0RunnerTests(unittest.TestCase):
         self.assertEqual((self.output / "keep.txt").read_text(encoding="utf-8"), "immutable")
 
 
+    @patch("run_blind10_post_p0.run_pipeline")
+    @patch("run_blind10_post_p0.audit_one")
+    def test_one_pipeline_exception_does_not_abort_remaining_cases(self, audit_mock, pipeline_mock):
+        audit_mock.side_effect = [
+            ({"figure_id": source["figure_id"], "status": "PASS"}, None)
+            for source in self.sources
+        ]
+
+        def fake_pipeline(source_pdf, destination, **kwargs):
+            if source_pdf.name == "source_00.pdf":
+                raise RuntimeError("synthetic importer failure")
+            destination.mkdir(parents=True)
+            (destination / "delivery_manifest.json").write_text("{}", encoding="utf-8")
+            return {
+                "status": "TECHNICAL_REVIEW",
+                "full_release_accepted": False,
+                "blockers": [],
+                "pending_approvals": ["human_visual_review"],
+            }
+
+        pipeline_mock.side_effect = fake_pipeline
+        result = run_cohort(self.source_dir, self.manifest, self.output)
+        self.assertEqual(pipeline_mock.call_count, 10)
+        self.assertEqual(result["pipeline_status_counts"]["PIPELINE_EXCEPTION"], 1)
+        self.assertEqual(result["pipeline_status_counts"]["TECHNICAL_REVIEW"], 9)
+        self.assertIn("synthetic importer failure", result["runs"][0]["blockers"][0])
+
+    @patch("run_blind10_post_p0.run_pipeline")
+    @patch("run_blind10_post_p0.audit_one")
+    def test_source_picture_only_policy_is_explicit(self, audit_mock, pipeline_mock):
+        image_only = [
+            "01_wind_turbine_causal_framework",
+            "06_harnessmm_overview",
+            "07_iiot_mult_agent_digital_twin",
+        ]
+        for index, figure_id in enumerate(image_only):
+            self.sources[index]["figure_id"] = figure_id
+        self.manifest.write_text(json.dumps({
+            "benchmark_id": "blind10-test",
+            "cohort_role": "DEVELOPMENT_REGRESSION_ONLY",
+            "sources": self.sources,
+        }), encoding="utf-8")
+        audit_mock.side_effect = [
+            ({"figure_id": source["figure_id"], "status": "PASS"}, None)
+            for source in self.sources
+        ]
+
+        def fake_pipeline(source_pdf, destination, **kwargs):
+            destination.mkdir(parents=True)
+            (destination / "delivery_manifest.json").write_text("{}", encoding="utf-8")
+            return {"status": "TECHNICAL_REVIEW", "blockers": [], "pending_approvals": []}
+
+        pipeline_mock.side_effect = fake_pipeline
+        run_cohort(self.source_dir, self.manifest, self.output)
+        native_requirements = [
+            call.kwargs["require_native"] for call in pipeline_mock.call_args_list
+        ]
+        self.assertEqual(native_requirements[:3], [False, False, False])
+        self.assertEqual(native_requirements[3:], [True] * 7)
+
+
 if __name__ == "__main__":
     unittest.main()
