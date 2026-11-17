@@ -166,3 +166,16 @@ After removing unsupported C₁–C₅ labels, the C01 V4.1 classification capti
 The repair preserves the minimum type size and widens/repositions the text frame inside the existing panel, aligning its right edge with the output group. Do not solve a geometry problem by violating the profile's minimum readable type size. When a caption is too wide, first reclaim horizontal space, adjust alignment, or reflow the text; only change font size when the output profile explicitly permits it.
 
 The same source-fidelity rule now applies to both C01 Image-first V4.1 and V8: keep the five output squares unlabeled and retain the separate classification caption. The V8 builder, committed FigureSpec, topology contract, regression test and Image-first content lock are kept in sync.
+
+
+### Generated FigureSpec and Image-first content-lock synchronization
+
+The V8 follow-up showed that a source-fidelity correction must be applied to every representation of the figure, not just the manually edited FigureSpec. The V8 builder still emitted the old per-square labels, while the committed FigureSpec and Image-first workflow lock had already been corrected.
+
+The repair now synchronizes four artifacts:
+- the V8 FigureSpec builder;
+- the committed V8 FigureSpec;
+- the expected topology contract and regression tests;
+- the Image-first manifest's source_figure lock (FigureSpec SHA-256, topology SHA-256, source text, labels, edges and geometry contract).
+
+A new regression compares build_spec() with the committed V8 FigureSpec exactly. The Image-first workflow validator independently checks the manifest lock against the committed FigureSpec and topology. Do not accept a fix that only changes the generated artifact or only changes the content lock.
