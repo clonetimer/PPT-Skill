@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0.0",
+  "corpus_id": "AST-LITERATURE-6",
+  "purpose": "Source-backed cross-paper FigureAST generalization experiment. FigureSpecs are editable scholarly redraws; the original PDF remains the scientific source. Render parity is experimental evidence, not a release gate.",
+  "policy": {
+    "core_gate": "FigureAST semantic round-trip, supported primitives, and source/asset hash binding are hard validation requirements.",
+    "rendered_parity": "Legacy-versus-AST DrawingML/SVG/LibreOffice parity is a non-blocking research experiment. Every result, including failures, must be retained for review.",
+    "no_pixel_identity_claim": "A source-visible redraw is not automatically pixel-identical to the original paper artwork."
+  },
+  "figures": [
+    {
+      "id": "Mamba_Figure1",
+      "paper_title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+      "figure_label": "Figure 1",
+      "family": "selective_state_space",
+      "figure_spec": "dist/skill_tests/generalization/Mamba_Figure1.json",
+      "source_evidence": {
+        "kind": "arxiv",
+        "url": "https://arxiv.org/abs/2312.00752",
+        "status": "source_visible_redraw",
+        "locator": "Figure 1",
+        "note": "Editable redraw preserving selective SSM dataflow, parameter blocks, selection path and GPU memory hierarchy; no source-page screenshot is embedded."
+      },
+      "asset_substitutions": []
+    },
+    {
+      "id": "Swin_Figure2",
+      "paper_title": "Swin Transformer: Hierarchical Vision Transformer using Shifted Windows",
+      "figure_label": "Figure 2",
+      "family": "hierarchical_vision_transformer",
+      "figure_spec": "dist/skill_tests/generalization/Swin_Figure2.json",
+      "source_evidence": {
+        "kind": "arxiv",
+        "url": "https://arxiv.org/abs/2103.14030",
+        "status": "source_visible_redraw",
+        "locator": "Figure 2",
+        "note": "Editable redraw preserving the 8×8 patch map, 4×4 regular windows, half-window shift and cross-window membership; source image thumbnails are replaced with neutral editable patch cells."
+      },
+      "asset_substitutions": []
+    },
+    {
+      "id": "GAT_Figure1_revision",
+      "paper_title": "Graph Attention Networks",
+      "figure_label": "Figure 1",
+      "family": "graph_attention",
+      "figure_spec": "dist/skill_tests/ml_cross_family/gat/GAT_Figure1_revision.json",
+      "source_evidence": {
+        "kind": "arxiv",
+        "url": "https://arxiv.org/abs/1710.10903",
+        "source_pdf_sha256": "a7d811a44e1c65bf27da3a01859f23a8edbe33b8f96114b4b5066aedb078f284",
+        "status": "source_visible_redraw",
+        "locator": "Figure 1, PDF page 4",
+        "note": "Editable source-composition redraw of shared pairwise attention and K=3 neighborhood heads; colored wave traces are editable piecewise lines, not copied source art. The source PDF is not vendored in this repository; the arXiv locator and ingest-time SHA-256 are retained as provenance."
+      },
+      "asset_substitutions": []
+    },
+    {
+      "id": "MLC01_clip_overview",
+      "paper_title": "Learning Transferable Visual Models From Natural Language Supervision",
+      "figure_label": "Figure 1",
+      "family": "vision_language_contrastive",
+      "figure_spec": "dist/skill_tests/ml_fidelity/clip/MLC01_clip_overview.json",
+      "source_evidence": {
+        "kind": "arxiv",
+        "url": "https://arxiv.org/abs/2103.00020",
+        "source_pdf_sha256": "2a4952960f350e50a3a4a847371b80b8aaa09ba82d1c2a8f6b30450e392a1fe4",
+        "status": "source_visible_redraw",
+        "locator": "Figure 1, PDF page 2",
+        "note": "Editable redraw of paired contrastive pretraining, classifier synthesis from label text and zero-shot prediction. The source PDF is not vendored in this repository; the arXiv locator and ingest-time SHA-256 are retained as provenance."
+      },
+      "asset_substitutions": [
+        {
+          "path": "dist/skill_tests/ml_fidelity/clip/dog_cc0.jpg",
+          "sha256": "cd152bb96219a393a0191c3a57c9d07782a8ecc3bc92f2f3b23b661f37f41ee4",
+          "license": "CC0 1.0",
+          "note": "Replacement dog photograph; not the original paper photograph and not evidence for model operations."
+        }
+      ]
+    },
+    {
+      "id": "MLR01_resnet_residual_block",
+      "paper_title": "Deep Residual Learning for Image Recognition",
+      "figure_label": "Figure 2",
+      "family": "residual_cnn",
+      "figure_spec": "dist/skill_tests/ml_fidelity/resnet/MLR01_resnet_residual_block.json",
+      "source_evidence": {
+        "kind": "arxiv",
+        "url": "https://arxiv.org/abs/1512.03385",
+        "source_pdf_sha256": "51b5de45eb0b558b19c3affe49503cff50cb170a32de602983d6e2ec286942a7",
+        "status": "source_visible_redraw",
+        "locator": "Figure 2, PDF page 2",
+        "note": "Editable source-composition study of F(x), the identity shortcut, additive junction and final ReLU; no pixel-identity claim. The source PDF is not vendored in this repository; the arXiv locator and ingest-time SHA-256 are retained as provenance."
+      },
+      "asset_substitutions": []
+    },
+    {
+      "id": "MLU01_unet_architecture",
+      "paper_title": "U-Net: Convolutional Networks for Biomedical Image Segmentation",
+      "figure_label": "Figure 1",
+      "family": "biomedical_segmentation",
+      "figure_spec": "dist/skill_tests/ml_fidelity/unet/MLU01_unet_architecture.json",
+      "source_evidence": {
+        "kind": "arxiv",
+        "url": "https://arxiv.org/abs/1505.04597",
+        "source_pdf_sha256": "a3172b2124f38e260dc2c7ed968d87c31bc94dbc19a42a7ab3dcbd7534319c44",
+        "status": "source_visible_redraw",
+        "locator": "Figure 1, PDF page 2",
+        "note": "Editable redraw preserving four copy-and-crop skip paths and valid-convolution spatial contraction from 572×572 to 388×388; small spatial labels require final-size review. The source PDF is not vendored in this repository; the arXiv locator and ingest-time SHA-256 are retained as provenance."
+      },
+      "asset_substitutions": []
+    }
+  ]
+}

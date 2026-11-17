@@ -1,0 +1,243 @@
+{
+  "figure_id": "C01_composite_defense_slide_image_first_v4_1",
+  "source": "docs/C01_V73_SOURCE.md",
+  "review_status": "2026-11-16 editorial Major Revision received; V4 candidate generated; Stage A awaiting human acceptance",
+  "critical_labels": {
+    "gcn_1": "GCN",
+    "gcn_2": "GCN",
+    "sr_main": "IR layer",
+    "ea": "Energy-assisted module",
+    "sr_ea": "IR layer",
+    "sum": "+",
+    "dense": "Dense",
+    "ocf": "OCF / notch filter",
+    "band_group": "Band subgraphs",
+    "total_graph": "Total graph",
+    "band_1": "B₁",
+    "band_2": "B₂",
+    "band_3": "B₃",
+    "band_4": "B_N",
+    "class_output_label": "Fault classification",
+    "input_label": "Input",
+    "pooling_1": "pooling",
+    "pooling_2": "pooling",
+    "sensor_1": "Sensor #1",
+    "sensor_2": "Sensor #2",
+    "sensor_m_minus_1": "Sensor #M−1",
+    "sensor_m": "Sensor #M"
+  },
+  "critical_edges": [
+    [
+      "input",
+      "gcn_1"
+    ],
+    [
+      "gcn_1",
+      "pooling_1"
+    ],
+    [
+      "pooling_1",
+      "gcn_2"
+    ],
+    [
+      "gcn_2",
+      "pooling_2"
+    ],
+    [
+      "pooling_2",
+      "sr_main"
+    ],
+    [
+      "sr_main",
+      "sum"
+    ],
+    [
+      "input",
+      "ea"
+    ],
+    [
+      "ea",
+      "gcn_1"
+    ],
+    [
+      "pooling_1",
+      "sr_ea"
+    ],
+    [
+      "sr_ea",
+      "sum"
+    ],
+    [
+      "sum",
+      "dense"
+    ],
+    [
+      "ocf",
+      "band_group"
+    ],
+    [
+      "total_graph",
+      "input"
+    ],
+    [
+      "band_1",
+      "total_graph"
+    ],
+    [
+      "band_2",
+      "total_graph"
+    ],
+    [
+      "band_3",
+      "total_graph"
+    ],
+    [
+      "band_4",
+      "total_graph"
+    ],
+    [
+      "dense",
+      "class_output"
+    ]
+  ],
+  "required_nodes": [
+    "input",
+    "input_graph_schematic",
+    "gcn_1",
+    "pooling_1",
+    "gcn_2",
+    "pooling_2",
+    "sr_main",
+    "ea",
+    "sr_ea",
+    "sum",
+    "dense",
+    "ocf",
+    "band_group",
+    "total_graph",
+    "band_1",
+    "band_2",
+    "band_3",
+    "band_4",
+    "class_output",
+    "class_output_label",
+    "input_label"
+  ],
+  "readout_label_discrepancy": "Author-lab graphical abstract appears to label both readout blocks IR layer; public abstract uses SR. Unresolved; do not silently harmonize.",
+  "geometry_contract": {
+    "frequency_axis": {
+      "label": "Frequency",
+      "direction": "vertical_downward"
+    },
+    "band_count": {
+      "symbol": "N",
+      "variable": true,
+      "displayed_examples": [
+        "B₁",
+        "B₂",
+        "B₃",
+        "…",
+        "B_N"
+      ],
+      "note": "N is variable. The four visible examples are representative only and do not imply a fixed four-band method.",
+      "index_notation": "B_N"
+    },
+    "band_subgraphs": {
+      "nodes_per_subgraph": 3,
+      "edge_motif": "two solid links forming a simple three-node schematic path",
+      "status": "visual_consistency_motif_not_recovered_adjacency"
+    },
+    "total_graph": {
+      "visible_example_rows": 4,
+      "nodes_per_visible_row": 3,
+      "within_row_edge_motif": "two solid links per row, schematic",
+      "inter_row_links": "exactly one representative dashed connector between adjacent visible rows B1 and B2; no direct B3-to-B_N node edge; continuation marks are non-attached and schematic",
+      "note": "Four visible rows represent B₁, B₂, B₃ and B_N; total band count remains N. A vertical ellipsis and non-attached dashed continuation rail are positioned specifically in the gap between B₃ and B_N; no B₃-to-B_N node edge is asserted.",
+      "continuation_marker": "vertical ellipsis and two short dashed rail segments placed in the B₃/B_N inter-row gap, left of all graph nodes; no node endpoints",
+      "representative_inter_band_connector_count": 1,
+      "representative_connector_route": "B1 to B2 only",
+      "forbidden_route": "B3 to B_N"
+    },
+    "input_graph": {
+      "node_count": 12,
+      "row_count": 4,
+      "nodes_per_row": 3,
+      "within_row_edge_count": 8,
+      "inter_row_links": "one or more sparse dashed inter-row links; schematic_unspecified",
+      "note": "Twelve-node, four-by-three input glyph is a source-visible schematic; dashed inter-row links are illustrative and are not a numerical adjacency matrix.",
+      "minimum_visible_inter_row_links": 1
+    },
+    "class_outputs": {
+      "displayed_count": 5,
+      "count_semantics": "illustrative_not_fixed",
+      "shape": "near_square",
+      "highlighted_index": 2,
+      "highlight_color": "#DCA16C",
+      "label": "Fault classification",
+      "labeling": "unlabeled source-visible squares; do not invent C₁–C₅ labels"
+    },
+    "readout_blocks": {
+      "count": 2,
+      "author_lab_visible_label": "IR layer",
+      "public_abstract_label": "SR",
+      "resolved": false
+    },
+    "sensor_count": {
+      "symbol": "M",
+      "variable": true,
+      "labels": [
+        "Sensor #1",
+        "Sensor #2",
+        "Sensor #M−1",
+        "Sensor #M"
+      ],
+      "note": "Visible graph-node count is schematic and not an assertion that M=3."
+    },
+    "fusion": {
+      "symbol": "+",
+      "shape": "circle",
+      "warning": "Never substitute Σ for the source-visible plus sign."
+    },
+    "ocf_signal_example": {
+      "before_after": true,
+      "illustrative": true,
+      "not_measured": true
+    },
+    "inter_band_legend": {
+      "intra_band": "solid",
+      "inter_band": "dashed",
+      "exact_edge_count_asserted": false
+    },
+    "cross_panel_connector": {
+      "route": "outer_left_margin",
+      "continuity": "single_traceable_orthogonal_path_from_total_graph_to_input",
+      "arrowhead_at_input": true,
+      "lower_only_text_card_insufficient": true,
+      "avoid_heading": true
+    },
+    "inter_band_links": "one representative dashed connector plus non-attached continuation marker; schematic only; no exact edge count or numerical adjacency asserted",
+    "construction_stages": {
+      "filtering": "Band-pass filtering yields signals in each frequency band.",
+      "graph_construction": "Graph construction forms one subgraph per band and connects the subgraphs into the total graph."
+    },
+    "readout_note_placement": "single note in Evidence boundary; no duplicate central banner",
+    "output_transition": {
+      "route": "dense_to_class_output",
+      "arrow_count": 1,
+      "detached_or_duplicate_arrows": false
+    }
+  },
+  "evidence_boundary": [
+    "N is variable; four visible band examples do not mean a fixed four-band algorithm.",
+    "Three-node band and total-graph glyphs are a visual-consistency schematic, not recovered graph topology.",
+    "Dashed cross-band and inter-row links are illustrative; exact counts and numerical adjacency are not asserted.",
+    "Five output squares are an illustrative five-class example, not a fixed class count.",
+    "Author-lab readout labels appear as IR layer; public abstract uses SR; unresolved.",
+    "M and N vary independently; displayed graph nodes are schematic and are not a fixed sensor count.",
+    "OCF before/after traces illustrate the filtering mechanism and are not measured results.",
+    "The author-lab fusion operator is +, not Σ.",
+    "The presentation layout is not a journal-ready figure; journal profile requires a separate layout and caption.",
+    "The author-lab source graphic labels the final example “Sub graph N: Nth band”; B_N is the redraw's normalized label, not literal source typography."
+  ],
+  "version": "8.0.1-dev"
+}

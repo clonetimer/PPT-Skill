@@ -2,16 +2,21 @@ name: Validate vector assets
 
 on:
   push:
-    branches: [main, "feature/**", "codex/**"]
-  pull_request:
     branches: [main]
+  pull_request:
+    branches: [main, "feat/**"]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,13 +25,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install validation dependencies
-        run: python -m pip install --disable-pip-version-check python-pptx jsonschema Pillow numpy pypdf
+        run: python -m pip install --disable-pip-version-check python-pptx jsonschema Pillow numpy pypdf fonttools
       - name: Install experimental PDF figure recovery dependencies
         run: python -m pip install --disable-pip-version-check PyMuPDF reportlab
       - name: Install LibreOffice rendering tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y libreoffice-impress poppler-utils
+          sudo apt-get install -y --no-install-recommends libreoffice-impress poppler-utils fonts-dejavu-core fonts-liberation fonts-noto-core fonts-noto-cjk
       - name: Test editable PDF figure recovery and Office portability
         run: |
           python tools/test_pdf_figure_import.py
@@ -68,6 +73,30 @@ jobs:
           python tools/test_figure_first_pass_gate.py
           python tools/test_audit_source_grounded_radar.py
           python tools/test_unseen_figure_families.py
+          python tools/test_image_first_workflow.py
+          python tools/test_image_first_stage_a.py
+          python tools/test_c01_image_first_source_figure_v8.py
+          python tools/test_c01_image_first_v4.py
+          python tools/test_c01_image_first_v4_1.py
+          python tools/test_c01_image_first_v4_3.py
+          python tools/test_figure_spec_pptx_provenance.py
+          python tools/test_figure_ast_writers.py
+          python tools/test_text_layout_metrics.py
+          python tools/test_render_with_libreoffice.py
+          python tools/test_compare_rendered_images.py
+          python tools/test_validate_ast_parity.py
+      - name: Validate committed Image-first example before generated specs are rebuilt
+        run: |
+          python tools/validate_deck_spec_v76.py specs/deck_spec_v8.example.json
+          python tools/validate_deck_spec_v76.py specs/deck_spec_v8_v4_1.example.json
+          python tools/validate_image_first_workflow.py specs/image_first_workflow_v8.example.json --diagnostics dist/validation_diagnostics/image_first_workflow_failure.json
+      - name: Upload committed Image-first validation diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-first-content-lock-validation-diagnostics
+          path: dist/validation_diagnostics/**
+          if-no-files-found: warn
       - name: Build B01/F07
         run: |
           python tools/build_v71_examples.py
@@ -88,12 +117,82 @@ jobs:
           python tools/build_c01_v74.py
           python tools/build_c01_seanet_v74.py
           python tools/build_c01_composite_v75.py
+          python tools/build_c01_image_first_source_figure_v8.py
+      - name: Build C01 AST dual-writer and LibreOffice parity pilot
+        run: |
+          mkdir -p dist/ast_pilot
+          python tools/render_figure_spec.py figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json --svg dist/ast_pilot/legacy.svg --pptx dist/ast_pilot/legacy.pptx
+          python tools/render_figure_ast.py figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json --svg dist/ast_pilot/ast.svg --pptx dist/ast_pilot/ast.pptx --ast-json dist/ast_pilot/figure_ast.json --preserve-source-ids
+          python tools/render_with_libreoffice.py dist/ast_pilot/legacy.pptx --output-dir dist/ast_pilot/legacy_render --profile profiles/renderer/lo_headless_v1.json
+          python tools/render_with_libreoffice.py dist/ast_pilot/ast.pptx --output-dir dist/ast_pilot/ast_render --profile profiles/renderer/lo_headless_v1.json
+          python tools/validate_ast_parity.py --legacy-pptx dist/ast_pilot/legacy.pptx --ast-pptx dist/ast_pilot/ast.pptx --legacy-png dist/ast_pilot/legacy_render/legacy-slide-1.png --ast-png dist/ast_pilot/ast_render/ast-slide-1.png --diff dist/ast_pilot/legacy_vs_ast_diff.png --output dist/ast_pilot/legacy_vs_ast_metrics.json
+          python tools/audit_figure_spec_text_fit.py figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json --output dist/ast_pilot/text_fit_preflight.json
+          python tools/calibrate_text_fit_against_pdf.py dist/ast_pilot/ast.pptx --pdf dist/ast_pilot/ast_render/ast.pdf --output dist/ast_pilot/text_fit_calibration.json --strict
+      - name: Validate FigureAST contracts and source-backed literature corpus
+        run: |
+          python tools/test_figure_ast_writers.py
+          python tools/test_figure_ast_generalization.py
+          python tools/test_validate_ast_parity.py
+          python tools/test_text_layout_metrics.py
+          python tools/test_calibrate_text_fit_against_pdf.py
+      - name: Run non-blocking real-paper FigureAST dual-writer experiment
+        id: ast_generalization
+        continue-on-error: true
+        run: |
+          python tools/run_ast_generalization_pilot.py --manifest specs/ast_generalization_corpus_v1.json --output-dir dist/ast_generalization --profile profiles/renderer/lo_headless_v1.json
+      - name: Preserve independent-paper AST diagnostics on experiment failure
+        if: always() && steps.ast_generalization.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-ast-literature-corpus-failure-diagnostics
+          path: dist/ast_generalization/**
+          if-no-files-found: warn
       - name: Execute C01-FBG source-grounded repair
         run: |
           python tools/repair_case_c01_fbg_round1.py --output-dir dist/repair_cases/C01_FBG --accepted-output dist/accepted_repairs/C01_FBG_construction_v74.pptx
       - name: Execute C01-SEANet multi-round source-grounded repair
         run: |
           python tools/repair_case_c01_seanet_round2.py --output-dir dist/repair_cases/C01_SEANet --accepted-output dist/accepted_repairs/C01_SEANet_graph_level_v74.pptx
+      - name: Generate and validate C01 Image-first Stage A prompt
+        run: |
+          python tools/create_image_first_manifest.py specs/deck_spec_v8.example.json s02 --output-dir dist/image_first/fbg-seanet-s02
+          python tools/validate_image_first_workflow.py dist/image_first/fbg-seanet-s02/workflow.json
+          python tools/create_image_first_manifest.py specs/deck_spec_v8_v4.example.json s02 --output-dir dist/image_first/fbg-seanet-s02-v4
+          python tools/validate_image_first_workflow.py dist/image_first/fbg-seanet-s02-v4/workflow.json
+          mkdir -p dist/image_first/fbg-seanet-s02-v4/source
+          cp figure_specs/c01/C01_composite_defense_slide_image_first_v4.json dist/image_first/fbg-seanet-s02-v4/source/
+          cp specs/c01_composite_expected_topology_v4.json dist/image_first/fbg-seanet-s02-v4/source/
+          cp specs/deck_spec_v8_v4.example.json dist/image_first/fbg-seanet-s02-v4/source/
+          cp docs/C01_STAGE_A_MAJOR_REVISION_V4.md dist/image_first/fbg-seanet-s02-v4/source/
+          python tools/create_image_first_manifest.py specs/deck_spec_v8_v4_1.example.json s02 --output-dir dist/image_first/fbg-seanet-s02-v4-1
+          python tools/validate_image_first_workflow.py dist/image_first/fbg-seanet-s02-v4-1/workflow.json
+          mkdir -p dist/image_first/fbg-seanet-s02-v4-1/source
+          cp figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json dist/image_first/fbg-seanet-s02-v4-1/source/
+          cp specs/c01_composite_expected_topology_v4_1.json dist/image_first/fbg-seanet-s02-v4-1/source/
+          cp specs/deck_spec_v8_v4_1.example.json dist/image_first/fbg-seanet-s02-v4-1/source/
+          cp docs/C01_STAGE_A_MINOR_REVISION_V4_1.md dist/image_first/fbg-seanet-s02-v4-1/source/
+          cp docs/C01_IMAGE2_STAGE_A_CANDIDATE_V4_1.md dist/image_first/fbg-seanet-s02-v4-1/source/
+          python tools/create_image_first_manifest.py specs/deck_spec_v8_v4_1.example.json s02 --output-dir dist/image_first/fbg-seanet-s02-v4-3
+          python tools/validate_image_first_workflow.py dist/image_first/fbg-seanet-s02-v4-3/workflow.json
+          mkdir -p dist/image_first/fbg-seanet-s02-v4-3/source
+          cp figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json dist/image_first/fbg-seanet-s02-v4-3/source/
+          cp specs/c01_composite_expected_topology_v4_1.json dist/image_first/fbg-seanet-s02-v4-3/source/
+          cp specs/deck_spec_v8_v4_1.example.json dist/image_first/fbg-seanet-s02-v4-3/source/
+          cp docs/C01_V73_SOURCE.md dist/image_first/fbg-seanet-s02-v4-3/source/
+          cp docs/C01_IMAGE_FIRST_STAGE_A_CANDIDATE_V4_3.md dist/image_first/fbg-seanet-s02-v4-3/source/
+          cp docs/C01_STAGE_A_REVIEW_FORM_V4_3.md dist/image_first/fbg-seanet-s02-v4-3/source/
+          cp docs/C01_STAGE_A_PROJECTION_TEST_V4_3.md dist/image_first/fbg-seanet-s02-v4-3/source/
+          mkdir -p dist/image_first/fbg-seanet-s02/source
+          cp figure_specs/c01/C01_composite_defense_slide_image_first_v8.json dist/image_first/fbg-seanet-s02/source/
+          cp specs/c01_composite_expected_topology_v8.json dist/image_first/fbg-seanet-s02/source/
+          cp docs/C01_V73_SOURCE.md dist/image_first/fbg-seanet-s02/source/
+          cp docs/C01_IMAGE2_TOPOLOGY_AUDIT_V8.md dist/image_first/fbg-seanet-s02/source/
+          cp docs/C01_STAGE_A_TECHNICAL_REVIEW_2026-11-16.md dist/image_first/fbg-seanet-s02/source/
+          cp docs/C01_STAGE_A_REMEDIATION_2026-11-16.md dist/image_first/fbg-seanet-s02/source/
+          cp docs/C01_STAGE_A_REVIEW_PACKAGE_README_V3.md dist/image_first/fbg-seanet-s02/source/
+          cp specs/deck_spec_v8.example.json dist/image_first/fbg-seanet-s02/source/
+          cp docs/C01_IMAGE2_STAGE_A_CANDIDATE_V3.md dist/image_first/fbg-seanet-s02/source/
+          cp docs/C01_STAGE_B_RECONSTRUCTION_PLAN_V8.md dist/image_first/fbg-seanet-s02/source/
       - name: Execute C01 composite multi-round source-grounded repair
         run: |
           python tools/repair_case_c01_composite_round2.py --output-dir dist/repair_cases/C01_composite --accepted-output dist/accepted_repairs/C01_composite_defense_slide_v75.pptx
@@ -119,12 +218,21 @@ jobs:
           python -m json.tool figure_specs/c01/C01_SEANet_graph_level_v74.json > /dev/null
           python -m json.tool figure_specs/c01/C01_composite_defense_slide_v75.json > /dev/null
           python -m json.tool specs/c01_composite_expected_topology_v75.json > /dev/null
+          python -m json.tool specs/c01_composite_expected_topology_v8.json > /dev/null
+          python -m json.tool figure_specs/c01/C01_composite_defense_slide_image_first_v8.json > /dev/null
           python -m json.tool MANIFEST_V7.json > /dev/null
           python -m json.tool specs/deck_spec_v75.example.json > /dev/null
           python -m json.tool specs/deck_spec_v75.schema.json > /dev/null
           python -m json.tool specs/deck_spec_v76.example.json > /dev/null
+          python -m json.tool specs/deck_spec_v8.example.json > /dev/null
+          python -m json.tool specs/deck_spec_v8_v4.example.json > /dev/null
+          python -m json.tool specs/deck_spec_v8_v4_1.example.json > /dev/null
+          python -m json.tool figure_specs/c01/C01_composite_defense_slide_image_first_v4_1.json > /dev/null
+          python -m json.tool specs/c01_composite_expected_topology_v4_1.json > /dev/null
           python -m json.tool specs/deck_spec_v76.schema.json > /dev/null
           python -m json.tool specs/15_figure_diagnostic_ledger_v76.json > /dev/null
+          python -m json.tool specs/image_first_workflow_v8.schema.json > /dev/null
+          python -m json.tool specs/image_first_workflow_v8.example.json > /dev/null
           python -m json.tool figure_specs/c01/C01_composite_defense_slide.json > /dev/null
       - name: Validate FigureSpecs
         run: |
@@ -135,6 +243,7 @@ jobs:
           python tools/validate_c01_composite_v75.py
           python tools/validate_deck_spec.py
           python tools/validate_deck_spec_v76.py
+          python tools/validate_deck_spec_v76.py specs/deck_spec_v8.example.json
           python tools/validate_scientific_ir.py
           python tools/validate_quantitative_examples.py
           python tools/export_quantitative_reproduction_audit.py
@@ -269,6 +378,30 @@ jobs:
           name: ppt-skill-v7.6-reconciliation-packet
           path: dist/scientific_review_reconciliation_v76.zip
           if-no-files-found: error
+      - name: Upload Image-first C01 Stage A prompt and manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-v8-c01-image-first-stage-a
+          path: dist/image_first/fbg-seanet-s02/*
+          if-no-files-found: error
+      - name: Upload C01 V4 Image-first Stage A prompt and source contracts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-v8-c01-image-first-stage-a-v4
+          path: dist/image_first/fbg-seanet-s02-v4/*
+          if-no-files-found: error
+      - name: Upload C01 V4.1 Image-first Stage A prompt and source contracts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-v8-c01-image-first-stage-a-v4-1
+          path: dist/image_first/fbg-seanet-s02-v4-1/*
+          if-no-files-found: error
+      - name: Upload C01 V4.3 Image-first Stage A prompt and source contracts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-v8-c01-image-first-stage-a-v4-3
+          path: dist/image_first/fbg-seanet-s02-v4-3/*
+          if-no-files-found: error
       - name: Upload generated vector assets
         uses: actions/upload-artifact@v4
         with:
@@ -307,6 +440,21 @@ jobs:
             dist/skill_tests/generalization/*.svg
             dist/skill_tests/generalization/*.pptx
           if-no-files-found: error
+
+      - name: Upload AST and canonical renderer pilot evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-ast-renderer-pilot
+          path: dist/ast_pilot/*
+          if-no-files-found: error
+
+      - name: Upload independent-paper FigureAST literature corpus experiment
+        if: always() && steps.ast_generalization.outcome != 'skipped'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-ast-literature-corpus-experiment
+          path: dist/ast_generalization/**
+          if-no-files-found: warn
 
   windows-script-parser:
     name: Check Office 2016 PowerShell syntax (no Office runtime)

@@ -161,7 +161,7 @@ def annotate_accessibility(path: Path) -> dict:
         elif shape.left > int(8.85 * 914400) and abs(shape.width - int(0.15 * 914400)) < 500:
             alt = "Semantic grouping boundary for the five independent class-output squares."
         elif shape.width < int(0.5 * 914400) and shape.top > int(5.2 * 914400) and shape.left > int(1.2 * 914400):
-            alt = "Schematic total-graph input with four stacked band subgraphs, twelve nodes and nine dashed inter-band connectors."
+            alt = "Schematic total-graph input with four representative band-subgraph rows; dashed inter-band connectors are illustrative and their exact count is not asserted."
         else:
             alt = "Editable vector object in the complete two-panel FBG-SEANet method overview."
         node = _c_nv_pr(shape)
@@ -181,13 +181,11 @@ def annotate_accessibility(path: Path) -> dict:
         "shape_count": len(slide.shapes),
         "alt_text_count": len(slide.shapes),
         "alt_text_coverage": 1.0,
-        "input_graph_icon": "12 nodes across four band-subgraph rows with nine dashed inter-band connectors",
+        "input_graph_icon": "12 schematic nodes across four representative band-subgraph rows; dashed inter-band connectivity is illustrative",
         "input_graph_nodes": 12,
         "input_graph_band_subgraphs": 4,
-        "input_graph_interband_links": 9,
-        "input_graph_nodes": 12,
-        "input_graph_band_subgraphs": 4,
-        "input_graph_interband_links": 9,
+        "input_graph_interband_connectivity": "schematic_unspecified",
+        "input_graph_interband_connector_count_asserted": False,
         "class_output_squares": 5,
         "orange_highlight_index": 2,
         "panel_description": PANEL_ALT,

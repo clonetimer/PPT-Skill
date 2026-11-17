@@ -199,5 +199,69 @@
       "Pixel-level source-image match",
       "Exact source node coordinates"
     ]
+  },
+  "C01_composite_defense_slide_image_first_v8": {
+    "claim": "The slide explains frequency-band graph construction and the two-branch graph-level diagnosis path.",
+    "archetype": "schematic_led_composite",
+    "output_mode": "presentation",
+    "source": "docs/C01_V73_SOURCE.md",
+    "source_locator": "Author-published graphical abstract, both visible panels and cross-panel Total graph → Input route; public abstract method description checked separately; V8 schematic boundary and variable-N construction",
+    "evidence_status": "source_visible_redraw",
+    "evidence_scope": "C01 Image-first Stage-A target. Frequency-band count N is variable; four visible bands are representative. Three-node B_i and Total graph motifs are visual-consistency schematics. Input is a 12-node four-by-three schematic with eight within-row links. Dashed cross-band and inter-row links are illustrative; exact counts and numerical adjacency are not asserted. Five class outputs are illustrative, not fixed. IR/SR terminology remains unresolved.",
+    "unverified": [
+      "Numerical adjacency matrix",
+      "Exact number of dashed inter-band or inter-row links",
+      "Fixed frequency-band count",
+      "Fixed class-output count",
+      "Pixel-level source-image match",
+      "Exact source node coordinates"
+    ]
+  },
+  "C01_composite_defense_slide_image_first_v4": {
+    "claim": "The slide explains frequency-band graph construction and the two-branch graph-level diagnosis path.",
+    "archetype": "schematic_led_composite",
+    "output_mode": "presentation",
+    "source": "docs/C01_V73_SOURCE.md",
+    "source_locator": "Author-lab method graphic and publisher Highlights/Abstract used as separate evidence. V4 reflects Major Revision (sensor dimension M, + fusion, inter-band legend, OCF illustrative before/after).",
+    "evidence_status": "source_visible_redraw",
+    "evidence_scope": "C01 Image-first V4 Stage-A candidate. M sensor count and N band count vary independently; graph node placement and links are schematic. The OCF waveforms are illustrative not measured. The fusion operator is the exact author-graphic +. Total graph → Input is routed outside the section heading. Five outputs illustrative. IR in author-lab graphic vs SR in published abstract remains unresolved. This is a presentation slide, not journal publication-ready artwork.",
+    "unverified": [
+      "Numerical adjacency matrix",
+      "Exact number of dashed inter-band or inter-row links",
+      "Fixed frequency-band count",
+      "Fixed class-output count",
+      "Pixel-level source-image match",
+      "Exact source node coordinates",
+      "Specific OCF before-and-after waveform values",
+      "Numerical relationship between sensor count M and illustrative graph-node glyphs",
+      "IR versus SR nomenclature equivalence in full text",
+      "Publisher-ready figure layout"
+    ]
+  },
+  "C01_composite_defense_slide_image_first_v4_1": {
+    "claim": "The slide explains two-stage frequency-band graph construction and the two-branch graph-level diagnosis path.",
+    "archetype": "schematic_led_composite",
+    "output_mode": "presentation",
+    "source": "docs/C01_V73_SOURCE.md",
+    "source_locator": "Author-lab source figure and publisher article preview; V4.1 Minor Revision review",
+    "evidence_status": "source_visible_redraw_with_explicit_schematic_boundaries",
+    "evidence_scope": "C01 Image-first V4.1 presentation Stage-A candidate. Sensor count M and frequency-band count N vary independently. The author-visible Nth subgraph is normalized as B_N; this is an explanatory label, not a claim that the source figure prints the literal string B_N. Band-pass filtering yields per-band signals; graph construction forms one subgraph per band and connects the subgraphs into the total graph. The total-graph ellipsis and non-attached dashed continuation rail indicate omitted intermediate bands without asserting a B3-to-B_N node edge. One dashed inter-band connector is a schematic example only. Class outputs are square illustrative markers, not a fixed class count. Author-lab figure labels readouts IR; published abstract uses SR; equivalence unresolved.",
+    "unverified": [
+      "Numerical adjacency matrix",
+      "Exact number of dashed inter-band or inter-row links",
+      "Fixed frequency-band count",
+      "Fixed class-output count",
+      "Pixel-level source-image match",
+      "Actual sensor count M",
+      "Specific OCF waveform values",
+      "Precise inter-band adjacency",
+      "IR/SR terminology equivalence",
+      "Journal-ready typesetting",
+      "Exact inter-band adjacency and omitted-band connections",
+      "Literal B_N notation in publisher artwork",
+      "IR/SR terminology equivalence in full text",
+      "Projection-distance readability",
+      "PowerPoint 2016 native-object round trip"
+    ]
   }
 }

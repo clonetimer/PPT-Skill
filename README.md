@@ -1,5 +1,40 @@
 # Academic Defense PPT Skill
 
+## V8 — Image-first two-stage slide generation
+
+For visually complex defense slides, generate and review a single Image2 target image first, then reconstruct it as editable native PowerPoint objects. The per-slide workflow contract, prompt builder, PPTX audit, image comparison, and acceptance validator are documented in [the V8 Image-first workflow](docs/IMAGE_FIRST_WORKFLOW_V8.md).
+
+Create a per-slide prompt and manifest:
+
+```bash
+python tools/create_image_first_manifest.py specs/deck_spec_v8.example.json s02 --output-dir dist/image_first/fbg-seanet-s02
+```
+
+DeckSpec slides bind the C01 V8 Image-first FigureSpec and topology contract. The prompt builder includes source labels, required nodes, directed method edges, variable-N band labels, and schematic geometry constraints; the manifest locks both source-file SHA-256 hashes and rejects stale contracts. The four visible band examples do not imply a fixed four-band algorithm. Dashed internal graph links are schematic: no exact count or numerical adjacency is asserted. Speaker notes remain presenter-only.
+
+After Image2 generation, place the 1920 × 1080 target PNG inside the per-slide output directory and record it with the Stage-A helpers:
+
+```bash
+python tools/record_image_first_target.py dist/image_first/fbg-seanet-s02/workflow.json dist/image_first/fbg-seanet-s02/target_image.png
+python tools/review_image_first_target.py dist/image_first/fbg-seanet-s02/workflow.json --decision revise --reviewer "visual triage" --reviewer-type assistant_visual_triage --issue "Frequency axis must point downward"
+```
+
+Human approval requires all six checks:
+
+```bash
+python tools/review_image_first_target.py dist/image_first/fbg-seanet-s02/workflow.json --decision approve --reviewer "domain reviewer" --check scientific_content --check exact_text --check source_fidelity --check visual_hierarchy --check projection_readability --check reconstruction_feasibility
+```
+
+After Stage A approval, rebuild the slide as editable PPTX, export its preview, then run:
+
+```bash
+python tools/audit_image_first_reconstruction.py dist/image_first/fbg-seanet-s02/workflow.json --output dist/image_first/fbg-seanet-s02/pptx_audit.json
+python tools/compare_image_first_renders.py dist/image_first/fbg-seanet-s02/target_image.png dist/image_first/fbg-seanet-s02/render/slide.png --output dist/image_first/fbg-seanet-s02/parity.json
+python tools/validate_image_first_workflow.py dist/image_first/fbg-seanet-s02/workflow.json
+```
+
+Image-first is for composition-sensitive slides; quantitative plots and formula/topology-critical figures remain spec-first. A full-slide raster image is not an acceptable editable PPTX reconstruction. Stage A requires human approval; final acceptance additionally requires native-object audits, visual parity review, and a PowerPoint 2016 host round trip.
+
 ## Unified research-figure production entrypoint
 
 For a source-author vector PDF, run the full evidence-linked workflow:
@@ -361,3 +396,8 @@ python tools/reproduce_research_figure.py .\paper.pdf --output .\qa\figure --mod
 ```
 
 The pipeline keeps the first-pass PPTX immutable for that run and produces object, text, raster, order, geometry, and optional visual evidence. A blocked composition manifest remains a blocker; it is not silently bypassed. Scientific and Office 2016 approval remain separate.
+
+
+### C01 V4.1 Minor Revision
+
+The latest C01 Image-first candidate is V4.1 (Minor Revision). It standardizes the Nth band label as B_N, adds a non-attached continuation marker between B₃ and B_N, separates per-band signal extraction from graph construction in the Reading guide, makes class outputs near-square and labels them Fault classification, and keeps the IR/SR note in one place. Its source FigureSpec and Topology Contract are separately versioned; Stage A still requires human sign-off.

@@ -2,6 +2,7 @@
 """Validate the v7.6 DeckSpec and its source-backed evidence cards."""
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -48,6 +49,9 @@ def validate(path: Path = EXAMPLE):
             assert (ROOT / item["source"]).is_file()
         if slide["figure_ref"]:
             assert (ROOT / slide["figure_ref"]).is_file()
+        if slide.get("topology_ref"):
+            assert slide.get("figure_ref"), "topology_ref requires a figure_ref"
+            assert (ROOT / slide["topology_ref"]).is_file()
     boundary = next(slide for slide in slides if slide["role"] == "evidence_boundary")
     assert len(boundary["evidence_blocks"]) == 3
     assert [block["metric"] for block in boundary["evidence_blocks"]] == ["18", "3", "3"]
@@ -57,4 +61,7 @@ def validate(path: Path = EXAMPLE):
 
 
 if __name__ == "__main__":
-    validate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("deck_spec", nargs="?", type=Path, default=EXAMPLE)
+    args = parser.parse_args()
+    validate(args.deck_spec)

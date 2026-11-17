@@ -62,3 +62,184 @@ These values are renderer-specific triage metrics, not scientific correctness sc
 - Source-inherited text clipped by the crop is reported separately; no new clipping is introduced. A publication-ready re-layout would need an explicitly authorized layout change.
 - Real Office 2016 open/save/re-export and final-size visual review remain outstanding.
 - The original ten-paper cohort is now a development regression set, not a new blind hold-out. Strict first-pass success on the frozen ten-paper FigureSpec cohort remains 0/10; this P0-03 repair must not be retroactively counted as a first-pass pass.
+
+
+## Extension — PDF text calibration across independent text frames (2026-11-17)
+
+### Failure pattern found in the independent-paper AST pilot
+
+The Mamba and Swin generalization figures retained exact SVG/DrawingML raster parity, but the first text-calibration attempts failed for reasons that were not all actual layout defects:
+
+- PDF text extraction groups characters into spans, lines and blocks according to renderer decisions. A PDF block is not equivalent to one PowerPoint text frame; adjacent independent text boxes may be merged into one block.
+- A single source text frame may be emitted as multiple PDF spans or font runs when a fallback face renders a missing glyph (for example, mathematical subscripts and floor/ceiling symbols).
+- A narrow PDF whitespace character can overlap the bounding box of a neighboring glyph. Removing whitespace on any intersection can turn a valid label such as `A patch` into `Apatch`.
+- Explicit line breaks in one PowerPoint text frame may be represented by separate PDF baselines rather than a literal newline character in one text span.
+- Font-wide PDF span bounds are not a reliable ink bound for mixed math fonts. Glyph-outline bounds, positioned by the PDF character baseline and the selected glyph face, are a better measurement basis.
+
+### Corrective implementation
+
+1. Keep a page-wide, character-position-preserving stream across PDF blocks and fallback-font runs. Do not assume a PDF block maps one-to-one to a PowerPoint text shape.
+2. Preserve whitespace unless its box is fully contained by a same-baseline visible glyph. Do not discard it merely because bounding boxes intersect.
+3. Match source text exactly first. If the PDF stream has dropped a whitespace glyph, retry with a whitespace-insensitive key and enforce alphanumeric token boundaries so a label cannot match only the prefix of a longer word.
+4. Match explicit source newlines line-by-line against distinct PDF baselines; retain the selected glyph records for the final geometry calculation.
+5. Resolve fallback faces per code point and measure the selected glyph outline. Retain the requested/resolved face and fallback decision in the audit record.
+6. Compare reconstructed ink bounds with the original PPTX text-frame geometry. Keep the fast fontTools estimate as a separate diagnostic; do not treat a line-count disagreement alone as proof of overflow.
+7. Emit the exact unmatched/overflowing text strings in the CI summary. Preserve the full generalization output directory as a failure artifact so the next diagnosis can inspect PDF, PPTX, render records and per-shape audit together.
+
+### Regression fixtures required
+
+- Adjacent independent text boxes on one PDF line.
+- A multi-line label with an explicit source newline.
+- A single label with a fallback-font subscript.
+- A label containing floor/ceiling symbols.
+- A narrow inter-word space that the PDF extractor may omit.
+- A negative fixture proving whitespace-insensitive matching does not match `A patch` inside `A patches`.
+
+### Acceptance boundary
+
+A missing text match is not automatically classified as a source-layout defect until the character stream and rendered page are inspected. The fallback matcher may recover whitespace lost by PDF extraction, but it must not suppress true missing text or partial-word matches. Any actual ink outside the source text frame remains a hard calibration failure. LibreOffice results remain separate from Microsoft PowerPoint 2016 host certification.
+
+
+### Additional regression lesson from the same-line boundary test
+
+A compact-text fallback must distinguish two cases using the candidate frame and glyph positions, not only string adjacency:
+
+- A preceding/following character from a separate PDF text object on the same baseline must not block a match when it is outside the candidate PowerPoint text frame.
+- An alphanumeric continuation inside the candidate frame must still block a prefix-only match (for example, matching `A patch` inside `A patches`).
+
+A regression fixture that places the neighboring character inside or overlapping the candidate frame is not a valid independent-text-box fixture; by geometry it is indistinguishable from a continuation of the same text object. Keep these positive and negative fixtures separate.
+
+
+### Binary-search ceiling lesson for pre-build fit estimates
+
+The first integrated FigureSpec preflight exposed a second boundary condition: a fixed 72 pt maximum search height is not sufficient for a very narrow box containing a long label. The binary search then reports `max_height_overflows` and returns no suggested height, even though a larger box would fit.
+
+Derive the upper search bound from the text length and the selected font's line height (a conservative one-glyph-per-line ceiling), while retaining a practical minimum and the existing authored-height multiplier. Keep the solver advisory: report the minimum fitting height and the additional height needed; do not silently resize the FigureSpec or shrink the font.
+
+
+### Glyph-ink preflight calibration lesson
+
+The first cross-paper preflight compared the full OS/2/hhea line box with the text-frame height. That was conservative enough to flag short Cambria Math labels (`xₜ`, `yₜ`) even though the pinned LibreOffice PDF showed their actual ink fully inside the frame.
+
+For a single line, calculate vertical demand from the selected glyph outlines' ink extents. For multiple lines, combine the maximum line ink height with the measured inter-baseline distance; retain the full font line-height metric for baseline spacing, not as the single-line ink height. Keep the post-render glyph-boundary check as the authoritative calibration. On the Mamba/Swin pilot, this reduced both preflight estimated-overflow counts to zero while preserving 24/24 PDF text matches and zero rendered overflow.
+
+Multiline regression fixtures must contain actual newline characters. A literal backslash followed by `n` is two printable characters and does not exercise paragraph/line-break handling.
+
+
+### Structural-gap text lesson from C01 regression (2026-11-17)
+
+The continuation ellipsis sits inside a fixed semantic gap between the visible B₃ and B_N graph rows. Increasing its text frame from 0.08 in to 0.14 in fixed the initial clipping but crossed the topology boundary; the geometry regression correctly rejected it.
+
+For text marks inside a constrained structural gap:
+1. Treat the surrounding object geometry as a hard layout constraint; do not enlarge the text frame beyond the gap to satisfy font metrics.
+2. Resolve the actual fallback font and glyph ink bounds first. The fallback vertical-ellipsis glyph produced an ink box larger than the available gap and also conflicted with the presentation minimum text size.
+3. Reduce the glyph's authored font size to fit the available frame, or replace a typographic mark with editable native vector dots when that is the clearer source-matched representation.
+4. Keep the frame within the measured gap with a small geometric tolerance, and preserve the independent topology test.
+5. Run the strict LibreOffice glyph calibration after the topology test; both must pass. Do not weaken either gate to make the other pass.
+
+The C01 correction replaces the font glyph with three editable native ellipse marks inside the B₃/B_N gap. This removes font substitution and minimum-text-size conflicts while preserving the non-attached continuation meaning; the two dashed rails remain separate vector connectors.
+
+
+### Source-first correction for constrained output annotations
+
+The C01 render audit also exposed five tiny `C₁`–`C₅` labels added beside the five class-output squares. Inspection of the author-lab source image shows five unlabeled squares, with the classification caption placed separately. The individual class labels were not required by the topology contract and were not source-supported.
+
+The correct repair was not to keep shrinking the invented labels until they fit. Remove unsupported annotations, preserve the five source-visible square marks and the classification caption, and encode the absence of per-square labels in the evidence contract and regression test. This improves source fidelity and removes unnecessary tiny text from the slide.
+
+
+### Evidence-hash maintenance after source-record edits
+
+A later C01 regression exposed a separate provenance failure: adding a source-grounded clarification to `docs/C01_V73_SOURCE.md` changed the bytes of the registered source record, but the FigureSpec's `EvidenceRecord.source_file_sha256` still contained the previous hash. The scientific IR validator correctly failed closed before running downstream geometry/render tests.
+
+Whenever a referenced local evidence file changes:
+1. Update the evidence file first.
+2. Recompute SHA-256 from the exact committed file bytes (including line endings).
+3. Update every FigureSpec EvidenceRecord that references that file.
+4. Run the source-evidence validator before the full workflow.
+Do not weaken the provenance check or reuse a stale hash. A source-grounded clarification is still a source change and must remain hash-bound.
+
+
+### Minimum presentation type size is a hard constraint
+
+After removing unsupported C₁–C₅ labels, the C01 V4.1 classification caption was temporarily reduced to 8.5 pt to fit a narrow frame. CI's output-profile validator correctly rejected it because the presentation profile requires at least 9.5 pt for that caption class.
+
+The repair preserves the minimum type size and widens/repositions the text frame inside the existing panel, aligning its right edge with the output group. Do not solve a geometry problem by violating the profile's minimum readable type size. When a caption is too wide, first reclaim horizontal space, adjust alignment, or reflow the text; only change font size when the output profile explicitly permits it.
+
+The same source-fidelity rule now applies to both C01 Image-first V4.1 and V8: keep the five output squares unlabeled and retain the separate classification caption. The V8 builder, committed FigureSpec, topology contract, regression test and Image-first content lock are kept in sync.
+
+
+### Generated FigureSpec and Image-first content-lock synchronization
+
+The V8 follow-up showed that a source-fidelity correction must be applied to every representation of the figure, not just the manually edited FigureSpec. The V8 builder still emitted the old per-square labels, while the committed FigureSpec and Image-first workflow lock had already been corrected.
+
+The repair now synchronizes four artifacts:
+- the V8 FigureSpec builder;
+- the committed V8 FigureSpec;
+- the expected topology contract and regression tests;
+- the Image-first manifest's source_figure lock (FigureSpec SHA-256, topology SHA-256, source text, labels, edges and geometry contract).
+
+A new regression compares build_spec() with the committed V8 FigureSpec exactly. The Image-first workflow validator independently checks the manifest lock against the committed FigureSpec and topology. Do not accept a fix that only changes the generated artifact or only changes the content lock.
+
+
+### Color-coded scientific labels must pass text contrast independently of their marks
+
+The C01 preflight correctly flagged four frequency-band labels (B₁, B₂, B₃ and B_N) because their original pastel text colors were below the 4.5:1 normal-text contrast target on white. The corresponding graph/signal colors remain useful as categorical cues, but a text label cannot inherit the lower 3:1 threshold used for essential non-text graphics.
+
+The repair darkens only the four text-label colors while retaining their hue families and leaving graph fills and signal traces unchanged. The new regression checks each label's contrast ratio directly; the V4.1 preflight now has no contrast failures. The same colors are inherited by the V8 builder, committed V8 FigureSpec and Image-first source-figure lock, which is refreshed after the visual change.
+
+
+### Image-first source-lock drift and CI execution discipline (2026-11-17)
+
+The V8 example manifest failed at the first committed-manifest gate with `CONTENT_LOCK_MISMATCH:source_figure`. Investigation showed that the figure SHA-256 had been captured before the final FigureSpec edits; the topology hash and all non-hash source text, labels, edges, required nodes and geometry contract already matched.
+
+Corrective rules:
+1. Treat `content_lock.source_figure` as a derived record, not manually maintained prose. Regenerate its FigureSpec and topology SHA-256 values from the exact committed UTF-8 files after the final source edits.
+2. Commit the FigureSpec, topology contract and manifest lock together. Do not update the lock before the last builder/source change.
+3. Keep the validator read-only and fail-closed, but report the exact mismatched source-lock fields (for example, `figure_spec_sha256`) rather than only the parent object name.
+4. Persist a machine-readable diagnostic before returning non-zero, and upload it immediately after the committed-manifest gate. A later-stage artifact step cannot recover diagnostics for a failure that occurs before those later build directories exist.
+5. Scope AST failure artifacts to the AST pilot step itself; do not run a later artifact upload merely because an earlier, unrelated step failed.
+
+CI execution discipline:
+- Use one Git tree/commit for a coherent multi-file change rather than one Contents-API commit per file.
+- Run PR validation against the PR's actual base family (main and feat/*); use concurrency cancellation so obsolete runs do not compete with the latest revision.
+- Keep a manual workflow_dispatch path for controlled revalidation. CI remains a regression guard; the primary acceptance evidence remains the real paper-figure reproduction and its scientific/visual review.
+
+
+### Six-paper FigureAST corpus expansion (2026-11-17)
+
+The next visual-parity experiment is now source-backed across six papers and six distinct families: Mamba, Swin Transformer, Graph Attention Networks, CLIP, ResNet and U-Net. The new four-paper expansion uses the committed source PDFs and their recorded SHA-256 values; Mamba and Swin retain their arXiv source locators. CLIP's dog photograph is explicitly declared as a CC0 replacement, not the paper's original photograph.
+
+The experiment rebuilds the legacy SVG/PPTX and the FigureAST SVG/DrawingML PPTX from the exact same FigureSpec before comparing them under the pinned LibreOffice profile. This removes stale pre-generated PPTX files as a confounder. The report records per-paper source evidence, primitive inventory, native shape/picture counts, text-fit preflight, glyph-level post-render calibration and raster differences.
+
+The boundary between CI and research is explicit:
+- source evidence hashes, FigureAST semantic round-trip and supported primitive coverage are hard tests;
+- cross-paper raster parity is a non-blocking research experiment whose full results (including per-figure errors) are retained as an artifact;
+- a parity failure is evidence to inspect and improve the renderer, not a reason to silently relax thresholds or block unrelated product validation.
+
+
+### Corpus identity versus source FigureSpec identity (2026-11-17)
+
+The six-paper corpus includes two established generalization FigureSpecs (Mamba and Swin) that intentionally predate the explicit top-level `id` field. Their stable paper/figure identity is already recorded in `meta.paper`, `meta.source` and `meta.figure`. Do not rewrite source material solely to add a new identifier for the experiment.
+
+Use the corpus manifest's `id` as the experiment/output key. If a FigureSpec has an explicit `id`, verify it matches; if it does not, validate its existing paper metadata and let FigureAST normalize its internal ID to `unnamed-figure`. The canonical source hash must remain bound to the unmodified source spec.
+
+
+### Source-PDF availability boundary in the literature corpus
+
+The four newly added arXiv paper PDFs are not vendored in the Git repository (the FigureSpec evidence records refer to acquisition-time local paths that are intentionally absent from CI checkout). The corpus manifest therefore stores the canonical arXiv URL and the SHA-256 recorded at source acquisition. CI verifies the URL shape and hash format, but does **not** claim to recompute those PDF hashes from absent files. The CLIP CC0 replacement image is committed and its bytes are hash-verified in CI.
+
+If exact source-PDF byte verification becomes a release requirement, add an explicit, version-pinned source-fetch step with cache and retry policy; do not make the ordinary validation job depend on unpinned external downloads.
+
+
+### Literature-corpus quality classification: preflight is not a silent pass (2026-11-17)
+
+The six-paper FigureAST experiment showed a reporting gap: CLIP had five WCAG contrast failures in its pre-build text audit, but the per-figure status was still reported as PASS because only rendered calibration and pixel parity were considered. The preflight is advisory rather than a hard renderer failure, but a contrast warning must remain visible as REVIEW and must not be counted as a clean PASS.
+
+The corpus now distinguishes:
+- PASS: parity and rendered text calibration pass, and preflight has no review findings;
+- REVIEW: rendered text calibration and parity pass, but advisory preflight reports contrast/fit findings requiring design review;
+- FAIL: rendered text calibration or parity fails.
+
+Keep the preflight advisory; do not silently promote REVIEW to PASS and do not turn every preflight warning into a renderer failure. Corpus summaries report PASS, REVIEW and FAIL/ERROR separately.
+
+The U-Net trial remains FAIL: 27 rotated spatial-dimension labels were not matched in the current PDF text calibration, one label was measured outside its frame, and one line-count mismatch was recorded. The rendered image shows these labels as rotated vertical annotations. This is a known calibration coverage gap for rotated text, not evidence that the labels may be dropped. Preserve the failure and add rotation-aware PDF glyph ordering/geometry support with regression fixtures before claiming U-Net text calibration PASS.

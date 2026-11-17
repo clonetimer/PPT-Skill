@@ -119,5 +119,33 @@
     "class_output_label",
     "input_label"
   ],
-  "readout_label_discrepancy": "Author-lab graphical abstract appears to label both readout blocks IR layer; public abstract uses SR. Unresolved; do not silently harmonize."
+  "readout_label_discrepancy": "Author-lab graphical abstract appears to label both readout blocks IR layer; public abstract uses SR. Unresolved; do not silently harmonize.",
+  "geometry_contract": {
+    "frequency_axis": {
+      "label": "Frequency",
+      "direction": "vertical_downward"
+    },
+    "total_graph": {
+      "band_layer_count": 4,
+      "inter_band_link_count": 9
+    },
+    "input_graph": {
+      "node_count": 12,
+      "within_band_edge_count": 8,
+      "band_row_count": 4,
+      "inter_band_link_count": 9
+    },
+    "class_outputs": {
+      "count": 5,
+      "shape": "square",
+      "highlighted_index": 2,
+      "highlight_color": "#DCA16C"
+    },
+    "readout_blocks": {
+      "count": 2,
+      "author_lab_visible_label": "IR layer",
+      "public_abstract_label": "SR",
+      "resolved": false
+    }
+  }
 }

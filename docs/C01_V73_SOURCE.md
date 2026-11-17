@@ -15,6 +15,7 @@ Direct image used for visual comparison:
 https://hai.snu.ac.kr/data/editor/2606/78d439b23291567a99c14c62e0bbf0a6_1780552979_7277.jpg
 
 The author-lab image is the direct visual evidence for the two-panel layout, pooling silhouettes, input graph stack and five-square class output.
+The five class-output squares are unlabeled in the author-lab source. The redraw keeps them unlabeled; adding individual C₁–C₅ labels would introduce unsupported annotation.
 
 ## Publisher source access status
 

@@ -269,6 +269,12 @@
           "items": {
             "$ref": "#/$defs/evidence_block"
           }
+        },
+        "topology_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "additionalProperties": false,

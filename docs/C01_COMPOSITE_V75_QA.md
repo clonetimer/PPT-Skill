@@ -8,7 +8,7 @@ C01 Composite v7.5 is the complete two-panel FBG-SEANet structural redraw. It co
 
 The directly inspected visual source is the author-lab graphical abstract. The publisher high-resolution graphical abstract could not be accessed; previous claims of publisher-image inspection are withdrawn. The author-lab image appears to label both readout blocks IR layer, while the public abstract uses SR. The composite preserves the visible IR labels and discloses the unresolved terminology difference.
 
-- **Round 01:** add an editable total-graph icon with four stacked band-subgraph rows (12 nodes), eight within-band edges and nine dashed inter-band connectors inside the lower Input block. The Total graph route is anchored to the Input container rather than the visible text label. The icon is explicitly schematic and does not encode a numerical adjacency matrix.
+- **Round 01:** add an editable total-graph icon with four stacked band-subgraph rows (12 nodes), eight within-row illustrative edges and dashed inter-band connectors inside the lower Input block. The Total graph route is anchored to the Input container rather than the visible text label. The icon is explicitly schematic and does not encode a numerical adjacency matrix or a source-backed inter-band edge count.
 - **Round 02:** restore five independent vertically stacked class-output squares after Dense, with the second square highlighted orange; restore the Dense → class-output connector and the `fault class` label.
 - Both pooling modules use editable freeform quadrilaterals with near-vertical sides and slanted top/bottom edges, matching the author-lab source silhouette.
 - The five output squares remain separate native shapes; the second square is highlighted orange.
@@ -18,11 +18,13 @@ The directly inspected visual source is the author-lab graphical abstract. The p
 
 The v7.5 validator checks:
 - all 18 source-critical routes (five upper-panel, one cross-panel, twelve lower-panel);
-- the 12-node editable input graph icon representing four stacked band subgraphs, with eight within-band edges and nine dashed inter-band links;
+- the 12-node editable input graph icon representing four stacked band subgraphs, with eight illustrative within-row edges and at least one dashed inter-band connector; the connector count is not a scientific acceptance criterion;
 - two source-like pooling quadrilaterals and the explicit IR/SR terminology note;
 - five independent class-output squares and the second-square highlight;
 - the Dense → class-output semantic route;
 - no rasterized objects, missing alt text, text overlap or out-of-bounds shapes.
+
+The v7.5 artifact retains a particular set of dashed connector shapes as a visual schematic. Their rendered count is an implementation detail, not a recovered property of the paper method. The later V8 source contract supersedes this legacy representation: it requires sparse schematic links, explicitly withdraws the unsupported exact-nine claim, and uses one representative dashed inter-band example plus a non-attached continuation marker in the V4.1 target. Do not carry the v7.5 line count into V8 Stage B.
 
 Automated PASS is necessary but does not replace independent domain review, final-size review or a real PowerPoint 2016 host round trip.
 
