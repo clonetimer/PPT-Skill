@@ -4,7 +4,7 @@ from __future__ import annotations
 import argparse, json
 from pathlib import Path
 from typing import Any
-from text_layout_metrics import FontMetrics, contrast_ratio, fit_textbox_height, resolve_font_file
+from text_layout_metrics import FontMetrics, contrast_ratio, fit_textbox_height, resolve_font_face
 
 
 def _background_for(elements: list[dict], index: int, text: dict) -> str:
@@ -29,10 +29,10 @@ def audit_spec(spec: dict[str, Any]) -> dict:
             if element.get("type")!="text":
                 continue
             family=element.get("font",default_font)
-            font_path=resolve_font_file(family)
-            key=str(font_path)
+            font_path,face_index,resolved_family=resolve_font_face(family)
+            key=f"{font_path}#face={face_index}"
             if key not in cache:
-                cache[key]=FontMetrics(font_path)
+                cache[key]=FontMetrics(font_path,face_index=face_index)
             metrics=cache[key]
             font_size=float(element.get("size",14))
             width_in=float(element["w"])
@@ -51,6 +51,8 @@ def audit_spec(spec: dict[str, Any]) -> dict:
                 "element_id":element.get("id",f"element_{index+1:04d}"),
                 "text":element["text"],
                 "font_family_requested":family,
+                "font_family_resolved":resolved_family or metrics.family_name,
+                "font_face_index":face_index,
                 "font_file":str(font_path),
                 "font_size_pt":float(element.get("size",14)),
                 "line_count":measured["line_count"],
