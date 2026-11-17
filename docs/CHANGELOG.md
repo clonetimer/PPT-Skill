@@ -1,3 +1,4 @@
+- Added a frozen Blind10 post-P0 batch runner with per-paper output isolation, immutable output-directory protection, source-picture-only routing for image-backed source crops, per-case exception capture and explicit separation of technical status from scientific/Office acceptance. Added mocked regression coverage and CI integration.
 - Added fail-closed regression tests for Blind10 source admission (missing source, hash mismatch, invalid crop/page and missing caption) and wired them into the main validation workflow. Recorded the evidence boundary: source preflight is not figure-reproduction acceptance; the inspected ten-paper cohort remains development regression only. See `docs/DEVELOPMENT_EXPERIENCE_2026-11-17.md`.
 
 # Changelog
