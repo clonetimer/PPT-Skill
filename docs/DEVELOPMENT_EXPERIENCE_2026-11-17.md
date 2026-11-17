@@ -65,3 +65,29 @@ Expanded the batch-runner regression suite to assert two important contracts dir
 - The three source-picture-only cases explicitly pass `require_native=False`; all other seven pass `require_native=True`.
 
 This prevents future refactors from silently converting the image-preservation exception into a false claim of native editability, or from reintroducing fail-fast batch behavior.
+
+## R1 native-vector reproduction findings (2026-11-17)
+
+The uploaded development branch was executed locally against the exact private first-five PDF crops. Source preflight passed 5/5. The first official post-P0 import run produced:
+- Wind Turbine: `RASTER_SOURCE_ONLY` (one full-figure picture; no native vectors).
+- PINN Tool Wear: blocked by `UNSUPPORTED_SOURCE_CROP_EDGE_TEXT`.
+- Attention-GIN: source figure flattened into one full-page picture; its 367 page drawing records did not intersect the selected crop in the importer coordinate system, so this case must not be counted as vector recovery.
+- Agent Distillation: blocked at the frozen budget (`127,713 > 100,000` source segments).
+- EvoOntology: blocked by crop-edge text; an expanded-crop experimental candidate recovered 327 native vectors and 271 text objects, but text audit found a U+25A1 white-square glyph substitution, so it remains unaccepted.
+
+### Successful native-vector diagnostic candidates
+
+- PINN Tool Wear: after expanding the top crop edge to include the complete journal header span, a candidate was generated with 774 native vectors, 11 text objects and 31 picture objects. Structure audit PASS, text-geometry audit PASS, visual audit PASS. Pipeline status remains `NEEDS_VISUAL_REVIEW`; no scientific or Office 2016 acceptance is claimed.
+- Agent Distillation: a crop including the full figure caption generated 828 native vectors, 57 text objects and 4 pictures. Text audit PASS, but structure audit FAIL because only 4 of 15 source picture blocks were retained. It is an inspectable diagnostic candidate, not a deliverable.
+
+### Lessons
+
+1. Crop-edge validation must be based on the actual selected crop and the full glyph bounding box. Header/caption spans can cross the crop boundary by a few points; adjust and re-audit the crop rather than disabling the guard.
+2. Resource budgets should be tested independently from crop/text preflight. Raising the budget did not bypass Agent Distillation's crop-edge glyph blocker; do not misdiagnose the failure as a resource-only issue.
+3. Native vector count alone is not sufficient. Image events must also be reconciled against source image blocks; Agent's 828 vectors did not compensate for 11 missing source pictures.
+4. GIN's page-level drawing records and selected figure crop occupy different coordinate regions in the inspected PDF. Before changing its route, establish the source drawing/image coordinate transforms; do not claim that the 367 unrelated records are recovered figure vectors.
+5. Keep diagnostic candidates even when the pipeline rejects them. They expose the next repair target and must remain explicitly REVIEW/FAIL rather than being relabelled PASS.
+
+### Evidence boundary
+
+These runs are local post-P0 technical diagnostics on the frozen development cohort. Human scientific review and actual PowerPoint 2016 host round-trip were not performed. Strict R1 acceptance remains 0/5.
