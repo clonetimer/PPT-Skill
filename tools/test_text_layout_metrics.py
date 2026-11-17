@@ -134,6 +134,26 @@ class TextLayoutMetricsTests(unittest.TestCase):
         self.assertGreater(element["additional_height_needed_pt"], 0)
         self.assertEqual(spec["elements"][0]["h"], original_height)
 
+    def test_single_line_math_fallback_uses_glyph_ink_height_not_font_line_box(self):
+        path, face_index, _ = resolve_font_face("Cambria Math")
+        metrics = FontMetrics(path, face_index=face_index)
+        try:
+            measured = metrics.measure(
+                "xₜ", 13, 0.55, 0.22,
+                margins_pt=(1.44, 1.44, .576, .576),
+            )
+            self.assertTrue(measured["fits"])
+            self.assertLess(measured["ink_height_pt"], measured["line_height_pt"])
+            self.assertIn("U+209C", metrics.fallback_fonts)
+            two_lines = metrics.measure(
+                "xₜ\\nxₜ", 13, 0.55, 0.50,
+                margins_pt=(1.44, 1.44, .576, .576),
+            )
+            self.assertEqual(two_lines["line_count"], 2)
+            self.assertGreater(two_lines["required_height_pt"], measured["required_height_pt"])
+        finally:
+            metrics.close()
+
     def test_wcag_contrast_ratio(self):
         self.assertAlmostEqual(contrast_ratio("#000000","#FFFFFF"),21.0,places=4)
         self.assertLess(contrast_ratio("#777777","#FFFFFF"),4.5)
