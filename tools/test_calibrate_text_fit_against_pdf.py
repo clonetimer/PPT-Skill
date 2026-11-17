@@ -36,8 +36,8 @@ class PdfTextCalibrationTests(unittest.TestCase):
         self.assertEqual("".join(item["c"] for item in matched["chars"]), "Apatch")
 
         neighboring_box_chars = [
-            {"c": value, "bbox": (-30.0 + index * 4.0, 10.0, -26.0 + index * 4.0, 18.0),
-             "origin": (-30.0 + index * 4.0, 18.0), "font": "LiberationSans", "size": 8.0}
+            {"c": value, "bbox": (-44.0 + index * 4.0, 10.0, -40.0 + index * 4.0, 18.0),
+             "origin": (-44.0 + index * 4.0, 18.0), "font": "LiberationSans", "size": 8.0}
             for index, value in enumerate("Neighbor")
         ]
         neighboring_box = {
