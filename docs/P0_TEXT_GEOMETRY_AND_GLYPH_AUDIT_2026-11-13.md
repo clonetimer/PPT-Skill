@@ -124,3 +124,17 @@ The first cross-paper preflight compared the full OS/2/hhea line box with the te
 For a single line, calculate vertical demand from the selected glyph outlines' ink extents. For multiple lines, combine the maximum line ink height with the measured inter-baseline distance; retain the full font line-height metric for baseline spacing, not as the single-line ink height. Keep the post-render glyph-boundary check as the authoritative calibration. On the Mamba/Swin pilot, this reduced both preflight estimated-overflow counts to zero while preserving 24/24 PDF text matches and zero rendered overflow.
 
 Multiline regression fixtures must contain actual newline characters. A literal backslash followed by `n` is two printable characters and does not exercise paragraph/line-break handling.
+
+
+### Structural-gap text lesson from C01 regression (2026-11-17)
+
+The continuation ellipsis sits inside a fixed semantic gap between the visible B₃ and B_N graph rows. Increasing its text frame from 0.08 in to 0.14 in fixed the initial clipping but crossed the topology boundary; the geometry regression correctly rejected it.
+
+For text marks inside a constrained structural gap:
+1. Treat the surrounding object geometry as a hard layout constraint; do not enlarge the text frame beyond the gap to satisfy font metrics.
+2. Resolve the actual fallback font and glyph ink bounds first. A fallback vertical-ellipsis glyph at 9.5 pt produced an approximately 11 pt ink box, larger than the available gap.
+3. Reduce the glyph's authored font size to fit the available frame, or replace a typographic mark with editable native vector dots when that is the clearer source-matched representation.
+4. Keep the frame within the measured gap with a small geometric tolerance, and preserve the independent topology test.
+5. Run the strict LibreOffice glyph calibration after the topology test; both must pass. Do not weaken either gate to make the other pass.
+
+The C01 correction keeps the marker inside the B₃/B_N gap (y=3.126 in, h=0.128 in) and reduces its font size to 6.5 pt. The intended visual meaning remains a non-attached continuation marker, not a B₃-to-B_N edge.
