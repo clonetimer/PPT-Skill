@@ -91,3 +91,25 @@ The uploaded development branch was executed locally against the exact private f
 ### Evidence boundary
 
 These runs are local post-P0 technical diagnostics on the frozen development cohort. Human scientific review and actual PowerPoint 2016 host round-trip were not performed. Strict R1 acceptance remains 0/5.
+
+
+## R1 full-cohort continuation (2026-11-17)
+
+The remaining five source PDFs were run through the post-P0 import pipeline using the frozen page/crop manifest. New technical candidates:
+- SkillSmith: 212 native vectors + 115 text objects; structure and text geometry PASS; visual approval pending.
+- UCFNet: 122 native vectors + 110 text objects + 3 pictures; structure and text geometry PASS; visual approval pending.
+- EvoOntology: 327 vectors + 271 text + 74 pictures; structure PASS; U+25A1 glyph remains NEEDS_REVIEW.
+- Paths-over-Graph: 336 vectors + 90 text + 7 pictures; structure FAIL because source picture events are not all retained.
+- HarnessMM remains blocked by crop-edge glyph protection.
+- IIoT is source-picture-only and is not counted as native semantic reconstruction.
+
+The first five status remains: PINN has 774 vectors and passes structural/text/visual screening but still needs visual approval; Agent has 828 vectors and 4/4 crop-visible images retained after the crop-aware audit fix; Wind Turbine and Attention-GIN are source-picture-only; EvoOntology needs glyph review.
+
+Focused tests: crop-aware audit 6/6, PDF importer 21/21, text geometry 9/9, crop assets 5/5 PASS. Human scientific acceptance and PowerPoint 2016 host round-trip remain outstanding.
+
+Key lessons:
+1. Use the same crop scope for source and candidate image-preservation metrics.
+2. Never treat page-wide drawings as target-figure vectors without spatial intersection.
+3. Distinguish source-picture-only fidelity from native editable semantic reconstruction.
+4. Preserve glyph clipping protection; expand crop or request reviewed geometry rather than dropping text.
+5. A high vector count cannot mask missing picture events or text substitution.
