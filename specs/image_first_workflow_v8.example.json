@@ -35,11 +35,11 @@
     ],
     "source_figure": {
       "figure_spec_ref": "figure_specs/c01/C01_composite_defense_slide_image_first_v8.json",
-      "figure_spec_sha256": "d55aa4831720757f791ba7e470d778b33248c6fe1fe82fc7b4e2251f7ce92e78",
+      "figure_spec_sha256": "713606290b0e54fb0dcaf15b6f4fa13ecffa2c11bbf086dcc01c85472ea51825",
       "figure_id": "C01_composite_defense_slide_image_first_v8",
       "figure_version": "8.0.0-dev",
       "topology_ref": "specs/c01_composite_expected_topology_v8.json",
-      "topology_sha256": "a35cc5c9d3c86a48893f99e10d35ca477082ae86f1b4092bf9a8859565d32ab1",
+      "topology_sha256": "a2233c94028c2f30ec9ed658f94ffffc236ad6a7988026dc8921193181dc7635",
       "source_text": [
         "FBG-SEANet: frequency-band graph construction and diagnosis",
         "01  Frequency-band graph",
@@ -68,11 +68,6 @@
         "Evidence boundary",
         "Lee et al., EAAI 179 (2026), 115273\nDOI: 10.1016/j.engappai.2026.115273",
         "Source-visible redraw · schematic connectivity · variable N",
-        "C₁",
-        "C₂",
-        "C₃",
-        "C₄",
-        "C₅",
         "GCN",
         "IR layer",
         "Energy-assisted module",
@@ -248,7 +243,8 @@
           "count_semantics": "illustrative_not_fixed",
           "shape": "square",
           "highlighted_index": 2,
-          "highlight_color": "#DCA16C"
+          "highlight_color": "#DCA16C",
+          "labeling": "unlabeled source-visible squares; do not invent C₁–C₅ labels"
         },
         "readout_blocks": {
           "count": 2,
