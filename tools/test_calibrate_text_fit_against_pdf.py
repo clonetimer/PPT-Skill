@@ -30,7 +30,7 @@ class PdfTextCalibrationTests(unittest.TestCase):
                 (1.0, 1.0, 2.8, 0.55, "Layer l · Regular windows"),
                 (4.0, 1.0, 3.0, 0.55, "Layer l+1 · Shifted windows"),
                 (1.0, 2.0, 6.0, 0.55, "Schematic: Δₜ, Bₜ and Cₜ"),
-                (1.0, 2.8, 3.0, 0.70, "Shift by\\n(2, 2)"),
+                (1.0, 2.8, 3.0, 0.70, "Shift by\n(2, 2)"),
                 (4.2, 2.8, 3.2, 0.70, "Illustration: shift=(⌊M/2⌋, ⌊M/2⌋)."),
             ]
             for x, y, width, height, value in examples:
