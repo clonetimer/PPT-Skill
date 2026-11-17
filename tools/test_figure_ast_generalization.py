@@ -24,9 +24,11 @@ class FigureAstGeneralizationTests(unittest.TestCase):
                 path = ROOT / "dist/skill_tests/generalization" / f"{name}.json"
                 spec = json.loads(path.read_text(encoding="utf-8"))
                 ast = FigureAST.from_spec(spec)
-                self.assertEqual(ast.to_spec(), spec)
-                self.assertEqual(ast.source_sha256.__len__(), 64)
-                self.assertEqual(ast.ast_sha256.__len__(), 64)
+                expected_round_trip = dict(spec)
+                expected_round_trip.setdefault("id", "unnamed-figure")
+                self.assertEqual(ast.to_spec(), expected_round_trip)
+                self.assertEqual(len(ast.source_sha256), 64)
+                self.assertEqual(len(ast.ast_sha256), 64)
                 self.assertEqual(len(ast.nodes), len(spec["elements"]))
                 self.assertTrue({node.kind for node in ast.nodes}.issubset(SUPPORTED))
                 self.assertEqual(
