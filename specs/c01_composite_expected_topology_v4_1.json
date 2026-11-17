@@ -173,7 +173,8 @@
       "shape": "near_square",
       "highlighted_index": 2,
       "highlight_color": "#DCA16C",
-      "label": "Fault classification"
+      "label": "Fault classification",
+      "labeling": "unlabeled source-visible squares; do not invent C₁–C₅ labels"
     },
     "readout_blocks": {
       "count": 2,
