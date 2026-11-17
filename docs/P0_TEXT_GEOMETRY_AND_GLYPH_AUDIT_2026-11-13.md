@@ -138,3 +138,10 @@ For text marks inside a constrained structural gap:
 5. Run the strict LibreOffice glyph calibration after the topology test; both must pass. Do not weaken either gate to make the other pass.
 
 The C01 correction keeps the marker inside the B₃/B_N gap (y=3.126 in, h=0.128 in) and reduces its font size to 6.5 pt. The intended visual meaning remains a non-attached continuation marker, not a B₃-to-B_N edge.
+
+
+### Source-first correction for constrained output annotations
+
+The C01 render audit also exposed five tiny `C₁`–`C₅` labels added beside the five class-output squares. Inspection of the author-lab source image shows five unlabeled squares, with the classification caption placed separately. The individual class labels were not required by the topology contract and were not source-supported.
+
+The correct repair was not to keep shrinking the invented labels until they fit. Remove unsupported annotations, preserve the five source-visible square marks and the classification caption, and encode the absence of per-square labels in the evidence contract and regression test. This improves source fidelity and removes unnecessary tiny text from the slide.
