@@ -70,7 +70,10 @@ def audit_spec(spec: dict[str, Any]) -> dict:
                 "available_height_pt":round(measured["available_height_pt"],3),
                 "fits_estimate":measured["fits"],
                 "binary_search_minimum_height_pt":round(height_search["height_pt"],3) if height_search["fits"] else None,
-                "additional_height_needed_pt":round(max(0.0,(height_search["height_pt"] or 0.0)-height_in*72.0),3) if height_search["fits"] else None,
+                "additional_height_needed_pt":(
+                    0.0 if measured["fits"] else
+                    round(max(0.0,(height_search["height_pt"] or 0.0)-height_in*72.0),3)
+                ) if height_search["fits"] else None,
                 "height_search_reason":height_search["reason"],
                 "foreground":foreground,
                 "background_estimate":background,
