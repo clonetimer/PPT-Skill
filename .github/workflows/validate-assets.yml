@@ -114,6 +114,12 @@ jobs:
           python tools/render_with_libreoffice.py dist/ast_pilot/legacy.pptx --output-dir dist/ast_pilot/legacy_render --profile profiles/renderer/lo_headless_v1.json
           python tools/render_with_libreoffice.py dist/ast_pilot/ast.pptx --output-dir dist/ast_pilot/ast_render --profile profiles/renderer/lo_headless_v1.json
           python tools/validate_ast_parity.py --legacy-pptx dist/ast_pilot/legacy.pptx --ast-pptx dist/ast_pilot/ast.pptx --legacy-png dist/ast_pilot/legacy_render/legacy-slide-1.png --ast-png dist/ast_pilot/ast_render/ast-slide-1.png --diff dist/ast_pilot/legacy_vs_ast_diff.png --output dist/ast_pilot/legacy_vs_ast_metrics.json
+      - name: Expand FigureAST parity to independent-paper generalization corpus
+        run: |
+          python tools/test_figure_ast_writers.py
+          python tools/test_figure_ast_generalization.py
+          python tools/test_validate_ast_parity.py
+          python tools/run_ast_generalization_pilot.py --output-dir dist/ast_generalization --profile profiles/renderer/lo_headless_v1.json
       - name: Execute C01-FBG source-grounded repair
         run: |
           python tools/repair_case_c01_fbg_round1.py --output-dir dist/repair_cases/C01_FBG --accepted-output dist/accepted_repairs/C01_FBG_construction_v74.pptx
@@ -413,6 +419,13 @@ jobs:
         with:
           name: ppt-skill-ast-renderer-pilot
           path: dist/ast_pilot/*
+          if-no-files-found: error
+
+      - name: Upload independent-paper FigureAST parity evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ppt-skill-ast-generalization-parity
+          path: dist/ast_generalization/**
           if-no-files-found: error
 
   windows-script-parser:
