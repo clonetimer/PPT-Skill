@@ -2,7 +2,7 @@
 """Tests for font metrics, fit solvers and WCAG contrast calculations."""
 from __future__ import annotations
 import shutil, unittest
-from text_layout_metrics import FontMetrics, binary_search_min_height, contrast_ratio, fit_font_size, fit_textbox_height, resolve_font_file
+from text_layout_metrics import FontMetrics, binary_search_min_height, contrast_ratio, fit_font_size, fit_textbox_height, resolve_font_face, resolve_font_file
 
 
 class TextLayoutMetricsTests(unittest.TestCase):
@@ -52,6 +52,18 @@ class TextLayoutMetricsTests(unittest.TestCase):
         self.assertGreater(result["height_pt"], 2)
         self.assertLessEqual(result["height_pt"], 80)
         self.assertEqual(result["reason"], "binary_search_minimum_height")
+
+    def test_ttc_font_resolution_selects_the_requested_cjk_face(self):
+        path, face_index, resolved = resolve_font_face("Noto Sans CJK SC")
+        self.assertEqual(resolved, "Noto Sans CJK SC")
+        self.assertEqual(path.suffix.lower(), ".ttc")
+        self.assertEqual(face_index, 2)
+        metrics = FontMetrics(path, face_index=face_index)
+        try:
+            self.assertEqual(metrics.family_name, "Noto Sans CJK SC")
+            self.assertGreater(metrics.text_width_pt("中文测试", 14), 0)
+        finally:
+            metrics.close()
 
     def test_wcag_contrast_ratio(self):
         self.assertAlmostEqual(contrast_ratio("#000000","#FFFFFF"),21.0,places=4)
