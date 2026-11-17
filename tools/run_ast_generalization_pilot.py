@@ -12,6 +12,7 @@ from figure_ast import load_figure_ast
 from figure_ast_writers import render_ast
 from render_with_libreoffice import render_pptx
 from validate_ast_parity import validate
+from calibrate_text_fit_against_pdf import calibrate as calibrate_text_fit
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FIGURES = ("Mamba_Figure1", "Swin_Figure2")
@@ -67,6 +68,13 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
     parity_path = figure_dir / "parity.json"
     parity_path.write_text(json.dumps(parity, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+    text_calibration = calibrate_text_fit(ast_pptx, Path(ast_record["outputs"]["pdf"]["path"]))
+    text_calibration_path = figure_dir / "text_fit_calibration.json"
+    text_calibration_path.write_text(
+        json.dumps(text_calibration, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
     primitive_counts = dict(Counter(node.kind for node in ast.nodes))
     legacy_slide = parity["legacy"]["slides"][0]
     ast_slide = parity["ast"]["slides"][0]
@@ -87,6 +95,15 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
         "picture_count": ast_slide["pictures"],
         "raster": parity["raster"],
         "issues": parity["issues"],
+        "text_fit_calibration": {
+            "status": text_calibration["status"],
+            "text_shapes": text_calibration["text_shapes"],
+            "pdf_text_matches": text_calibration["pdf_text_matches"],
+            "missing_text_count": text_calibration["missing_text_count"],
+            "rendered_text_outside_frame_count": text_calibration["rendered_text_outside_frame_count"],
+            "line_count_mismatch_count": text_calibration["line_count_mismatch_count"],
+            "font_metric_false_negative_overflow_count": text_calibration["font_metric_false_negative_overflow_count"],
+        },
         "artifacts": {
             "ast_json": str(ast_json.relative_to(ROOT)),
             "ast_svg": str(ast_svg.relative_to(ROOT)),
@@ -94,6 +111,7 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
             "legacy_render_record": str((legacy_render_dir / "render_record.json").relative_to(ROOT)),
             "ast_render_record": str((ast_render_dir / "render_record.json").relative_to(ROOT)),
             "parity": str(parity_path.relative_to(ROOT)),
+            "text_fit_calibration": str(text_calibration_path.relative_to(ROOT)),
             "diff": str(diff_png.relative_to(ROOT)),
         },
         "render_result": render_result,
