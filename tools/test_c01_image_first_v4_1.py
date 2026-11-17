@@ -123,6 +123,10 @@ class C01ImageFirstV41Tests(unittest.TestCase):
             [],
             "The author source shows five unlabeled class-output squares; do not invent C₁…C₅ labels.",
         )
+        self.assertIn(
+            "unlabeled source-visible squares",
+            self.topology["geometry_contract"]["class_outputs"]["labeling"],
+        )
         for output in outputs:
             self.assertGreaterEqual(output["x"], main_panel["x"])
             self.assertLessEqual(output["x"] + output["w"], panel_right)
