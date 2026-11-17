@@ -59,27 +59,44 @@ class C01ImageFirstV41Tests(unittest.TestCase):
         gap_top = b3["y"] + b3["h"]
         gap_bottom = bn["y"]
         upper = self.by_id["el_0209"]
-        ellipsis = self.by_id["el_0210"]
         lower = self.by_id["el_0211"]
+        dots = sorted(
+            [e for e in self.elements if e.get("semantic_role") == "schematic_marker"
+             and e.get("semantic_id", "").startswith("inter_band_continuation_ellipsis_dot_")],
+            key=lambda e: e["y"],
+        )
+        self.assertEqual(len(dots), 3)
+        marker_top = min(e["y"] for e in dots)
+        marker_bottom = max(e["y"] + e["h"] for e in dots)
+        self.assertLessEqual(gap_top - 0.01, marker_top)
+        self.assertLessEqual(marker_bottom, gap_bottom - 0.005)
+        self.assertTrue(all(e["type"] == "ellipse" for e in dots))
+        self.assertTrue(all(dots[i]["y"] < dots[i + 1]["y"] for i in range(2)))
+        marker_center_x = dots[0]["x"] + dots[0]["w"] / 2
+        self.assertTrue(all(abs(e["x"] + e["w"] / 2 - marker_center_x) < 1e-9 for e in dots))
+        self.assertLess(abs(upper["x1"] - marker_center_x), 0.15)
+        self.assertLess(abs(lower["x1"] - marker_center_x), 0.15)
         self.assertLessEqual(gap_top - 0.04, upper["y1"])
         self.assertLessEqual(upper["y2"], gap_bottom)
-        self.assertGreaterEqual(ellipsis["y"], gap_top - 0.009)
-        self.assertLessEqual(ellipsis["y"] + ellipsis["h"], gap_bottom + 0.01)
-        self.assertLessEqual(ellipsis["size"], 6.5)
         self.assertGreaterEqual(lower["y1"], gap_top)
         self.assertLessEqual(lower["y2"], gap_bottom + 0.04)
         self.assertTrue(all(rail["x1"] == rail["x2"] for rail in (upper, lower)))
         self.assertTrue(all("semantic_link" not in rail for rail in (upper, lower)))
+        self.assertFalse(any(e.get("text") == "⋮" for e in self.elements))
         self.assertNotIn(("band_3", "band_4"), set(map(tuple, self.spec["semantic_edges"])))
 
     def test_total_graph_has_one_example_edge_and_non_attached_continuation(self):
         examples = [e for e in self.elements if e.get("semantic_id") == "inter_band_example"]
         rails = [e for e in self.elements if e.get("semantic_id", "").startswith("inter_band_continuation_rail_")]
-        ellipses = [e for e in self.elements if e.get("semantic_id") == "inter_band_continuation_ellipsis"]
+        ellipses = [
+            e for e in self.elements
+            if e.get("semantic_id", "").startswith("inter_band_continuation_ellipsis_dot_")
+        ]
         self.assertEqual(len(examples), 1)
         self.assertTrue(examples[0]["dash"])
         self.assertEqual(len(rails), 2)
-        self.assertEqual(len(ellipses), 1)
+        self.assertEqual(len(ellipses), 3)
+        self.assertTrue(all(e["type"] == "ellipse" for e in ellipses))
         self.assertTrue(all(e["x1"] == e["x2"] for e in rails))
         self.assertTrue(all("semantic_link" not in e for e in rails))
         self.assertIn("no node endpoints", self.topology["geometry_contract"]["total_graph"]["continuation_marker"])
