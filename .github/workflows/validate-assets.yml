@@ -119,6 +119,8 @@ jobs:
           python tools/test_figure_ast_writers.py
           python tools/test_figure_ast_generalization.py
           python tools/test_validate_ast_parity.py
+          python tools/test_text_layout_metrics.py
+          python tools/test_calibrate_text_fit_against_pdf.py
           python tools/run_ast_generalization_pilot.py --output-dir dist/ast_generalization --profile profiles/renderer/lo_headless_v1.json
       - name: Execute C01-FBG source-grounded repair
         run: |
