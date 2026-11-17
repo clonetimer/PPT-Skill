@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
 import unicodedata
 from pathlib import Path
@@ -166,42 +167,93 @@ def _frame_bbox_points(
 
 
 def _match_text(
-    expected: str,
+    expected_source: str,
     blocks: list[dict[str, Any]],
     frame_bbox: tuple[float, float, float, float],
 ) -> tuple[dict[str, Any] | None, str]:
-    """Find the exact source text inside a PDF block and return only its glyph records."""
-    candidates: list[tuple[float, dict[str, Any]]] = []
+    """Match one- or multi-line source text within a page-wide PDF glyph stream."""
+    expected_lines = [
+        normalize_text(line)
+        for line in str(expected_source).splitlines()
+        if normalize_text(line)
+    ]
+    if not expected_lines:
+        expected_lines = [normalize_text(expected_source)]
     frame_x = (frame_bbox[0] + frame_bbox[2]) / 2
     frame_y = (frame_bbox[1] + frame_bbox[3]) / 2
-    for block in blocks:
-        haystack = block["normalized_text"]
-        start = 0
-        while True:
-            start = haystack.find(expected, start)
-            if start < 0:
-                break
-            end = start + len(expected)
-            chars = [item for item in block["char_map"][start:end] if item is not None]
-            if chars:
-                raw_bbox = _union_bbox([item["bbox"] for item in chars])
-                center_x = (raw_bbox[0] + raw_bbox[2]) / 2
-                center_y = (raw_bbox[1] + raw_bbox[3]) / 2
-                distance = abs(center_x - frame_x) + abs(center_y - frame_y)
-                candidates.append((distance, {
-                    "chars": chars,
-                    "raw_bbox": raw_bbox,
-                    "block_index": block["block_index"],
-                    "line_count": len({
-                        round(item["origin"][1] / 0.75) for item in chars
-                    }),
-                    "pdf_fonts": sorted({item["font"] for item in chars if item["font"]}),
-                }))
-            start = end
-    if not candidates:
+
+    def occurrences(needle: str) -> list[dict[str, Any]]:
+        found: list[dict[str, Any]] = []
+        for block in blocks:
+            haystack = block["normalized_text"]
+            start = 0
+            while True:
+                start = haystack.find(needle, start)
+                if start < 0:
+                    break
+                end = start + len(needle)
+                chars = [item for item in block["char_map"][start:end] if item is not None]
+                if chars:
+                    raw_bbox = _union_bbox([item["bbox"] for item in chars])
+                    center_x = (raw_bbox[0] + raw_bbox[2]) / 2
+                    center_y = (raw_bbox[1] + raw_bbox[3]) / 2
+                    baseline = sum(item["origin"][1] for item in chars) / len(chars)
+                    distance = abs(center_x - frame_x) + abs(center_y - frame_y)
+                    found.append({
+                        "chars": chars,
+                        "raw_bbox": raw_bbox,
+                        "block_index": block["block_index"],
+                        "baseline": baseline,
+                        "distance": distance,
+                    })
+                start = end
+        return sorted(found, key=lambda item: item["distance"])[:16]
+
+    line_candidates = [occurrences(line) for line in expected_lines]
+    if any(not candidates for candidates in line_candidates):
         return None, "not_found"
-    candidates.sort(key=lambda item: item[0])
-    return candidates[0][1], "exact_substring"
+
+    if len(line_candidates) == 1:
+        selected = line_candidates[0][0]
+        match_kind = "exact_substring"
+        selected_lines = [selected]
+    else:
+        valid: list[tuple[float, list[dict[str, Any]]]] = []
+        for combination in itertools.product(*line_candidates):
+            baselines = [item["baseline"] for item in combination]
+            if any(
+                later - earlier <= 0.75
+                for earlier, later in zip(baselines, baselines[1:])
+            ):
+                continue
+            centers_x = [
+                (item["raw_bbox"][0] + item["raw_bbox"][2]) / 2
+                for item in combination
+            ]
+            if max(centers_x) - min(centers_x) > max(40.0, (frame_bbox[2] - frame_bbox[0]) * 0.35):
+                continue
+            score = sum(item["distance"] for item in combination)
+            valid.append((score, list(combination)))
+        if not valid:
+            return None, "not_found"
+        valid.sort(key=lambda item: item[0])
+        selected_lines = valid[0][1]
+        match_kind = "linewise_exact"
+
+    chars = [
+        char
+        for item in selected_lines
+        for char in item["chars"]
+    ]
+    return {
+        "chars": chars,
+        "raw_bbox": _union_bbox([item["bbox"] for item in chars]),
+        "block_index": -1,
+        "line_count": len({
+            round(item["origin"][1] / 0.75) for item in chars
+        }),
+        "pdf_fonts": sorted({item["font"] for item in chars if item["font"]}),
+    }, match_kind
 
 
 def _rendered_geometry(
@@ -257,7 +309,7 @@ def calibrate(pptx_path: Path, pdf_path: Path, tolerance_pt: float = 1.5) -> dic
             for shape_index, shape in enumerate(slide.shapes, 1):
                 if not getattr(shape, "has_text_frame", False) or not shape.text.strip():
                     continue
-                expected = normalize_text(shape.text)
+                expected = shape.text
                 frame = _frame_bbox_points(
                     shape, page_width, page_height, deck.slide_width, deck.slide_height
                 )
