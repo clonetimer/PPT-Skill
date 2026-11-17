@@ -3,6 +3,7 @@
 from __future__ import annotations
 import shutil, unittest
 from text_layout_metrics import FontMetrics, binary_search_min_height, contrast_ratio, fit_font_size, fit_textbox_height, resolve_font_face, resolve_font_file
+from audit_figure_spec_text_fit import audit_spec
 
 
 class TextLayoutMetricsTests(unittest.TestCase):
@@ -112,6 +113,26 @@ class TextLayoutMetricsTests(unittest.TestCase):
             self.assertIn("U+209C", metrics.fallback_fonts)
         finally:
             metrics.close()
+
+    def test_figure_spec_preflight_suggests_height_without_mutating_layout(self):
+        spec = {
+            "id": "text_fit_preflight_fixture",
+            "canvas": {"width_in": 4, "height_in": 2},
+            "style": {"font": "DejaVu Sans"},
+            "elements": [{
+                "type": "text", "x": 0.2, "y": 0.2, "w": 0.45, "h": 0.12,
+                "text": "A long scientific label with several words",
+                "size": 18, "bold": False, "color": "#28343C",
+            }],
+        }
+        original_height = spec["elements"][0]["h"]
+        report = audit_spec(spec)
+        element = report["elements"][0]
+        self.assertEqual(report["status"], "REVISE")
+        self.assertFalse(element["fits_estimate"])
+        self.assertIsNotNone(element["binary_search_minimum_height_pt"])
+        self.assertGreater(element["additional_height_needed_pt"], 0)
+        self.assertEqual(spec["elements"][0]["h"], original_height)
 
     def test_wcag_contrast_ratio(self):
         self.assertAlmostEqual(contrast_ratio("#000000","#FFFFFF"),21.0,places=4)
