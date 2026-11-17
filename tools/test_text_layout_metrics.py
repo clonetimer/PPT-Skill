@@ -146,7 +146,7 @@ class TextLayoutMetricsTests(unittest.TestCase):
             self.assertLess(measured["ink_height_pt"], measured["line_height_pt"])
             self.assertIn("U+209C", metrics.fallback_fonts)
             two_lines = metrics.measure(
-                "xₜ\\nxₜ", 13, 0.55, 0.50,
+                "\n".join(("xₜ", "xₜ")), 13, 0.55, 0.50,
                 margins_pt=(1.44, 1.44, .576, .576),
             )
             self.assertEqual(two_lines["line_count"], 2)
