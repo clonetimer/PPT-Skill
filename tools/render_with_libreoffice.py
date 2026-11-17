@@ -73,11 +73,22 @@ def collect_requested_fonts(pptx_path: Path) -> list[str]:
 def resolve_fonts(font_names: list[str]) -> dict[str, dict[str, str]]:
     resolved = {}
     for family in font_names:
-        match = run_command(["fc-match", "-f", "%{family}\\n%{file}\\n", family], check=False)
-        lines = [line.strip() for line in match.stdout.splitlines() if line.strip()]
+        match = run_command(
+            ["fc-match", "-f", "%{family[0]}\\n%{index}\\n%{file}\\n", family],
+            check=False,
+        )
+        lines = [line.strip() for line in match.stdout.splitlines()]
         actual_family = lines[0] if lines else "unresolved"
-        file_name = lines[1] if len(lines) > 1 else ""
-        item = {"resolved_family": actual_family, "file": file_name}
+        try:
+            font_index = int(lines[1] or "0") if len(lines) > 1 else 0
+        except ValueError:
+            font_index = -1
+        file_name = lines[2] if len(lines) > 2 else ""
+        item = {
+            "resolved_family": actual_family,
+            "font_index": font_index,
+            "file": file_name,
+        }
         file_path = Path(file_name) if file_name else None
         if file_path and file_path.is_file():
             item["sha256"] = sha256_file(file_path)
@@ -128,8 +139,14 @@ def validate_lock(profile: dict[str, Any], observed: dict[str, Any]) -> list[str
         mismatches.append(f"os_release:expected={expected_os}:actual={actual_os}")
     for family, value in expected.get("font_files", {}).items():
         actual = observed.get("font_files", {}).get(family, {})
-        if actual.get("sha256") != value:
-            mismatches.append(f"font:{family}:expected={value}:actual={actual.get('sha256')}")
+        if isinstance(value, dict):
+            for field, expected_value in value.items():
+                if actual.get(field) != expected_value:
+                    mismatches.append(
+                        f"font:{family}:{field}:expected={expected_value}:actual={actual.get(field)}"
+                    )
+        elif actual.get("sha256") != value:
+            mismatches.append(f"font:{family}:sha256:expected={value}:actual={actual.get('sha256')}")
     return mismatches
 
 
