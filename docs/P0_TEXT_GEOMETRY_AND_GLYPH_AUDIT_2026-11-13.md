@@ -115,3 +115,12 @@ A regression fixture that places the neighboring character inside or overlapping
 The first integrated FigureSpec preflight exposed a second boundary condition: a fixed 72 pt maximum search height is not sufficient for a very narrow box containing a long label. The binary search then reports `max_height_overflows` and returns no suggested height, even though a larger box would fit.
 
 Derive the upper search bound from the text length and the selected font's line height (a conservative one-glyph-per-line ceiling), while retaining a practical minimum and the existing authored-height multiplier. Keep the solver advisory: report the minimum fitting height and the additional height needed; do not silently resize the FigureSpec or shrink the font.
+
+
+### Glyph-ink preflight calibration lesson
+
+The first cross-paper preflight compared the full OS/2/hhea line box with the text-frame height. That was conservative enough to flag short Cambria Math labels (`xₜ`, `yₜ`) even though the pinned LibreOffice PDF showed their actual ink fully inside the frame.
+
+For a single line, calculate vertical demand from the selected glyph outlines' ink extents. For multiple lines, combine the maximum line ink height with the measured inter-baseline distance; retain the full font line-height metric for baseline spacing, not as the single-line ink height. Keep the post-render glyph-boundary check as the authoritative calibration. On the Mamba/Swin pilot, this reduced both preflight estimated-overflow counts to zero while preserving 24/24 PDF text matches and zero rendered overflow.
+
+Multiline regression fixtures must contain actual newline characters. A literal backslash followed by `n` is two printable characters and does not exercise paragraph/line-break handling.
