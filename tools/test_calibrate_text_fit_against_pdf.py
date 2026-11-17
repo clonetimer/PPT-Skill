@@ -83,6 +83,8 @@ class PdfTextCalibrationTests(unittest.TestCase):
                 (1.0, 2.0, 6.0, 0.55, "Schematic: Δₜ, Bₜ and Cₜ"),
                 (1.0, 2.8, 3.0, 0.70, "Shift by\n(2, 2)"),
                 (4.2, 2.8, 3.2, 0.70, "Illustration: shift=(⌊M/2⌋, ⌊M/2⌋)."),
+                (1.0, 3.5, 1.4, 0.24, "A patch"),
+                (2.5, 3.5, 1.0, 0.24, "Extra"),
             ]
             for x, y, width, height, value in examples:
                 shape = slide.shapes.add_textbox(
@@ -97,7 +99,7 @@ class PdfTextCalibrationTests(unittest.TestCase):
                 for paragraph in shape.text_frame.paragraphs:
                     for run in paragraph.runs:
                         run.font.name = "Arial"
-                        run.font.size = Pt(14)
+                        run.font.size = Pt(8 if value in {"A patch", "Extra"} else 14)
             deck.save(pptx_path)
 
             render = render_pptx(
@@ -107,7 +109,7 @@ class PdfTextCalibrationTests(unittest.TestCase):
                 pptx_path, Path(render["outputs"]["pdf"]["path"])
             )
 
-            self.assertEqual(report["text_shapes"], 5)
+            self.assertEqual(report["text_shapes"], 7)
             self.assertEqual(report["missing_text_count"], 0, report["elements"])
             self.assertEqual(report["rendered_text_outside_frame_count"], 0, report["elements"])
             self.assertEqual(report["status"], "PASS")
