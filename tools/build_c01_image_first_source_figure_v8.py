@@ -64,7 +64,7 @@ def _add_input_graph(spec: dict) -> None:
 def _add_class_outputs(spec: dict) -> None:
     elements = spec["elements"]
     class_label = _text(spec, "el_0090")
-    class_label.update(text="fault class", x=8.48, y=6.08, w=0.68, h=0.2, size=9.5)
+    class_label.update(text="fault class", x=8.40, y=6.08, w=0.67, h=0.2, size=9.5, align="right")
     class_label["semantic_id"] = "class_output_label"
     group = {
         "type": "rect", "x": 8.89, "y": 5.0, "w": 0.34, "h": 0.94,
@@ -81,13 +81,6 @@ def _add_class_outputs(spec: dict) -> None:
             "stroke": "#43525B", "sw": 0.65, "radius": 0,
             "id": f"el_{131 + index:04d}",
             "semantic_role": "illustrative_class_output", "evidence_ref": "source_1",
-        })
-        elements.append({
-            "type": "text", "text": ["C₁", "C₂", "C₃", "C₄", "C₅"][index],
-            "x": 9.07, "y": y - 0.005, "w": 0.18, "h": 0.16,
-            "size": 9.5, "bold": index == 1, "align": "left", "color": "#28343C",
-            "id": f"el_{136 + index:04d}",
-            "semantic_role": "illustrative_class_label", "evidence_ref": "source_1",
         })
     if ["dense", "class_output"] not in spec["semantic_edges"]:
         spec["semantic_edges"].append(["dense", "class_output"])
