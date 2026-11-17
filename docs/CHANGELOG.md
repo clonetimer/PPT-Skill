@@ -12,6 +12,7 @@
 - Added six reproducible UCI Iris charts with row-level lineage, statistics definitions, SVG/PPTX/PDF outputs and validation, including paired ablation and trend/interval cases.
 - Added a CC0 quantitative-phase image plus raw-pixel histogram, with source hash, processing log, calibration and scale-bar checks.
 - Added CI build and validation for the new examples. Independent domain and final-size review remains pending.
+- Added a glyph-level PDF text-fit calibration gate for the independent-paper FigureAST corpus, including per-codepoint fallback-font resolution, glyph-outline bounds, page-wide character matching, explicit multiline baseline matching and whitespace-loss-safe token boundaries. Added regression coverage for adjacent text boxes, fallback subscripts, floor/ceiling symbols, multiline labels and partial-word false matches; CI preserves calibration diagnostics on failure.
 - Added a Nature two-column publication-size Q03 demonstrator with the same rows/statistics as the presentation panel, final-size PDF geometry and embedded-font checks; CI now verifies committed PowerPoint export records and SVG/PPTX/PDF labels without forging a Linux exporter claim.
 - Recorded observed PDF font names and embedding for all ten Windows-exported research figures, including Type 0 composite fonts, and checked them against the requested font family.
 - Added coordinate audits that recompute raw-point positions, summary markers and ablation bar heights from source rows and statistics; displaced points and bars now fail negative tests.
