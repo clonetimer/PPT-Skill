@@ -108,3 +108,10 @@ A compact-text fallback must distinguish two cases using the candidate frame and
 - An alphanumeric continuation inside the candidate frame must still block a prefix-only match (for example, matching `A patch` inside `A patches`).
 
 A regression fixture that places the neighboring character inside or overlapping the candidate frame is not a valid independent-text-box fixture; by geometry it is indistinguishable from a continuation of the same text object. Keep these positive and negative fixtures separate.
+
+
+### Binary-search ceiling lesson for pre-build fit estimates
+
+The first integrated FigureSpec preflight exposed a second boundary condition: a fixed 72 pt maximum search height is not sufficient for a very narrow box containing a long label. The binary search then reports `max_height_overflows` and returns no suggested height, even though a larger box would fit.
+
+Derive the upper search bound from the text length and the selected font's line height (a conservative one-glyph-per-line ceiling), while retaining a practical minimum and the existing authored-height multiplier. Keep the solver advisory: report the minimum fitting height and the additional height needed; do not silently resize the FigureSpec or shrink the font.
