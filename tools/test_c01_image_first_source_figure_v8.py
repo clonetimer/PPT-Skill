@@ -14,6 +14,13 @@ class C01ImageFirstSourceFigureV8Tests(unittest.TestCase):
         self.spec = build_spec()
         self.elements = self.spec["elements"]
 
+    def test_builder_output_matches_committed_source_figure_spec(self):
+        committed = json.loads(
+            (ROOT / "figure_specs/c01/C01_composite_defense_slide_image_first_v8.json")
+            .read_text(encoding="utf-8")
+        )
+        self.assertEqual(self.spec, committed)
+
     def test_each_band_subgraph_and_total_graph_row_uses_three_node_motif(self):
         graphs = [
             e for e in self.elements
