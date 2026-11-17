@@ -95,6 +95,24 @@ class TextLayoutMetricsTests(unittest.TestCase):
         finally:
             metrics.close()
 
+    def test_glyph_outline_bounds_are_available_for_math_and_fallback_glyphs(self):
+        path, face_index, _ = resolve_font_face("Cambria Math")
+        metrics = FontMetrics(path, face_index=face_index)
+        try:
+            delta = metrics.glyph_ink_offsets_pt("Δ", 14)
+            subscript = metrics.glyph_ink_offsets_pt("ₜ", 14)
+            self.assertIsNotNone(delta)
+            self.assertIsNotNone(subscript)
+            for bounds in (delta, subscript):
+                left, bottom, right, top = bounds
+                self.assertLess(left, right)
+                self.assertLess(bottom, top)
+                self.assertLess(right - left, 20)
+                self.assertLess(top - bottom, 20)
+            self.assertIn("U+209C", metrics.fallback_fonts)
+        finally:
+            metrics.close()
+
     def test_wcag_contrast_ratio(self):
         self.assertAlmostEqual(contrast_ratio("#000000","#FFFFFF"),21.0,places=4)
         self.assertLess(contrast_ratio("#777777","#FFFFFF"),4.5)
