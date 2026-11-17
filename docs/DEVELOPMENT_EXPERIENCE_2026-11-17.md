@@ -56,3 +56,12 @@ This command performs the technical PDF-import route only. FigureSpec reconstruc
 - The preceding #841 run was cancelled by a newer push; #842 is the authoritative completed run for this increment.
 
 The next blocking work is no longer CI wiring: execute the batch runner in an environment containing the ten private PDFs and retain the actual per-paper PPTX/manifests/previews. CI uses mocked inputs and cannot supply this evidence.
+
+## Third increment: test failure isolation and source-route policy
+
+Expanded the batch-runner regression suite to assert two important contracts directly:
+
+- A synthetic importer exception in the first paper is recorded as `PIPELINE_EXCEPTION`, while the remaining nine papers still execute and retain their own manifests.
+- The three source-picture-only cases explicitly pass `require_native=False`; all other seven pass `require_native=True`.
+
+This prevents future refactors from silently converting the image-preservation exception into a false claim of native editability, or from reintroducing fail-fast batch behavior.
