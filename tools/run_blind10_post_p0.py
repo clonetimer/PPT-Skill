@@ -63,17 +63,26 @@ def run_cohort(source_dir: Path, manifest_path: Path, output_dir: Path,
     for source in sources:
         figure_id = source["figure_id"]
         destination = output_dir / figure_id
-        result = run_pipeline(
-            source_dir / source["filename"],
-            destination,
-            mode="import",
-            render_host="auto",
-            require_native=figure_id not in SOURCE_PICTURE_ONLY,
-            require_office_host=False,
-            max_seconds=max_seconds,
-            page_index=source["page_1based"] - 1,
-            figure_region=tuple(source["region_pt"]),
-        )
+        try:
+            result = run_pipeline(
+                source_dir / source["filename"],
+                destination,
+                mode="import",
+                render_host="auto",
+                require_native=figure_id not in SOURCE_PICTURE_ONLY,
+                require_office_host=False,
+                max_seconds=max_seconds,
+                page_index=source["page_1based"] - 1,
+                figure_region=tuple(source["region_pt"]),
+            )
+            pipeline_status = result.get("status") or "UNKNOWN"
+            blockers = result.get("blockers", [])
+            pending_approvals = result.get("pending_approvals", [])
+        except Exception as exc:  # preserve per-paper failures and continue cohort
+            result = {}
+            pipeline_status = "PIPELINE_EXCEPTION"
+            blockers = [f"{type(exc).__name__}: {exc}"]
+            pending_approvals = []
         manifest_file = destination / "delivery_manifest.json"
         runs.append({
             "figure_id": figure_id,
@@ -82,10 +91,10 @@ def run_cohort(source_dir: Path, manifest_path: Path, output_dir: Path,
             "source_region_pt": source["region_pt"],
             "route": "SOURCE_PICTURE_ONLY_ALLOWED" if figure_id in SOURCE_PICTURE_ONLY
                      else "NATIVE_EDITABLE_IMPORT_REQUIRED",
-            "pipeline_status": result.get("status"),
+            "pipeline_status": pipeline_status,
             "full_release_accepted": result.get("full_release_accepted"),
-            "blockers": result.get("blockers", []),
-            "pending_approvals": result.get("pending_approvals", []),
+            "blockers": blockers,
+            "pending_approvals": pending_approvals,
             "delivery_manifest": str(manifest_file),
             "delivery_manifest_sha256": (
                 hashlib.sha256(manifest_file.read_bytes()).hexdigest()
