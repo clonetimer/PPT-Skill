@@ -108,6 +108,14 @@ def run_figure(figure_name: str, output_root: Path, profile: Path = PROFILE) -> 
             "line_count_mismatch_count": text_calibration["line_count_mismatch_count"],
             "font_metric_unavailable_count": text_calibration["font_metric_unavailable_count"],
             "font_metric_false_negative_overflow_count": text_calibration["font_metric_false_negative_overflow_count"],
+            "missing_texts": [
+                item["text"] for item in text_calibration["elements"]
+                if item.get("match") == "not_found"
+            ],
+            "outside_texts": [
+                item["text"] for item in text_calibration["elements"]
+                if item.get("status") == "TEXT_OUTSIDE_FRAME"
+            ],
         },
         "artifacts": {
             "ast_json": str(ast_json.relative_to(ROOT)),
