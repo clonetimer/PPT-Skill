@@ -98,3 +98,13 @@ The Mamba and Swin generalization figures retained exact SVG/DrawingML raster pa
 ### Acceptance boundary
 
 A missing text match is not automatically classified as a source-layout defect until the character stream and rendered page are inspected. The fallback matcher may recover whitespace lost by PDF extraction, but it must not suppress true missing text or partial-word matches. Any actual ink outside the source text frame remains a hard calibration failure. LibreOffice results remain separate from Microsoft PowerPoint 2016 host certification.
+
+
+### Additional regression lesson from the same-line boundary test
+
+A compact-text fallback must distinguish two cases using the candidate frame and glyph positions, not only string adjacency:
+
+- A preceding/following character from a separate PDF text object on the same baseline must not block a match when it is outside the candidate PowerPoint text frame.
+- An alphanumeric continuation inside the candidate frame must still block a prefix-only match (for example, matching `A patch` inside `A patches`).
+
+A regression fixture that places the neighboring character inside or overlapping the candidate frame is not a valid independent-text-box fixture; by geometry it is indistinguishable from a continuation of the same text object. Keep these positive and negative fixtures separate.
