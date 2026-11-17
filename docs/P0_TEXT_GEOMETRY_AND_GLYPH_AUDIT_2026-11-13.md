@@ -62,3 +62,39 @@ These values are renderer-specific triage metrics, not scientific correctness sc
 - Source-inherited text clipped by the crop is reported separately; no new clipping is introduced. A publication-ready re-layout would need an explicitly authorized layout change.
 - Real Office 2016 open/save/re-export and final-size visual review remain outstanding.
 - The original ten-paper cohort is now a development regression set, not a new blind hold-out. Strict first-pass success on the frozen ten-paper FigureSpec cohort remains 0/10; this P0-03 repair must not be retroactively counted as a first-pass pass.
+
+
+## Extension — PDF text calibration across independent text frames (2026-11-17)
+
+### Failure pattern found in the independent-paper AST pilot
+
+The Mamba and Swin generalization figures retained exact SVG/DrawingML raster parity, but the first text-calibration attempts failed for reasons that were not all actual layout defects:
+
+- PDF text extraction groups characters into spans, lines and blocks according to renderer decisions. A PDF block is not equivalent to one PowerPoint text frame; adjacent independent text boxes may be merged into one block.
+- A single source text frame may be emitted as multiple PDF spans or font runs when a fallback face renders a missing glyph (for example, mathematical subscripts and floor/ceiling symbols).
+- A narrow PDF whitespace character can overlap the bounding box of a neighboring glyph. Removing whitespace on any intersection can turn a valid label such as `A patch` into `Apatch`.
+- Explicit line breaks in one PowerPoint text frame may be represented by separate PDF baselines rather than a literal newline character in one text span.
+- Font-wide PDF span bounds are not a reliable ink bound for mixed math fonts. Glyph-outline bounds, positioned by the PDF character baseline and the selected glyph face, are a better measurement basis.
+
+### Corrective implementation
+
+1. Keep a page-wide, character-position-preserving stream across PDF blocks and fallback-font runs. Do not assume a PDF block maps one-to-one to a PowerPoint text shape.
+2. Preserve whitespace unless its box is fully contained by a same-baseline visible glyph. Do not discard it merely because bounding boxes intersect.
+3. Match source text exactly first. If the PDF stream has dropped a whitespace glyph, retry with a whitespace-insensitive key and enforce alphanumeric token boundaries so a label cannot match only the prefix of a longer word.
+4. Match explicit source newlines line-by-line against distinct PDF baselines; retain the selected glyph records for the final geometry calculation.
+5. Resolve fallback faces per code point and measure the selected glyph outline. Retain the requested/resolved face and fallback decision in the audit record.
+6. Compare reconstructed ink bounds with the original PPTX text-frame geometry. Keep the fast fontTools estimate as a separate diagnostic; do not treat a line-count disagreement alone as proof of overflow.
+7. Emit the exact unmatched/overflowing text strings in the CI summary. Preserve the full generalization output directory as a failure artifact so the next diagnosis can inspect PDF, PPTX, render records and per-shape audit together.
+
+### Regression fixtures required
+
+- Adjacent independent text boxes on one PDF line.
+- A multi-line label with an explicit source newline.
+- A single label with a fallback-font subscript.
+- A label containing floor/ceiling symbols.
+- A narrow inter-word space that the PDF extractor may omit.
+- A negative fixture proving whitespace-insensitive matching does not match `A patch` inside `A patches`.
+
+### Acceptance boundary
+
+A missing text match is not automatically classified as a source-layout defect until the character stream and rendered page are inspected. The fallback matcher may recover whitespace lost by PDF extraction, but it must not suppress true missing text or partial-word matches. Any actual ink outside the source text frame remains a hard calibration failure. LibreOffice results remain separate from Microsoft PowerPoint 2016 host certification.
