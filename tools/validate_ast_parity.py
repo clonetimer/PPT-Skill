@@ -21,7 +21,7 @@ def inspect_pptx(path: Path) -> dict:
             "bounds":[[shape.left,shape.top,shape.width,shape.height] for shape in shapes],
             "within_canvas":all(shape.left>=0 and shape.top>=0 and shape.left+shape.width<=deck.slide_width and shape.top+shape.height<=deck.slide_height for shape in shapes),
         })
-    return {"slide_count":len(deck.slides),"slides":slides}
+    return {"slide_count":len(deck.slides),"slide_size_emu":[deck.slide_width,deck.slide_height],"slides":slides}
 
 
 def validate(legacy_pptx: Path, ast_pptx: Path, legacy_png: Path, ast_png: Path,
@@ -31,11 +31,15 @@ def validate(legacy_pptx: Path, ast_pptx: Path, legacy_png: Path, ast_png: Path,
     issues=[]
     if legacy["slide_count"]!=ast["slide_count"]:
         issues.append("SLIDE_COUNT_MISMATCH")
+    if legacy["slide_size_emu"]!=ast["slide_size_emu"]:
+        issues.append("SLIDE_SIZE_MISMATCH")
     for index,(left,right) in enumerate(zip(legacy["slides"],ast["slides"])):
         if left["shape_count"]!=right["shape_count"]:
             issues.append(f"SHAPE_COUNT_MISMATCH:{index+1}")
         if left["shape_types"]!=right["shape_types"]:
             issues.append(f"SHAPE_TYPE_INVENTORY_MISMATCH:{index+1}")
+        if left["pictures"]!=right["pictures"]:
+            issues.append(f"PICTURE_COUNT_MISMATCH:{index+1}")
         if left["texts"]!=right["texts"]:
             issues.append(f"TEXT_SEQUENCE_MISMATCH:{index+1}")
         if left["bounds"]!=right["bounds"]:
