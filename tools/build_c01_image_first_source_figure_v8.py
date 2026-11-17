@@ -167,6 +167,7 @@ def build_spec(source_spec: dict | None = None) -> dict:
         "input_graph": "12_nodes_4_by_3_source_visible_schematic",
         "cross_band_edges": "schematic_unspecified",
         "class_outputs": "five_output_illustrative_example",
+        "class_output_labeling": "unlabeled_source_visible_squares",
     }
     return spec
 
