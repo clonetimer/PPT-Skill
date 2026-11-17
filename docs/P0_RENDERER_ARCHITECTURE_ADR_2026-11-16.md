@@ -75,6 +75,16 @@ The calibration implementation now:
 
 The workflow also preserves the AST generalization directory as a failure artifact. The associated development lessons and regression requirements are recorded in `docs/P0_TEXT_GEOMETRY_AND_GLYPH_AUDIT_2026-11-13.md`.
 
+### Pre-build fit estimate evidence
+
+The AST generalization pilot now runs `audit_figure_spec_text_fit.audit_spec` before rendering and archives `text_fit_preflight.json` beside the PDF glyph calibration. The preflight reports font-resolved width/height estimates, a binary-searched minimum frame height, additional height needed and WCAG contrast without changing source geometry or shrinking fonts.
+
+CI #762 measured both independent-paper examples:
+- Mamba Figure 1: 16 text elements, 0 estimated overflows, 0 contrast failures; post-render calibration 16/16 matches and 0 overflow.
+- Swin Figure 2: 8 text elements, 0 estimated overflows, 0 contrast failures; post-render calibration 8/8 matches and 0 overflow.
+
+The initial preflight used the full font line box as single-line ink height and produced two false positives on Mamba math labels. Replacing that with glyph-outline ink height (while retaining font line-height for inter-baseline spacing) removed those false positives without changing the figures. The regression suite now covers the single-line fallback-glyph case and explicit multi-line baselines.
+
 ### Remaining P0 boundary
 
-This is a successful pilot, not yet a production-default renderer switch. The current FigureSpec font-metric audit is advisory and does not automatically alter authored text boxes. The next implementation step is to record pre-build fit estimates beside the post-render calibration results on the same cross-paper corpus, measure false-positive/false-negative behavior, and only then decide which preflight conditions can become hard gates. Real Microsoft PowerPoint 2016 open/save/reopen remains a separate host test.
+This is a successful pilot, not yet a production-default renderer switch. The pre-build fit report remains advisory: its agreement is established on two independent-paper examples, not the full 15-task corpus. Expand calibration across dense Chinese/mixed-font figures, rotated labels, long equations and multi-paragraph text before converting preflight warnings into hard release gates. Real Microsoft PowerPoint 2016 open/save/reopen remains a separate host test.
