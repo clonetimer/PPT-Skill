@@ -119,14 +119,16 @@ def run_figure(entry: dict[str, Any], output_root: Path, profile: Path) -> dict:
     ast_slide = parity["ast"]["slides"][0]
     source_evidence = entry.get("source_evidence", {})
     source_path = source_evidence.get("path")
-    source_hash = sha256(repo_path(source_path)) if source_path else None
+    source_hash_observed = sha256(repo_path(source_path)) if source_path else None
+    source_hash_recorded = source_evidence.get("source_pdf_sha256")
     summary = {
         "figure": figure_name,
         "paper": entry["paper_title"],
         "figure_label": entry.get("figure_label"),
         "family": entry.get("family"),
         "source_evidence": source_evidence,
-        "source_file_sha256_observed": source_hash,
+        "source_pdf_sha256_recorded_at_ingest": source_hash_recorded,
+        "source_file_sha256_observed": source_hash_observed,
         "asset_substitutions": entry.get("asset_substitutions", []),
         "status": "PASS" if parity["status"] == "PASS" and text_calibration["status"] == "PASS" else "FAIL",
         "parity_status": parity["status"],

@@ -45,12 +45,12 @@
       "family": "graph_attention",
       "figure_spec": "dist/skill_tests/ml_cross_family/gat/GAT_Figure1_revision.json",
       "source_evidence": {
-        "kind": "local_paper_pdf",
-        "path": "dist/skill_tests/ml_cross_family/gat/paper.pdf",
-        "sha256": "a7d811a44e1c65bf27da3a01859f23a8edbe33b8f96114b4b5066aedb078f284",
+        "kind": "arxiv",
+        "url": "https://arxiv.org/abs/1710.10903",
+        "source_pdf_sha256": "a7d811a44e1c65bf27da3a01859f23a8edbe33b8f96114b4b5066aedb078f284",
         "status": "source_visible_redraw",
         "locator": "Figure 1, PDF page 4",
-        "note": "Editable source-composition redraw of shared pairwise attention and K=3 neighborhood heads; colored wave traces are editable piecewise lines, not copied source art."
+        "note": "Editable source-composition redraw of shared pairwise attention and K=3 neighborhood heads; colored wave traces are editable piecewise lines, not copied source art. The source PDF is not vendored in this repository; the arXiv locator and ingest-time SHA-256 are retained as provenance."
       },
       "asset_substitutions": []
     },
@@ -61,12 +61,12 @@
       "family": "vision_language_contrastive",
       "figure_spec": "dist/skill_tests/ml_fidelity/clip/MLC01_clip_overview.json",
       "source_evidence": {
-        "kind": "local_paper_pdf",
-        "path": "dist/skill_tests/ml_fidelity/clip/paper.pdf",
-        "sha256": "2a4952960f350e50a3a4a847371b80b8aaa09ba82d1c2a8f6b30450e392a1fe4",
+        "kind": "arxiv",
+        "url": "https://arxiv.org/abs/2103.00020",
+        "source_pdf_sha256": "2a4952960f350e50a3a4a847371b80b8aaa09ba82d1c2a8f6b30450e392a1fe4",
         "status": "source_visible_redraw",
         "locator": "Figure 1, PDF page 2",
-        "note": "Editable redraw of paired contrastive pretraining, classifier synthesis from label text and zero-shot prediction."
+        "note": "Editable redraw of paired contrastive pretraining, classifier synthesis from label text and zero-shot prediction. The source PDF is not vendored in this repository; the arXiv locator and ingest-time SHA-256 are retained as provenance."
       },
       "asset_substitutions": [
         {
@@ -84,12 +84,12 @@
       "family": "residual_cnn",
       "figure_spec": "dist/skill_tests/ml_fidelity/resnet/MLR01_resnet_residual_block.json",
       "source_evidence": {
-        "kind": "local_paper_pdf",
-        "path": "dist/skill_tests/ml_fidelity/resnet/paper.pdf",
-        "sha256": "51b5de45eb0b558b19c3affe49503cff50cb170a32de602983d6e2ec286942a7",
+        "kind": "arxiv",
+        "url": "https://arxiv.org/abs/1512.03385",
+        "source_pdf_sha256": "51b5de45eb0b558b19c3affe49503cff50cb170a32de602983d6e2ec286942a7",
         "status": "source_visible_redraw",
         "locator": "Figure 2, PDF page 2",
-        "note": "Editable source-composition study of F(x), the identity shortcut, additive junction and final ReLU; no pixel-identity claim."
+        "note": "Editable source-composition study of F(x), the identity shortcut, additive junction and final ReLU; no pixel-identity claim. The source PDF is not vendored in this repository; the arXiv locator and ingest-time SHA-256 are retained as provenance."
       },
       "asset_substitutions": []
     },
@@ -100,12 +100,12 @@
       "family": "biomedical_segmentation",
       "figure_spec": "dist/skill_tests/ml_fidelity/unet/MLU01_unet_architecture.json",
       "source_evidence": {
-        "kind": "local_paper_pdf",
-        "path": "dist/skill_tests/ml_fidelity/unet/paper.pdf",
-        "sha256": "a3172b2124f38e260dc2c7ed968d87c31bc94dbc19a42a7ab3dcbd7534319c44",
+        "kind": "arxiv",
+        "url": "https://arxiv.org/abs/1505.04597",
+        "source_pdf_sha256": "a3172b2124f38e260dc2c7ed968d87c31bc94dbc19a42a7ab3dcbd7534319c44",
         "status": "source_visible_redraw",
         "locator": "Figure 1, PDF page 2",
-        "note": "Editable redraw preserving four copy-and-crop skip paths and valid-convolution spatial contraction from 572×572 to 388×388; small spatial labels require final-size review."
+        "note": "Editable redraw preserving four copy-and-crop skip paths and valid-convolution spatial contraction from 572×572 to 388×388; small spatial labels require final-size review. The source PDF is not vendored in this repository; the arXiv locator and ingest-time SHA-256 are retained as provenance."
       },
       "asset_substitutions": []
     }

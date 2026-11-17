@@ -1,5 +1,7 @@
 # Changelog
 
+- Corrected the literature-corpus provenance boundary: source PDFs excluded from Git are represented by canonical arXiv URLs plus ingest-time SHA-256 records (format-checked, not falsely claimed as recomputed in CI); the committed CLIP CC0 replacement asset remains byte-hash verified.
+
 - Preserved source identity for legacy Mamba/Swin FigureSpecs that intentionally omit a top-level id: corpus IDs remain external experiment keys, while existing paper metadata and canonical source hashes are validated without mutating the original specs.
 
 - Added a six-paper source-backed FigureAST corpus (Mamba, Swin, GAT, CLIP, ResNet, U-Net). Core semantic/source-provenance tests remain hard gates; legacy-vs-AST visual parity is a non-blocking experiment with retained per-paper artifacts. The legacy baseline is rebuilt from the same FigureSpec before comparison, and CLIP's CC0 replacement image is explicitly disclosed.

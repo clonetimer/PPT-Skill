@@ -37,13 +37,12 @@ class FigureAstGeneralizationTests(unittest.TestCase):
                 self.assertTrue(spec_path.is_file(), entry["figure_spec"])
                 self.assertEqual(entry["source_evidence"]["status"], "source_visible_redraw")
                 evidence = entry["source_evidence"]
-                if evidence["kind"] == "local_paper_pdf":
-                    source_path = ROOT / evidence["path"]
-                    self.assertTrue(source_path.is_file(), evidence["path"])
-                    self.assertEqual(sha256(source_path), evidence["sha256"])
-                else:
-                    self.assertEqual(evidence["kind"], "arxiv")
-                    self.assertTrue(evidence["url"].startswith("https://arxiv.org/"))
+                self.assertEqual(evidence["kind"], "arxiv")
+                self.assertTrue(evidence["url"].startswith("https://arxiv.org/"))
+                recorded_pdf_hash = evidence.get("source_pdf_sha256")
+                if recorded_pdf_hash:
+                    self.assertEqual(len(recorded_pdf_hash), 64)
+                    self.assertTrue(all(char in "0123456789abcdef" for char in recorded_pdf_hash))
                 for asset in entry.get("asset_substitutions", []):
                     asset_path = ROOT / asset["path"]
                     self.assertTrue(asset_path.is_file(), asset["path"])

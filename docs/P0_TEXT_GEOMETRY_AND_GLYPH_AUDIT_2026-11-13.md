@@ -222,3 +222,10 @@ The boundary between CI and research is explicit:
 The six-paper corpus includes two established generalization FigureSpecs (Mamba and Swin) that intentionally predate the explicit top-level `id` field. Their stable paper/figure identity is already recorded in `meta.paper`, `meta.source` and `meta.figure`. Do not rewrite source material solely to add a new identifier for the experiment.
 
 Use the corpus manifest's `id` as the experiment/output key. If a FigureSpec has an explicit `id`, verify it matches; if it does not, validate its existing paper metadata and let FigureAST normalize its internal ID to `unnamed-figure`. The canonical source hash must remain bound to the unmodified source spec.
+
+
+### Source-PDF availability boundary in the literature corpus
+
+The four newly added arXiv paper PDFs are not vendored in the Git repository (the FigureSpec evidence records refer to acquisition-time local paths that are intentionally absent from CI checkout). The corpus manifest therefore stores the canonical arXiv URL and the SHA-256 recorded at source acquisition. CI verifies the URL shape and hash format, but does **not** claim to recompute those PDF hashes from absent files. The CLIP CC0 replacement image is committed and its bytes are hash-verified in CI.
+
+If exact source-PDF byte verification becomes a release requirement, add an explicit, version-pinned source-fetch step with cache and retry policy; do not make the ordinary validation job depend on unpinned external downloads.
