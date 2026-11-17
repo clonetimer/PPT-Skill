@@ -132,12 +132,12 @@ The continuation ellipsis sits inside a fixed semantic gap between the visible B
 
 For text marks inside a constrained structural gap:
 1. Treat the surrounding object geometry as a hard layout constraint; do not enlarge the text frame beyond the gap to satisfy font metrics.
-2. Resolve the actual fallback font and glyph ink bounds first. A fallback vertical-ellipsis glyph at 9.5 pt produced an approximately 11 pt ink box, larger than the available gap.
+2. Resolve the actual fallback font and glyph ink bounds first. The fallback vertical-ellipsis glyph produced an ink box larger than the available gap and also conflicted with the presentation minimum text size.
 3. Reduce the glyph's authored font size to fit the available frame, or replace a typographic mark with editable native vector dots when that is the clearer source-matched representation.
 4. Keep the frame within the measured gap with a small geometric tolerance, and preserve the independent topology test.
 5. Run the strict LibreOffice glyph calibration after the topology test; both must pass. Do not weaken either gate to make the other pass.
 
-The C01 correction keeps the marker inside the B₃/B_N gap (y=3.127 in, h=0.127 in) and reduces its font size to 6 pt, leaving explicit tolerance at both gap boundaries. The intended visual meaning remains a non-attached continuation marker, not a B₃-to-B_N edge.
+The C01 correction replaces the font glyph with three editable native ellipse marks inside the B₃/B_N gap. This removes font substitution and minimum-text-size conflicts while preserving the non-attached continuation meaning; the two dashed rails remain separate vector connectors.
 
 
 ### Source-first correction for constrained output annotations
