@@ -91,46 +91,46 @@ def _collapse_with_map(
 
 
 def extract_pdf_text_blocks(pdf_path: Path) -> list[list[dict[str, Any]]]:
-    """Keep character positions so adjacent text boxes and fallback glyphs remain separable."""
+    """Build one position-preserving text stream per page across blocks and fallback-font runs."""
     document = fitz.open(pdf_path)
     pages: list[list[dict[str, Any]]] = []
     try:
         for page in document:
-            page_blocks: list[dict[str, Any]] = []
-            for block_index, block in enumerate(page.get_text("rawdict").get("blocks", [])):
-                if block.get("type") != 0:
-                    continue
-                spans = [
-                    span for line in block.get("lines", [])
-                    for span in line.get("spans", [])
-                ]
-                records = _line_char_records({"spans": spans})
-                if not records:
-                    continue
-                baseline_groups: dict[int, list[dict[str, Any]]] = {}
-                for item in records:
-                    baseline_key = round(item["origin"][1] / 0.75)
-                    baseline_groups.setdefault(baseline_key, []).append(item)
-                flattened: list[dict[str, Any] | None] = []
-                for group_index, baseline_key in enumerate(sorted(baseline_groups)):
-                    if group_index:
-                        flattened.append(None)
-                    flattened.extend(sorted(
-                        baseline_groups[baseline_key],
-                        key=lambda item: item["bbox"][0],
-                    ))
-                raw_text, char_map = _collapse_with_map(flattened)
-                normalized = normalize_text(raw_text)
-                if not normalized:
-                    continue
-                page_blocks.append({
-                    "block_index": block_index,
-                    "text": raw_text,
-                    "normalized_text": normalized,
-                    "char_map": char_map,
-                    "line_count": len(baseline_groups),
-                })
-            pages.append(page_blocks)
+            spans = [
+                span
+                for block in page.get_text("rawdict").get("blocks", [])
+                if block.get("type") == 0
+                for line in block.get("lines", [])
+                for span in line.get("spans", [])
+            ]
+            records = _line_char_records({"spans": spans})
+            if not records:
+                pages.append([])
+                continue
+            baseline_groups: dict[int, list[dict[str, Any]]] = {}
+            for item in records:
+                baseline_key = round(item["origin"][1] / 0.75)
+                baseline_groups.setdefault(baseline_key, []).append(item)
+            flattened: list[dict[str, Any] | None] = []
+            for group_index, baseline_key in enumerate(sorted(baseline_groups)):
+                if group_index:
+                    flattened.append(None)
+                flattened.extend(sorted(
+                    baseline_groups[baseline_key],
+                    key=lambda item: item["bbox"][0],
+                ))
+            raw_text, char_map = _collapse_with_map(flattened)
+            normalized = normalize_text(raw_text)
+            if not normalized:
+                pages.append([])
+                continue
+            pages.append([{
+                "block_index": -1,
+                "text": raw_text,
+                "normalized_text": normalized,
+                "char_map": char_map,
+                "line_count": len(baseline_groups),
+            }])
     finally:
         document.close()
     return pages
