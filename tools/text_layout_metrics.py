@@ -80,6 +80,8 @@ class FontMetrics:
         else:
             hhea = self.font["hhea"]
             ascender, descender, line_gap = int(hhea.ascent), int(hhea.descent), int(hhea.lineGap)
+        self.ascender_units = ascender
+        self.descender_units = descender
         self.line_height_units = max(1, ascender - descender + line_gap)
 
     def _fallback_for_char(self, char: str) -> "FontMetrics | None":
@@ -119,20 +121,33 @@ class FontMetrics:
         else:
             self.font.close()
 
+    def _font_for_char(self, char: str) -> "FontMetrics":
+        codepoint = ord(char)
+        if codepoint in self.cmap or unicodedata.category(char).startswith("M"):
+            return self
+        fallback = self._fallback_for_char(char)
+        if fallback is not None:
+            return fallback
+        raise MissingGlyphError(f"MISSING_GLYPH:U+{codepoint:04X}:{char!r}:{self.path.name}")
+
+    def glyph_vertical_offsets_pt(self, char: str, font_size_pt: float) -> tuple[float, float]:
+        """Return (top, bottom) offsets from the rendered baseline using the selected glyph face."""
+        metrics = self._font_for_char(char)
+        top = -float(metrics.ascender_units) / metrics.units_per_em * float(font_size_pt)
+        bottom = -float(metrics.descender_units) / metrics.units_per_em * float(font_size_pt)
+        return top, bottom
+
     def glyph_advance_pt(self, char: str, font_size_pt: float) -> float:
         if char in "\r\n":
             return 0.0
-        codepoint = ord(char)
-        glyph_name = self.cmap.get(codepoint)
+        if unicodedata.category(char).startswith("M") and ord(char) not in self.cmap:
+            return 0.0
+        metrics = self._font_for_char(char)
+        glyph_name = metrics.cmap.get(ord(char))
         if glyph_name is None:
-            if unicodedata.category(char).startswith("M"):
-                return 0.0
-            fallback = self._fallback_for_char(char)
-            if fallback is not None:
-                return fallback.glyph_advance_pt(char, font_size_pt)
-            raise MissingGlyphError(f"MISSING_GLYPH:U+{codepoint:04X}:{char!r}:{self.path.name}")
-        advance = self.hmtx.get(glyph_name, (0, 0))[0]
-        return float(advance) / self.units_per_em * float(font_size_pt)
+            return 0.0
+        advance = metrics.hmtx.get(glyph_name, (0, 0))[0]
+        return float(advance) / metrics.units_per_em * float(font_size_pt)
 
     def text_width_pt(self, text: str, font_size_pt: float) -> float:
         return sum(self.glyph_advance_pt(char, font_size_pt) for char in text)
