@@ -65,6 +65,21 @@ class TextLayoutMetricsTests(unittest.TestCase):
         finally:
             metrics.close()
 
+    def test_missing_math_subscript_uses_a_fontconfig_fallback_face(self):
+        path, face_index, resolved = resolve_font_face("Cambria Math")
+        metrics = FontMetrics(path, face_index=face_index)
+        try:
+            self.assertGreater(metrics.text_width_pt("ₜ", 14), 0)
+            self.assertIn("U+209C", metrics.fallback_fonts)
+            fallback = metrics.fallback_fonts["U+209C"]
+            self.assertTrue(fallback["resolved_family"])
+            self.assertNotEqual(
+                (fallback["font_file"], fallback["font_face_index"]),
+                (str(path), face_index),
+            )
+        finally:
+            metrics.close()
+
     def test_wcag_contrast_ratio(self):
         self.assertAlmostEqual(contrast_ratio("#000000","#FFFFFF"),21.0,places=4)
         self.assertLess(contrast_ratio("#777777","#FFFFFF"),4.5)
