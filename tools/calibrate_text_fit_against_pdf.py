@@ -168,6 +168,59 @@ def _frame_bbox_points(
     )
 
 
+def _frame_local_text_block(
+    blocks: list[dict[str, Any]],
+    frame_bbox: tuple[float, float, float, float],
+    tolerance_pt: float = 1.5,
+) -> dict[str, Any] | None:
+    """Reconstruct a text stream from glyphs local to one PPTX frame.
+
+    PDF page-wide reading order can interleave text from separate columns and overlapping
+    text boxes. A frame-local stream preserves only glyphs geometrically associated with
+    the candidate source frame; a global fallback remains available for genuine overflow.
+    """
+    left, top, right, bottom = frame_bbox
+    records: list[dict[str, Any]] = []
+    for block in blocks:
+        for item in block.get("char_map", []):
+            if item is None:
+                continue
+            x0, y0, x1, y1 = item["bbox"]
+            center_x, center_y = (x0 + x1) / 2, (y0 + y1) / 2
+            if (
+                left - tolerance_pt <= center_x <= right + tolerance_pt
+                and top - tolerance_pt <= center_y <= bottom + tolerance_pt
+            ):
+                records.append(item)
+    if not records:
+        return None
+
+    baseline_groups: dict[int, list[dict[str, Any]]] = {}
+    for item in records:
+        baseline_key = round(item["origin"][1] / 0.75)
+        baseline_groups.setdefault(baseline_key, []).append(item)
+    flattened: list[dict[str, Any] | None] = []
+    for group_index, baseline_key in enumerate(sorted(baseline_groups)):
+        if group_index:
+            flattened.append(None)
+        flattened.extend(sorted(
+            baseline_groups[baseline_key],
+            key=lambda item: item["bbox"][0],
+        ))
+    raw_text, char_map = _collapse_with_map(flattened)
+    normalized = normalize_text(raw_text)
+    if len(normalized) != len(char_map):
+        # Keep source-to-glyph offsets stable when Unicode normalization changes code-point count.
+        normalized = raw_text
+    return {
+        "block_index": -2,
+        "text": raw_text,
+        "normalized_text": normalized,
+        "char_map": char_map,
+        "line_count": len(baseline_groups),
+    }
+
+
 def _match_text(
     expected_source: str,
     blocks: list[dict[str, Any]],
@@ -315,7 +368,9 @@ def _match_text(
         "raw_bbox": _union_bbox([item["bbox"] for item in chars]),
         "block_index": -1,
         "line_count": len({
-            round(item["origin"][1] / 0.75) for item in chars
+            round(item["origin"][1] / 0.75)
+            for item in chars
+            if not 0x2070 <= ord(item["c"]) <= 0x209F
         }),
         "pdf_fonts": sorted({item["font"] for item in chars if item["font"]}),
     }, match_kind
@@ -378,7 +433,13 @@ def calibrate(pptx_path: Path, pdf_path: Path, tolerance_pt: float = 1.5) -> dic
                 frame = _frame_bbox_points(
                     shape, page_width, page_height, deck.slide_width, deck.slide_height
                 )
-                matched, match_kind = _match_text(expected, blocks, frame)
+                local_block = _frame_local_text_block(blocks, frame, tolerance_pt)
+                matched, match_kind = _match_text(
+                    expected, [local_block] if local_block is not None else blocks, frame
+                )
+                if matched is None and local_block is not None:
+                    # Preserve overflow detection when a source frame is too small to contain all rendered glyphs.
+                    matched, match_kind = _match_text(expected, blocks, frame)
                 if matched is None:
                     results.append({
                         "slide": slide_index,
