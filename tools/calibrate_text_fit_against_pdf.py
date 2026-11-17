@@ -56,8 +56,10 @@ def _line_char_records(line: dict[str, Any]) -> list[dict[str, Any]]:
             baseline = item["origin"][1]
             placeholder = any(
                 abs(other["origin"][1] - baseline) <= 0.75
-                and min(x1, other["bbox"][2]) - max(x0, other["bbox"][0]) > 0.5
-                and min(y1, other["bbox"][3]) - max(y0, other["bbox"][1]) > 0.5
+                and other["bbox"][0] <= x0 + 0.1
+                and other["bbox"][1] <= y0 + 0.1
+                and other["bbox"][2] >= x1 - 0.1
+                and other["bbox"][3] >= y1 - 0.1
                 for other in non_whitespace
             )
             if placeholder:
@@ -186,27 +188,59 @@ def _match_text(
         found: list[dict[str, Any]] = []
         for block in blocks:
             haystack = block["normalized_text"]
+            compact_haystack = "".join(
+                char for char in haystack if not char.isspace()
+            )
+            compact_to_source = [
+                index for index, char in enumerate(haystack)
+                if not char.isspace()
+            ]
+            compact_needle = "".join(char for char in needle if not char.isspace())
+
+            matches: list[tuple[int, int, bool]] = []
             start = 0
             while True:
                 start = haystack.find(needle, start)
                 if start < 0:
                     break
-                end = start + len(needle)
-                chars = [item for item in block["char_map"][start:end] if item is not None]
-                if chars:
-                    raw_bbox = _union_bbox([item["bbox"] for item in chars])
-                    center_x = (raw_bbox[0] + raw_bbox[2]) / 2
-                    center_y = (raw_bbox[1] + raw_bbox[3]) / 2
-                    baseline = sum(item["origin"][1] for item in chars) / len(chars)
-                    distance = abs(center_x - frame_x) + abs(center_y - frame_y)
-                    found.append({
-                        "chars": chars,
-                        "raw_bbox": raw_bbox,
-                        "block_index": block["block_index"],
-                        "baseline": baseline,
-                        "distance": distance,
-                    })
-                start = end
+                matches.append((start, start + len(needle), False))
+                start += len(needle)
+
+            if not matches and compact_needle:
+                compact_start = 0
+                while True:
+                    compact_start = compact_haystack.find(compact_needle, compact_start)
+                    if compact_start < 0:
+                        break
+                    compact_end = compact_start + len(compact_needle)
+                    before = compact_haystack[compact_start - 1] if compact_start else ""
+                    after = compact_haystack[compact_end] if compact_end < len(compact_haystack) else ""
+                    if not (before.isalnum() or after.isalnum()):
+                        source_start = compact_to_source[compact_start]
+                        source_end = compact_to_source[compact_end - 1] + 1
+                        matches.append((source_start, source_end, True))
+                    compact_start += len(compact_needle)
+
+            for source_start, source_end, whitespace_fallback in matches:
+                chars = [
+                    item for item in block["char_map"][source_start:source_end]
+                    if item is not None
+                ]
+                if not chars:
+                    continue
+                raw_bbox = _union_bbox([item["bbox"] for item in chars])
+                center_x = (raw_bbox[0] + raw_bbox[2]) / 2
+                center_y = (raw_bbox[1] + raw_bbox[3]) / 2
+                baseline = sum(item["origin"][1] for item in chars) / len(chars)
+                distance = abs(center_x - frame_x) + abs(center_y - frame_y)
+                found.append({
+                    "chars": chars,
+                    "raw_bbox": raw_bbox,
+                    "block_index": block["block_index"],
+                    "baseline": baseline,
+                    "distance": distance,
+                    "whitespace_fallback": whitespace_fallback,
+                })
         return sorted(found, key=lambda item: item["distance"])[:16]
 
     line_candidates = [occurrences(line) for line in expected_lines]
@@ -215,7 +249,10 @@ def _match_text(
 
     if len(line_candidates) == 1:
         selected = line_candidates[0][0]
-        match_kind = "exact_substring"
+        match_kind = (
+            "whitespace_insensitive_exact"
+            if selected["whitespace_fallback"] else "exact_substring"
+        )
         selected_lines = [selected]
     else:
         valid: list[tuple[float, list[dict[str, Any]]]] = []
