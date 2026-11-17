@@ -7,6 +7,7 @@ import unittest
 
 from build_c01_image_first_source_figure_v8 import build_spec
 from scientific_ir import ROOT, validate_expected_topology, validate_spec
+from text_layout_metrics import contrast_ratio
 
 
 class C01ImageFirstSourceFigureV8Tests(unittest.TestCase):
@@ -73,6 +74,18 @@ class C01ImageFirstSourceFigureV8Tests(unittest.TestCase):
             (ROOT / "specs/c01_composite_expected_topology_v8.json").read_text(encoding="utf-8")
         )
         self.assertIn("unlabeled source-visible squares", topology["geometry_contract"]["class_outputs"]["labeling"])
+
+    def test_frequency_band_labels_meet_normal_text_contrast(self):
+        expected = {
+            "band_1": "#4B6B7B",
+            "band_2": "#496E63",
+            "band_3": "#865F2B",
+            "band_4": "#66577D",
+        }
+        for semantic_id, color in expected.items():
+            label = next(e for e in self.elements if e.get("semantic_id") == semantic_id and e.get("type") == "text")
+            self.assertEqual(label["color"], color)
+            self.assertGreaterEqual(contrast_ratio(color, "#FFFFFF"), 4.5)
 
     def test_readout_label_boundary_is_preserved(self):
         labels = [e.get("text") for e in self.elements if e.get("semantic_id") in {"sr_main", "sr_ea"}]
