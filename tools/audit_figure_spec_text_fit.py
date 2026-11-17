@@ -38,9 +38,18 @@ def audit_spec(spec: dict[str, Any]) -> dict:
             width_in=float(element["w"])
             height_in=float(element["h"])
             measured=metrics.measure(element["text"],font_size,width_in,height_in)
+            margins = (1.44, 1.44, .576, .576)
+            line_height = metrics.line_height_pt(font_size)
+            # The search ceiling must accommodate the worst case of one glyph per line;
+            # a fixed 72 pt ceiling silently loses the recommendation for narrow, long labels.
+            search_ceiling = max(
+                72.0,
+                height_in * 72.0 * 4.0,
+                (len(str(element["text"])) + 1) * line_height + margins[2] + margins[3],
+            )
             height_search=fit_textbox_height(
                 metrics,element["text"],font_size,width_in,
-                min_height_pt=1.0,max_height_pt=max(72.0,height_in*72.0*4.0)
+                min_height_pt=1.0,max_height_pt=search_ceiling,margins_pt=margins
             )
             background=_background_for(elements,index,element)
             foreground=element.get("color","#28343C")
