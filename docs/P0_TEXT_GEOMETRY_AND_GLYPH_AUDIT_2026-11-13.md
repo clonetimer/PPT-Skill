@@ -157,3 +157,12 @@ Whenever a referenced local evidence file changes:
 3. Update every FigureSpec EvidenceRecord that references that file.
 4. Run the source-evidence validator before the full workflow.
 Do not weaken the provenance check or reuse a stale hash. A source-grounded clarification is still a source change and must remain hash-bound.
+
+
+### Minimum presentation type size is a hard constraint
+
+After removing unsupported C₁–C₅ labels, the C01 V4.1 classification caption was temporarily reduced to 8.5 pt to fit a narrow frame. CI's output-profile validator correctly rejected it because the presentation profile requires at least 9.5 pt for that caption class.
+
+The repair preserves the minimum type size and widens/repositions the text frame inside the existing panel, aligning its right edge with the output group. Do not solve a geometry problem by violating the profile's minimum readable type size. When a caption is too wide, first reclaim horizontal space, adjust alignment, or reflow the text; only change font size when the output profile explicitly permits it.
+
+The same source-fidelity rule now applies to both C01 Image-first V4.1 and V8: keep the five output squares unlabeled and retain the separate classification caption. The V8 builder, committed FigureSpec, topology contract, regression test and Image-first content lock are kept in sync.
