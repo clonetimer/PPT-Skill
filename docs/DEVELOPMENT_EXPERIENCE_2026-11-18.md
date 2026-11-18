@@ -101,3 +101,11 @@ These are native/partly raster technical reproductions with documented source-co
 The last successful run, #851, took 43 minutes 12 seconds to install its rendering dependencies. Its log reports 164 MB fetched in 42 minutes 31 seconds, averaging 64.2 kB/s from the regional EC2 Ubuntu mirror. The 61.2 MB CJK font package alone occupied roughly 16 minutes; the 43 MB LibreOffice core package occupied roughly 12.6 minutes. Package-index refresh took seconds, and the actual validation work was much shorter.
 
 The workflow now points the hosted runner's existing Ubuntu mirror-list file at the official HTTPS archive and applies three download retries plus 30-second HTTP/HTTPS connection/data timeouts. It keeps all rendering dependencies, fonts, tests and acceptance gates. The shell block and YAML were checked, and all workflow fields outside that block were compared unchanged. A timeout is not a total download deadline, and a different mirror is not proof of faster CI: the next run's observed timing and exact head SHA remain the evidence.
+
+The mirror change was measured in run **#855** at `b454b40a630275afabc3f8938b9b2c5c3fc9ce76`: the installation step finished in **48 seconds** (07:04:25–07:05:13 UTC), compared with 43m12s in #851. That run then failed a new test assertion, so the faster installation is not recorded as a green overall CI result.
+
+## Lesson 12: assert source preservation across extraction-library versions
+
+The local private rendering environment uses PyMuPDF 1.26.6. CI installs newer dependencies and used PyMuPDF 2.1, where a mode-6 fill/stroke/clipping text call produced two extracted dictionary spans instead of one. The importer still rejected unsupported paint; the regression test had incorrectly hard-coded a span count of one.
+
+The test now independently reads the raw source PDF, requires the intended label to exist, and requires all source audits to retain the complete observed label Counter. An empty candidate must still fail, and the importer must still reject the source. This preserves the missing-label protection without assuming an internal extraction count. No production acceptance threshold is changed. The private regeneration requirements pin the versions actually used for the delivered figures; no PyMuPDF 2.1 private rendering result is claimed.

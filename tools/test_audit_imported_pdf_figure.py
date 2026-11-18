@@ -1,6 +1,7 @@
 """Checks that a converted scientific diagram remains structurally editable."""
 
 from pathlib import Path
+from collections import Counter
 import sys
 from tempfile import TemporaryDirectory
 import unittest
@@ -114,6 +115,17 @@ class FigureAuditTests(unittest.TestCase):
         for mode in (2, 6):
             with self.subTest(mode=mode):
                 source = self._zero_fill_stroked_text_source(mode)
+                # MuPDF 2.x may expose fill and stroke as separate dictionary
+                # spans for mode 6. Every observed source run must remain
+                # required; do not assume one extraction span per text call.
+                with fitz.open(source) as original:
+                    expected_labels = Counter(s["text"]
+                        for b in original[0].get_text("dict")["blocks"]
+                        for line in b.get("lines", []) for s in line["spans"]
+                        if s["text"].strip())
+                self.assertEqual(set(expected_labels), {"VISIBLE STROKED LABEL"})
+                expected_count = sum(expected_labels.values())
+                self.assertGreaterEqual(expected_count, 1)
                 missing = source.with_suffix(".missing.pptx")
                 deck = Presentation()
                 from pptx.util import Pt
@@ -121,14 +133,14 @@ class FigureAuditTests(unittest.TestCase):
                 deck.slides.add_slide(deck.slide_layouts[6])
                 deck.save(missing)
                 report = audit_figure(source, missing)
-                self.assertEqual(report["source_text_spans"], 1)
+                self.assertEqual(report["source_text_spans"], expected_count)
                 self.assertEqual(report["status"], "FAIL")
-                self.assertEqual(report["missing_text"], {"VISIBLE STROKED LABEL": 1})
+                self.assertEqual(report["missing_text"], dict(expected_labels))
                 geometry = audit_text_geometry(source, missing)
-                self.assertEqual(geometry["source_text_span_count"], 1)
+                self.assertEqual(geometry["source_text_span_count"], expected_count)
                 self.assertEqual(geometry["status"], "FAIL")
                 profile = source_profile(source)
-                self.assertEqual(profile["source_text_spans"], 1)
+                self.assertEqual(profile["source_text_spans"], expected_count)
                 self.assertTrue(any(r["code"] == "UNSUPPORTED_TEXT_PAINT_MODE"
                                     for r in profile["risk_flags"]))
 
