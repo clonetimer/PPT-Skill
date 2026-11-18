@@ -40,7 +40,7 @@ if ($inputs.Count -ne $ExpectedFileCount) {
 }
 $actualBaseNames = @($inputs | ForEach-Object { $_.BaseName } | Sort-Object)
 $expectedNames = @($ExpectedBaseNames | Sort-Object)
-if (!(Test-SequenceEqual $actualBaseNames $expectedNames)) {
+if (@(Compare-Object -ReferenceObject $expectedNames -DifferenceObject $actualBaseNames).Count -gt 0) {
     $missingNames = @($expectedNames | Where-Object { $_ -notin $actualBaseNames })
     $unexpectedNames = @($actualBaseNames | Where-Object { $_ -notin $expectedNames })
     throw "Frozen R1 input identity mismatch. Missing: $($missingNames -join ', '); unexpected: $($unexpectedNames -join ', '). No PowerPoint files were opened."
