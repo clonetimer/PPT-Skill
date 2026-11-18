@@ -33,6 +33,8 @@
 - [x] Reproduce crop-image audit failure with synthetic tests, implement correction and verify Agent and PoG.
 - [x] Investigate EvoOntology missing glyph from original font/visual evidence and preserve the observed outline without inventing semantics.
 - [x] Fresh-render all ten; inspect labels, topology and appearance; repair observed defects.
-- [ ] Package ten editable figures, source comparisons, authoring files and honest status manifest.
-- [ ] Run required checks; commit generic fixes, synthetic tests and lessons; verify CI at the exact new head.
-- [ ] Persist and deliver the integrated batch with remaining external-review boundaries disclosed.
+- [x] Package ten editable figures, source comparisons, authoring files and honest status manifest.
+- [x] Run required checks; commit generic fixes, synthetic tests and lessons; verify CI at the exact new head.
+- [x] Persist and deliver the integrated batch with remaining external-review boundaries disclosed.
+
+Completed batch evidence: `PPT-Skill_R1_native_batch_delivery_2026-11-18.zip`, SHA256 `c4b89feae53b9cd666a886aa876e6bbc0f9af6f70705e96ac2b6db7ef4da9bc5`; ten PPTX and fresh PDFs, exact-source validation, portable regeneration and archived limitations. Remote CI #857 succeeded at `eed6c8d46f5fd3b240aa2080126f181f510dd608`. The complete batch was delivered before the source-image clip continuation began.

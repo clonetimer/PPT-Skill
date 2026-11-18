@@ -23,6 +23,7 @@ class ImageEvent:
     png: bytes
     source_kind: str
     transform: tuple[float, ...]
+    clip_provenance: dict | None = None
 
 
 def _rms_distance(left: fitz.Rect, right: fitz.Rect) -> float:
@@ -96,6 +97,7 @@ def collect_image_events(page: fitz.Page, document: fitz.Document,
     used_blocks: set[int] = set()
     used_infos: set[int] = set()
     events: list[ImageEvent] = []
+    source_pngs: dict[int, bytes] = {}
     stats = dict(source_paint_events=0, recovered_xrefs=0,
                  from_dict_blocks=0, off_page_image_events=0,
                  unresolved_visible_events=0, warnings=[])
@@ -125,6 +127,7 @@ def collect_image_events(page: fitz.Page, document: fitz.Document,
                 png = _png_for_xref(document, xref, smasks)
                 origin = "xref-fallback"
                 stats["recovered_xrefs"] += 1
+            source_pngs[seqno] = png
             # XRef coordinates can be translated/rotated. Cropping a rotated
             # image as if it were axis-aligned is unsafe; report this explicitly.
             rotated = len(transform) == 6 and (abs(transform[1]) > .01 or abs(transform[2]) > .01)
@@ -136,6 +139,11 @@ def collect_image_events(page: fitz.Page, document: fitz.Document,
         except (ValueError, RuntimeError, OSError) as exc:
             stats["unresolved_visible_events"] += 1
             stats["warnings"].append(f"paint event {seqno}: {type(exc).__name__}: {exc}")
+    from pdf_image_clips import preserve_image_clips
+    events, clip_stats = preserve_image_clips(page, events, source_pngs)
+    stats["unresolved_visible_events"] += clip_stats.pop("unresolved_visible_events")
+    stats["warnings"].extend(clip_stats.pop("warnings"))
+    stats.update(clip_stats)
     return events, stats
 
 
@@ -143,4 +151,4 @@ def manifest_events(events: list[ImageEvent]) -> list[dict]:
     return [dict(seqno=e.seqno, xref=e.xref, source_kind=e.source_kind,
                  original_bbox=list(e.bbox), placed_bbox=list(e.visible_bbox),
                  image_png_sha256=hashlib.sha256(e.png).hexdigest(),
-                 transform=list(e.transform)) for e in events]
+                 transform=list(e.transform), source_clip=e.clip_provenance) for e in events]

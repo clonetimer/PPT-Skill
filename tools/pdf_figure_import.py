@@ -506,6 +506,7 @@ def _add_recovered_image(slide, event, warnings):
         "source_image_xref": event.xref,
         "source_image_transform": list(event.transform),
         "source_image_pixel_size": pixel_size,
+        "source_clip_reconstruction": event.clip_provenance,
     })
     return 1
 
@@ -579,6 +580,11 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
             page, document,
             image_blocks=[b for b in page_blocks if b["type"] == 1],
         )
+        if source_image_stats["unresolved_visible_events"]:
+            raise ValueError(
+                f"UNRESOLVED_SOURCE_IMAGES: {source_image_stats['unresolved_visible_events']}: "
+                + "; ".join(source_image_stats["warnings"])
+            )
         if selected_region is not None and any(
             len(event.transform) == 6 and
             (abs(event.transform[1]) > .01 or abs(event.transform[2]) > .01)
@@ -641,10 +647,6 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
                     font_counts[_source_font(span["font"])] += 1
 
         assert_budget(clock_start, max_seconds)
-        if source_image_stats["unresolved_visible_events"]:
-            raise ValueError(
-                f"UNRESOLVED_SOURCE_IMAGES: {source_image_stats['unresolved_visible_events']}"
-            )
         if not any((native_count, text_count, picture_count)):
             raise ValueError("NO_VISIBLE_SOURCE_CONTENT")
 
@@ -665,6 +667,8 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
             "recovered_image_xrefs": source_image_stats["recovered_xrefs"],
             "source_image_events": source_image_stats["source_paint_events"],
             "off_page_image_events": source_image_stats["off_page_image_events"],
+            "source_image_clips": {k: source_image_stats[k] for k in (
+                "clipped_image_events", "fully_clipped_image_events", "clip_render_pixels")},
             "image_assets": manifest_events(images),
             "resource_profile": resource_profile,
             "reconstruction_class": (

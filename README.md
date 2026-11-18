@@ -170,6 +170,23 @@ python tools/reproduce_research_figure.py source.pdf \
   --region 60 90 550 355 --render-host auto
 ~~~
 
+The native import path also preserves supported **source image clip paths** on
+individual pictures. Circular/curved clips, compound paths with holes, nested
+clips, repeated local image references and verified image soft masks are applied
+before the final page crop. Diagram text, vectors and connectors stay native;
+only each original raster image is rendered through its own source clip.
+The importer records original/final asset hashes, clip geometry, source order and
+placement in `image_assets[].source_clip` and the picture's source metadata.
+No new command or private repair payload is needed for this behavior.
+
+Clip rendering uses at least 576 dpi and retains a higher source pixel density
+for small high-resolution icons. It is bounded to 16 million pixels per image
+and 64 million per page. Ambiguous image correspondence, unsupported transforms,
+arbitrary group masks/compositing or unsupported clip geometry produce an
+explicit unresolved-image error before a candidate is saved. This does not add
+support for complex clipping of native vectors/text or replace visual review.
+Run `python tools/test_pdf_image_clips.py` for the synthetic clip regressions.
+
 The resulting slide has the crop's aspect ratio and dimensions. Invalid or
 rotated-page crop requests fail closed. For editable imports, source glyphs
 partly cut by the crop, stroke-width-only fringes and rotated/skewed image
@@ -233,7 +250,7 @@ inline images are handled explicitly.
 For example, with a PDF you have permission to modify:
 
 ```bash
-python -m pip install PyMuPDF python-pptx Pillow pypdf
+python -m pip install PyMuPDF python-pptx Pillow pypdf fonttools reportlab
 python tools/pdf_figure_import.py path/to/Figure.pdf path/to/Figure_editable.pptx \
   --report path/to/Figure_import.json
 python tools/audit_imported_pdf_figure.py path/to/Figure.pdf \
