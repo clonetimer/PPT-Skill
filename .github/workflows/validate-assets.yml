@@ -44,6 +44,11 @@ jobs:
           python tools/test_pdf_figure_import.py
           python tools/test_pdf_crop_assets.py
           python tools/test_pdf_image_clips.py
+          python tools/test_pdf_text_events.py
+          python tools/test_pdf_text_outlines.py
+          python tools/test_pdf_drawing_events.py
+          python tools/test_pdf_text_paint_import.py
+          python tools/test_source_text_paint_audit.py
           python tools/test_pdf_import_budgets.py
           python tools/test_text_geometry_import.py
           python tools/test_text_geometry_audit.py

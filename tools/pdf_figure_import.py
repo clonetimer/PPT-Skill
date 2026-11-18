@@ -34,6 +34,9 @@ from render_figure_spec import clean_theme, nofx
 from pdf_ellipse_recognition import ellipse_bounds
 from pdf_source_assets import collect_image_events, manifest_events
 from pdf_text_visibility import TextVisibility
+from pdf_text_events import collect_text_events, TextEventError
+from pdf_text_outlines import recover_text_outlines
+from pdf_drawing_events import collect_drawing_paint_orders
 from pdf_import_budget import (
     preflight_drawing_budget, assert_budget,
     DEFAULT_MAX_DRAWINGS, DEFAULT_MAX_SOURCE_SEGMENTS,
@@ -297,7 +300,8 @@ def _add_drawing(slide, drawing, page_rect, warnings, clip_rect=None):
             f"unrepresentable PDF stroke width {drawing['width']:g} pt omitted at {drawing['rect']}"
         )
         return 0
-    if drawing["type"] == "f" and drawing["rect"].contains(page_rect) and drawing.get("fill") == (1, 1, 1):
+    if (drawing["type"] == "f" and drawing.get("seqno") == 0
+            and drawing["rect"].contains(page_rect) and drawing.get("fill") == (1, 1, 1)):
         return 0  # already represented by the white page background
     # Source-canonical circles and ellipses are safer as native PowerPoint
     # ovals than as sampled open Bézier freeforms. Never reshape clipped or
@@ -334,7 +338,8 @@ def _source_font(name):
     compact = re.sub(r"[^a-z0-9]", "", name.casefold())
     if name.startswith("Georgia"):
         return "Georgia"
-    if name.startswith("Times") or compact.startswith(("texgyretermes", "linlibertine")):
+    if name.startswith("Times") or compact.startswith((
+            "texgyretermes", "linlibertine", "nimbusromno9l", "nimbusroman")):
         return "Times New Roman"
     # Width variants must be resolved before the generic Arial family. Mapping
     # ArialNarrow to Arial preserves the name prefix but widens the glyphs.
@@ -437,6 +442,14 @@ def _add_text(slide, span, line, page_rect=None, *, visibility=None):
     run.font.color.rgb = _color(((color >> 16 & 255) / 255,
                                  (color >> 8 & 255) / 255,
                                  (color & 255) / 255) if color is not None else (0, 0, 0))
+    alpha = int(span.get("alpha", 255))
+    if alpha != 255:
+        solid = run._r.get_or_add_rPr().find(qn("a:solidFill"))
+        rgb = solid.find(qn("a:srgbClr")) if solid is not None else None
+        if rgb is not None:
+            node = OxmlElement("a:alpha")
+            node.set("val", str(round(max(0, min(255, alpha)) / 255 * 100000)))
+            rgb.append(node)
     direction = line.get("dir", (1, 0))
     if abs(direction[0] - 1) > .001 or abs(direction[1]) > .001:
         # Both the PDF direction vector and DrawingML use page y-down axes.
@@ -461,6 +474,72 @@ def _annotate_source_shape(shape, source_object_id, source_order, object_class, 
     if not nonvisual_nodes:
         raise ValueError("UNSUPPORTED_SHAPE_PROVENANCE_CONTAINER")
     nonvisual_nodes[0].set("descr", metadata)
+
+
+def _add_text_event(slide, page, event):
+    """Emit one verified source paint event without replacing its paint style."""
+    extra = {
+        "text_event_id": event.source_id,
+        "source_text": event.span["text"],
+        "source_seqnos": list(event.source_seqnos),
+        "text_event_evidence": event.evidence,
+    }
+    if event.paint_type == "fill":
+        if not _add_text(slide, event.span, event.line, page.rect):
+            raise ValueError("UNRESOLVED_SOURCE_TEXT_EVENT: collected visible run was not emitted")
+        shape = slide.shapes[-1]
+        _annotate_source_shape(shape, event.source_id, event.seqno, "text", extra)
+        return [shape]
+    if event.paint_type != "fill_stroke":
+        raise ValueError("UNSUPPORTED_SOURCE_TEXT_PAINT_MODE: " + event.paint_type)
+    # Glyph contours come from the source SVG, including the original affine
+    # transform and stroke expansion. A substituted font must not impersonate
+    # a PDF glyph's fill+stroke paint.
+    try:
+        records = recover_text_outlines(page, event)
+    except ValueError as exc:
+        raise ValueError("UNSUPPORTED_SOURCE_TEXT_PAINT_MODE: " + str(exc)) from exc
+    if not records:
+        raise ValueError("UNRESOLVED_SOURCE_TEXT_OUTLINE: no visible source contours")
+    shapes = []
+    for index, record in enumerate(records):
+        paths = [[fitz.Point(*point) for point in path] for path in record["paths"]]
+        shape = _shape_from_paths(slide, paths, {
+            "type": "f", "fill": record["fill"],
+            "fill_opacity": record["opacity"], "color": None,
+        }, page.rect)
+        if shape is None:
+            raise ValueError("UNRESOLVED_SOURCE_TEXT_OUTLINE: empty native geometry")
+        style = shape._element.find(qn("p:style"))
+        if style is not None:
+            shape._element.remove(style)
+        nofx(shape)
+        seqnos = list(record.get("source_seqnos", event.source_seqnos))
+        _annotate_source_shape(
+            shape, f"{event.source_id}__outline_{index}", seqnos[0], "text_outline",
+            {**extra, "source_seqnos": seqnos, "outline_provenance": record["provenance"]},
+        )
+        shapes.append(shape)
+    return shapes
+
+
+def _restore_source_paint_order(slide):
+    """Order actual OOXML shapes by source paints after all objects exist."""
+    ordered = []
+    for index, shape in enumerate(slide.shapes):
+        props = next((node for node in shape._element.iter()
+                      if node.tag == qn("p:cNvPr")), None)
+        try:
+            order = json.loads(props.get("descr", ""))["source_order"]
+        except (AttributeError, KeyError, TypeError, ValueError):
+            raise ValueError("UNRESOLVED_SOURCE_PAINT_ORDER: missing source identity") from None
+        if not isinstance(order, int) or isinstance(order, bool) or order < 0:
+            raise ValueError("UNRESOLVED_SOURCE_PAINT_ORDER: invalid source paint sequence")
+        ordered.append((order, index, shape._element))
+    tree = slide.shapes._spTree
+    for _, _, element in sorted(ordered):
+        tree.remove(element)
+        tree.append(element)
 
 
 def _image_block_bytes(block):
@@ -553,28 +632,24 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
         )
         warnings = []
         page_blocks = page.get_text("dict")["blocks"]
-        visibility = TextVisibility(page)
-        text_paints = Counter()
-        for block in page_blocks:
-            for line in block.get("lines", []):
-                for span in line["spans"]:
-                    if not _normalize_pdf_text(span.get("text", "")).strip():
-                        continue
-                    paint = visibility.classify(span)
-                    text_paints[paint] += 1
-                    if paint == "unsupported":
-                        raise ValueError("UNSUPPORTED_SOURCE_TEXT_PAINT_MODE: zero-alpha text may have visible stroke or unresolved paint")
-        if selected_region is not None:
-            for block in page_blocks:
-                for line in block.get("lines", []):
-                    for span in line["spans"]:
-                        if (visibility.classify(span) == "hidden" or
-                                not _normalize_pdf_text(span.get("text", "")).strip()):
-                            continue
-                        bbox = fitz.Rect(span["bbox"])
-                        if (bbox.x0 < page.rect.x0 - .1 or bbox.y0 < page.rect.y0 - .1 or
-                            bbox.x1 > page.rect.x1 + .1 or bbox.y1 > page.rect.y1 + .1):
-                            raise ValueError("UNSUPPORTED_SOURCE_CROP_EDGE_TEXT: glyph clipping requires manual reconstruction")
+        try:
+            text_events, text_event_stats = collect_text_events(
+                page, strict_crop_edges=selected_region is not None,
+            )
+        except TextEventError as exc:
+            if str(exc).startswith("UNSUPPORTED_SOURCE_CROP_EDGE_TEXT"):
+                raise
+            # Preserve the public conservative paint-error contract while
+            # retaining the precise collector reason for diagnosis.
+            raise ValueError("UNSUPPORTED_SOURCE_TEXT_PAINT_MODE: " + str(exc)) from exc
+        text_paints = {
+            "visible": text_event_stats["visible_trace_count"],
+            "hidden": text_event_stats["hidden_trace_count"],
+            "unsupported": text_event_stats["unsupported_count"],
+        }
+        drawing_orders, drawing_event_stats = collect_drawing_paint_orders(
+            page, drawings=extended,
+        )
 
         images, source_image_stats = collect_image_events(
             page, document,
@@ -598,7 +673,10 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
         clip_stack = []
         for drawing_index, drawing in enumerate(extended):
             assert_budget(clock_start, max_seconds)
-            current_seqno = drawing.get("seqno")
+            original_seqno = drawing.get("seqno")
+            source_id = f"draw_{original_seqno if original_seqno is not None else drawing_index}"
+            source_order = drawing_orders.get(source_id)
+            current_seqno = source_order["source_order"] if source_order else None
             if current_seqno is not None:
                 while next_image is not None and next_image.seqno < current_seqno:
                     picture_count += _add_recovered_image(slide, next_image, warnings)
@@ -628,23 +706,27 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
             added = _add_drawing(slide, drawing, page.rect, warnings, clip_region)
             native_count += added
             if added:
-                seqno = drawing.get("seqno")
-                source_id = f"draw_{seqno if seqno is not None else drawing_index}"
-                _annotate_source_shape(slide.shapes[-1], source_id, seqno, "vector")
+                if source_order is None:
+                    raise ValueError("UNRESOLVED_SOURCE_PAINT_ORDER: missing drawing occurrence")
+                _annotate_source_shape(
+                    slide.shapes[-1], source_id, source_order["source_order"], "vector",
+                    {"drawing_paint_evidence": source_order},
+                )
         while next_image is not None:
             picture_count += _add_recovered_image(slide, next_image, warnings)
             next_image = next(picture_events, None)
 
-        text_count, font_counts = 0, Counter()
-        for block_index, block in enumerate(page_blocks):
-            for line_index, line in enumerate(block.get("lines", [])):
-                for span_index, span in enumerate(line["spans"]):
-                    added_text = _add_text(slide, span, line, page.rect, visibility=visibility)
-                    text_count += int(added_text)
-                    if added_text:
-                        source_id = f"text_{block_index}_{line_index}_{span_index}"
-                        _annotate_source_shape(slide.shapes[-1], source_id, None, "text")
-                    font_counts[_source_font(span["font"])] += 1
+        text_count, text_outline_count, font_counts = 0, 0, Counter()
+        for event in text_events:
+            assert_budget(clock_start, max_seconds)
+            shapes = _add_text_event(slide, page, event)
+            if event.paint_type == "fill":
+                text_count += len(shapes)
+                font_counts[_source_font(event.span["font"])] += 1
+            else:
+                text_outline_count += len(shapes)
+                native_count += len(shapes)
+        _restore_source_paint_order(slide)
 
         assert_budget(clock_start, max_seconds)
         if not any((native_count, text_count, picture_count)):
@@ -660,9 +742,13 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
             "source_sha256": source_sha256,
             "native_shapes": native_count,
             "text_shapes": text_count,
+            "source_text_outline_shapes": text_outline_count,
             "picture_shapes": picture_count,
             "source_fonts": dict(font_counts),
             "source_text_visibility": dict(text_paints),
+            "source_text_events": text_event_stats,
+            "source_drawing_events": drawing_event_stats,
+            "source_paint_order_restored": True,
             "warnings": warnings,
             "recovered_image_xrefs": source_image_stats["recovered_xrefs"],
             "source_image_events": source_image_stats["source_paint_events"],

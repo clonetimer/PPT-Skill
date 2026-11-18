@@ -187,6 +187,30 @@ explicit unresolved-image error before a candidate is saved. This does not add
 support for complex clipping of native vectors/text or replace visual review.
 Run `python tools/test_pdf_image_clips.py` for the synthetic clip regressions.
 
+Native text is now collected by **source paint occurrence**. This retains
+repeated labels that reading-order extraction can omit, splits source runs
+whose baselines or advances differ, and places text, vectors and pictures in
+the original paint order. Ordinary labels remain editable text boxes. The
+text/structure audits inspect actual shape order and source-derived content;
+candidate provenance metadata alone cannot establish a pass.
+Vector occurrences are also reconciled with the source paint log by type and
+path geometry, because empty PDF paths can make extraction sequence numbers
+drift. A merged fill/stroke path spanning another visible paint is rejected.
+
+A bounded outline path also preserves opaque fill-and-stroke text made from
+unambiguous, closed, single straight-line contours. It uses the embedded
+source glyph and actual PDF stroke state, with no replacement-font geometry.
+These symbols become editable native freeforms. Curved or multiple contours,
+transparent fill/stroke composition, ambiguous occurrences, and non-similarity
+stroke transforms remain explicitly unsupported. An anisotropic text matrix
+is supported within the verified stroke-transform subset. Unknown Unicode
+meaning remains unresolved even when the visible source outline is preserved.
+Run `test_pdf_text_events.py`, `test_pdf_text_outlines.py`,
+`test_pdf_text_paint_import.py` and `test_source_text_paint_audit.py` under
+`tools/`, plus `test_pdf_drawing_events.py`, for source-event and mutation
+regressions. Fresh source/candidate
+renders remain necessary for font substitution, baseline and spacing review.
+
 The resulting slide has the crop's aspect ratio and dimensions. Invalid or
 rotated-page crop requests fail closed. For editable imports, source glyphs
 partly cut by the crop, stroke-width-only fringes and rotated/skewed image
