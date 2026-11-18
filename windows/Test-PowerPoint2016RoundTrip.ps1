@@ -212,6 +212,7 @@ function Test-SequenceEqual($Left, $Right) {
 
 $reports = @()
 $app = $null
+$batchError = $null
 try {
     $app = New-Object -ComObject PowerPoint.Application
     $app.Visible = -1
@@ -314,6 +315,31 @@ try {
         } finally {
             if ($reopened) { try { $reopened.Close() } catch {} }
             if ($deck) { try { $deck.Close() } catch {} }
+        }
+    }
+} catch {
+    $batchError = $_.Exception.Message
+    $alreadyReported = @{}
+    foreach ($entry in $reports) { $alreadyReported[$entry.input_file] = $true }
+    foreach ($source in $inputs) {
+        if (!$alreadyReported.ContainsKey($source.Name)) {
+            $reports += [pscustomobject]@{
+                input_file = $source.Name
+                input_sha256 = (Get-FileHash -LiteralPath $source.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+                output_pptx = $null
+                output_pdf = $null
+                output_png = $null
+                output_sha256 = $null
+                office = $null
+                roundtrip_structure_same = $false
+                roundtrip_differences = @("batch_error: $batchError")
+                all_output_files_exist = $false
+                requires_manual_visual_check = $true
+                status = 'FAIL'
+                failure_scope = 'BATCH'
+                error_type = $_.Exception.GetType().FullName
+                error_message = $batchError
+            }
         }
     }
 } finally {
