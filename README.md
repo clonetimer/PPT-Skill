@@ -170,6 +170,51 @@ python tools/reproduce_research_figure.py source.pdf \
   --region 60 90 550 355 --render-host auto
 ~~~
 
+The native import path also preserves supported **source image clip paths** on
+individual pictures. Circular/curved clips, compound paths with holes, nested
+clips, repeated local image references and verified image soft masks are applied
+before the final page crop. Diagram text, vectors and connectors stay native;
+only each original raster image is rendered through its own source clip.
+The importer records original/final asset hashes, clip geometry, source order and
+placement in `image_assets[].source_clip` and the picture's source metadata.
+No new command or private repair payload is needed for this behavior.
+
+Clip rendering uses at least 576 dpi and retains a higher source pixel density
+for small high-resolution icons. It is bounded to 16 million pixels per image
+and 64 million per page. Ambiguous image correspondence, unsupported transforms,
+arbitrary group masks/compositing or unsupported clip geometry produce an
+explicit unresolved-image error before a candidate is saved. This does not add
+support for complex clipping of native vectors/text or replace visual review.
+Run `python tools/test_pdf_image_clips.py` for the synthetic clip regressions.
+
+Native text is now collected by **source paint occurrence**. This retains
+repeated labels that reading-order extraction can omit, splits source runs
+whose baselines or advances differ, and places text, vectors and pictures in
+the original paint order. Ordinary labels remain editable text boxes. The
+text/structure audits inspect actual shape order and source-derived content;
+candidate provenance metadata alone cannot establish a pass.
+Vector occurrences are also reconciled with the source paint log by type and
+path geometry, because empty PDF paths can make extraction sequence numbers
+drift. A merged fill/stroke path spanning another visible paint is rejected.
+Type3 glyph programs exposed as visible text without native source paths are
+also explicitly unsupported; their Unicode label cannot substitute for the
+drawn glyph. An unresolvable direct Type3 font resource is rejected when visible
+font text remains. Older, proven ignore-text overlays retain their native paths.
+
+A bounded outline path also preserves opaque fill-and-stroke text made from
+unambiguous, closed, single straight-line contours. It uses the embedded
+source glyph and actual PDF stroke state, with no replacement-font geometry.
+These symbols become editable native freeforms. Curved or multiple contours,
+transparent fill/stroke composition, ambiguous occurrences, and non-similarity
+stroke transforms remain explicitly unsupported. An anisotropic text matrix
+is supported within the verified stroke-transform subset. Unknown Unicode
+meaning remains unresolved even when the visible source outline is preserved.
+Run `test_pdf_text_events.py`, `test_pdf_text_outlines.py`,
+`test_pdf_text_paint_import.py` and `test_source_text_paint_audit.py` under
+`tools/`, plus `test_pdf_drawing_events.py`, for source-event and mutation
+regressions. Fresh source/candidate
+renders remain necessary for font substitution, baseline and spacing review.
+
 The resulting slide has the crop's aspect ratio and dimensions. Invalid or
 rotated-page crop requests fail closed. For editable imports, source glyphs
 partly cut by the crop, stroke-width-only fringes and rotated/skewed image
@@ -233,7 +278,7 @@ inline images are handled explicitly.
 For example, with a PDF you have permission to modify:
 
 ```bash
-python -m pip install PyMuPDF python-pptx Pillow
+python -m pip install PyMuPDF python-pptx Pillow pypdf fonttools reportlab
 python tools/pdf_figure_import.py path/to/Figure.pdf path/to/Figure_editable.pptx \
   --report path/to/Figure_import.json
 python tools/audit_imported_pdf_figure.py path/to/Figure.pdf \

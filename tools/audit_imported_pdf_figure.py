@@ -8,7 +8,6 @@ It does not replace a visual comparison on the target presentation application.
 from __future__ import annotations
 
 import argparse
-from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -17,8 +16,9 @@ import fitz
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
-from pdf_figure_import import _normalize_pdf_text
+from pdf_source_assets import collect_image_events
 from source_figure_crop import apply_figure_region, drawable_intersects_region
+from audit_text_geometry import _audit_source_text_paint, _text_paint_report
 
 
 def _count_visible_source_drawings(page):
@@ -38,7 +38,7 @@ def _count_visible_source_drawings(page):
             continue
         if drawing["type"] == "group":
             continue
-        if (drawing["type"] == "f" and drawing["rect"].contains(page.rect)
+        if (drawing["type"] == "f" and drawing.get("seqno") == 0 and drawing["rect"].contains(page.rect)
                 and drawing.get("fill") == (1, 1, 1)):
             continue
         clip_box = fitz.Rect(page.rect)
@@ -52,37 +52,36 @@ def _count_visible_source_drawings(page):
 def audit_figure(source_pdf: Path, candidate_pptx: Path, *, page_index: int = 0,
                  figure_region: tuple[float, float, float, float] | None = None) -> dict:
     source_pdf, candidate_pptx = Path(source_pdf), Path(candidate_pptx)
+    deck = Presentation(candidate_pptx)
+    if len(deck.slides) != 1:
+        raise ValueError("figure import must contain exactly one slide")
+    slide = deck.slides[0]
     with fitz.open(source_pdf) as document:
         page = document[page_index]
         selected_region = apply_figure_region(page, figure_region)
         src_width, src_height = page.rect.width, page.rect.height
         source_vectors = len(page.get_drawings())
         visible_vectors = _count_visible_source_drawings(page)
-        source_text = Counter(
-            _normalize_pdf_text(span["text"])
-            for block in page.get_text("dict")["blocks"]
-            for line in block.get("lines", [])
-            for span in line["spans"]
-            if _normalize_pdf_text(span["text"]).strip()
-        )
-        source_pictures = sum(b["type"] == 1 for b in page.get_text("dict")["blocks"])
+        # Image dictionaries can include off-crop assets and can omit visible
+        # XRefs. Count crop-visible paint occurrences (including repeated use
+        # of one XRef), using the same recovery path as the importer.
+        image_events, image_stats = collect_image_events(page, document)
+        unresolved_images = image_stats["unresolved_visible_events"]
+        source_pictures = len(image_events) + unresolved_images
+        evidence = _audit_source_text_paint(page, slide,
+                                           strict_crop_edges=selected_region is not None,
+                                           image_events=image_events)
+        text_paints, source_text = evidence["text_paints"], evidence["source_text"]
 
-    deck = Presentation(candidate_pptx)
-    if len(deck.slides) != 1:
-        raise ValueError("figure import must contain exactly one slide")
-    slide = deck.slides[0]
     vector_shapes = [
         shape for shape in slide.shapes
         if shape.shape_type in (MSO_SHAPE_TYPE.FREEFORM, MSO_SHAPE_TYPE.LINE, MSO_SHAPE_TYPE.AUTO_SHAPE)
+        and shape.name not in evidence["outline_shape_names"]
     ]
     picture_shapes = [
         shape for shape in slide.shapes if shape.shape_type == MSO_SHAPE_TYPE.PICTURE
     ]
-    candidate_text = Counter(
-        shape.text
-        for shape in slide.shapes
-        if shape.shape_type == MSO_SHAPE_TYPE.TEXT_BOX and shape.text.strip()
-    )
+    candidate_text = evidence["candidate_text"]
     missing_text = source_text - candidate_text
     extra_text = candidate_text - source_text
     full_page_pictures = sum(
@@ -97,13 +96,21 @@ def audit_figure(source_pdf: Path, candidate_pptx: Path, *, page_index: int = 0,
     )
     checks = {
         "labels_preserved": not missing_text,
+        "source_text_paint_supported": (
+            text_paints["unsupported"] == 0 and evidence["complete"] and not evidence["errors"]),
+        "source_text_rendering_preserved": not evidence["render_mismatches"] and not evidence["identity_errors"],
+        "source_paint_order_preserved": not evidence["paint_order_mismatches"],
         "native_vectors_preserved": ratio >= .9,
         "not_flattened": full_page_pictures == 0,
         "aspect_ratio_and_dimensions_preserved": dims_match,
-        "source_pictures_retained": len(picture_shapes) >= source_pictures,
+        "source_pictures_retained": (
+            unresolved_images == 0 and len(picture_shapes) >= source_pictures
+        ),
     }
+    status = ("FAIL" if not all(checks.values()) else
+              "NEEDS_REVIEW" if evidence["paint_order_status"] == "NEEDS_REVIEW" else "PASS")
     return {
-        "status": "PASS" if all(checks.values()) else "FAIL",
+        "status": status,
         "checks": checks,
         "source_sha256": hashlib.sha256(source_pdf.read_bytes()).hexdigest(),
         "source_drawings": source_vectors,
@@ -111,15 +118,20 @@ def audit_figure(source_pdf: Path, candidate_pptx: Path, *, page_index: int = 0,
         "native_vectors": len(vector_shapes),
         "vector_retention_ratio": round(ratio, 5),
         "source_text_spans": sum(source_text.values()),
+        "source_text_visibility": dict(text_paints),
         "candidate_text_shapes": sum(candidate_text.values()),
         "missing_text": dict(missing_text),
         "extra_text": dict(extra_text),
         "source_pictures": source_pictures,
+        "source_image_paint_events": image_stats["source_paint_events"],
+        "unresolved_source_image_events": unresolved_images,
+        "image_extraction": image_stats,
         "picture_shapes": len(picture_shapes),
         "full_page_pictures": full_page_pictures,
         "source_page_pt": [round(src_width, 3), round(src_height, 3)],
         "figure_region_pt": selected_region,
         "candidate_page_pt": [round(deck.slide_width.pt, 3), round(deck.slide_height.pt, 3)],
+        **_text_paint_report(evidence),
     }
 
 

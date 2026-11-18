@@ -132,6 +132,8 @@ class TextGeometryImportTests(unittest.TestCase):
         self.assertEqual(_source_font("CalistoMT-Italic"), "Calisto MT")
         self.assertEqual(_source_font("TeXGyreTermesX-Regular"), "Times New Roman")
         self.assertEqual(_source_font("LinLibertineTB"), "Times New Roman")
+        self.assertEqual(_source_font("FQHBTS+NimbusRomNo9L-Regu"), "Times New Roman")
+        self.assertEqual(_source_font("NimbusRoman-Regular"), "Times New Roman")
         self.assertEqual(_source_font("Unnamed-T3"), "Arial")
         self.assertEqual(_source_font("STIXTwoMath-Regular"), "Cambria Math")
         self.assertEqual(_source_font("ArialMT"), "Arial")

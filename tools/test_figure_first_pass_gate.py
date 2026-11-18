@@ -198,6 +198,44 @@ class FirstPassFidelityTests(unittest.TestCase):
         self.assertFalse(profile["risk_flags"])
         self.assertEqual(len(profile["sha256"]),64)
 
+    def test_candidate_profile_accepts_rotated_frame_inside_slide(self):
+        deck = Presentation()
+        deck.slide_width, deck.slide_height = Pt(200), Pt(140)
+        slide = deck.slides.add_slide(deck.slide_layouts[6])
+        label = slide.shapes.add_textbox(Pt(150), Pt(50), Pt(60), Pt(10))
+        label.text = "Vertical classifier"
+        label.rotation = 270
+        candidate = self.root / "rotated_inside.pptx"
+        deck.save(candidate)
+        # Before rotation its right edge is 210pt. The visible 270-degree
+        # frame spans x=175..185 and y=25..85, entirely inside the slide.
+        self.assertEqual(candidate_profile(candidate)["out_of_bounds"], 0)
+
+    def test_source_profile_excludes_only_explicitly_transparent_text(self):
+        source = self.root / "source_text_alpha.pdf"
+        pdf = canvas.Canvas(str(source), pagesize=(240, 140))
+        pdf.setFillAlpha(0)
+        pdf.drawString(20, 110, "INVISIBLE OVERLAY")
+        pdf.setFillAlpha(1)
+        pdf.setFillColorRGB(0, 0, 1)
+        pdf.rect(10, 20, 220, 70, fill=1, stroke=0)
+        pdf.setFillColorRGB(1, 1, 1)
+        pdf.drawString(20, 60, "VISIBLE WHITE LABEL")
+        pdf.save()
+        self.assertEqual(source_profile(source)["source_text_spans"], 1)
+
+    def test_candidate_profile_catches_rotation_introduced_overflow(self):
+        deck = Presentation()
+        deck.slide_width, deck.slide_height = Pt(200), Pt(140)
+        slide = deck.slides.add_slide(deck.slide_layouts[6])
+        label = slide.shapes.add_textbox(Pt(50), Pt(1), Pt(100), Pt(8))
+        label.text = "Rotated label"
+        label.rotation = 45
+        candidate = self.root / "rotated_outside.pptx"
+        deck.save(candidate)
+        # The unrotated box is inside, but rotation crosses the upper edge.
+        self.assertEqual(candidate_profile(candidate)["out_of_bounds"], 1)
+
     def test_gate_rejects_new_text_overlap_even_when_text_and_shapes_survive(self):
         from figure_first_pass_gate import evaluate
         from pdf_figure_import import convert_pdf_page

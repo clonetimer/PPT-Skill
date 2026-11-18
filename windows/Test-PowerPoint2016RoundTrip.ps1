@@ -11,6 +11,10 @@
 param(
     [Parameter(Mandatory=$true)][string]$InputDirectory,
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
+    [ValidateRange(1,1000)][int]$ExpectedFileCount = 10,
+    [string[]]$ExpectedBaseNames = @('01_wind_turbine_causal_framework','02_pinn_tool_wear_framework','03_attention_guided_gin_multitask','04_agent_distillation_taxonomy','05_evoontology_overview','06_harnessmm_overview','07_iiot_mult_agent_digital_twin','08_pog_reasoning_architecture','09_skillsmith_system_overview','10_ucfnet_architecture'),
+    [Parameter(Mandatory=$true)][string]$ExpectedSha256Manifest,
+    [switch]$ValidateOnly,
     [switch]$RequireOffice2016,
     [switch]$ConfirmOffice2016Installation
 )
@@ -20,8 +24,83 @@ $outputRoot = [IO.Path]::GetFullPath($OutputDirectory)
 if (!(Test-Path -LiteralPath $inputRoot -PathType Container)) {
     throw "Input directory does not exist: $inputRoot"
 }
+$inputPrefix = $inputRoot.TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+$outputPrefix = $outputRoot.TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+if ($outputRoot -eq $inputRoot -or $outputPrefix.StartsWith($inputPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "OutputDirectory must be separate from and outside InputDirectory: $outputRoot"
+}
 New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
 
+# Preflight every expected output before launching PowerPoint or processing the
+# first input. A collision late in the batch must not leave a partial run.
+$inputs = @(Get-ChildItem -LiteralPath $inputRoot -Filter '*.pptx' -File | Sort-Object Name)
+if ($inputs.Count -eq 0) { throw 'No *.pptx inputs found' }
+if ($inputs.Count -ne $ExpectedFileCount) {
+    throw "Incomplete or contaminated batch: expected $ExpectedFileCount PPTX files, found $($inputs.Count). No PowerPoint files were opened."
+}
+$actualBaseNames = @($inputs | ForEach-Object { $_.BaseName } | Sort-Object)
+$expectedNames = @($ExpectedBaseNames | Sort-Object)
+if (@(Compare-Object -ReferenceObject $expectedNames -DifferenceObject $actualBaseNames).Count -gt 0) {
+    $missingNames = @($expectedNames | Where-Object { $_ -notin $actualBaseNames })
+    $unexpectedNames = @($actualBaseNames | Where-Object { $_ -notin $expectedNames })
+    throw "Frozen R1 input identity mismatch. Missing: $($missingNames -join ', '); unexpected: $($unexpectedNames -join ', '). No PowerPoint files were opened."
+}
+if (!(Test-Path -LiteralPath $ExpectedSha256Manifest -PathType Leaf)) {
+    throw "Frozen PPTX SHA-256 manifest not found: $ExpectedSha256Manifest"
+}
+$manifestRows = @(Import-Csv -LiteralPath $ExpectedSha256Manifest)
+$manifestMap = @{}
+foreach ($row in $manifestRows) {
+    if ([string]::IsNullOrWhiteSpace($row.filename) -or $row.sha256 -notmatch '^[0-9a-fA-F]{64}$') {
+        throw 'Invalid SHA-256 manifest row. Required columns: filename,sha256.'
+    }
+    if ($manifestMap.ContainsKey($row.filename)) {
+        throw "Duplicate filename in SHA-256 manifest: $($row.filename)"
+    }
+    $manifestMap[$row.filename] = $row.sha256.ToLowerInvariant()
+}
+if ($manifestMap.Count -ne $inputs.Count) {
+    throw "Frozen PPTX SHA-256 manifest must contain exactly $($inputs.Count) rows; found $($manifestMap.Count)."
+}
+foreach ($source in $inputs) {
+    if (!$manifestMap.ContainsKey($source.Name)) {
+        throw "PPTX missing from frozen SHA-256 manifest: $($source.Name)"
+    }
+    $actualHash = (Get-FileHash -LiteralPath $source.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($actualHash -ne $manifestMap[$source.Name]) {
+        throw "PPTX SHA-256 mismatch for $($source.Name). No PowerPoint files were opened."
+    }
+}
+$plannedOutputs = @()
+foreach ($source in $inputs) {
+    $plannedOutputs += Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.pptx')
+    $plannedOutputs += Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.pdf')
+    $plannedOutputs += Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.png')
+}
+$collisions = @($plannedOutputs | Where-Object { Test-Path -LiteralPath $_ })
+if ($collisions.Count -gt 0) {
+    throw 'Refusing to start partial batch because prior evidence already exists. Choose a fresh empty OutputDirectory.'
+}
+if ($ValidateOnly) {
+    $preflight = [pscustomobject]@{
+        status = 'PREFLIGHT_PASS'
+        input_count = $inputs.Count
+        input_files = @($inputs | ForEach-Object {
+            [pscustomobject]@{
+                filename = $_.Name
+                sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            }
+        })
+        manifest = [IO.Path]::GetFullPath($ExpectedSha256Manifest)
+        output_directory = $outputRoot
+        output_collisions = @()
+        power_point_started = $false
+    }
+    $preflightPath = Join-Path $outputRoot 'office2016_preflight_report.json'
+    $preflight | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $preflightPath -Encoding UTF8
+    Write-Host "Preflight report: $preflightPath"
+    exit 0
+}
 function Get-Office2016Evidence {
     param($PowerPointApp, [bool]$ManualConfirmation)
     $version = [string]$PowerPointApp.Version
@@ -64,6 +143,44 @@ function Get-Office2016Evidence {
     }
 }
 
+function Get-ShapeSnapshot {
+    param($Shape, [string]$Path)
+    $shapeText = ''
+    $shapeFont = ''
+    try {
+        if ($Shape.HasTextFrame -and $Shape.TextFrame.HasText) {
+            $shapeText = [string]$Shape.TextFrame.TextRange.Text
+            $shapeFont = [string]$Shape.TextFrame.TextRange.Font.Name
+        }
+    } catch {}
+    $children = @()
+    # msoGroup = 6. Recursively snapshot nested group items so that an
+    # unchanged top-level group count cannot conceal child loss/reordering.
+    if ([int]$Shape.Type -eq 6) {
+        try {
+            for ($i=1; $i -le $Shape.GroupItems.Count; $i++) {
+                $child = $Shape.GroupItems.Item($i)
+                $children += Get-ShapeSnapshot -Shape $child -Path "$Path/$i"
+            }
+        } catch {
+            throw "Unable to inspect grouped shape '$Path': $($_.Exception.Message)"
+        }
+    }
+    return [pscustomobject]@{
+        path = $Path
+        name = [string]$Shape.Name
+        type = [string]$Shape.Type
+        left_pt = [Math]::Round([double]$Shape.Left, 2)
+        top_pt = [Math]::Round([double]$Shape.Top, 2)
+        width_pt = [Math]::Round([double]$Shape.Width, 2)
+        height_pt = [Math]::Round([double]$Shape.Height, 2)
+        rotation_degrees = [Math]::Round([double]$Shape.Rotation, 2)
+        text = $shapeText
+        font_family = $shapeFont
+        children = @($children)
+    }
+}
+
 function Get-SlideSnapshot {
     param($Deck)
     $slides = @()
@@ -71,24 +188,38 @@ function Get-SlideSnapshot {
         $texts = @()
         $fontNames = @()
         $types = @{}
+        $shapeSnapshots = @()
+        $shapeOrder = 0
         foreach ($shape in $slide.Shapes) {
             $kind = [string]$shape.Type
             if ($types.ContainsKey($kind)) { $types[$kind]++ }
             else { $types[$kind] = 1 }
+            $shapeText = ''
+            $shapeFont = ''
             try {
                 if ($shape.HasTextFrame -and $shape.TextFrame.HasText) {
-                    $texts += [string]$shape.TextFrame.TextRange.Text
-                    $fontNames += [string]$shape.TextFrame.TextRange.Font.Name
+                    $shapeText = [string]$shape.TextFrame.TextRange.Text
+                    $shapeFont = [string]$shape.TextFrame.TextRange.Font.Name
+                    $texts += $shapeText
+                    $fontNames += $shapeFont
                 }
             } catch {}
+            $shapeSnapshots += [pscustomobject]@{
+                z_order = [int]$shapeOrder
+                snapshot = Get-ShapeSnapshot -Shape $shape -Path ([string]$shapeOrder)
+            }
+            $shapeOrder++
         }
         $slides += [pscustomobject]@{
             slide_number = [int]$slide.SlideIndex
             shape_count = [int]$slide.Shapes.Count
             text_count = [int]$texts.Count
+            # Keep the legacy sorted inventory for readable diagnostics, but
+            # shape_snapshots is the authoritative ordered structural contract.
             texts = @($texts | Sort-Object)
             font_families = @($fontNames | Sort-Object -Unique)
             type_counts = $types
+            shape_snapshots = @($shapeSnapshots)
             slide_width_points = [double]$Deck.PageSetup.SlideWidth
             slide_height_points = [double]$Deck.PageSetup.SlideHeight
         }
@@ -102,6 +233,7 @@ function Test-SequenceEqual($Left, $Right) {
 
 $reports = @()
 $app = $null
+$batchError = $null
 try {
     $app = New-Object -ComObject PowerPoint.Application
     $app.Visible = -1
@@ -109,20 +241,22 @@ try {
     if ($RequireOffice2016 -and !$office.identified_office2016) {
         throw "Office 2016 not established. Version=$($office.version); ProductReleaseIds=$($office.product_release_ids). Check File > Account/About PowerPoint, then rerun with -ConfirmOffice2016Installation."
     }
-    $inputs = @(Get-ChildItem -LiteralPath $inputRoot -Filter '*.pptx' -File | Sort-Object Name)
-    if ($inputs.Count -eq 0) { throw 'No *.pptx inputs found' }
     foreach ($source in $inputs) {
+        # Reset all per-deck state before entering try so a failure during
+        # output-path construction cannot inherit paths from the previous deck.
         $deck = $null
         $reopened = $null
+        $pptx = $null
+        $pdf = $null
+        $preview = $null
+        $before = @()
+        $after = @()
         try {
             $pptx = Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.pptx')
             $pdf = Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.pdf')
             $preview = Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.png')
             if ([IO.Path]::GetFullPath($source.FullName) -eq [IO.Path]::GetFullPath($pptx)) {
                 throw 'Refusing to overwrite original'
-            }
-            foreach ($existing in @($pptx,$pdf,$preview)) {
-                if (Test-Path -LiteralPath $existing) { Remove-Item -LiteralPath $existing -Force }
             }
             $deck = $app.Presentations.Open($source.FullName, $false, $false, $false)
             $before = @(Get-SlideSnapshot $deck)
@@ -144,6 +278,11 @@ try {
                 for ($i=0; $i -lt $before.Count; $i++) {
                     $b = $before[$i]; $a = $after[$i]
                     if ($b.shape_count -ne $a.shape_count) { $differences += "slide $($i+1): shape count" }
+                    $beforeShapes = @($b.shape_snapshots | ConvertTo-Json -Depth 8 -Compress)
+                    $afterShapes = @($a.shape_snapshots | ConvertTo-Json -Depth 8 -Compress)
+                    if (!(Test-SequenceEqual $beforeShapes $afterShapes)) {
+                        $differences += "slide $($i+1): ordered shape geometry/text/font snapshot"
+                    }
                     if ($b.text_count -ne $a.text_count) { $differences += "slide $($i+1): text count" }
                     if (!(Test-SequenceEqual $b.texts $a.texts)) { $differences += "slide $($i+1): text content" }
                     if (!(Test-SequenceEqual $b.font_families $a.font_families)) { $differences += "slide $($i+1): font families" }
@@ -175,9 +314,53 @@ try {
                 before = $before
                 after = $after
             }
+        } catch {
+            $failureMessage = $_.Exception.Message
+            $reports += [pscustomobject]@{
+                input_file = $source.Name
+                input_sha256 = (Get-FileHash -LiteralPath $source.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+                output_pptx = $pptx
+                output_pdf = $pdf
+                output_png = $preview
+                output_sha256 = $(if ($pptx -and (Test-Path -LiteralPath $pptx)) { (Get-FileHash -LiteralPath $pptx -Algorithm SHA256).Hash.ToLowerInvariant() } else { $null })
+                office = $office
+                roundtrip_structure_same = $false
+                roundtrip_differences = @("exception: $failureMessage")
+                all_output_files_exist = $false
+                requires_manual_visual_check = $true
+                status = 'FAIL'
+                error_type = $_.Exception.GetType().FullName
+                error_message = $failureMessage
+            }
+            Write-Warning "R1 round-trip failed for $($source.Name): $failureMessage. Continuing with remaining decks; prior outputs are preserved."
         } finally {
             if ($reopened) { try { $reopened.Close() } catch {} }
             if ($deck) { try { $deck.Close() } catch {} }
+        }
+    }
+} catch {
+    $batchError = $_.Exception.Message
+    $alreadyReported = @{}
+    foreach ($entry in $reports) { $alreadyReported[$entry.input_file] = $true }
+    foreach ($source in $inputs) {
+        if (!$alreadyReported.ContainsKey($source.Name)) {
+            $reports += [pscustomobject]@{
+                input_file = $source.Name
+                input_sha256 = (Get-FileHash -LiteralPath $source.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+                output_pptx = $null
+                output_pdf = $null
+                output_png = $null
+                output_sha256 = $null
+                office = $null
+                roundtrip_structure_same = $false
+                roundtrip_differences = @("batch_error: $batchError")
+                all_output_files_exist = $false
+                requires_manual_visual_check = $true
+                status = 'FAIL'
+                failure_scope = 'BATCH'
+                error_type = $_.Exception.GetType().FullName
+                error_message = $batchError
+            }
         }
     }
 } finally {
