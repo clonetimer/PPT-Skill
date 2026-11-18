@@ -7,6 +7,8 @@ from __future__ import annotations
 
 from io import BytesIO
 import math
+from pathlib import Path
+import tempfile
 import unittest
 
 import fitz
@@ -28,7 +30,7 @@ def _stream(writer, data):
     return writer._add_object(obj)
 
 
-def _custom_pdf(content, unicode_hex=None, *, type3=False):
+def _custom_pdf(content, unicode_hex=None, *, type3=False, type3_direct=False):
     writer = PdfWriter()
     page = writer.add_blank_page(width=300, height=220)
     font = DictionaryObject({
@@ -63,7 +65,8 @@ endcmap CMapName currentdict /CMap defineresource pop end end
             NameObject("/Resources"): DictionaryObject(),
         })
     page[NameObject("/Resources")] = DictionaryObject({
-        NameObject("/Font"): DictionaryObject({NameObject("/F1"): writer._add_object(font)})})
+        NameObject("/Font"): DictionaryObject({
+            NameObject("/F1"): font if type3_direct else writer._add_object(font)})})
     page[NameObject("/Contents")] = _stream(writer, content)
     data = BytesIO()
     writer.write(data)
@@ -196,10 +199,125 @@ class TextPaintEventTests(unittest.TestCase):
     def test_type3_semantic_overlay_is_ignored_only_with_safe_no_clip_evidence(self):
         doc = _custom_pdf("BT /F1 16 Tf 1 0 0 1 40 150 Tm (A) Tj ET", type3=True)
         self.addCleanup(doc.close)
-        events, stats = self.collect(doc[0])
-        self.assertEqual(events, [])
-        self.assertEqual(stats["hidden_trace_count"], 1)
-        self.assertGreater(len(doc[0].get_drawings()), 0)
+        self.assert_type3_source_preserved_or_rejected(doc[0])
+
+    def assert_type3_source_preserved_or_rejected(self, page):
+        # This is a source-authored rectangle mapped to Unicode A. MuPDF 1.26
+        # exposes a native path plus ignore-text; 1.28 exposes visible Type3
+        # text without a path. Neither API permits substituting an ordinary A.
+        fonts = page.get_fonts(full=True)
+        self.assertEqual(len(fonts), 1)
+        self.assertEqual(page.parent.xref_get_key(fonts[0][0], "Subtype"),
+                         ("name", "/Type3"))
+        self.assertEqual(page.get_pixmap().pixel(44, 65), (0, 0, 0))
+        traces = page.get_texttrace()
+        self.assertEqual(len(traces), 1)
+        ledger = page.get_bboxlog()
+        if traces[0]["type"] == 3:
+            events, stats = self.collect(page)
+            self.assertEqual(events, [])
+            self.assertEqual(stats["hidden_trace_count"], 1)
+            self.assertEqual(ledger[traces[0]["seqno"]][0], "ignore-text")
+            self.assertTrue(any(d["type"] == "f" for d in page.get_drawings()))
+        else:
+            self.assertEqual(traces[0]["type"], 0)
+            self.assertGreater(traces[0]["opacity"], 0)
+            self.assertEqual(ledger[traces[0]["seqno"]][0], "fill-text")
+            with self.assertRaisesRegex(ValueError, "UNSUPPORTED_SOURCE_TYPE3_TEXT_PAINT"):
+                self.collect(page)
+
+    def test_named_type3_source_cannot_be_replaced_by_standard_font_text(self):
+        for attributes in ({"Name": "NamedBox"}, {"BaseFont": "Helvetica"},
+                           {"Name": "NamedBox", "BaseFont": "Helvetica"},
+                           {"Name": "ABCDEF+NamedBox"},
+                           {"Name": "Type3#20#28999#200#20R#29"}):
+            with self.subTest(source_attributes=attributes):
+                doc = _custom_pdf("BT /F1 16 Tf 1 0 0 1 40 150 Tm (A) Tj ET", type3=True)
+                xref = doc[0].get_fonts(full=True)[0][0]
+                for key, name in attributes.items():
+                    doc.xref_set_key(xref, key, "/"+name)
+                # Reopen to avoid reusing a pre-mutation font cache.
+                reopened = fitz.open(stream=doc.tobytes(), filetype="pdf")
+                doc.close()
+                self.addCleanup(reopened.close)
+                self.assert_type3_source_preserved_or_rejected(reopened[0])
+
+    def test_direct_type3_is_not_authorized_by_an_ordinary_font_with_same_name(self):
+        doc = _custom_pdf("BT /F1 16 Tf 1 0 0 1 40 150 Tm (A) Tj ET",
+                          type3=True, type3_direct=True)
+        page = doc[0]
+        doc.xref_set_key(page.xref, "Resources/Font/F1/Name", "/Helvetica")
+        doc.xref_set_key(page.xref, "Resources/Font/F1/BaseFont", "/DifferentBaseFont")
+        page.insert_font(fontname="helv")  # An unused, unrelated ordinary font.
+        reopened = fitz.open(stream=doc.tobytes(), filetype="pdf")
+        doc.close()
+        self.addCleanup(reopened.close)
+        page = reopened[0]
+        self.assertEqual(page.get_pixmap().pixel(44, 65), (0, 0, 0))
+        self.assertTrue(any(f[0] == 0 and f[2] == "Type3" for f in page.get_fonts(full=True)))
+        if page.get_texttrace()[0]["type"] == 3:
+            events, _ = self.collect(page)
+            self.assertEqual(events, [])
+            self.assertTrue(page.get_drawings())
+        else:
+            with self.assertRaisesRegex(ValueError, "UNSUPPORTED_SOURCE_TYPE3_TEXT_PAINT"):
+                self.collect(page)
+
+    def test_unused_type3_basefont_alias_does_not_reject_real_type1_text(self):
+        doc = _custom_pdf("", type3=True)
+        self.addCleanup(doc.close)
+        xref = doc[0].get_fonts(full=True)[0][0]
+        doc.xref_set_key(xref, "BaseFont", "/Helvetica")
+        page = doc[0]
+        page.insert_text((40, 70), "REAL", fontsize=16)
+        events, stats = self.collect(page)
+        self.assertEqual([e.span["text"] for e in events], ["REAL"])
+        self.assertEqual(stats["unsupported_count"], 0)
+
+    def test_completely_off_crop_type3_paint_does_not_reject_visible_text(self):
+        doc = _custom_pdf("BT /F1 16 Tf 1 0 0 1 40 150 Tm (A) Tj ET", type3=True)
+        self.addCleanup(doc.close)
+        page = doc[0]
+        page.insert_text((90, 100), "IN", fontsize=12)
+        page.set_cropbox(fitz.Rect(60, 60, 240, 180))
+        events, stats = self.collect(page, strict_crop_edges=True)
+        self.assertEqual([e.span["text"] for e in events], ["IN"])
+        self.assertEqual(stats["unsupported_count"], 0)
+
+    def test_both_audits_reject_ordinary_a_impersonating_a_type3_rectangle(self):
+        from pptx import Presentation
+        from pptx.util import Pt
+        from audit_imported_pdf_figure import audit_figure
+        from audit_text_geometry import audit_text_geometry
+        from pdf_figure_import import _add_text, _annotate_source_shape
+
+        doc = _custom_pdf("BT /F1 16 Tf 1 0 0 1 40 150 Tm (A) Tj ET", type3=True)
+        self.addCleanup(doc.close)
+        page = doc[0]
+        line = page.get_text("dict")["blocks"][0]["lines"][0]
+        deck = Presentation()
+        deck.slide_width, deck.slide_height = Pt(300), Pt(220)
+        slide = deck.slides.add_slide(deck.slide_layouts[6])
+        # Deliberately forge a visible ordinary A, even when the older raw API
+        # marks its semantic overlay alpha=0. Both auditors must reject it.
+        _add_text(slide, {**line["spans"][0], "alpha": 255}, line, page.rect)
+        _annotate_source_shape(slide.shapes[-1], "text_0_0_0",
+                               page.get_texttrace()[0]["seqno"], "text")
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)/"type3_rectangle.pdf"
+            candidate = Path(directory)/"wrong_ordinary_a.pptx"
+            doc.save(source)
+            deck.save(candidate)
+            structure = audit_figure(source, candidate)
+            geometry = audit_text_geometry(source, candidate)
+        self.assertEqual(structure["status"], "FAIL")
+        self.assertEqual(geometry["status"], "FAIL")
+        if page.get_texttrace()[0]["type"] == 0:
+            self.assertFalse(structure["checks"]["source_text_paint_supported"])
+            self.assertFalse(geometry["source_text_collection_complete"])
+            self.assertGreater(geometry["unsupported_source_text_paint_count"], 0)
+            self.assertGreater(structure["source_text_spans"], 0)
+            self.assertGreater(geometry["source_text_span_count"], 0)
 
     def test_completely_outside_crop_glyphs_do_not_require_rawdict_matches(self):
         page = self.new_page()

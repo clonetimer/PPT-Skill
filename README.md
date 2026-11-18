@@ -196,6 +196,10 @@ candidate provenance metadata alone cannot establish a pass.
 Vector occurrences are also reconciled with the source paint log by type and
 path geometry, because empty PDF paths can make extraction sequence numbers
 drift. A merged fill/stroke path spanning another visible paint is rejected.
+Type3 glyph programs exposed as visible text without native source paths are
+also explicitly unsupported; their Unicode label cannot substitute for the
+drawn glyph. An unresolvable direct Type3 font resource is rejected when visible
+font text remains. Older, proven ignore-text overlays retain their native paths.
 
 A bounded outline path also preserves opaque fill-and-stroke text made from
 unambiguous, closed, single straight-line contours. It uses the embedded

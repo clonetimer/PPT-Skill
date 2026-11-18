@@ -33,17 +33,32 @@ class DrawingPaintOrderTests(unittest.TestCase):
             doc.update_stream(xref, b"q S Q\n" + doc.xref_stream(xref))
             page.draw_rect((35, 50, 120, 80), color=None, fill=(1, 1, 1))
             legacy = page.get_drawings(extended=True)[0]["seqno"]
+            # Newer MuPDF versions omit the empty operation from bboxlog too.
+            # Require the source's actual text-before-cover order in either
+            # representation, rather than a version-specific numeric index.
+            ledger = page.get_bboxlog()
+            cover_order = next(i for i, (kind, bounds) in enumerate(ledger)
+                               if kind == "fill-path" and fitz.Rect(bounds) == fitz.Rect(35, 50, 120, 80))
+            empty = [i for i, (kind, b) in enumerate(ledger)
+                     if kind == "stroke-path" and (b[2] < b[0] or b[3] < b[1])]
             orders, stats = self.collect(page)
-            self.assertEqual(orders[f"draw_{legacy}"]["source_order"], 2)
-            self.assertEqual(orders[f"draw_{legacy}"]["source_seqnos"], [2])
-            self.assertEqual(stats["empty_path_paint_seqnos"], [0])
+            self.assertLess(page.get_texttrace()[0]["seqno"], cover_order)
+            self.assertEqual(orders[f"draw_{legacy}"]["source_order"], cover_order)
+            self.assertEqual(orders[f"draw_{legacy}"]["source_seqnos"], [cover_order])
+            self.assertEqual(stats["empty_path_paint_seqnos"], empty)
 
     def test_horizontal_zero_width_hairline_is_kept(self):
         doc, page = source_with_stream(b"q S 0 w 30 90 m 180 90 l S Q")
         try:
+            ledger = page.get_bboxlog()
+            line_paints = [i for i, (kind, b) in enumerate(ledger)
+                           if kind == "stroke-path" and b[2] >= b[0] and b[3] >= b[1]]
+            self.assertEqual(len(line_paints), 1)
+            drawing = page.get_drawings()[0]
+            self.assertEqual(drawing["width"], 0)
+            self.assertEqual(drawing["rect"].height, 0)
             orders, stats = self.collect(page)
-            self.assertEqual([o["source_order"] for o in orders.values()], [1])
-            self.assertEqual(stats["empty_path_paint_seqnos"], [0])
+            self.assertEqual([o["source_order"] for o in orders.values()], line_paints)
             self.assertEqual(stats["nonempty_path_paints"], 1)
         finally:
             doc.close()
@@ -68,9 +83,16 @@ class DrawingPaintOrderTests(unittest.TestCase):
     def test_only_proven_empty_path_may_separate_merged_fill_and_stroke(self):
         doc, page = source_with_stream(b"q 1 0 0 rg 20 30 80 60 re f S 20 30 80 60 re S Q")
         try:
+            ledger = page.get_bboxlog()
+            visible_paths = [(i, kind) for i, (kind, b) in enumerate(ledger)
+                             if b[2] >= b[0] and b[3] >= b[1]]
+            self.assertEqual([kind for _, kind in visible_paths], ["fill-path", "stroke-path"])
+            empty = [i for i, (kind, b) in enumerate(ledger)
+                     if kind == "stroke-path" and (b[2] < b[0] or b[3] < b[1])]
             orders, stats = self.collect(page)
-            self.assertEqual([o["source_seqnos"] for o in orders.values()], [[0, 2]])
-            self.assertEqual(stats["empty_path_paint_seqnos"], [1])
+            self.assertEqual([o["source_seqnos"] for o in orders.values()],
+                             [[i for i, _ in visible_paths]])
+            self.assertEqual(stats["empty_path_paint_seqnos"], empty)
         finally:
             doc.close()
 

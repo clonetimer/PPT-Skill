@@ -14,6 +14,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 import math
+import re
 
 import fitz
 
@@ -391,6 +392,56 @@ def _layout_span(groups, item, raw):
     return span, line, row
 
 
+def _reject_visible_type3_fonts(page, logical, stats):
+    """A Type3 Unicode mapping does not authorize a substitute font glyph.
+
+    Older MuPDF versions expose the glyph paths and a separate ignore-text
+    record. Newer versions can expose only a visible text record. The latter
+    requires glyph-program reconstruction, which this collector does not do.
+    Resource subtype and source /Name or XRef bind this check to the PDF;
+    neither a display-font name alone nor unused Type3 resources hide text.
+    """
+    if not logical:
+        return
+    try:
+        fonts = page.get_fonts(full=True)
+        type3 = [font for font in fonts if font[2] == "Type3"]
+        if not type3:
+            return
+        names, xrefs = set(), set()
+        for font in type3:
+            xref = font[0]
+            xrefs.add(xref)
+            if not isinstance(xref, int) or xref <= 0:
+                # Another resource with the same name cannot prove which
+                # direct font painted the glyph. Do not authorize a fallback.
+                _fail(stats, "UNSUPPORTED_SOURCE_TYPE3_TEXT_PAINT",
+                      "direct Type3 font resource has no verifiable XRef")
+            if page.parent.xref_get_key(xref, "Subtype") != ("name", "/Type3"):
+                _fail(stats, "UNSUPPORTED_SOURCE_TYPE3_TEXT_PAINT", "unverified source font subtype")
+            name_kind, name = page.parent.xref_get_key(xref, "Name")
+            if name_kind == "name":
+                # get_fonts()[3] can prefer /BaseFont even when the actual
+                # Type3 display name comes from a different source /Name.
+                source_name = name.removeprefix("/")
+                names.update((source_name, re.sub(r"^[A-Z]{6}\+", "", source_name)))
+            else:
+                # Type3 /BaseFont is not its display name in either supported
+                # API. Treating it as one would reject an unrelated Helvetica.
+                names.add("Unnamed-T3")
+        for item in logical:
+            trace = item["trace"]
+            name = trace["font"]
+            indirect = re.fullmatch(r"Type3 \((\d+) \d+ R\)", name)
+            if name in names or indirect and int(indirect[1]) in xrefs:
+                _fail(stats, "UNSUPPORTED_SOURCE_TYPE3_TEXT_PAINT",
+                      f"paint {trace['seqno']}, source font {name!r}; visible glyph program is not native text")
+    except TextEventError:
+        raise
+    except (AttributeError, IndexError, KeyError, RuntimeError, TypeError, ValueError) as exc:
+        _fail(stats, "UNSUPPORTED_SOURCE_TYPE3_TEXT_PAINT", f"source font evidence: {exc}")
+
+
 def collect_text_events(page, *, strict_crop_edges=False):
     """Return ``(events, stats)`` in source paint order, or fail closed.
 
@@ -445,6 +496,7 @@ def collect_text_events(page, *, strict_crop_edges=False):
     _resolve_raw_matches(logical, raw, stats)
     logical = _crop_groups(logical, raw, fitz.Rect(page.rect), strict_crop_edges, stats)
     stats["visible_trace_count"] = sum(len(item["trace_indices"]) for item in logical)
+    _reject_visible_type3_fonts(page, logical, stats)
     pending = []
     for item in logical:
         pieces = _segments(item, raw)
