@@ -113,3 +113,23 @@ Key lessons:
 3. Distinguish source-picture-only fidelity from native editable semantic reconstruction.
 4. Preserve glyph clipping protection; expand crop or request reviewed geometry rather than dropping text.
 5. A high vector count cannot mask missing picture events or text substitution.
+
+
+## R1 full-cohort status consolidation (2026-11-18)
+
+The ten-paper cohort now has a single evidence ledger and source-vs-candidate contact sheet. Current technical classifications:
+
+- Wind Turbine: source-picture-only candidate; semantic editable reconstruction remains open.
+- PINN: 774 vectors, 11 text objects, 31 pictures; technical structure/text/visual checks pass, but final visual review remains pending.
+- Attention-GIN: target crop is image-backed; the 367 page drawing records are outside the selected figure crop. FigureSpec reconstruction required.
+- Agent Distillation: 828 vectors, 57 text objects, all 4 crop-visible image paint events retained; crop-aware structure audit passes.
+- EvoOntology: 327 vectors, 271 text objects, 74 pictures; structure passes, U+25A1 glyph review remains.
+- HarnessMM: still blocked by crop-edge text guard.
+- IIoT: source-picture-only candidate; semantic reconstruction remains open.
+- Paths-over-Graph: 336 vectors, 90 text objects, 7 pictures; structure audit fails image-event retention.
+- SkillSmith: 212 vectors, 115 text objects; structure/text geometry pass, visual review pending.
+- UCFNet: 122 vectors, 110 text objects, 3 pictures; structure/text geometry pass, visual review pending.
+
+The all-ten evidence package preserves originals, candidate PPTX/renders where they exist, and per-paper status. The ten-paper cohort remains a development regression set. No independent blind-generalization claim is made.
+
+Remaining release gates: native semantic reconstruction for three image-backed cases, HarnessMM crop-edge handling, PoG image retention, EvoOntology glyph resolution, visual/expert review for all candidates, and PowerPoint 2016 host round-trip. The frozen scientific rubric is unchanged.
