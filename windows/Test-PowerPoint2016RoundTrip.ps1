@@ -64,6 +64,44 @@ function Get-Office2016Evidence {
     }
 }
 
+function Get-ShapeSnapshot {
+    param($Shape, [string]$Path)
+    $shapeText = ''
+    $shapeFont = ''
+    try {
+        if ($Shape.HasTextFrame -and $Shape.TextFrame.HasText) {
+            $shapeText = [string]$Shape.TextFrame.TextRange.Text
+            $shapeFont = [string]$Shape.TextFrame.TextRange.Font.Name
+        }
+    } catch {}
+    $children = @()
+    # msoGroup = 6. Recursively snapshot nested group items so that an
+    # unchanged top-level group count cannot conceal child loss/reordering.
+    if ([int]$Shape.Type -eq 6) {
+        try {
+            for ($i=1; $i -le $Shape.GroupItems.Count; $i++) {
+                $child = $Shape.GroupItems.Item($i)
+                $children += Get-ShapeSnapshot -Shape $child -Path "$Path/$i"
+            }
+        } catch {
+            throw "Unable to inspect grouped shape '$Path': $($_.Exception.Message)"
+        }
+    }
+    return [pscustomobject]@{
+        path = $Path
+        name = [string]$Shape.Name
+        type = [string]$Shape.Type
+        left_pt = [Math]::Round([double]$Shape.Left, 2)
+        top_pt = [Math]::Round([double]$Shape.Top, 2)
+        width_pt = [Math]::Round([double]$Shape.Width, 2)
+        height_pt = [Math]::Round([double]$Shape.Height, 2)
+        rotation_degrees = [Math]::Round([double]$Shape.Rotation, 2)
+        text = $shapeText
+        font_family = $shapeFont
+        children = @($children)
+    }
+}
+
 function Get-SlideSnapshot {
     param($Deck)
     $slides = @()
@@ -89,15 +127,7 @@ function Get-SlideSnapshot {
             } catch {}
             $shapeSnapshots += [pscustomobject]@{
                 z_order = [int]$shapeOrder
-                name = [string]$shape.Name
-                type = $kind
-                left_pt = [Math]::Round([double]$shape.Left, 2)
-                top_pt = [Math]::Round([double]$shape.Top, 2)
-                width_pt = [Math]::Round([double]$shape.Width, 2)
-                height_pt = [Math]::Round([double]$shape.Height, 2)
-                rotation_degrees = [Math]::Round([double]$shape.Rotation, 2)
-                text = $shapeText
-                font_family = $shapeFont
+                snapshot = Get-ShapeSnapshot -Shape $shape -Path ([string]$shapeOrder)
             }
             $shapeOrder++
         }
