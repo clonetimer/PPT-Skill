@@ -10,7 +10,7 @@ Run the ten delivered R1 PPTX files in the actual target Windows PowerPoint inst
 - The repository script `windows/Test-PowerPoint2016RoundTrip.ps1` at the exact reviewed commit.
 - A Windows desktop with PowerPoint installed and permission to launch PowerPoint COM automation.
 
-Keep the original input directory read-only. Use a separate, empty output directory.
+Keep the original input directory read-only. Use a new, empty output directory outside the input directory for every run. The script rejects output paths inside the input directory and refuses to overwrite existing round-trip artifacts; use a fresh output directory for retries so previous failure evidence remains intact.
 
 ## Confirm the host
 
