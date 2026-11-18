@@ -83,3 +83,8 @@ If PowerPoint COM cannot start or the host identity check fails after input pref
 
 
 The Windows CI job also runs the production preflight in `-ValidateOnly` mode against synthetic PPTX byte fixtures. It verifies one valid batch is accepted and wrong count, wrong SHA-256 and output collision are rejected without launching PowerPoint. This validates the deterministic input gate only; it does not simulate PowerPoint COM or establish Office compatibility.
+
+
+## CI-only preflight check
+
+To exercise the exact production input gate without launching PowerPoint, add `-ValidateOnly` to the command. It writes `office2016_preflight_report.json` and exits before COM startup. Windows CI runs this mode against synthetic fixtures, including negative cases. This is useful for diagnosing filename/hash/output-directory problems, but it is not a substitute for the full Office run.
