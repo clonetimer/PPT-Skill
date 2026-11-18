@@ -255,3 +255,8 @@ Refusing to overwrite each file inside the processing loop prevents evidence del
 ## Lesson 29: batch completeness is an input contract, not an output inference
 
 A batch can have a clean output directory and still be incomplete because the input folder contains only a subset of the frozen cohort, or contaminated because unrelated PPTX files were copied into it. The Office round-trip runner now requires an explicit expected file count (default 10 for R1) and aborts before launching PowerPoint when the number of top-level PPTX inputs differs. The runbook passes `-ExpectedFileCount 10` explicitly. This prevents a nine-file run from being mistaken for a ten-paper acceptance result. Count equality alone does not prove the correct ten files were selected; the frozen source SHA-256 manifest and file identities must still be checked separately.
+
+
+## Lesson 30: equal batch counts do not establish cohort identity
+
+The ten-file count guard prevents incomplete or oversized batches, but a same-count substitution can still pass (for example, nine expected R1 decks plus one unrelated PPTX). The Office host runner now compares the exact expected ten PPTX base names against the frozen R1 cohort before launching PowerPoint, reporting both missing and unexpected names. This identity gate complements, rather than replaces, the original source PDF SHA-256 manifest and the per-file PPTX hashes recorded in the host report. A count check, filename check and source hash check establish different facts and must remain separate evidence fields.
