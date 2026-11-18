@@ -71,24 +71,46 @@ function Get-SlideSnapshot {
         $texts = @()
         $fontNames = @()
         $types = @{}
+        $shapeSnapshots = @()
+        $shapeOrder = 0
         foreach ($shape in $slide.Shapes) {
             $kind = [string]$shape.Type
             if ($types.ContainsKey($kind)) { $types[$kind]++ }
             else { $types[$kind] = 1 }
+            $shapeText = ''
+            $shapeFont = ''
             try {
                 if ($shape.HasTextFrame -and $shape.TextFrame.HasText) {
-                    $texts += [string]$shape.TextFrame.TextRange.Text
-                    $fontNames += [string]$shape.TextFrame.TextRange.Font.Name
+                    $shapeText = [string]$shape.TextFrame.TextRange.Text
+                    $shapeFont = [string]$shape.TextFrame.TextRange.Font.Name
+                    $texts += $shapeText
+                    $fontNames += $shapeFont
                 }
             } catch {}
+            $shapeSnapshots += [pscustomobject]@{
+                z_order = [int]$shapeOrder
+                name = [string]$shape.Name
+                type = $kind
+                left_pt = [Math]::Round([double]$shape.Left, 2)
+                top_pt = [Math]::Round([double]$shape.Top, 2)
+                width_pt = [Math]::Round([double]$shape.Width, 2)
+                height_pt = [Math]::Round([double]$shape.Height, 2)
+                rotation_degrees = [Math]::Round([double]$shape.Rotation, 2)
+                text = $shapeText
+                font_family = $shapeFont
+            }
+            $shapeOrder++
         }
         $slides += [pscustomobject]@{
             slide_number = [int]$slide.SlideIndex
             shape_count = [int]$slide.Shapes.Count
             text_count = [int]$texts.Count
+            # Keep the legacy sorted inventory for readable diagnostics, but
+            # shape_snapshots is the authoritative ordered structural contract.
             texts = @($texts | Sort-Object)
             font_families = @($fontNames | Sort-Object -Unique)
             type_counts = $types
+            shape_snapshots = @($shapeSnapshots)
             slide_width_points = [double]$Deck.PageSetup.SlideWidth
             slide_height_points = [double]$Deck.PageSetup.SlideHeight
         }
@@ -144,6 +166,11 @@ try {
                 for ($i=0; $i -lt $before.Count; $i++) {
                     $b = $before[$i]; $a = $after[$i]
                     if ($b.shape_count -ne $a.shape_count) { $differences += "slide $($i+1): shape count" }
+                    $beforeShapes = @($b.shape_snapshots | ConvertTo-Json -Depth 8 -Compress)
+                    $afterShapes = @($a.shape_snapshots | ConvertTo-Json -Depth 8 -Compress)
+                    if (!(Test-SequenceEqual $beforeShapes $afterShapes)) {
+                        $differences += "slide $($i+1): ordered shape geometry/text/font snapshot"
+                    }
                     if ($b.text_count -ne $a.text_count) { $differences += "slide $($i+1): text count" }
                     if (!(Test-SequenceEqual $b.texts $a.texts)) { $differences += "slide $($i+1): text content" }
                     if (!(Test-SequenceEqual $b.font_families $a.font_families)) { $differences += "slide $($i+1): font families" }
