@@ -290,3 +290,8 @@ The original COM runner closed the application in a batch-level `finally`, but a
 ## Lesson 36: reset per-file state before entering a recoverable batch item
 
 After adding per-deck exception capture, review found that PowerShell variables persist across loop iterations. If a deck failed before its output paths were assigned, the failure record could inherit the previous deck's paths and hash an unrelated prior output. The runner now clears `$pptx`, `$pdf`, `$preview`, COM handles and before/after snapshots at the start of every deck, before entering its `try` block. Failure reports therefore refer only to the current input and any artifacts actually created for it. Batch recovery must isolate both exception handling and mutable state; catching exceptions alone is insufficient.
+
+
+## Lesson 37: distinguish per-deck failures from batch-level host failures in the final report
+
+Per-deck exception capture still cannot produce entries for decks that were never reached if PowerPoint COM startup or Office identity verification fails before the loop. The runner now has an outer batch catch: it preserves already completed per-deck entries and adds explicit `FAIL` records with `failure_scope=BATCH` and `NOT_PROCESSED` context for every remaining input, then writes the consolidated ten-entry JSON report and exits non-zero. Preflight failures before the input batch is accepted (wrong count/name/hash or output collision) intentionally remain hard aborts before any host launch. This keeps two failure classes distinct and avoids a missing report being mistaken for a missing test.
