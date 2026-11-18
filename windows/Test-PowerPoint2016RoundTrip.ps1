@@ -27,6 +27,21 @@ if ($outputRoot -eq $inputRoot -or $outputPrefix.StartsWith($inputPrefix, [Strin
 }
 New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
 
+# Preflight every expected output before launching PowerPoint or processing the
+# first input. A collision late in the batch must not leave a partial run.
+$inputs = @(Get-ChildItem -LiteralPath $inputRoot -Filter '*.pptx' -File | Sort-Object Name)
+if ($inputs.Count -eq 0) { throw 'No *.pptx inputs found' }
+$plannedOutputs = @()
+foreach ($source in $inputs) {
+    $plannedOutputs += Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.pptx')
+    $plannedOutputs += Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.pdf')
+    $plannedOutputs += Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.png')
+}
+$collisions = @($plannedOutputs | Where-Object { Test-Path -LiteralPath $_ })
+if ($collisions.Count -gt 0) {
+    throw "Refusing to start partial batch; prior evidence already exists: $($collisions -join '; '). Choose a fresh empty OutputDirectory."
+}
+
 function Get-Office2016Evidence {
     param($PowerPointApp, [bool]$ManualConfirmation)
     $version = [string]$PowerPointApp.Version
@@ -166,8 +181,6 @@ try {
     if ($RequireOffice2016 -and !$office.identified_office2016) {
         throw "Office 2016 not established. Version=$($office.version); ProductReleaseIds=$($office.product_release_ids). Check File > Account/About PowerPoint, then rerun with -ConfirmOffice2016Installation."
     }
-    $inputs = @(Get-ChildItem -LiteralPath $inputRoot -Filter '*.pptx' -File | Sort-Object Name)
-    if ($inputs.Count -eq 0) { throw 'No *.pptx inputs found' }
     foreach ($source in $inputs) {
         $deck = $null
         $reopened = $null
@@ -177,10 +190,6 @@ try {
             $preview = Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.png')
             if ([IO.Path]::GetFullPath($source.FullName) -eq [IO.Path]::GetFullPath($pptx)) {
                 throw 'Refusing to overwrite original'
-            }
-            $collisions = @($pptx,$pdf,$preview) | Where-Object { Test-Path -LiteralPath $_ }
-            if ($collisions.Count -gt 0) {
-                throw "Refusing to overwrite prior round-trip evidence: $($collisions -join '; '). Choose a new empty OutputDirectory."
             }
             $deck = $app.Presentations.Open($source.FullName, $false, $false, $false)
             $before = @(Get-SlideSnapshot $deck)
