@@ -285,6 +285,25 @@ try {
                 before = $before
                 after = $after
             }
+        } catch {
+            $failureMessage = $_.Exception.Message
+            $reports += [pscustomobject]@{
+                input_file = $source.Name
+                input_sha256 = (Get-FileHash -LiteralPath $source.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+                output_pptx = $pptx
+                output_pdf = $pdf
+                output_png = $preview
+                output_sha256 = $(if ($pptx -and (Test-Path -LiteralPath $pptx)) { (Get-FileHash -LiteralPath $pptx -Algorithm SHA256).Hash.ToLowerInvariant() } else { $null })
+                office = $office
+                roundtrip_structure_same = $false
+                roundtrip_differences = @("exception: $failureMessage")
+                all_output_files_exist = $false
+                requires_manual_visual_check = $true
+                status = 'FAIL'
+                error_type = $_.Exception.GetType().FullName
+                error_message = $failureMessage
+            }
+            Write-Warning "R1 round-trip failed for $($source.Name): $failureMessage. Continuing with remaining decks; prior outputs are preserved."
         } finally {
             if ($reopened) { try { $reopened.Close() } catch {} }
             if ($deck) { try { $deck.Close() } catch {} }
