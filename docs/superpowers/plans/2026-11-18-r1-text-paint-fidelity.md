@@ -55,5 +55,13 @@
 
 - [x] Freshly regenerate/render affected EvoOntology, SkillSmith and UCFNet candidates; inspect source/old/new local and full-figure comparisons.
 - [x] Preserve source images, scientific content and established native repairs; record any text-object grouping changes and retained limitations.
-- [ ] Independently review component failures and final native-object evidence, then push with the expected remote parent and verify exact-head CI.
-- [ ] Rebuild the complete ten-figure package, verify all file/render bindings and unchanged-case hashes, save and deliver the batch.
+- [x] Independently review component failures and final native-object evidence, then push with the expected remote parent and verify exact-head CI. Evidence: PyMuPDF 1.26.6/2.1 focused suites and integration suites passed; PR #20 head `fd3af9672ad45809db739dd4471fc4f52d1a9cdf`, CI run #866 (`44274622893`) completed successfully, including the full validate job and Windows PowerShell syntax job. This does not constitute PowerPoint 2016 runtime or independent scientific acceptance.
+- [x] Rebuild the complete ten-figure package, verify all file/render bindings and unchanged-case hashes, save and deliver the batch. Evidence: v3 ten-figure package, ten PPTX/PDF pairs, comparison materials and SHA-256/CRC manifest were independently checked; the three changed figures were replayed through the packaged regeneration entrypoint and the other seven remained byte-identical.
+
+## Remaining acceptance boundaries
+
+- The batch is a technical development-regression delivery, not a new blind benchmark or independent scientific acceptance.
+- EvoOntology's unresolved source `.notdef` glyph remains visibly preserved as native geometry; its semantic Unicode mapping is unresolved and raw audit failures remain.
+- The white S/V text-box overlap warning remains in the report; it is not suppressed by lowering thresholds. The affected source region is covered by the later icon paint.
+- Actual Microsoft PowerPoint 2016 open/save/re-export and final expert visual/scientific review remain external acceptance gates.
+- PR #20 remains a draft stacked on PR #17, which is stacked on PR #10. Do not merge this leaf independently; close the dependency chain in order after the upstream acceptance gates are met.
