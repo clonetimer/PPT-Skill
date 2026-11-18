@@ -245,3 +245,8 @@ The script's current structural snapshot compares top-level Z-order and recursiv
 ## Lesson 27: round-trip reruns must never erase previous failure evidence
 
 Review of the host acceptance script found that it deleted same-named PPTX/PDF/PNG outputs before starting a new run. This contradicted the evidence-preservation rule: a retry could destroy the exact output that explained a prior failure. The script now rejects an output directory equal to or nested inside the input directory, and refuses to overwrite any pre-existing per-file round-trip output. A rerun must use a fresh, separate output directory; prior reports and exports remain immutable. This is a safety property of the acceptance workflow, not a claim that Office 2016 has run. The target host must still execute the script and return the ten-file report.
+
+
+## Lesson 28: preflight the entire batch before opening the host application
+
+Refusing to overwrite each file inside the processing loop prevents evidence deletion but can still create a partial batch: earlier decks may complete before a later filename collision is encountered. The PowerPoint round-trip runner now enumerates all inputs and computes every expected PPTX/PDF/PNG output path before launching PowerPoint. Any collision aborts the batch before the first deck is opened. This preserves all-or-nothing batch semantics and prevents ambiguous mixed old/new reports. Every retry uses a fresh output directory; prior reports remain immutable.
