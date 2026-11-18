@@ -11,6 +11,7 @@
 param(
     [Parameter(Mandatory=$true)][string]$InputDirectory,
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
+    [ValidateRange(1,1000)][int]$ExpectedFileCount = 10,
     [switch]$RequireOffice2016,
     [switch]$ConfirmOffice2016Installation
 )
@@ -31,6 +32,9 @@ New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
 # first input. A collision late in the batch must not leave a partial run.
 $inputs = @(Get-ChildItem -LiteralPath $inputRoot -Filter '*.pptx' -File | Sort-Object Name)
 if ($inputs.Count -eq 0) { throw 'No *.pptx inputs found' }
+if ($inputs.Count -ne $ExpectedFileCount) {
+    throw "Incomplete or contaminated batch: expected $ExpectedFileCount PPTX files, found $($inputs.Count). No PowerPoint files were opened."
+}
 $plannedOutputs = @()
 foreach ($source in $inputs) {
     $plannedOutputs += Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.pptx')
