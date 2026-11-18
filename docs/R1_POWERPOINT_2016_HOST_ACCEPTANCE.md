@@ -33,6 +33,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
   -InputDirectory $input `
   -OutputDirectory $output `
   -ExpectedFileCount 10 `
+  -ExpectedSha256Manifest 'C:\R1\pptx\R1_v3_pptx_sha256.csv' `
   -RequireOffice2016 `
   -ConfirmOffice2016Installation
 ```
@@ -52,7 +53,7 @@ For every PPTX the script:
 7. Repeats the structural snapshot and compares the before/after state.
 8. Writes per-file input/output SHA-256 and a combined JSON report.
 
-Before launching PowerPoint, the script preflights every expected output filename across the entire input batch. Any collision aborts before the first deck is opened, preventing a mixed partial batch. The output directory must contain ten `_office_roundtrip.pptx`, ten `_office_roundtrip.pdf`, ten `_office_roundtrip.png`, and `office2016_roundtrip_report.json`.
+Before launching PowerPoint, the script checks the exact ten filenames and verifies every input PPTX SHA-256 against the frozen CSV manifest (`filename,sha256` columns), then preflights every expected output filename across the entire input batch. Any identity/hash mismatch or output collision aborts before the first deck is opened, preventing a substituted or mixed partial batch. The output directory must contain ten `_office_roundtrip.pptx`, ten `_office_roundtrip.pdf`, ten `_office_roundtrip.png`, and `office2016_roundtrip_report.json`.
 
 ## Acceptance interpretation
 
