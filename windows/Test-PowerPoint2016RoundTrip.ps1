@@ -12,6 +12,7 @@ param(
     [Parameter(Mandatory=$true)][string]$InputDirectory,
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
     [ValidateRange(1,1000)][int]$ExpectedFileCount = 10,
+    [string[]]$ExpectedBaseNames = @('01_wind_turbine_causal_framework','02_pinn_tool_wear_framework','03_attention_guided_gin_multitask','04_agent_distillation_taxonomy','05_evoontology_overview','06_harnessmm_overview','07_iiot_mult_agent_digital_twin','08_pog_reasoning_architecture','09_skillsmith_system_overview','10_ucfnet_architecture'),
     [switch]$RequireOffice2016,
     [switch]$ConfirmOffice2016Installation
 )
@@ -32,6 +33,16 @@ New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
 # first input. A collision late in the batch must not leave a partial run.
 $inputs = @(Get-ChildItem -LiteralPath $inputRoot -Filter '*.pptx' -File | Sort-Object Name)
 if ($inputs.Count -eq 0) { throw 'No *.pptx inputs found' }
+if ($inputs.Count -ne $ExpectedFileCount) {
+    throw "Incomplete or contaminated batch: expected $ExpectedFileCount PPTX files, found $($inputs.Count). No PowerPoint files were opened."
+}
+$actualBaseNames = @($inputs | ForEach-Object { $_.BaseName } | Sort-Object)
+$expectedNames = @($ExpectedBaseNames | Sort-Object)
+if (!(Test-SequenceEqual $actualBaseNames $expectedNames)) {
+    $missingNames = @($expectedNames | Where-Object { $_ -notin $actualBaseNames })
+    $unexpectedNames = @($actualBaseNames | Where-Object { $_ -notin $expectedNames })
+    throw "Frozen R1 input identity mismatch. Missing: $($missingNames -join ', '); unexpected: $($unexpectedNames -join ', '). No PowerPoint files were opened."
+}
 if ($inputs.Count -ne $ExpectedFileCount) {
     throw "Incomplete or contaminated batch: expected $ExpectedFileCount PPTX files, found $($inputs.Count). No PowerPoint files were opened."
 }
