@@ -14,6 +14,7 @@ param(
     [ValidateRange(1,1000)][int]$ExpectedFileCount = 10,
     [string[]]$ExpectedBaseNames = @('01_wind_turbine_causal_framework','02_pinn_tool_wear_framework','03_attention_guided_gin_multitask','04_agent_distillation_taxonomy','05_evoontology_overview','06_harnessmm_overview','07_iiot_mult_agent_digital_twin','08_pog_reasoning_architecture','09_skillsmith_system_overview','10_ucfnet_architecture'),
     [Parameter(Mandatory=$true)][string]$ExpectedSha256Manifest,
+    [switch]$ValidateOnly,
     [switch]$RequireOffice2016,
     [switch]$ConfirmOffice2016Installation
 )
@@ -79,6 +80,26 @@ foreach ($source in $inputs) {
 $collisions = @($plannedOutputs | Where-Object { Test-Path -LiteralPath $_ })
 if ($collisions.Count -gt 0) {
     throw 'Refusing to start partial batch because prior evidence already exists. Choose a fresh empty OutputDirectory.'
+}
+if ($ValidateOnly) {
+    $preflight = [pscustomobject]@{
+        status = 'PREFLIGHT_PASS'
+        input_count = $inputs.Count
+        input_files = @($inputs | ForEach-Object {
+            [pscustomobject]@{
+                filename = $_.Name
+                sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            }
+        })
+        manifest = [IO.Path]::GetFullPath($ExpectedSha256Manifest)
+        output_directory = $outputRoot
+        output_collisions = @()
+        power_point_started = $false
+    }
+    $preflightPath = Join-Path $outputRoot 'office2016_preflight_report.json'
+    $preflight | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $preflightPath -Encoding UTF8
+    Write-Host "Preflight report: $preflightPath"
+    exit 0
 }
 function Get-Office2016Evidence {
     param($PowerPointApp, [bool]$ManualConfirmation)
