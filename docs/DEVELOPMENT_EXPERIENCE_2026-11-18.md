@@ -280,3 +280,8 @@ The R1 Office gate now uses a versioned `tests/fixtures/r1_v3_pptx_sha256_2026-1
 ## Lesson 34: verify the delivered archive itself against its embedded manifest
 
 A tracked SHA-256 fixture and a successful script parser do not prove that the user-facing ZIP contains the same ten PPTX files. The actual Office input ZIP was independently opened and checked: exactly ten PPTX entries plus one CSV manifest were present; each PPTX was matched by basename to exactly one manifest row and re-hashed directly from the ZIP member bytes. All ten hashes matched with zero missing, duplicate or unexpected entries. Keep this archive-level verification separate from repository fixture verification and from the later Office COM round-trip report.
+
+
+## Lesson 35: a batch acceptance report must survive per-file host exceptions
+
+The original COM runner closed the application in a batch-level `finally`, but an exception while opening, saving, exporting or reopening one deck could unwind the loop before the JSON report was written. That left a partial batch with no consolidated record of which files had completed. The runner now catches failures per input, records `FAIL`, exception type/message and any partial output paths/hash, closes the current COM objects, and continues with the remaining decks. At the end it writes one report covering all ten inputs and returns a non-zero exit code if any deck failed. This preserves evidence and makes failures actionable without disguising them as a successful batch. Batch-level failures before PowerPoint starts (wrong cohort, hash mismatch, output collision, wrong host) still abort before processing.
