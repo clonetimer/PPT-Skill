@@ -295,3 +295,8 @@ After adding per-deck exception capture, review found that PowerShell variables 
 ## Lesson 37: distinguish per-deck failures from batch-level host failures in the final report
 
 Per-deck exception capture still cannot produce entries for decks that were never reached if PowerPoint COM startup or Office identity verification fails before the loop. The runner now has an outer batch catch: it preserves already completed per-deck entries and adds explicit `FAIL` records with `failure_scope=BATCH` and `NOT_PROCESSED` context for every remaining input, then writes the consolidated ten-entry JSON report and exits non-zero. Preflight failures before the input batch is accepted (wrong count/name/hash or output collision) intentionally remain hard aborts before any host launch. This keeps two failure classes distinct and avoids a missing report being mistaken for a missing test.
+
+
+## Lesson 38: keep CI syntax, batch automation, host runtime and scientific review as separate acceptance gates
+
+The latest exact-head run #899 has passed the Windows PowerShell parser and the Linux editable-PDF/Office-portability test step; the Linux workflow is still running its later build and evidence jobs. This demonstrates why status must be reported per gate and per exact commit: a parser PASS is not a COM runtime pass, a Linux import/render PASS is not a Microsoft Office save/reopen pass, and neither is scientific acceptance. The COM runner's per-deck and batch-level failure capture has been statically verified in the committed source, but only a real Windows host report can validate its behavior against PowerPoint. Preserve these distinctions in the R1 scorecard and never collapse them into a single green status.
