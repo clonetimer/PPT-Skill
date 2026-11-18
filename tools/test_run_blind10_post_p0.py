@@ -114,6 +114,7 @@ class Blind10PostP0RunnerTests(unittest.TestCase):
     def test_source_picture_only_policy_is_explicit(self, audit_mock, pipeline_mock):
         image_only = [
             "01_wind_turbine_causal_framework",
+            "03_attention_guided_gin_multitask",
             "06_harnessmm_overview",
             "07_iiot_mult_agent_digital_twin",
         ]
@@ -135,12 +136,17 @@ class Blind10PostP0RunnerTests(unittest.TestCase):
             return {"status": "TECHNICAL_REVIEW", "blockers": [], "pending_approvals": []}
 
         pipeline_mock.side_effect = fake_pipeline
-        run_cohort(self.source_dir, self.manifest, self.output)
+        result = run_cohort(self.source_dir, self.manifest, self.output)
         native_requirements = [
             call.kwargs["require_native"] for call in pipeline_mock.call_args_list
         ]
-        self.assertEqual(native_requirements[:3], [False, False, False])
-        self.assertEqual(native_requirements[3:], [True] * 7)
+        self.assertEqual(native_requirements[:4], [False] * 4)
+        self.assertEqual(native_requirements[4:], [True] * 6)
+        self.assertEqual(
+            [run["route"] for run in result["runs"][:4]],
+            ["SOURCE_PICTURE_ONLY_ALLOWED"] * 4,
+        )
+        self.assertIsNone(result["strict_reproduction_pass_rate"])
 
 
 if __name__ == "__main__":

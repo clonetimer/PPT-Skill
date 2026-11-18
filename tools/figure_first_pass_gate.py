@@ -23,9 +23,10 @@ from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 from pdf_ellipse_recognition import ellipse_bounds
-from audit_text_geometry import audit_text_geometry
+from audit_text_geometry import audit_text_geometry, _candidate_rect_pt
 from source_figure_crop import apply_figure_region, drawable_intersects_region
 from pdf_source_assets import collect_image_events
+from pdf_text_visibility import TextVisibility
 
 
 def _bad_glyphs(s: str) -> list[str]:
@@ -44,9 +45,12 @@ def source_profile(source: Path, *, page: int = 0,
         selected_region = apply_figure_region(p, figure_region)
         drawings = [d for d in p.get_drawings() if drawable_intersects_region(d, p.rect)]
         extended = p.get_drawings(extended=True)
-        spans = [span for block in p.get_text("dict")["blocks"]
+        visibility = TextVisibility(p)
+        all_spans = [span for block in p.get_text("dict")["blocks"]
                  for line in block.get("lines", []) for span in line["spans"]
                  if span["text"].strip()]
+        text_paints = Counter(visibility.classify(span) for span in all_spans)
+        spans = [span for span in all_spans if visibility.classify(span) != "hidden"]
         fonts = Counter(str(s.get("font", "")) for s in spans)
         glyphs = Counter(c for s in spans for c in _bad_glyphs(s["text"]))
         unusual_strokes = sum(1 for d in drawings if (d.get("width") or 0) > 1584)
@@ -63,6 +67,8 @@ def source_profile(source: Path, *, page: int = 0,
                 risks.append(dict(code=code, severity=severity, count=int(count), guidance=guidance))
         flag("SUSPICIOUS_UNICODE", "high", sum(glyphs.values()),
              "Freeze formula transcription against the paper source; do not trust PDF ToUnicode blindly")
+        flag("UNSUPPORTED_TEXT_PAINT_MODE", "high", text_paints["unsupported"],
+             "Zero fill alpha does not prove invisibility; visible strokes or unresolved traces require manual reconstruction")
         flag("MATH_FONT", "medium", sum(math_fonts.values()),
              "Inspect exported glyphs in PowerPoint, especially superscripts, Greek and operators")
         flag("UNREPRESENTABLE_STROKE", "high", unusual_strokes,
@@ -86,6 +92,7 @@ def source_profile(source: Path, *, page: int = 0,
             "figure_region_pt": selected_region,
             "source_drawings": len(drawings),
             "source_text_spans": len(spans),
+            "source_text_visibility": dict(text_paints),
             "source_pictures": len(image_events),
             "image_extraction": image_stats,
             "clipped_paths": clip_count,
@@ -109,9 +116,17 @@ def candidate_profile(pptx_path: Path) -> dict:
     texts = [s for s in slide.shapes if s.has_text_frame and s.text.strip()]
     full_page = sum(s.width >= deck.slide_width * .9 and
                     s.height >= deck.slide_height * .9 for s in pics)
-    out_of_bounds = sum(s.left < -9144 or s.top < -9144 or
-                        s.left+s.width > deck.slide_width + 9144 or
-                        s.top+s.height > deck.slide_height + 9144 for s in slide.shapes)
+    # OOXML positions describe the frame before rotation. Use the same
+    # rotated frame extents as the text-geometry audit, retaining the old
+    # 9144 EMU (0.72pt) tolerance in this coarse candidate profile.
+    tolerance_pt = 0.72
+    bounds = [_candidate_rect_pt(s) for s in slide.shapes]
+    out_of_bounds = sum(
+        box[0] < -tolerance_pt or box[1] < -tolerance_pt or
+        box[2] > deck.slide_width.pt + tolerance_pt or
+        box[3] > deck.slide_height.pt + tolerance_pt
+        for box in bounds
+    )
     return dict(shape_count=len(slide.shapes), native_vectors=len(vector), text_objects=len(texts),
                 picture_objects=len(pics), full_page_pictures=full_page,
                 out_of_bounds=out_of_bounds,

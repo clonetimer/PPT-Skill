@@ -233,7 +233,7 @@ inline images are handled explicitly.
 For example, with a PDF you have permission to modify:
 
 ```bash
-python -m pip install PyMuPDF python-pptx Pillow
+python -m pip install PyMuPDF python-pptx Pillow pypdf
 python tools/pdf_figure_import.py path/to/Figure.pdf path/to/Figure_editable.pptx \
   --report path/to/Figure_import.json
 python tools/audit_imported_pdf_figure.py path/to/Figure.pdf \

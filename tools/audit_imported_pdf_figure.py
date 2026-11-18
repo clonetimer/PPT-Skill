@@ -18,6 +18,8 @@ from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 from pdf_figure_import import _normalize_pdf_text
+from pdf_source_assets import collect_image_events
+from pdf_text_visibility import TextVisibility
 from source_figure_crop import apply_figure_region, drawable_intersects_region
 
 
@@ -58,14 +60,22 @@ def audit_figure(source_pdf: Path, candidate_pptx: Path, *, page_index: int = 0,
         src_width, src_height = page.rect.width, page.rect.height
         source_vectors = len(page.get_drawings())
         visible_vectors = _count_visible_source_drawings(page)
-        source_text = Counter(
-            _normalize_pdf_text(span["text"])
+        visibility = TextVisibility(page)
+        source_spans = [span
             for block in page.get_text("dict")["blocks"]
             for line in block.get("lines", [])
             for span in line["spans"]
-            if _normalize_pdf_text(span["text"]).strip()
-        )
-        source_pictures = sum(b["type"] == 1 for b in page.get_text("dict")["blocks"])
+            if _normalize_pdf_text(span["text"]).strip()]
+        text_paints = Counter(visibility.classify(span) for span in source_spans)
+        source_text = Counter(_normalize_pdf_text(span["text"])
+                              for span in source_spans
+                              if visibility.classify(span) != "hidden")
+        # Image dictionaries can include off-crop assets and can omit visible
+        # XRefs. Count crop-visible paint occurrences (including repeated use
+        # of one XRef), using the same recovery path as the importer.
+        image_events, image_stats = collect_image_events(page, document)
+        unresolved_images = image_stats["unresolved_visible_events"]
+        source_pictures = len(image_events) + unresolved_images
 
     deck = Presentation(candidate_pptx)
     if len(deck.slides) != 1:
@@ -97,10 +107,13 @@ def audit_figure(source_pdf: Path, candidate_pptx: Path, *, page_index: int = 0,
     )
     checks = {
         "labels_preserved": not missing_text,
+        "source_text_paint_supported": text_paints["unsupported"] == 0,
         "native_vectors_preserved": ratio >= .9,
         "not_flattened": full_page_pictures == 0,
         "aspect_ratio_and_dimensions_preserved": dims_match,
-        "source_pictures_retained": len(picture_shapes) >= source_pictures,
+        "source_pictures_retained": (
+            unresolved_images == 0 and len(picture_shapes) >= source_pictures
+        ),
     }
     return {
         "status": "PASS" if all(checks.values()) else "FAIL",
@@ -111,10 +124,14 @@ def audit_figure(source_pdf: Path, candidate_pptx: Path, *, page_index: int = 0,
         "native_vectors": len(vector_shapes),
         "vector_retention_ratio": round(ratio, 5),
         "source_text_spans": sum(source_text.values()),
+        "source_text_visibility": dict(text_paints),
         "candidate_text_shapes": sum(candidate_text.values()),
         "missing_text": dict(missing_text),
         "extra_text": dict(extra_text),
         "source_pictures": source_pictures,
+        "source_image_paint_events": image_stats["source_paint_events"],
+        "unresolved_source_image_events": unresolved_images,
+        "image_extraction": image_stats,
         "picture_shapes": len(picture_shapes),
         "full_page_pictures": full_page_pictures,
         "source_page_pt": [round(src_width, 3), round(src_height, 3)],

@@ -24,6 +24,7 @@ from pdf_figure_import import (
     MIN_VISIBLE_TEXT_FRACTION,
 )
 from source_figure_crop import apply_figure_region
+from pdf_text_visibility import TextVisibility
 
 EMU_PER_PT = 12700.0
 DEFAULT_OVERLAP_THRESHOLD_PT = 2.16
@@ -38,9 +39,13 @@ def _walk(shapes):
 
 def _source_spans(page):
     rows = []
+    visibility = TextVisibility(page)
     for block_index, block in enumerate(page.get_text("dict")["blocks"]):
         for line_index, line in enumerate(block.get("lines", [])):
             for span_index, span in enumerate(line["spans"]):
+                paint = visibility.classify(span)
+                if paint == "hidden":
+                    continue
                 if _span_visible_fraction(span, page.rect) < MIN_VISIBLE_TEXT_FRACTION:
                     continue
                 text = _normalize_pdf_text(span.get("text", ""))
@@ -53,6 +58,7 @@ def _source_spans(page):
                     quad = None
                     rect = fitz.Rect(span["bbox"])
                 rows.append({
+                    "paint_visibility": paint,
                     "text": text,
                     "font": str(span.get("font", "")),
                     "target_font": _source_font(str(span.get("font", ""))),
@@ -228,8 +234,10 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
     count_mismatch = len(spans) != len(shapes)
     introduced_overlap_count = len(introduced_overlaps)
     mismatch_count = len(mismatches)
+    unsupported_text_paint_count = sum(row["paint_visibility"] == "unsupported" for row in spans)
     if (count_mismatch or mismatch_count or introduced_overlap_count or introduced_oob
-            or font_mismatches or font_size_mismatches or rotation_mismatches or autofit_mismatches):
+            or font_mismatches or font_size_mismatches or rotation_mismatches or autofit_mismatches
+            or unsupported_text_paint_count):
         status = "FAIL"
     elif suspicious_glyphs:
         status = "NEEDS_REVIEW"
@@ -243,6 +251,7 @@ def audit_text_geometry(source_pdf: Path, candidate_pptx: Path, *,
         "page_size_pt": [source_rect[2], source_rect[3]],
         "figure_region_pt": selected_region,
         "source_text_span_count": len(spans),
+        "unsupported_source_text_paint_count": unsupported_text_paint_count,
         "candidate_text_shape_count": len(shapes),
         "matched_text_count": matched,
         "text_mismatch_count": mismatch_count,

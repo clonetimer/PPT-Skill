@@ -33,6 +33,7 @@ from pptx.util import Inches, Pt
 from render_figure_spec import clean_theme, nofx
 from pdf_ellipse_recognition import ellipse_bounds
 from pdf_source_assets import collect_image_events, manifest_events
+from pdf_text_visibility import TextVisibility
 from pdf_import_budget import (
     preflight_drawing_budget, assert_budget,
     DEFAULT_MAX_DRAWINGS, DEFAULT_MAX_SOURCE_SEGMENTS,
@@ -401,7 +402,13 @@ def _span_local_geometry(span, line):
     return center.x - width / 2, center.y - height / 2, width, height
 
 
-def _add_text(slide, span, line, page_rect=None):
+def _add_text(slide, span, line, page_rect=None, *, visibility=None):
+    paint = visibility.classify(span) if visibility is not None else (
+        "unsupported" if span.get("alpha", 255) == 0 else "visible")
+    if paint == "hidden":
+        return False
+    if paint == "unsupported":
+        raise ValueError("UNSUPPORTED_SOURCE_TEXT_PAINT_MODE: zero-alpha text requires unambiguous non-painting trace evidence")
     if page_rect is not None and _span_visible_fraction(span, page_rect) < MIN_VISIBLE_TEXT_FRACTION:
         return False
     content = _normalize_pdf_text(span.get("text", ""))
@@ -545,11 +552,23 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
         )
         warnings = []
         page_blocks = page.get_text("dict")["blocks"]
+        visibility = TextVisibility(page)
+        text_paints = Counter()
+        for block in page_blocks:
+            for line in block.get("lines", []):
+                for span in line["spans"]:
+                    if not _normalize_pdf_text(span.get("text", "")).strip():
+                        continue
+                    paint = visibility.classify(span)
+                    text_paints[paint] += 1
+                    if paint == "unsupported":
+                        raise ValueError("UNSUPPORTED_SOURCE_TEXT_PAINT_MODE: zero-alpha text may have visible stroke or unresolved paint")
         if selected_region is not None:
             for block in page_blocks:
                 for line in block.get("lines", []):
                     for span in line["spans"]:
-                        if not _normalize_pdf_text(span.get("text", "")).strip():
+                        if (visibility.classify(span) == "hidden" or
+                                not _normalize_pdf_text(span.get("text", "")).strip()):
                             continue
                         bbox = fitz.Rect(span["bbox"])
                         if (bbox.x0 < page.rect.x0 - .1 or bbox.y0 < page.rect.y0 - .1 or
@@ -614,7 +633,7 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
         for block_index, block in enumerate(page_blocks):
             for line_index, line in enumerate(block.get("lines", [])):
                 for span_index, span in enumerate(line["spans"]):
-                    added_text = _add_text(slide, span, line, page.rect)
+                    added_text = _add_text(slide, span, line, page.rect, visibility=visibility)
                     text_count += int(added_text)
                     if added_text:
                         source_id = f"text_{block_index}_{line_index}_{span_index}"
@@ -641,6 +660,7 @@ def convert_pdf_page(pdf_path: Path, pptx_path: Path, *, page_index: int = 0,
             "text_shapes": text_count,
             "picture_shapes": picture_count,
             "source_fonts": dict(font_counts),
+            "source_text_visibility": dict(text_paints),
             "warnings": warnings,
             "recovered_image_xrefs": source_image_stats["recovered_xrefs"],
             "source_image_events": source_image_stats["source_paint_events"],

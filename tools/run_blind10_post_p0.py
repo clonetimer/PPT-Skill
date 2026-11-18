@@ -20,8 +20,11 @@ from reproduce_research_figure import run_pipeline
 # These source crops have no PDF vector drawing records in the reviewed
 # source-layout inventory. Their only honest import evidence class is a
 # source-picture-preserving recovery, not native semantic reconstruction.
+# GIN's page-level drawings are outside the selected figure crop; caption
+# text does not turn its embedded figure image into an editable diagram.
 SOURCE_PICTURE_ONLY = {
     "01_wind_turbine_causal_framework",
+    "03_attention_guided_gin_multitask",
     "06_harnessmm_overview",
     "07_iiot_mult_agent_digital_twin",
 }
