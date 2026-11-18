@@ -31,8 +31,12 @@ jobs:
         run: python -m pip install --disable-pip-version-check PyMuPDF reportlab
       - name: Install LibreOffice rendering tools
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libreoffice-impress poppler-utils fonts-dejavu-core fonts-liberation fonts-noto-core fonts-noto-cjk
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            printf '%s\n' 'https://archive.ubuntu.com/ubuntu/' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
+          fi
+          apt_network_options=(-o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30)
+          sudo apt-get "${apt_network_options[@]}" update
+          sudo apt-get "${apt_network_options[@]}" install -y --no-install-recommends libreoffice-impress poppler-utils fonts-dejavu-core fonts-liberation fonts-noto-core fonts-noto-cjk
       - name: Test editable PDF figure recovery and Office portability
         run: |
           python tools/test_audit_blind10_sources.py
