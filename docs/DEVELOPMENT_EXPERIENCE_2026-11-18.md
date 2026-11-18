@@ -260,3 +260,8 @@ A batch can have a clean output directory and still be incomplete because the in
 ## Lesson 30: equal batch counts do not establish cohort identity
 
 The ten-file count guard prevents incomplete or oversized batches, but a same-count substitution can still pass (for example, nine expected R1 decks plus one unrelated PPTX). The Office host runner now compares the exact expected ten PPTX base names against the frozen R1 cohort before launching PowerPoint, reporting both missing and unexpected names. This identity gate complements, rather than replaces, the original source PDF SHA-256 manifest and the per-file PPTX hashes recorded in the host report. A count check, filename check and source hash check establish different facts and must remain separate evidence fields.
+
+
+## Lesson 31: filenames identify the cohort; hashes identify the actual artifacts
+
+The Office batch runner already checked the expected ten base names and file count, but a same-name PPTX could still be replaced or modified without detection. The runner now requires a frozen CSV SHA-256 manifest with `filename,sha256` columns and verifies every input PPTX before launching PowerPoint. The manifest must contain exactly one unique row per expected file, with a 64-hex SHA-256. This complements the count and filename checks: count proves batch size, names prove intended slots, and hashes prove byte identity. The source-PDF hash manifest remains separate from the derived PPTX hash manifest; never reuse source PDF hashes for PPTX inputs.
