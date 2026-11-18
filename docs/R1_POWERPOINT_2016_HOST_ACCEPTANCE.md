@@ -19,18 +19,11 @@ Keep the original input directory read-only. Use a new, empty output directory o
 3. Confirm that the installed product is actually Office 2016. Version 16.0 alone is insufficient because Microsoft 365 also reports 16.0.
 4. Record the product display name and version in the run report. Only use `-ConfirmOffice2016Installation` after this manual check.
 
-## Freeze the PPTX hash manifest
+## Frozen PPTX hash manifest
 
-After extracting the final v3 package, place exactly the ten expected PPTX files in a read-only input directory. Generate the derived-PPTX manifest from those exact files and retain it with the run evidence:
+The v3 package's ten derived PPTX hashes are frozen in `tests/fixtures/r1_v3_pptx_sha256_2026-11-18.csv`. This manifest was calculated directly from the ten PPTX byte streams in the frozen v3 delivery ZIP, not copied from the source-PDF manifest. Use that tracked file unchanged for the v3 host run. If the PPTX files are intentionally revised, create a new versioned manifest; never overwrite this one.
 
-```powershell
-Get-ChildItem -LiteralPath 'C:\R1\pptx' -Filter '*.pptx' -File | Sort-Object Name | ForEach-Object {
-    [pscustomobject]@{ filename = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() }
-} | Export-Csv -NoTypeInformation -Encoding UTF8 -LiteralPath 'C:\R1\pptx\R1_v3_pptx_sha256.csv'
-```
-
-Review the ten filenames against the frozen cohort before treating this generated manifest as authoritative. The script verifies byte identity against this manifest; it does not infer scientific correctness from a matching hash.
-
+Before running, verify the extracted ten PPTX files match the frozen manifest. The script checks exact base names, count and per-file SHA-256 before launching PowerPoint.
 ## Run
 
 Open Windows PowerShell 5.1 (not PowerShell Core) and run:
@@ -45,7 +38,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
   -InputDirectory $input `
   -OutputDirectory $output `
   -ExpectedFileCount 10 `
-  -ExpectedSha256Manifest 'C:\R1\pptx\R1_v3_pptx_sha256.csv' `
+  -ExpectedSha256Manifest '.\tests\fixtures\r1_v3_pptx_sha256_2026-11-18.csv' `
   -RequireOffice2016 `
   -ConfirmOffice2016Installation
 ```
