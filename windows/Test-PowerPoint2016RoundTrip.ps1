@@ -20,6 +20,11 @@ $outputRoot = [IO.Path]::GetFullPath($OutputDirectory)
 if (!(Test-Path -LiteralPath $inputRoot -PathType Container)) {
     throw "Input directory does not exist: $inputRoot"
 }
+$inputPrefix = $inputRoot.TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+$outputPrefix = $outputRoot.TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+if ($outputRoot -eq $inputRoot -or $outputPrefix.StartsWith($inputPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "OutputDirectory must be separate from and outside InputDirectory: $outputRoot"
+}
 New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
 
 function Get-Office2016Evidence {
@@ -173,8 +178,9 @@ try {
             if ([IO.Path]::GetFullPath($source.FullName) -eq [IO.Path]::GetFullPath($pptx)) {
                 throw 'Refusing to overwrite original'
             }
-            foreach ($existing in @($pptx,$pdf,$preview)) {
-                if (Test-Path -LiteralPath $existing) { Remove-Item -LiteralPath $existing -Force }
+            $collisions = @($pptx,$pdf,$preview) | Where-Object { Test-Path -LiteralPath $_ }
+            if ($collisions.Count -gt 0) {
+                throw "Refusing to overwrite prior round-trip evidence: $($collisions -join '; '). Choose a new empty OutputDirectory."
             }
             $deck = $app.Presentations.Open($source.FullName, $false, $false, $false)
             $before = @(Get-SlideSnapshot $deck)
