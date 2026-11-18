@@ -487,6 +487,39 @@ jobs:
           }
           Write-Host 'Windows script syntax: PASS. Real PowerPoint 2016 COM is NOT tested in CI.'
 
+      - name: Exercise R1 Office batch preflight without launching PowerPoint
+        shell: pwsh
+        run: |
+          $root = Join-Path $env:RUNNER_TEMP 'r1-office-preflight-test'
+          $input = Join-Path $root 'input'
+          New-Item -ItemType Directory -Force -Path $input | Out-Null
+          $names = @('deck-a','deck-b')
+          foreach ($name in $names) {
+            Set-Content -LiteralPath (Join-Path $input ($name + '.pptx')) -Value ('synthetic-' + $name) -NoNewline
+          }
+          $manifest = Join-Path $root 'hashes.csv'
+          Get-ChildItem -LiteralPath $input -Filter '*.pptx' -File | ForEach-Object {
+            [pscustomobject]@{ filename = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() }
+          } | Export-Csv -NoTypeInformation -Encoding UTF8 -LiteralPath $manifest
+          $script = (Resolve-Path 'windows/Test-PowerPoint2016RoundTrip.ps1').Path
+          $outGood = Join-Path $root 'out-good'
+          & powershell.exe -NoProfile -File $script -InputDirectory $input -OutputDirectory $outGood -ExpectedFileCount 2 -ExpectedBaseNames $names -ExpectedSha256Manifest $manifest -ValidateOnly
+          if ($LASTEXITCODE -ne 0) { throw 'Valid synthetic batch did not pass preflight.' }
+          $report = Get-Content -Raw -LiteralPath (Join-Path $outGood 'office2016_preflight_report.json') | ConvertFrom-Json
+          if ($report.status -ne 'PREFLIGHT_PASS' -or $report.power_point_started -ne $false -or $report.input_count -ne 2) { throw 'Preflight success report is invalid.' }
+          $badManifest = Join-Path $root 'bad-hashes.csv'
+          @([pscustomobject]@{filename='deck-a.pptx';sha256=('0' * 64)},[pscustomobject]@{filename='deck-b.pptx';sha256=('0' * 64)}) | Export-Csv -NoTypeInformation -Encoding UTF8 -LiteralPath $badManifest
+          & powershell.exe -NoProfile -File $script -InputDirectory $input -OutputDirectory (Join-Path $root 'out-bad-hash') -ExpectedFileCount 2 -ExpectedBaseNames $names -ExpectedSha256Manifest $badManifest -ValidateOnly
+          if ($LASTEXITCODE -eq 0) { throw 'Bad SHA-256 manifest unexpectedly passed.' }
+          & powershell.exe -NoProfile -File $script -InputDirectory $input -OutputDirectory (Join-Path $root 'out-wrong-count') -ExpectedFileCount 3 -ExpectedBaseNames $names -ExpectedSha256Manifest $manifest -ValidateOnly
+          if ($LASTEXITCODE -eq 0) { throw 'Wrong input count unexpectedly passed.' }
+          $outCollision = Join-Path $root 'out-collision'
+          New-Item -ItemType Directory -Force -Path $outCollision | Out-Null
+          Set-Content -LiteralPath (Join-Path $outCollision 'deck-b_office_roundtrip.png') -Value 'prior-evidence'
+          & powershell.exe -NoProfile -File $script -InputDirectory $input -OutputDirectory $outCollision -ExpectedFileCount 2 -ExpectedBaseNames $names -ExpectedSha256Manifest $manifest -ValidateOnly
+          if ($LASTEXITCODE -eq 0) { throw 'Existing output collision unexpectedly passed.' }
+          Write-Host 'R1 Office batch preflight PASS: valid batch accepted; bad hash, wrong count and output collision rejected; PowerPoint was never launched.'
+
 
   vision-model-smoke:
     name: Real PP-DocLayoutV3 and PP-OCRv6 inference (P1-01B)
