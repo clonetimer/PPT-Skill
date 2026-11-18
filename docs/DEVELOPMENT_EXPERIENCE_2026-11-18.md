@@ -270,3 +270,8 @@ The Office batch runner already checked the expected ten base names and file cou
 ## Lesson 32: validate the assembled script, not only inserted fragments
 
 A contents-API edit accidentally inserted the PPTX hash-manifest block into the middle of a regular-expression line and left a duplicate tail in the PowerShell file. Linux validation passed because the Windows-only script was not executed there; the Windows parser job caught the corruption. The script was reconstructed from the last intact sections, then checked for exactly one host-identity function, one batch preflight block, a complete SHA-256 regex line and a single execution/report tail. Going forward, script edits must be followed by a full-file fetch and structural checks before pushing; only the exact-head Windows parser CI can establish syntax validity. This failure also demonstrates why Linux PASS cannot be generalized to Windows-only code.
+
+
+## Lesson 33: freeze hashes from the delivered PPTX bytes, not from source PDFs or regenerated copies
+
+The R1 Office gate now uses a versioned `tests/fixtures/r1_v3_pptx_sha256_2026-11-18.csv` containing the exact SHA-256 values computed directly from the ten PPTX entries in the frozen v3 delivery ZIP. This prevents accidental substitution by same-named decks and avoids confusing source-PDF hashes with derived PPTX hashes. If any PPTX is revised, create a new versioned manifest and delivery revision; do not silently update the v3 fixture. CI #887 (`44285861679`) passed Linux validation and the Windows PowerShell parser on the intact predecessor script. A later syntax regression (#885) was repaired and the fixed script was included in the CI #887 head; keep the original #885 failure evidence as a regression lesson.
