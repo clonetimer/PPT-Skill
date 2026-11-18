@@ -19,6 +19,18 @@ Keep the original input directory read-only. Use a new, empty output directory o
 3. Confirm that the installed product is actually Office 2016. Version 16.0 alone is insufficient because Microsoft 365 also reports 16.0.
 4. Record the product display name and version in the run report. Only use `-ConfirmOffice2016Installation` after this manual check.
 
+## Freeze the PPTX hash manifest
+
+After extracting the final v3 package, place exactly the ten expected PPTX files in a read-only input directory. Generate the derived-PPTX manifest from those exact files and retain it with the run evidence:
+
+```powershell
+Get-ChildItem -LiteralPath 'C:\R1\pptx' -Filter '*.pptx' -File | Sort-Object Name | ForEach-Object {
+    [pscustomobject]@{ filename = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() }
+} | Export-Csv -NoTypeInformation -Encoding UTF8 -LiteralPath 'C:\R1\pptx\R1_v3_pptx_sha256.csv'
+```
+
+Review the ten filenames against the frozen cohort before treating this generated manifest as authoritative. The script verifies byte identity against this manifest; it does not infer scientific correctness from a matching hash.
+
 ## Run
 
 Open Windows PowerShell 5.1 (not PowerShell Core) and run:
