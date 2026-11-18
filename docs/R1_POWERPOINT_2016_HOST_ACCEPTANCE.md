@@ -77,3 +77,6 @@ The runner also validates the exact ten expected R1 deck base names before launc
 
 
 If one deck fails during COM open/save/export/reopen, the script records a per-file `FAIL` entry (including exception type/message and any partial output paths) and continues with the remaining decks. At batch end it writes the combined report and exits non-zero if any file failed. Preserve all partial outputs and the report; do not rerun into the same output directory. Preflight failures (wrong count/name/hash or output collision) abort before PowerPoint starts and therefore do not produce a per-deck report.
+
+
+If PowerPoint COM cannot start or the host identity check fails after input preflight, the runner writes a batch-level failure and adds `FAIL` entries for every deck not reached (`failure_scope=BATCH`, with no output paths). Completed per-deck entries are preserved. It then writes the ten-entry JSON report and exits non-zero. Input count/name/hash and output-collision preflight failures remain early aborts before host launch and are not represented as Office execution results.
