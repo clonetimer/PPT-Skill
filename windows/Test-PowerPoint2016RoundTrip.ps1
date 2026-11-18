@@ -220,8 +220,15 @@ try {
         throw "Office 2016 not established. Version=$($office.version); ProductReleaseIds=$($office.product_release_ids). Check File > Account/About PowerPoint, then rerun with -ConfirmOffice2016Installation."
     }
     foreach ($source in $inputs) {
+        # Reset all per-deck state before entering try so a failure during
+        # output-path construction cannot inherit paths from the previous deck.
         $deck = $null
         $reopened = $null
+        $pptx = $null
+        $pdf = $null
+        $preview = $null
+        $before = @()
+        $after = @()
         try {
             $pptx = Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.pptx')
             $pdf = Join-Path $outputRoot ($source.BaseName + '_office_roundtrip.pdf')
