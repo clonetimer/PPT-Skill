@@ -275,3 +275,8 @@ A contents-API edit accidentally inserted the PPTX hash-manifest block into the 
 ## Lesson 33: freeze hashes from the delivered PPTX bytes, not from source PDFs or regenerated copies
 
 The R1 Office gate now uses a versioned `tests/fixtures/r1_v3_pptx_sha256_2026-11-18.csv` containing the exact SHA-256 values computed directly from the ten PPTX entries in the frozen v3 delivery ZIP. This prevents accidental substitution by same-named decks and avoids confusing source-PDF hashes with derived PPTX hashes. If any PPTX is revised, create a new versioned manifest and delivery revision; do not silently update the v3 fixture. CI #887 (`44285861679`) passed Linux validation and the Windows PowerShell parser on the intact predecessor script. A later syntax regression (#885) was repaired and the fixed script was included in the CI #887 head; keep the original #885 failure evidence as a regression lesson.
+
+
+## Lesson 34: verify the delivered archive itself against its embedded manifest
+
+A tracked SHA-256 fixture and a successful script parser do not prove that the user-facing ZIP contains the same ten PPTX files. The actual Office input ZIP was independently opened and checked: exactly ten PPTX entries plus one CSV manifest were present; each PPTX was matched by basename to exactly one manifest row and re-hashed directly from the ZIP member bytes. All ten hashes matched with zero missing, duplicate or unexpected entries. Keep this archive-level verification separate from repository fixture verification and from the later Office COM round-trip report.
