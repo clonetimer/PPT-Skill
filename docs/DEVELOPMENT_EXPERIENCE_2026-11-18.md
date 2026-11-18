@@ -226,3 +226,10 @@ The Office round-trip snapshot now records each top-level shape in collection or
 This check remains deliberately scoped: it does not prove pixel-identical rendering, inspect every nested group child or certify scientific topology. The exported PDF/PNG still requires visual comparison, and the COM test must run on the actual target Windows host. Windows CI only parses the PowerShell script; it does not execute PowerPoint. Do not describe the new comparison as an Office 2016 runtime pass until a real host report is returned.
 
 Validation to record against the new exact head: PowerShell parser CI, a synthetic reordered/moved-shape negative on a Windows PowerPoint host, and the ten-file batch round-trip report. Preserve all failed host reports rather than overwriting them.
+
+
+## Lesson 25: top-level group equality does not prove nested object preservation
+
+After adding ordered top-level shape snapshots to the PowerPoint COM round-trip check, a remaining blind spot was identified: a grouped diagram can reopen with the same single top-level group, while a child path, label, or connector inside that group is missing or reordered. The snapshot now recursively records GroupItems in their collection order, with a stable group path, type, geometry, rotation, text, font family, and nested children. Failure to enumerate a group is an explicit error rather than a silently empty child list.
+
+The comparison therefore covers top-level z-order and nested group structure after SaveAs/reopen. It remains a structural host check, not a pixel comparison or scientific-topology proof; source-relative PDF/PNG comparison and human review remain separate. Windows CI parses the script only. A real PowerPoint COM run is still required to validate COM behavior and the ten delivered decks on the target Office installation.
