@@ -74,3 +74,6 @@ Return the complete `office2016_roundtrip_report.json`, all ten PowerPoint-expor
 Do not report the Office 2016 gate complete until all ten files have a host report and their exported renders have been visually reviewed. A green Windows parser CI job only proves script syntax.
 
 The runner also validates the exact ten expected R1 deck base names before launching PowerPoint. This catches same-count substitutions (for example, nine correct decks plus one unrelated PPTX), which a count-only check cannot detect. The frozen source PDF SHA-256 manifest remains a separate source-integrity check; it must not be confused with the derived PPTX identity or hash.
+
+
+If one deck fails during COM open/save/export/reopen, the script records a per-file `FAIL` entry (including exception type/message and any partial output paths) and continues with the remaining decks. At batch end it writes the combined report and exits non-zero if any file failed. Preserve all partial outputs and the report; do not rerun into the same output directory. Preflight failures (wrong count/name/hash or output collision) abort before PowerPoint starts and therefore do not produce a per-deck report.
