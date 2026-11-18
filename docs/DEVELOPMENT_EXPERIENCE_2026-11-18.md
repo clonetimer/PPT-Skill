@@ -265,3 +265,8 @@ The ten-file count guard prevents incomplete or oversized batches, but a same-co
 ## Lesson 31: filenames identify the cohort; hashes identify the actual artifacts
 
 The Office batch runner already checked the expected ten base names and file count, but a same-name PPTX could still be replaced or modified without detection. The runner now requires a frozen CSV SHA-256 manifest with `filename,sha256` columns and verifies every input PPTX before launching PowerPoint. The manifest must contain exactly one unique row per expected file, with a 64-hex SHA-256. This complements the count and filename checks: count proves batch size, names prove intended slots, and hashes prove byte identity. The source-PDF hash manifest remains separate from the derived PPTX hash manifest; never reuse source PDF hashes for PPTX inputs.
+
+
+## Lesson 32: validate the assembled script, not only inserted fragments
+
+A contents-API edit accidentally inserted the PPTX hash-manifest block into the middle of a regular-expression line and left a duplicate tail in the PowerShell file. Linux validation passed because the Windows-only script was not executed there; the Windows parser job caught the corruption. The script was reconstructed from the last intact sections, then checked for exactly one host-identity function, one batch preflight block, a complete SHA-256 regex line and a single execution/report tail. Going forward, script edits must be followed by a full-file fetch and structural checks before pushing; only the exact-head Windows parser CI can establish syntax validity. This failure also demonstrates why Linux PASS cannot be generalized to Windows-only code.
