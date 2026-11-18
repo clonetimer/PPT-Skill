@@ -32,6 +32,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
   -File '.\windows\Test-PowerPoint2016RoundTrip.ps1' `
   -InputDirectory $input `
   -OutputDirectory $output `
+  -ExpectedFileCount 10 `
   -RequireOffice2016 `
   -ConfirmOffice2016Installation
 ```
