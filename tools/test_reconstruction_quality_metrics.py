@@ -65,6 +65,52 @@ class ReconstructionQualityMetricsTests(unittest.TestCase):
         self.assertEqual(result["geometry_fidelity"]["status"],"COMPARABLE_FULL_PAGE_ORIGIN")
         self.assertFalse(result["policy"]["single_blended_score_emitted"])
 
+    def test_candidate_text_sequence_does_not_expand_manifest_order_scope(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder); manifest=root/"manifest.json"; pptx=root/"figure.pptx"
+            make_manifest(manifest);make_pptx(pptx)
+            deck=Presentation(pptx)
+            text=next(shape for shape in deck.slides[0].shapes if shape.name=="text_0_0_0")
+            _annotate_source_shape(text,"text_0_0_0",3,"text")
+            deck.save(pptx)
+            result=evaluate_reconstruction_quality(manifest,pptx)
+        self.assertEqual(result["status"],"NEEDS_REVIEW")
+        self.assertEqual(result["object_preservation"]["source_object_recall"],1.0)
+        self.assertEqual(result["source_order"]["expected_order"],["draw_1","image_2"])
+        self.assertEqual(result["source_order"]["actual_order"],["draw_1","image_2"])
+        self.assertEqual(result["source_order"]["excluded_source_object_ids"],["text_0_0_0"])
+        self.assertTrue(result["source_order"]["exact_order_match"])
+        self.assertTrue(result["source_order"]["unsequenced_text_excluded"])
+
+    def test_physical_order_is_checked_when_candidate_order_metadata_is_wrong_or_absent(self):
+        for reverse in (False,True):
+            for metadata_mode in ("wrong","absent"):
+                with self.subTest(reverse=reverse,metadata_mode=metadata_mode), tempfile.TemporaryDirectory() as folder:
+                    root=Path(folder); manifest=root/"manifest.json"; pptx=root/"figure.pptx"
+                    make_manifest(manifest);make_pptx(pptx)
+                    deck=Presentation(pptx)
+                    slide=deck.slides[0]
+                    if reverse:
+                        shapes={shape.name:shape for shape in slide.shapes}
+                        shapes["draw_1"]._element.addprevious(shapes["image_2"]._element)
+                    for index,shape in enumerate(slide.shapes):
+                        node=next(node for node in shape._element.iter() if node.tag.endswith("}cNvPr"))
+                        metadata=json.loads(node.get("descr"))
+                        if metadata_mode=="absent":
+                            metadata.pop("source_order",None)
+                        else:
+                            metadata["source_order"]=100-index
+                        node.set("descr",json.dumps(metadata))
+                    deck.save(pptx)
+                    result=evaluate_reconstruction_quality(manifest,pptx)
+                self.assertEqual(result["status"],"FAIL" if reverse else "NEEDS_REVIEW")
+                self.assertEqual(result["source_order"]["actual_order"],
+                                 ["image_2","draw_1"] if reverse else ["draw_1","image_2"])
+                self.assertEqual(result["source_order"]["exact_order_match"],not reverse)
+                self.assertEqual(result["source_order"]["kendall_tau"],-1.0 if reverse else 1.0)
+                if reverse:
+                    self.assertIn("SOURCE_ORDER_MISMATCH",result["blockers"])
+
     def test_text_mutation_increases_cer_without_hiding_object_recall(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder); manifest=root/"manifest.json"; pptx=root/"figure.pptx"

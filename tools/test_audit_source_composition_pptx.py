@@ -71,6 +71,50 @@ class SourceCompositionPptxAuditTests(unittest.TestCase):
         self.assertEqual(result["actual_source_order"],["draw_1","image_2"])
         self.assertFalse(result["policy"]["visual_fidelity_verified"])
 
+    def test_candidate_text_sequence_does_not_expand_manifest_order_scope(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder); manifest=root/"manifest.json"; pptx=root/"figure.pptx"
+            make_manifest(manifest); make_pptx(pptx)
+            deck=Presentation(pptx)
+            text=next(shape for shape in deck.slides[0].shapes if shape.name=="text_0_0_0")
+            _annotate_source_shape(text,"text_0_0_0",3,"text")
+            deck.save(pptx)
+            result=audit_imported_pptx_against_composition(manifest,pptx)
+        self.assertEqual(result["status"],"PASS")
+        self.assertEqual(result["expected_object_count"],3)
+        self.assertEqual(result["actual_annotated_shape_count"],3)
+        self.assertEqual(result["expected_source_order"],["draw_1","image_2"])
+        self.assertEqual(result["actual_source_order"],["draw_1","image_2"])
+        self.assertEqual(result["source_order_excluded_ids"],["text_0_0_0"])
+
+    def test_physical_order_is_checked_when_candidate_order_metadata_is_wrong_or_absent(self):
+        for reverse in (False,True):
+            for metadata_mode in ("wrong","absent"):
+                with self.subTest(reverse=reverse,metadata_mode=metadata_mode), tempfile.TemporaryDirectory() as folder:
+                    root=Path(folder); manifest=root/"manifest.json"; pptx=root/"figure.pptx"
+                    make_manifest(manifest); make_pptx(pptx)
+                    deck=Presentation(pptx)
+                    slide=deck.slides[0]
+                    if reverse:
+                        shapes={shape.name:shape for shape in slide.shapes}
+                        shapes["draw_1"]._element.addprevious(shapes["image_2"]._element)
+                    for index,shape in enumerate(slide.shapes):
+                        node=next(node for node in shape._element.iter() if node.tag.endswith("}cNvPr"))
+                        metadata=json.loads(node.get("descr"))
+                        if metadata_mode=="absent":
+                            metadata.pop("source_order",None)
+                        else:
+                            metadata["source_order"]=100-index
+                        node.set("descr",json.dumps(metadata))
+                    deck.save(pptx)
+                    result=audit_imported_pptx_against_composition(manifest,pptx)
+                self.assertEqual(result["status"],"FAIL" if reverse else "PASS")
+                self.assertEqual(result["actual_source_order"],
+                                 ["image_2","draw_1"] if reverse else ["draw_1","image_2"])
+                self.assertEqual(result["source_order_matches"],not reverse)
+                if reverse:
+                    self.assertIn("SOURCE_PAINT_ORDER_MISMATCH",result["failures"])
+
     def test_missing_and_duplicate_objects_fail(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder); manifest=root/"manifest.json"; pptx=root/"figure.pptx"

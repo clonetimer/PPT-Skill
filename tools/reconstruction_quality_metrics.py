@@ -133,8 +133,11 @@ def evaluate_reconstruction_quality(manifest_path: Path,pptx_path: Path,visual_r
         [key for key,item in expected.items() if item.get("source_order") is not None],
         key=lambda key:(expected[key]["source_order"],key)
     )
+    # Compare the manifest's sequenced objects in their physical spTree order;
+    # candidate source_order fields cannot expand or shrink that source scope.
+    sequenced_ids=set(expected_order)
     actual_order=[item["source_object_id"] for item in shapes
-                  if item["source_order"] is not None and item["source_object_id"] in expected]
+                  if item["source_object_id"] in sequenced_ids]
     exact_order=actual_order==expected_order
     tau=_kendall_tau(expected_order,actual_order)
 
@@ -257,6 +260,7 @@ def evaluate_reconstruction_quality(manifest_path: Path,pptx_path: Path,visual_r
         "source_order":{
             "expected_order":expected_order,
             "actual_order":actual_order,
+            "excluded_source_object_ids":sorted(set(expected)-sequenced_ids),
             "exact_order_match":exact_order,
             "kendall_tau":tau,
             "unsequenced_text_excluded":True,

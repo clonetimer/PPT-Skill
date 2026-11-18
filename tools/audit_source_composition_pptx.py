@@ -106,10 +106,13 @@ def audit_imported_pptx_against_composition(manifest_path: Path, pptx_path: Path
     expected_order.sort(key=lambda object_id: (
         expected[object_id]["source_order"], object_id
     ))
+    # The source manifest defines which objects have known paint order.
+    # Candidate metadata may add text seqnos or omit them; neither changes
+    # this scope or the physical spTree order of the source-bound shapes.
+    sequenced_ids = set(expected_order)
     actual_order = [
         record["source_object_id"] for record in actual_shapes
-        if record.get("source_order") is not None
-        and record["source_object_id"] in expected
+        if record["source_object_id"] in sequenced_ids
     ]
     order_matches = actual_order == expected_order
     order_missing = [object_id for object_id in expected_order if object_id not in actual_order]
@@ -142,6 +145,7 @@ def audit_imported_pptx_against_composition(manifest_path: Path, pptx_path: Path
         "class_mismatches": class_mismatches,
         "expected_source_order": expected_order,
         "actual_source_order": actual_order,
+        "source_order_excluded_ids": sorted(set(expected) - sequenced_ids),
         "source_order_matches": order_matches,
         "source_order_missing_ids": order_missing,
         "object_class_counts": dict(Counter(item["object_class"] for item in actual_shapes)),
@@ -150,7 +154,7 @@ def audit_imported_pptx_against_composition(manifest_path: Path, pptx_path: Path
             "scientific_relations_verified": False,
             "visual_fidelity_verified": False,
             "office2016_host_verified": False,
-            "this_audit_verifies": "source-object provenance, object class, count, uniqueness, and paint-order metadata",
+            "this_audit_verifies": "source-object provenance, object class, count, uniqueness, and physical order of manifest-sequenced objects",
         },
     }
 
