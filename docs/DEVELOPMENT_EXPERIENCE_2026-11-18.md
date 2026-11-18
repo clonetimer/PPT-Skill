@@ -250,3 +250,8 @@ Review of the host acceptance script found that it deleted same-named PPTX/PDF/P
 ## Lesson 28: preflight the entire batch before opening the host application
 
 Refusing to overwrite each file inside the processing loop prevents evidence deletion but can still create a partial batch: earlier decks may complete before a later filename collision is encountered. The PowerPoint round-trip runner now enumerates all inputs and computes every expected PPTX/PDF/PNG output path before launching PowerPoint. Any collision aborts the batch before the first deck is opened. This preserves all-or-nothing batch semantics and prevents ambiguous mixed old/new reports. Every retry uses a fresh output directory; prior reports remain immutable.
+
+
+## Lesson 29: batch completeness is an input contract, not an output inference
+
+A batch can have a clean output directory and still be incomplete because the input folder contains only a subset of the frozen cohort, or contaminated because unrelated PPTX files were copied into it. The Office round-trip runner now requires an explicit expected file count (default 10 for R1) and aborts before launching PowerPoint when the number of top-level PPTX inputs differs. The runbook passes `-ExpectedFileCount 10` explicitly. This prevents a nine-file run from being mistaken for a ten-paper acceptance result. Count equality alone does not prove the correct ten files were selected; the frozen source SHA-256 manifest and file identities must still be checked separately.
