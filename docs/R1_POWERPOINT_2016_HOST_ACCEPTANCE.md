@@ -80,3 +80,6 @@ If one deck fails during COM open/save/export/reopen, the script records a per-f
 
 
 If PowerPoint COM cannot start or the host identity check fails after input preflight, the runner writes a batch-level failure and adds `FAIL` entries for every deck not reached (`failure_scope=BATCH`, with no output paths). Completed per-deck entries are preserved. It then writes the ten-entry JSON report and exits non-zero. Input count/name/hash and output-collision preflight failures remain early aborts before host launch and are not represented as Office execution results.
+
+
+The Windows CI job also runs the production preflight in `-ValidateOnly` mode against synthetic PPTX byte fixtures. It verifies one valid batch is accepted and wrong count, wrong SHA-256 and output collision are rejected without launching PowerPoint. This validates the deterministic input gate only; it does not simulate PowerPoint COM or establish Office compatibility.
