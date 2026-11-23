@@ -1,58 +1,73 @@
 # Scientific Figure Planning (7.7.0-dev)
 
-Choose the requested visual form, read the evidence, and assign each part to the appropriate drawing tool. **Evidence type and visual expression are independent choices.** FigurePlan compiles an explicit structural layer through the existing FigureSpec renderer; it is not the vocabulary for every scientific illustration. The agent or researcher authors its input; the planner validates references and selects glyphs. It does not parse arbitrary programs or establish scientific truth. Existing python-pptx rendering, native components and chart contracts remain available.
+Identify the scientific task, inspect relevant paper figures, read the evidence, and choose graphical encodings that explain the claim. **Evidence type and visual expression are independent choices.** FigurePlan is an optional compiler for supported structural parts through the existing FigureSpec renderer; its preset vocabulary does not limit a whole paper figure. The agent or researcher authors its input; the planner validates references and selects glyphs. It does not parse arbitrary programs or establish scientific truth. Source-specific FigureSpec/vector geometry, existing python-pptx rendering, native components and chart contracts remain available.
 
 Contents: [Route](#1-select-the-route) · [Evidence](#2-read-evidence-and-choose-visual-objects) · [Schema](#3-author-the-brief) · [Example](#4-run-a-complete-synthetic-example) · [Review](#5-review-the-actual-output)
 
 ## 1. Select the route
 
-### Choose the visual form first
+### Identify the scientific task and inspect paper figures
 
-Use the user's requested form and any inspected visual reference to select **structure diagram**, **object/scene illustration**, or **hybrid figure**. Separately record whether the scientific claims come from a visible source figure, paper/code, measured data, or a disclosed concept. A paper-grounded method can use a hybrid illustration; it does not become conceptual evidence merely because part of its appearance is generated.
+For an **academic paper figure / 学术论文插图** requested from code or a paper, first identify which scientific task the figure serves. Multiple tasks may occupy separate panels. Then choose the visual form from the source, the user's request and inspected scholarly references, while recording the evidence for each claim separately.
 
-| Visual form | What to produce |
+| Scientific task | What to produce |
 | --- | --- |
-| Structure diagram | Precise native/vector dependencies, operators, mathematical structure or genuine workflow steps; FigurePlan handles the supported structural kinds. |
-| Object/scene illustration | An imagegen object, scene or material layer carrying the requested visual subject, plus deterministic scientific labels where needed. The artwork is illustrative, with no claim to measured geometry or results. |
-| Hybrid figure | A coherent illustrated subject/scene and an independently checked structure/data layer. Place the exact marks in the illustrated composition so the whole figure explains the claim. |
+| Method / mechanism figure | A checkable visual explanation of variables, operations, dimensions, neighborhoods/propagation, hierarchy, branches and fusion, using native/vector geometry. |
+| Quantitative results figure | Data-driven marks with evidenced values, units, analysis definitions, uncertainty and axes. |
+| Experimental apparatus / study-object figure | Real source photographs or microscopy, documented apparatus geometry, or a faithful schematic with clear observation/schematic status. |
+| Graphical abstract / concept figure | A compact visual account of the scientific claim; exact relations remain checkable, and any object/scene artwork serves a specific explanatory role. |
 
-If the user asks for **科研插画、图形摘要、对象感、不要方框图/流程图**, choose illustration or hybrid and **actually invoke an available imagegen tool** for its non-data, non-topological object/scene/material layer. Inspect the returned artwork before composing the figure. A planner handoff, a written prompt or more varied native glyphs does not fulfill that instruction. If imagegen is unavailable, state that the illustration layer could not be generated and identify what remains incomplete; do not silently return a box diagram as the requested figure.
+Before drawing, **view the original paper figures and established paper figures for similar scientific tasks**, including the actual images and captions. If the source has no figure, record that limitation and inspect suitable published visual references. Record what their composition, panel structure, notation, repeated objects and line grammar communicate. Use the original paper/code for scientific content; use comparison figures for expression. A similar-looking architecture is not evidence that its internal mechanism exists in the user's implementation.
 
-For a hybrid, keep this division explicit in the ordinary figure brief; no new FigurePlan fields are required:
+The phrases **科研插画、图形摘要、不要方框图/流程图** do not select an imagegen route. For a rejected generic method diagram, replace labels-in-boxes with source-derived graphical encoding: show the scientific objects and how they change or interact. Recoloring boxes, adding decorative dots or attaching a satellite does not explain a mechanism. Do not automatically convert this request into a science-popularization scene, cover image or asset poster.
 
-- **Illustration layer:** identify the subject, explanatory scene, materials, perspective and visual reference. Generate only those illustrative objects and surfaces. Ask for space for precise overlays when needed, and identify the resulting raster artwork as generated/illustrative.
-- **Exact scientific layer:** derive real dependencies, node identities, equations, dimensions, quantitative marks, axes, numerical values and labels from the sources. Draw these with native/vector components or the data pipeline, and verify them after composition. Do not ask imagegen to draw an entire architecture that must be exact or produce fake measurement curves, microscopy, maps or heatmaps as evidence.
-- **Complete composition:** make the illustrated objects and their arrangement explain the requested mechanism. A decorative satellite next to an unchanged box pipeline does not make a complete illustrated method figure. A concept-only visual trial must be labeled as such; it does not establish a verified method or a completed deck.
+### Assign tools to the information being shown
 
-Prefer editable objects in the exact scientific layer. Permit disclosed raster illustration layers; neither “all objects editable” nor “zero pictures” is a default illustration acceptance criterion; honor an explicit all-native requirement. FigurePlan's 12 structural kinds do not restrict what imagegen can depict, and illustrative subjects must not be disguised as `process` nodes to satisfy that schema.
+- **Precise scientific content:** use native/vector geometry or data tools for variables, mathematical operators, exact dependencies, dimensions, numerical marks, axes and labels. The geometry must express the information, not merely decorate a sequence of module names. Use source-specific FigureSpec or custom vector geometry when presets cannot represent it faithfully.
+- **Observed images and apparatus:** use real source photographs, microscopy and documented equipment references, with provenance and relevant processing history. Draw a schematic only to the extent the sources support its geometry and connections. Missing internal structure remains unknown; an imagined cutaway is not evidence.
+- **Non-precise illustrative content:** imagegen is appropriate only when an object/scene has a scientific explanatory purpose or the user explicitly requests conceptual artwork. It is optional, not a default repair for an unsuccessful method figure. If chosen, generate and inspect the artwork, disclose its illustrative status, and check any precise overlay after composition. Never use it to fabricate experimental images, measurement curves, maps or heatmaps as evidence.
 
-If the user explicitly requires every object to be native and editable, use imagegen only for a visual study, then reconstruct the subject with custom native shapes/freeform curves or licensed SVG geometry converted into editable objects. Check that the requested host exposes those objects for editing; embedding an SVG as a picture is insufficient. If this cannot be achieved, state the limitation. A general “prefer editable” request still permits clearly identified raster illustration layers.
+These choices are independent of evidence type: a paper-grounded figure can include necessary raster images, and a graphical abstract can be entirely vector. Prefer editable objects for precise information; native/vector-first does not impose a zero-raster target. Honor an explicit all-native requirement by constructing native shapes/freeform curves or converting suitably licensed SVG geometry into editable objects and checking the requested host. An embedded SVG picture alone is insufficient. No preliminary imagegen study is required.
+
+FigurePlan's 12 structural kinds are optional reusable components, not the permitted vocabulary of a paper figure. Do not force the whole figure into these kinds or invent `process` nodes to satisfy the schema. The ordinary figure brief can describe custom geometry and image layers without adding FigurePlan fields or a new schema.
 
 ### Use the existing routes for each layer or tool task
 
-The following `intent` values describe the task handled by an existing tool route. They do not select the visual form of the whole figure. In a hybrid, use `reconstruct` for the exact method layer and imagegen separately for the illustrative layer, while retaining the original evidence types.
+The following `intent` values describe tasks handled by existing tool routes. They do not classify every paper figure or determine its whole composition. Use the structural compiler only where its components fit; custom source-specific drawings and data tools remain available independently.
 
 | `intent` | Evidence to read | Route and next action |
 | --- | --- | --- |
 | `redraw` | Actual reference figure and its caption | `source_spec / source_matched`: use the existing source-specific FigureSpec workflow; preserve inspected anchors and composition. |
-| `reconstruct` | Paper method/equations and relevant code | `native / scientific_semantic`: compile the precise computation/structure layer with object-specific glyphs. |
-| `conceptual` | The requested concept and applicable source material | `imagegen / conceptual`: the planner records a handoff; the agent must actually use imagegen for the disclosed illustrative layer. |
+| `reconstruct` | Paper method/equations and relevant code | `native / scientific_semantic`: compile supported computation/structure parts; use source-specific FigureSpec/vector geometry for mechanisms outside this vocabulary. |
+| `conceptual` | A selected conceptual-artwork task and applicable source material | `imagegen / conceptual`: the planner records a handoff for disclosed illustrative artwork. A graphical abstract or paper-figure request does not automatically select this route. |
 | `quantitative` | Raw data, units and analysis definitions | `existing_chart_pipeline / quantitative`: use the existing chart/data contract and its builder. |
 | `workflow` | Real process or control steps | `native / engineering_flow`: functional rectangles and decision marks express the steps. |
 
-The planner reports all five routes. The semantic compiler handles the structural content of `reconstruct` and `workflow`; it returns an explicit handoff for the other routes and does not invoke imagegen. For `redraw`, author a source-specific FigureSpec after inspecting the image, then use `python tools/render_figure_spec.py source.json --svg source.svg --pptx source.pptx` and the existing source-grammar checks. Preserve source-visible composition and marks; do not replace them with generated imagery or semantic presets merely because an operator has a familiar name. Imagegen and chart routes use their existing tools. The semantic compiler does not embed arbitrary image panels; compose illustration layers through the existing image/FigureSpec path.
+The planner reports all five routes. The semantic compiler handles the structural content of `reconstruct` and `workflow`; it returns an explicit handoff for the other routes and does not invoke imagegen. For `redraw`, author a source-specific FigureSpec after inspecting the image, then use `python tools/render_figure_spec.py source.json --svg source.svg --pptx source.pptx` and the existing source-grammar checks. Preserve source-visible composition and marks; do not replace them with generated imagery or semantic presets merely because an operator has a familiar name. Imagegen and chart routes use their existing tools when selected. The semantic compiler does not embed arbitrary image panels; compose necessary image layers through the existing image/FigureSpec path.
 
 ## 2. Read evidence and choose visual objects
 
 For a paper, identify the figure/panel, relevant formula and symbol definitions. For code, inspect the entry module and the methods implementing the claimed path; cite file lines or class/method names, configuration and known shapes. Compare training/inference and shared branches where they affect the claim. A reference image supports visible labels, objects and arrows; hidden adjacency, head fusion or weights need separate support. Record unresolved details explicitly.
 
-For the structural layer, choose a tensor plane for tensor dimensions, separate indexed heads for graph attention, a reduction glyph for pooling, segmented output for concatenation, and a sum junction for addition. Domain words such as “satellite” or “fault diagnosis” describe the application; `node.kind` controls the structural glyph, not the complete figure's visual form. Use a `process` rectangle for a genuine workflow step or a named module whose internals are unavailable. A reconstruction marks that module `opaque: true` and explains the evidence boundary. Generate illustrative subjects through the illustration route rather than forcing them into this list.
+Translate source-supported information into marks with an explicit meaning:
 
-Set layout after these choices. Coordinates use inches; `medium: "figure"` can use the figure's own aspect ratio. In a redraw, inspect the reference and preserve its panel order and relationships. In a structural reconstruction, arrange objects to make their computation legible. In an illustration or hybrid, organize the explanatory subject/scene and place the precise layer within that composition. Existing [ML components](ML_COMPONENT_PRESETS.md) remain available for richer source-specific work outside this first vocabulary.
+| Scientific information | Graphical encoding to consider |
+| --- | --- |
+| Variables and dimensions | Named vectors, matrices, tensor planes or indexed groups with supported dimensions and consistent symbols. |
+| Operations and transformed states | Distinct mathematical operators and visible input/output states; use a reduction, segmented concatenation or sum junction only for the corresponding operation. |
+| Neighborhoods and propagation | Evidenced adjacency, directed messages or local aggregation around identified nodes; distinguish a schematic neighborhood from a measured graph. |
+| Repetition and hierarchy | Indexed heads, repeated elements, nested groups or levels whose count and role match the source. |
+| Branches and fusion | Explicit branch origins and destinations, shared inputs, residual/conditioning paths and a visible merge operation. |
+
+For a concrete reference, inspect [Graph Attention Networks, Figure 1 (PDF page 4)](https://arxiv.org/pdf/1710.10903#page=4) and the [authors' explanation](https://petar-v.com/GAT/). Its feature symbols, attention computation, neighborhood links and parallel heads carry scientific meaning. Use this as an expression reference for a comparable task; do not transfer standard GAT internals, head counts, adjacency or fusion into an unseen user implementation without source support.
+
+These are examples, not a fixed palette. Domain words such as “satellite” or “fault diagnosis” identify the application; they do not select boxes, scene artwork or a scientific operator. When using FigurePlan, `node.kind` selects only its supported structural glyph. Use `process` for a genuine workflow step or a named module whose internals are unavailable; a reconstruction marks it `opaque: true` and explains the evidence boundary. Do not guess missing adjacency, attention, fusion or physical internals from a familiar method name.
+
+Set layout after identifying these relationships. Coordinates use inches; `medium: "figure"` can use the figure's own aspect ratio. In a redraw, preserve source panel order and relationships. In a reconstruction, use compact, well-related panels to expose the mechanism without shrinking symbols below readable size. Existing [ML components](ML_COMPONENT_PRESETS.md) and custom FigureSpec/vector geometry remain available outside the first compiler vocabulary.
 
 ## 3. Author the brief
 
-Use this brief for the supported structural layer or a route handoff, not as an illustration schema. The executable schema is enforced by [`tools/scientific_figure_plan.py`](../tools/scientific_figure_plan.py). Supply these fields:
+Use this optional brief for supported structural parts or a route handoff; it is not a universal paper-figure schema. The executable schema is enforced by [`tools/scientific_figure_plan.py`](../tools/scientific_figure_plan.py). Supply these fields when using that compiler:
 
 | Field | Required form |
 | --- | --- |
@@ -79,7 +94,7 @@ Each node and edge needs a nonempty `evidence` list. Hashes identify the supplie
 | `gate` | `decision_boundary`; nonempty string `threshold`, using `"unknown"` if unprovided. Conditioning enters a separate `top`/`bottom` boundary port, not the data input. |
 | `process` | `process_box`; reconstruction requires `opaque: true` and a nonempty `explanation`. |
 
-Unsupported structural kinds produce a planning error. Extend the relevant glyph and its checks for a new exact mechanism, or use the existing source-specific components with an explicit FigureSpec. Use imagegen for the separate illustrative object/scene/material layer; that layer need not fit this vocabulary. Changing a scientific operator into a generic process changes what the figure communicates.
+Unsupported structural kinds produce a planning error in this optional compiler. Use an explicit source-specific FigureSpec, existing components or custom vector geometry for the required mechanism; a compiler limit is not a reason to simplify away the science, switch to imagegen or introduce another schema. Changing a scientific operator into a generic process changes what the figure communicates.
 
 ## 4. Run a complete synthetic example
 
@@ -143,9 +158,9 @@ The planner checks file bytes and references, then adds `route`, node `glyph`/`r
 
 ## 5. Review the actual output
 
-Open the actual generated artwork and the composed figure; render any PPTX with the available host. Inspect the final exported image at the intended size for both scientific content and the requested visual form. For an illustration or hybrid, check whether the objects, scene, materials and arrangement actually deliver the requested style and explain the claim. A prompt, tool route, passing CI, shape count or zero-image statistic cannot demonstrate this. If the result still reads as the rejected box diagram, revise the actual composition and artwork before claiming the request is satisfied.
+Open the actual rendered figure and any source/image layers; render a PPTX with the available host. Inspect the final PDF/PNG at the intended paper or presentation dimensions. Check readable font sizes and symbols, consistent notation and line types/weights, clear arrow semantics, compact multiple panels and adequate separation of related marks. Compare the image with the original source and inspected scholarly references. A prompt, tool route, passing CI, shape count or zero-image statistic does not establish paper-figure quality.
 
-For the precise layer, follow each critical relation, inspect every attention head, distinguish sum from concatenation, check unknown-detail disclosures, and verify labels, clipping and arrow placement in the final composite. Record the renderer actually used. A LibreOffice preview is evidence about LibreOffice output; it does not establish a Windows PowerPoint review.
+Follow each source-derived critical relation; check variables, dimensions, operations, neighborhoods/propagation, hierarchy, every repeated head, branches and fusion against the source. Distinguish sum from concatenation, check unknown-detail disclosures, and verify labels, clipping and arrow placement. A reader should be able to identify the actual mechanism from the marks. If the result remains a generic box pipeline, revise the graphical encoding rather than adding colors, dots, decorative objects or a default generated scene. Record the renderer actually used. A LibreOffice preview is evidence about LibreOffice output; it does not establish a Windows PowerPoint review.
 
 Scientific and visual review begin as `pending`. Automated geometry/mechanism checks are bounded checks on the authored plan and marks; an omitted source relation can remain invisible to them. Review the source independently alongside the final image. Rectangles remain appropriate for opaque modules and genuine process steps.
 
@@ -158,6 +173,6 @@ to six vertices; larger source graphs need a source-specific layout.
 
 PPTX shapes and text in the compiled structural layer are independent editable objects. Connections use fixed coordinates and do not follow a node dragged in PowerPoint. Change boxes or waypoints in the brief, then compile again and inspect the result. State which illustration/source-image layers are raster; do not describe the whole composite as fully editable.
 
-Use sourced photographs, microscopy and necessary source-artwork excerpts as image layers with hashes, rights and any crop/processing history. Record generated object/scene/material artwork as illustrative, with its generation provenance and raster status. Keep exact topology, values, axes and scientific annotations in the deterministic/native or data path; source-artwork annotations that remain inside a crop are raster and must be described accordingly. For requested illustration or hybrid output, deliver the composed image with its precise overlays, rather than treating a standalone decorative asset as the completed scientific figure.
+Use actual sourced photographs, microscopy and necessary source-artwork excerpts as image layers with hashes, rights and any crop/processing history. Check any apparatus schematic or cutaway against documented geometry; leave unavailable internals unknown. Record any selected generated artwork as illustrative, with its generation provenance and raster status. Keep exact topology, values, axes and scientific annotations in the native/vector or data path; source-artwork annotations that remain inside a crop are raster and must be described accordingly. Deliver the complete scientific figure with all required precise content; a decorative asset or concept image alone does not complete a paper method or results figure.
 
 Publish synthetic examples and their synthetic evidence. Keep user screenshots and undisclosed research in the authorized local task. `7.7.0-dev` identifies this bounded executable path; it does not establish automatic source understanding, a frozen benchmark win rate, stable release status, or completed independent scientific/Office-host review.
