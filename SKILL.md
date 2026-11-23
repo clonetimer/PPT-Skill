@@ -1,11 +1,11 @@
 ---
 name: academic-defense-ppt
 metadata:
-  version: 7.6.0-dev
+  version: 7.7.0-dev
 description: >
-  Plan and build source-grounded academic defense slides and editable research figures.
-  Use for 科研答辩PPT、论文图重绘、科研绘图、学术汇报, academic defense slides,
-  scientific figure redraws, or data-driven research charts. A publication-size
+  Use when creating or revising 科研答辩PPT、论文图重绘、源码架构图、科研绘图、学术汇报,
+  academic defense slides, paper/code-grounded method figures, scientific figure
+  redraws, or data-driven research charts. A publication-size
   output requires a named journal target and final-size review. Excludes generic
   marketing decks and scientific claims without traceable evidence.
 ---
@@ -14,16 +14,44 @@ description: >
 
 Produce technically accurate, readable academic-defense presentations. Select visual grammar from the actual source; do not impose a universal card template.
 
+## Scientific figure entry (7.7.0-dev)
+
+Start a new figure with its intent and scientific objects, then select its style. Read [Scientific Figure Planning](docs/SCIENTIFIC_FIGURE_PLANNING.md) for the exact input fields and a runnable example. The new path is **evidence-linked FigurePlan → semantic glyphs → existing FigureSpec/SVG/PPTX renderer**; the current component library and python-pptx engine remain available.
+
+| Intended result | FigurePlan `intent` | First action and drawing route |
+| --- | --- | --- |
+| Redraw a visible source figure | `redraw` | Inspect an actual image/SVG, record its hash, locator and distinct visual anchors, then use the existing source-specific FigureSpec workflow. |
+| Reconstruct a method from a paper or code | `reconstruct` | Read the method, equations or relevant implementation; encode evidenced objects, dimensions and relations; compile object-specific native glyphs. |
+| Create conceptual artwork | `conceptual` | Use the planner's imagegen route to prepare a disclosed illustration in the image-generation tool. |
+| Plot quantitative evidence | `quantitative` | Follow the existing chart/data contract with raw rows, units and declared transformations. |
+| Explain actual work or control steps | `workflow` | Use process boxes, decisions and explicit flow relations. |
+
+1. Read the source before authoring the brief. Give each evidence record a local path, computed SHA-256 and exact locator; attach evidence IDs to nodes and edges. A source image supports visible marks and labels. Use paper/code evidence for hidden internals, or record them in `unknowns`.
+2. Select semantic kinds such as `tensor`, `graph_attention`, `pool`, `concat` and `add` from the operation being explained. An engineering domain label such as satellite diagnosis does not change graph attention into a process box. Use `process` for a true workflow step or an opaque module; reconstruction requires `params.opaque: true` and an evidence-boundary `explanation` for that module.
+3. Write explicit node boxes, ports and any connector waypoints, with source-derived `critical_edges`. Match source composition for a redraw; arrange reconstructed objects to expose their mechanism. Keep standalone figure dimensions independent of a slide's aspect ratio.
+4. Run the main entry point from the repository root. Use the planner alone when inspecting route and evidence before compilation:
+
+```bash
+python tools/build_scientific_figure.py path/to/brief.json --source-root path/to/sources --output-dir path/to/output
+python tools/scientific_figure_plan.py path/to/brief.json --source-root path/to/sources --out path/to/plan.json
+```
+
+The `reconstruct` and `workflow` routes produce a plan, compiled spec, SVG, editable PPTX and review record. Read the record and inspect the actual exported image at the intended size; scientific and visual review start as `pending`. Native objects can be edited, but the exported connectors use fixed coordinates: update the plan and render again when changing layout. The planner relies on an agent or researcher to read sources and author the brief. It does not automatically parse arbitrary source code, invoke imagegen, or run a quantitative analysis. Redraws hand off to source-specific FigureSpec authoring, so the preset glyphs cannot silently replace source artwork; conceptual and quantitative routes hand off to their respective tools.
+
+Keep photographs, microscopy or source-artwork excerpts as provenance-recorded image layers when needed; keep exact topology, axes, values and annotations in the appropriate deterministic/native drawing path. Label generated conceptual imagery and schematic patterns according to what they represent. The 7.7.0-dev path demonstrates a bounded executable vocabulary, not a stable release or completed independent scientific/Office-host review.
+
 ## Principles
 1. Scientific topology, terminology, equations and evidence boundaries take priority.
 2. Prefer editable vector graphics and native PowerPoint text/shapes. When source-matched fidelity calls for a distinctive icon that native shapes would distort, use a provenance-recorded, licensed SVG asset (with a high-resolution transparent raster fallback if the PowerPoint renderer cannot embed that SVG). Keep scientific nodes, edges, labels and annotations editable.
-3. Preserve source composition, panel order, proportions, arrows, branches, operators and line grammar.
+3. For source-visible redraws, preserve source composition, panel order, proportions, arrows, branches, operators and line grammar.
 4. Do not invent layers, edges, node mappings, equations or downstream blocks unsupported by the source.
 5. Split dense mechanisms before shrinking labels.
 6. Shadows are off by default. Reproduce them only when visible in the selected source, using explicit source-specific shapes; never inherit the PowerPoint theme shadow.
 7. Distinguish source-visible redraws, paper/code-grounded reconstructions and domain adaptations.
 
 ## Workflow
+
+For the new FigurePlan entry, follow `docs/SCIENTIFIC_FIGURE_PLANNING.md` and its planner/compiler checks. Its `scientific-figure-1.0` compiled payload is an additive renderer input, not a V7.6-schema migration. The V7.6 contracts, examples and release checks below continue to govern the existing V7.6 assets and deck/chart workflows; do not validate a new scientific payload against an unrelated legacy schema.
 
 1. Identify the audience, scientific claim, source files, delivery medium and final size. For a journal figure, record its current author-guide URL and production limits before layout.
 2. Write the DeckSpec/SlideSpecs for a talk and a FigureContract for each figure. Mark source-visible, paper-grounded, domain-adapted or data-driven evidence and list unresolved claims.
@@ -45,8 +73,11 @@ Produce technically accurate, readable academic-defense presentations. Select vi
 The presentation profile supports projected defense slides. The publication profile re-lays out the same science for a named journal's final dimensions; its automatic checks are a technical preflight. Evidence status describes how directly a source supports the figure, separately from the output profile. This skill does not certify journal acceptance or make unsupported statistical, biological or engineering claims.
 
 ## Profiles
+
+These are visual style choices, separate from the planner's `route.profile`. Select them after intent and scientific kinds; domain terms alone do not select the engineering-flow style.
+
 - A: black-and-white academic framework, Times New Roman, thin strokes and restrained section boundaries.
-- B: engineering system flow, Microsoft YaHei, muted pastel modules, feedback and state transitions.
+- B: actual engineering process or system flow, Microsoft YaHei, functional modules, feedback and state transitions.
 - C: source-matched journal/network figure, paper-specific typography, graph nodes/edges, sensor waveforms, pooling geometry, readout and fusion layout.
 
 ## FigureSpec
@@ -57,7 +88,7 @@ The UCI Wine scatter and distribution examples test a second chemistry dataset u
 
 Canonical source is JSON under `figure_specs/`. Render SVG and editable native PowerPoint from the same FigureSpec. C01 primitives include text, rect, trapezoid, line, polyline, ellipse, sensor and graph. F07 also uses grid and stack_grid. FigureSpec also supports editable freeform polygons and rotated text for paper-specific silhouettes and spatial labels; compare these primitives in the exported PPTX/PDF, since an SVG preview can hide a PowerPoint geometry error. For ML method figures, call the parameterized native components in `tools/ml_figure_components.py` after checking the source grammar; see `docs/ML_COMPONENT_PRESETS.md` for ports, visual bounds, examples and limits. GAT and DETR cross-family trials in `docs/ML_CROSS_FAMILY_TRIAL_2026-11.md` show why visible group ports, per-head checks, arrowhead scale and rendered math labels matter. The component gallery tests parameterized drawing; the Wide Residual Networks Figure 1 trial tests reuse within the residual family. Neither establishes speed or accuracy on a frozen, independent paper set.
 
-Before drawing, write a FigureContract with one defensible claim, output mode, evidence status and unverified items. Every FigureSpec element must have a stable ID, semantic role and evidence reference. EvidenceRecords include a local source file hash and a precise local locator; when the primary artwork is not stored locally, state that the hash covers the evidence ledger rather than the original artwork. Validate against `specs/figure_spec_v76.schema.json` and run `python tools/validate_scientific_ir.py`. For C01, declared critical relations must agree with visible connectors in both `specs/c01_expected_topology_v76.json` and `specs/c01_standalone_expected_topology_v76.json`.
+For existing V7.6 FigureSpec assets, write a FigureContract with one defensible claim, output mode, evidence status and unverified items. Every FigureSpec element must have a stable ID, semantic role and evidence reference. EvidenceRecords include a local source file hash and a precise local locator; when the primary artwork is not stored locally, state that the hash covers the evidence ledger rather than the original artwork. Validate against `specs/figure_spec_v76.schema.json` and run `python tools/validate_scientific_ir.py`. For C01, declared critical relations must agree with visible connectors in both `specs/c01_expected_topology_v76.json` and `specs/c01_standalone_expected_topology_v76.json`.
 
 For quantitative figures, define source file/hash, row unit, variable units, sample size, transformations, chart kind, numerical axis domains and zero policy, and the meaning of each statistic/interval before rendering. Declare every derived axis/group field with its unit, source columns and calculation rule. Specify model algorithm, data split, tie handling and compared feature sets as structured fields that the builder and validator both use; do not let a renderer invent predicted labels or summary measures. Disclose why a numerical axis excludes zero. Use `specs/iris_charts_v76.json` for scatter, distribution, point interval, confusion matrix, ablation and trend interval examples; run `python tools/build_quantitative_examples.py` and `python tools/validate_quantitative_examples.py`. Preserve row-level links for raw points and calculation links for summaries; check plotted coordinates and summary geometry against their source values. Separate coincident or closely spaced raw points with bounded display-only offsets, keep summary marks clear of them, and disclose offsets in the caption; never silently hide observations. A preview chart is not evidence for an unprovided statistical claim.
 

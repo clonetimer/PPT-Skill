@@ -21,6 +21,13 @@ jobs:
           python-version: "3.12"
       - name: Install validation dependencies
         run: python -m pip install --disable-pip-version-check python-pptx jsonschema Pillow numpy pypdf
+      - name: Check semantic figure planning and native compilation
+        run: |
+          python tools/test_scientific_figure_plan.py
+          python tools/test_scientific_figure_glyphs.py
+          python tools/test_scientific_figure_render.py
+          python tools/build_scientific_figure.py examples/semantic_figures/graph_attention.json --output-dir dist/semantic_demo
+          python tools/build_scientific_figure.py examples/semantic_figures/residual_branch.json --output-dir dist/semantic_demo
       - name: Build B01/F07
         run: python tools/build_v71_examples.py
       - name: Build C01
@@ -119,4 +126,10 @@ jobs:
             examples/I01_*.svg
             dist/I01_*.pptx
             dist/DECK01_c01_defense.pptx
+          if-no-files-found: error
+      - name: Upload semantic figure examples
+        uses: actions/upload-artifact@v4
+        with:
+          name: scientific-figure-semantic-examples
+          path: dist/semantic_demo/
           if-no-files-found: error
