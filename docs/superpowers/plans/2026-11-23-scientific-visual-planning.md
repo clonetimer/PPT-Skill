@@ -63,8 +63,17 @@ examples/semantic_figures/*; .github/workflows/validate-assets.yml.
 
 ## Task 4: Delivery and installed-skill parity
 
-- [ ] Commit and push a focused feature branch and create a reviewable draft PR.
-- [ ] Update the user's installed scientific path with tested resources, retain
+- [x] Commit and push a focused feature branch and create a reviewable draft PR.
+- [x] Update the user's installed scientific path with tested resources, retain
   existing defense material, validate and save the updated personal skill.
-- [ ] Verify saved paths and content; deliver PR, actual previews, limitations
+- [x] Verify saved paths and content; deliver PR, actual previews, limitations
   and the next substantive improvement rather than more unmeasured gates.
+
+## Delivery record
+
+- Draft PR: https://github.com/clonetimer/PPT-Skill/pull/22
+- Local verification: 162 unittest cases across 12 suites plus one standalone polygon regression; 61 cases cover the new path.
+- Two public synthetic examples and two private screenshot cases were built and inspected through LibreOffice PDF/PNG.
+- Installed personal Skill: 12 changed resources saved and verified after reconciliation; original 10 library tests remain passing.
+- User deliverable: portable private briefs, source screenshots, native PPTX, SVG, PDF/PNG and review records. Private artifacts are not committed here.
+- Package version remains 7.6.0-dev; the new scientific component is independently marked 7.7.0-dev. PR checks carry the current CI outcome.

@@ -1,7 +1,8 @@
 ---
 name: academic-defense-ppt
 metadata:
-  version: 7.7.0-dev
+  version: 7.6.0-dev
+  scientific_figure_version: 7.7.0-dev
 description: >
   Use when creating or revising 科研答辩PPT、论文图重绘、源码架构图、科研绘图、学术汇报,
   academic defense slides, paper/code-grounded method figures, scientific figure
