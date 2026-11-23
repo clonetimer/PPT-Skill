@@ -26,6 +26,9 @@ jobs:
           python tools/test_scientific_figure_plan.py
           python tools/test_scientific_figure_glyphs.py
           python tools/test_scientific_figure_render.py
+          python tools/test_single_page_composer.py
+          python tools/build_gat_single_page.py --output-dir dist/single_page/ci --review examples/single_page/gat_review_revision.json
+          python tools/audit_pptx.py dist/single_page/ci/GAT_single_page.pptx --strict
           python tools/build_scientific_figure.py examples/semantic_figures/graph_attention.json --output-dir dist/semantic_demo
           python tools/build_scientific_figure.py examples/semantic_figures/residual_branch.json --output-dir dist/semantic_demo
       - name: Build B01/F07
@@ -132,4 +135,10 @@ jobs:
         with:
           name: scientific-figure-semantic-examples
           path: dist/semantic_demo/
+          if-no-files-found: error
+      - name: Upload single-page academic example
+        uses: actions/upload-artifact@v4
+        with:
+          name: single-page-academic-example
+          path: dist/single_page/ci/
           if-no-files-found: error

@@ -4,7 +4,7 @@ metadata:
   version: 7.6.0-dev
   scientific_figure_version: 7.7.0-dev
 description: >
-  Use when creating or revising 科研答辩PPT、论文图重绘、源码架构图、科研绘图、科研插画、图形摘要、学术汇报,
+  Use when creating or revising 单页学术PPT、科研答辩PPT、论文图重绘、源码架构图、科研绘图、科研插画、图形摘要、学术汇报,
   academic defense slides, paper/code-grounded method figures, scientific figure
   redraws, scientific illustrations, graphical abstracts, or data-driven research charts. A publication-size
   output requires a named journal target and final-size review. Excludes generic
@@ -14,6 +14,14 @@ description: >
 # Academic Defense PPT Skill
 
 Produce technically accurate, readable academic-defense presentations and scientific figures. Select visual grammar from the user's requested form and the actual source; do not impose a universal card template.
+
+## Single-page academic PPT entry (7.7.0-dev)
+
+When the user asks for **one academic slide / 单页学术 PPT**, produce one page directly. Do not require a deck outline, cover slide or defense storyline. Read [Single-page Academic Slides](docs/SINGLE_PAGE_ACADEMIC.md). Use one sourced scientific claim, an inspected figure or design reference, meaningful scientific marks, and a small number of invisible composition regions. Check whether the input includes paper/code, a reference figure, data and assets; leave missing scientific content unresolved rather than inventing it.
+
+The executable entry is `tools/single_page_composer.py`: compose existing native FigureSpecs, preserve region/element IDs, export one editable slide, inspect the **actual PPTX render**, and revise the region responsible for an observed issue with `revise_region`. Regions are layout/edit boundaries, not visible cards or module boxes. A neighborhood should show neighbors and messages; a concatenation should show separate segments joined along a feature axis; quantitative claims require actual data. Use source-specific geometry beyond these examples. Preserve the initial render and the local revision record; update cross-region connectors explicitly when their endpoints move.
+
+Run the reviewed GAT example with `python tools/build_gat_single_page.py --output-dir dist/single_page/gat --review examples/single_page/gat_review_revision.json`. It demonstrates one paper/code-grounded page and local visual revision, not automatic paper understanding, model inference, or a general quality guarantee. Its formulas are editable native text, not Office Math objects. The workflow borrows documented methods from AutoPresent and SlideCoder; their model weights are not required or installed.
 
 ## Scientific figure entry (7.7.0-dev)
 

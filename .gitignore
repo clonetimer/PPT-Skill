@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 .testtmp/
+dist/single_page/
 
 # Local paper evidence and extracted source artwork are not redistributed.
 dist/skill_tests/**/paper.pdf

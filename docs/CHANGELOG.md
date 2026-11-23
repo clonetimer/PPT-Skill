@@ -1,5 +1,12 @@
 # Changelog
 
+## Scientific figures 7.7.0-dev — Single-page composition
+
+- Added a direct one-page academic slide route, informed by inspected AutoPresent and SlideCoder implementations. This does not install or invoke their model weights.
+- Added invisible region composition, preserved source notes and element IDs, and scoped local revision over the unchanged SVG/native PPTX renderer.
+- Added a source-grounded GAT explanation and saved visual revisions: distinct head-to-segment connections for concatenation, native summation limits, and larger supporting text. Actual preview inspection used LibreOffice PDF export.
+- Added focused geometry, region revision and one-slide export tests; retained existing figure/deck behavior and development release status.
+
 ## V7.6.0-dev — Scientific evidence and data channels
 - Rechecked C01 against the publisher graphical abstract, added explicit band-pass and OCF-effect labels, replaced the star aggregation sketch with connected frequency-band layers, and drew the total-graph-to-SEANet input route. PowerPoint now refreshes every deck PNG alongside PDF export; source-comparison notes distinguish remaining schematic details from scientific routes.
 - Corrected C01's EA and lower-SR routing and restored Dense classification after inspecting the publisher's 1198 × 886 graphical abstract. Added visible-route checks for the standalone diagram, corrected composite/deck outputs, explicit source evidence and exact legacy-label exceptions.
