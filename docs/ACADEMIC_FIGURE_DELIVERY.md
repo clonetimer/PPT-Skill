@@ -1,0 +1,67 @@
+# Academic figure mandatory delivery rules — 20-case retrospective
+
+Status: candidate policy, derived from one user's exploratory paired comparisons, 2026-11-23 to 2026-11-25. This is not a trained model, an expert certification, or a confirmatory benchmark.
+
+## Frozen case matrix
+
+| Trial | Subject | Original review outcome | Failure / useful contrast | Rules |
+|---|---|---|---|---|
+| 01 | Deformable convolution | Redraw rejected; not a valid paired blind trial | line overlap, floating arrow, empty conv box, mismatched legend | R03 R04 R06 |
+| 02 | EdgeConv | Preferred redraw; initial origin guess wrong | formula helps explain geometry; post-reveal x_i' comment is not a second blind vote | R01 R03 R05 |
+| 03 | Neural ODE | Preferred redraw; origin guess wrong | auxiliary vector field arrows obscure main trajectories | R02 R04 R06 |
+| 04 | DeepONet | Preferred source | network shapes convey structure; explanatory text can go in caption | R02 R03 |
+| 05 | Swin | Preferred source | keep meaningful photographic spatial reference | R02 R07 |
+| 06 | Spatial transformer | Preferred source | gray grouping region shows shared intermediate and continuity | R02 R04 |
+| 07 | SE | Preferred source | preserve meaningful font weight and math notation | R05 |
+| 08 | MobileNets | Preferred source | count arrows too small | R04 R05 |
+| 09 | ShuffleNet | Preferred redraw; origin guess wrong | more complete arrows; source preview quantized/downsampled | R04 R05 R08 |
+| 10 | ResNet | Both suitable | low-complexity control; not difficult reproduction | R02 |
+| 11 | GVP | Preferred source | symbols too small | R05 |
+| 12 | OpenVINS spline | Both suitable | technical documentation, not paper figure; original redraw PPTX lost and recovered after review | R02 R07 R08 |
+| 13 | GIN multitask | Preferred source relatively; source also imperfect | formula/text overlap and wasted GIN width | R05 R06 |
+| 14 | Dual-branch attention | Preferred source | Conv1D and other layer details, cross-block continuity | R01 R03 R04 |
+| 15 | UCFNet | Preferred source; worst redraw in user's assessment | generic shapes, small text, incomplete detail; Revision-01 still wrong gating/fusion junctions; Revision-02 user said much better | R01 R02 R03 R04 R05 R06 R08 |
+| 16 | AWTA-ELCNN | Both suitable | 15 retained raster assets reduce reconstruction burden; preprint | R07 |
+| 17 | Spacecraft dual attention | Preferred redraw; origin guess wrong | separate dimensions/labels and geometry; layer details | R03 R05 R06 |
+| 18 | PINN | Origin identified correctly; preference not stated | fonts small; 290 native marks and zero images do not establish quality | R05 |
+| 19 | Reaction wheel physical model | Both suitable | source-assisted vector topology; small mathematical scripts | R04 R05 |
+| 20 | Weighted random forest | Both suitable | matrices and trees, some small text; two retained images | R05 R07 |
+
+Counts: source preferred 9, redraw preferred 4 (02/03/09/17), both 5, unspecified 1, invalid non-paired 1. The 18 explicit paired preferences are not an acceptance rate. Case 02 later source guess occurred after reveal. Case 03 changed the illustrative field, case 09 had unequal raster processing, case 12 recovered PPTX is not the blind-trial file. Case 15 revised user feedback is separate; no later revisions are retroactively scored. Multiple sources are author documentation or preprints. A single reviewer and non-identical information/render routes cannot establish general superiority or detection accuracy. Case artifacts and user records remain in their original archive (later cases under PPT-Skill/Blind-Trials); no paper images or private source files copied into this repo.
+
+## R01–R08 are blocking rules, not style preferences
+
+- **R01 Science and provenance:** inspect actual original figure, caption, method equations and relevant implementation. Freeze an inventory before drawing, including source locator, unknowns, parameters and tensor dimensions. Do not silently resolve source figure/text contradictions; record discrepancy and chosen evidenced reading. Invented scientific facts/data are blockers.
+- **R02 Scientific graphical grammar:** inspect what actual shapes, color, grouping, overlapping boundaries, spatial references and repeated structures express. Preserve their scientific function; choose a source-specific mark rather than a generic box. Geometry should explain the mechanism. No automatic preference for photos, rounded cards, maximal detail or zero raster. If original has no visual figure, inspect a relevant scholarly reference and mark that gap. Form declarations are checked against actual editable objects, then visually reviewed.
+- **R03 Operator-level completeness:** preserve meaningful layer names, sequence, parameters, dimensions, group boundaries, labels and interfaces. Distinguish essential from detail suitable for notes; every omission must be justified against the source inventory, not silently replaced by MLP/process. Symbols newly introduced have definitions/visual referents. Missing required label or mark blocks.
+- **R04 Typed topology:** separate sum, multiply, gating, concatenation, weighted concatenation, average and true feedback. List every required directed edge with operand/control/weight/residual role and destination port; distinguish dimension and vector-field arrows from data connectors. Verify actual end points, direction, distinct operand ports and order. For custom freeforms verify visually against exact source/equation; machine checking declared bindings alone cannot establish true topology. Crossings are allowed if scientifically necessary, not accidental junctions; prevent floating, misdirected and hidden arrows. Set visible line weight and arrowhead in final display.
+- **R05 Notation and final-size legibility:** preserve bold/italic/roman, case, index and math roles. Use actual final slide placement, not source canvas size. Default provisional floors for presentation: rendered span >=11 pt, core labels >=14 pt; prioritize main labels around 18 pt where space permits. These are engineering floors, not guaranteed readable in all rooms. No silent lowering to fit; reallocate space or separate detail. Publication output requires named venue, actual physical dimensions and explicit thresholds. Check nested scripts, glyph substitutions, arrowheads and raster labels on actual PDF/PNG; verify font/host where possible. Use real final-size preview, not just enlarged figure.
+- **R06 Layout:** allocate region and label bands before detailed drawing; check full figure and dense regions. No unjustified overlap, clipping, wire through text, tiny controls, or crowding next to useless empty space. Preserve intentional grouping/overlap; no arbitrary equal-size boxes or global occupancy targets. Automatic PDF text-box intersections are conservative proxies; inspect actual shape/text occlusion, hierarchy and spacing.
+- **R07 Editable deliverable and evidence:** exact scientific geometry/text native/editable when requested. Keep genuine photos, data plots and spatial references only when they serve the scientific explanation, with provenance and hashes. Never use a pasted whole network image or fabricated measurements to pass. Native-object count and image area are descriptive, not quality scores. Editable freeforms are not necessarily auto-reconnecting connectors or native equations; disclose. Preserve source-derived illustrative vs actual data distinction.
+- **R08 Revision and release:** preserve frozen original preview, source contract, mapping and user judgment. For local changes, list mutable shape IDs and preserve other native objects and assets; inspect rendered change scope. Re-prepare after any changed source/mapping/PPTX. Retain original and new render, source-linked review observations, current limitations. Do not mark user approval without actual user feedback.
+
+## Executable finalization (all drawing routes)
+
+Existing build tools remain draft generators; the gate is the final handoff path for scientific figure/single-page PPTX work. It is deliberately small, works with the existing native renderer or a source-specific PowerPoint script, and does not constrain figure vocabulary.
+
+1. Before drawing, save source.json with actual evidence copies (paths relative to source.json, SHA-256, locators), source-derived marks/typed relations, and placement. Do not derive the inventory from the draft or backfit it after an error. If source content cannot be inspected or a conflict remains material, stop at draft.
+2. Draw, then bind the source inventory to actual top-level PPTX shape IDs (one or more per mark/route). Use required shape kinds, labels, actual route segments, distinct ports, and operand order. Nested group geometry and freeform route direction require visual review; do not claim automatic validation of them. Inspect both original and final-size preview.
+3. Run prepare; fix all machine findings or keep draft. Write the eight specific review observations from exact receipt, original evidence and actual PDF/PNG. A review is an author/independent-agent/human/user review, not an automatically inferred scientific truth; say who performed it. No checkbox-only approval.
+4. Run finalize to publish the candidate and hash-bound receipt. Re-review on any change. Candidate is not user acceptance; preserve physical projection and Office compatibility limitations.
+
+```bash
+python -m pip install python-pptx pymupdf
+# LibreOffice Impress must be installed and available on PATH.
+python tools/academic_delivery_gate.py prepare --pptx draft.pptx --contract source.json --mapping mapping.json --review-dir review
+# inspect review/render.pdf and review/final_size.png and author review/checked.json
+python tools/academic_delivery_gate.py finalize --pptx draft.pptx --contract source.json --mapping mapping.json --review-dir review --review review/checked.json --destination delivery/figure.pptx
+```
+
+See the complete small, synthetic input example generated in tools/test_academic_delivery_gate.py. Field contract:
+- source.json: version=1, claim, mode, evidence [{id,kind,path,sha256,locator}], marks [{id,evidence,locator,meaning,form,native_kinds,labels,core?,operator?,operands?}], relations [{id,evidence,locator,meaning,source,target,role,target_port,directed}], placement {profile,width_in,height_in,min_span_pt?,min_core_pt?,venue?}, all_native optional. Evidence kind visual_reference plus paper/code/data/user_spec required. For aggregation, operands is the ordered list of incoming relation IDs. Shape kind names are MSO_SHAPE_TYPE names, optionally AUTO_SHAPE:MSO_SHAPE name.
+- mapping.json: marks keyed by source id {shape_ids,form,operator?,operands?}; relations keyed by relation id {shape_ids,source,target,role,target_port,directed,arrow_shape_id?}. For native straight routes, shape_ids are ordered connectors from start to finish; arrow is native tailEnd or an actual editable marker ID near endpoint. Custom paths are flagged for R04 review. assets keyed by each picture shape id {category,evidence,locator,sha256}. Local revision additionally records revision {baseline,sha256,mutable_shape_ids}.
+- checked.json: {receipt_sha256,reviewer_role,checks:{R01..R08:{status:"pass",locator,observation}}}. Locate actual checked scientific content and rendered region, including justified simplifications. Reviewer role must be accurate.
+
+Machine checks: frozen evidence hash, exact source-to-object coverage, native kind, required label, typed relation bindings and straight-line geometry, operand endpoints, actual retained picture digests, local unchanged XML, render actual size/label coverage, text intersection proxy, immutable prepared artifact/review. Review checks: actual scientific validity, notation, custom paths/arrow direction, grouping, projection readability incl. raster labels, crowding, intentional overlap and photo provenance. Neither alone is sufficient. A developer can still call draft renderers; this is a delivery-path gate, not a universal filesystem policy or a proof of visual quality.
+
+CI uses a real synthetic PPTX -> LibreOffice PDF and mutation tests for missing layers, wrong shapes, wrong operator/port, missing or disconnected arrows, shrinking, overlaps, stale source and missing review. Historical feedback motivates the tests; synthetic mutations do not mean all 20 historical slides have passed the gate. No extra model training, no source data sent to public repo.

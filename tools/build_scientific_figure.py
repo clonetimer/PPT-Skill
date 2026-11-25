@@ -282,6 +282,7 @@ def build(brief: dict, source_root: Path, output_dir: Path) -> dict:
     plan = plan_figure(brief, source_root)
     spec = compile_figure(plan)
     review = audit_figure(plan, spec)
+    review['delivery_status'] = 'draft_requires_academic_delivery_gate'
     if not review['passed']:
         raise PlanError('Figure preflight failed: ' + '; '.join(review['errors']))
     output_dir = Path(output_dir)

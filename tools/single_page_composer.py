@@ -226,6 +226,7 @@ def _speaker_notes(page):
 def render_page(page: dict, output_dir: str | Path, stem: str | None = None) -> dict[str, Path]:
     """Write compiled JSON, SVG and one-slide PPTX with source/claim notes."""
     spec = compile_page(page)
+    spec['delivery_status'] = 'draft_requires_academic_delivery_gate'
     stem = _id(stem if stem is not None else page["id"], "output stem")
     _require(stem not in {".", ".."} and "/" not in stem and "\\" not in stem,
              "output stem must be a filename without path separators")
