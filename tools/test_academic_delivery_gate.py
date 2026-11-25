@@ -76,7 +76,8 @@ class DeliveryGateTests(unittest.TestCase):
             cls.m["marks"][key] = binding
         for key, source, port, shape in (("e1","a","upper",l1),("e2","b","lower",l2)):
             e = {"id":key,"source":source,"target":"j","role":"data","target_port":port,
-                 "directed":True,"meaning":"operand","evidence":"p","locator":"line 1"}
+                 "directed":True,"meaning":"operand","evidence":"p","locator":"line 1",
+                 "target_anchor":[0,.25 if key == "e1" else .75]}
             cls.c["relations"].append(e)
             cls.m["relations"][key] = {**e,"shape_ids":[shape.shape_id]}
         save(cls.contract, cls.c); save(cls.mapping, cls.m)
@@ -139,6 +140,23 @@ class DeliveryGateTests(unittest.TestCase):
         m["relations"]["e1"]["shape_ids"] = m["relations"]["e2"]["shape_ids"]
         with self.assertRaisesRegex(GateError,"misses source"):
             verify_mapping(self.pptx,*self.mutate(m=m))
+
+    def test_missing_planned_port_is_blocked(self):
+        c = copy.deepcopy(self.c); del c["relations"][0]["target_anchor"]
+        with self.assertRaisesRegex(GateError, "planned operand port anchor"):
+            verify_mapping(self.pptx,*self.mutate(c=c))
+
+    def test_swapped_actual_operand_ports_with_unchanged_metadata(self):
+        # Trial 15: correct-looking metadata cannot excuse the wrong physical
+        # aggregation route. Both endpoints still land on the same operator.
+        deck = Presentation(self.pptx)
+        ids = {self.m["relations"][k]["shape_ids"][0]: k for k in ("e1","e2")}
+        for shape in deck.slides[0].shapes:
+            if shape.shape_id in ids:
+                shape.end_y = Inches(3.25 if ids[shape.shape_id] == "e1" else 2.75)
+        path = self.root/"swapped_actual_ports.pptx"; deck.save(path)
+        with self.assertRaisesRegex(GateError, "misses planned operand port"):
+            verify_mapping(path,self.contract,self.mapping)
 
     def test_missing_arrow(self):
         deck = Presentation(self.pptx)

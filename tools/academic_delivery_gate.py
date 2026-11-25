@@ -108,6 +108,18 @@ def read_contract(path):
         require(e.get("source") in marks and e.get("target") in marks
                 and nonempty(e.get("role")) and nonempty(e.get("target_port"))
                 and isinstance(e.get("directed"), bool), "R04: incomplete typed relation: " + e["id"])
+    # Every aggregation operand is tied to an explicit source/planned geometric
+    # anchor, independent of the rendered connector's metadata. Relative coordinates
+    # remain stable when the operator moves or scales. Exact curve geometry is reviewed.
+    for m in marks.values():
+        if "operator" not in m:
+            continue
+        for operand in m["operands"]:
+            anchor = edges[operand].get("target_anchor")
+            require(isinstance(anchor, list) and len(anchor) == 2 and
+                    all(isinstance(v, (int, float)) and not isinstance(v, bool)
+                        and math.isfinite(v) and 0 <= v <= 1 for v in anchor),
+                    "R04: missing/invalid planned operand port anchor: " + operand)
     p = c.get("placement", {})
     require(p.get("profile") in {"presentation", "publication"} and
             all(isinstance(p.get(k), (float, int)) and not isinstance(p[k], bool)
@@ -209,6 +221,15 @@ def verify_mapping(pptx, contract_path, mapping_path):
                 else:
                     require(tail is not None and tail.get("type", "none") != "none",
                             "R04: missing directed arrow: " + key)
+            if e.get("target_anchor") is not None:
+                a, b_, c_, d = bbox(native[e["target"]])
+                u, v = e["target_anchor"]
+                planned = (a + u * (c_ - a), b_ + v * (d - b_))
+                # Cap tolerance in physical and local operator coordinates so
+                # two nearby input ports cannot be accepted interchangeably.
+                tolerance = min(3 * EMU_PT, .10 * min(c_ - a, d - b_))
+                require(distance(ends[-1], planned) <= tolerance,
+                        "R04: connector misses planned operand port: " + key)
             operand_ends[key] = ends[-1]
         else:
             # Curves and imported freeforms remain supported. Geometry/direction require
