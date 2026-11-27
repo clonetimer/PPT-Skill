@@ -20,7 +20,7 @@ from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.oxml.ns import qn
 
-RULES = ("R01", "R02", "R03", "R04", "R05", "R06", "R07", "R08")
+RULES = ("R01", "R02", "R03", "R04", "R05", "R06", "R07", "R08", "R09")
 EMU_PT = 12700
 RENDERER = "LibreOffice Impress -> PDF -> PyMuPDF"
 

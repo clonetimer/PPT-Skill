@@ -193,6 +193,15 @@ class DeliveryGateTests(unittest.TestCase):
         with self.assertRaisesRegex(GateError,"changed source"):
             verify_mapping(self.pptx,*self.mutate(c=c))
 
+    def test_semantic_shape_grammar_review_is_mandatory(self):
+        review=load(self.review)
+        del review["checks"]["R09"]
+        path=self.root/"missing_r09.json"; save(path,review)
+        destination=self.root/"missing_r09.pptx"
+        with self.assertRaisesRegex(GateError, "missing mandatory R01-R09 review"):
+            finalize(self.pptx,self.contract,self.mapping,self.review_dir,path,destination)
+        self.assertFalse(destination.exists())
+
     def test_stale_review_and_unreviewed_rule(self):
         for change in ("stale","pending"):
             review=load(self.review)
