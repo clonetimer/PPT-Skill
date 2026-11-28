@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0",
+  "id": "graph_attention",
+  "title": "Graph attention mechanism",
+  "claim": "Three heads transform a feature tensor.",
+  "intent": "reconstruct",
+  "medium": "figure",
+  "canvas": {
+    "width_in": 11,
+    "height_in": 4
+  },
+  "style": {
+    "font": "Noto Sans CJK SC",
+    "font_size": 11
+  },
+  "evidence": [
+    {
+      "id": "source",
+      "path": "synthetic_source.md",
+      "sha256": "fceeaa55131893d3b44174ac8227a57fd2069dcb625de45ce731f615693a0370",
+      "locator": "Graph attention section",
+      "kind": "synthetic"
+    }
+  ],
+  "unknowns": [],
+  "disclosure": "Synthetic specification; no empirical weights or graph adjacency are asserted.",
+  "nodes": [
+    {
+      "id": "input",
+      "kind": "tensor",
+      "label": "Input features",
+      "box": [
+        0.4,
+        1,
+        2,
+        2
+      ],
+      "params": {
+        "shape": [
+          12,
+          32
+        ]
+      },
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "attention",
+      "kind": "graph_attention",
+      "label": "Graph attention",
+      "box": [
+        3.3,
+        1,
+        3.8,
+        2
+      ],
+      "params": {
+        "heads": 3,
+        "merge": "unknown",
+        "adjacency": "unknown"
+      },
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "output",
+      "kind": "tensor",
+      "label": "Output features",
+      "box": [
+        8.2,
+        1,
+        2,
+        2
+      ],
+      "params": {
+        "shape": [
+          12,
+          16
+        ]
+      },
+      "evidence": [
+        "source"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "input_attention",
+      "source": "input",
+      "target": "attention",
+      "kind": "data",
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "attention_output",
+      "source": "attention",
+      "target": "output",
+      "kind": "data",
+      "evidence": [
+        "source"
+      ]
+    }
+  ],
+  "critical_edges": [
+    "input_attention",
+    "attention_output"
+  ],
+  "panels": [
+    {
+      "label": "Graph attention with explicit evidence boundaries",
+      "x": 0.4,
+      "y": 0.25,
+      "w": 10,
+      "h": 0.3
+    }
+  ]
+}

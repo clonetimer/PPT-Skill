@@ -40,7 +40,12 @@
       "examples/Q06_iris_trend_interval.svg",
       "examples/Q07_wine_scatter.svg",
       "examples/Q08_wine_strip.svg",
-      "examples/I01_cell_image_quant.svg"
+      "examples/I01_cell_image_quant.svg",
+      "examples/single_page/gat.json",
+      "examples/single_page/gat_review_revision.json",
+      "examples/single_page/gat_review_record.json",
+      "examples/single_page/GAT_single_page.png",
+      "examples/single_page/GAT_single_page_initial.png"
     ],
     "tools": [
       "tools/render_figure_spec.py",
@@ -86,7 +91,10 @@
       "tools/validate_output_profiles.py",
       "tools/test_output_profiles.py",
       "tools/build_deck_benchmark.py",
-      "tools/validate_deck_benchmark.py"
+      "tools/validate_deck_benchmark.py",
+      "tools/single_page_composer.py",
+      "tools/test_single_page_composer.py",
+      "tools/build_gat_single_page.py"
     ],
     "docs": [
       "docs/CHANGELOG.md",
@@ -102,7 +110,8 @@
       "docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md",
       "docs/SCIENTIFIC_FIGURE_REVIEW_FORM_V76.md",
       "docs/SCIENTIFIC_FIGURE_V76_COMPLETION_AUDIT.md",
-      "docs/Q03_NATURE_PUBLICATION_CAPTION.md"
+      "docs/Q03_NATURE_PUBLICATION_CAPTION.md",
+      "docs/SINGLE_PAGE_ACADEMIC.md"
     ],
     "generated_outputs": [
       "dist/C01_FBG_construction_v73.pptx",
@@ -138,9 +147,27 @@
       "dist/DECK01_c01_defense_slide_2.png",
       "dist/DECK01_c01_defense_slide_3.png"
     ],
-    "planning_specs": ["specs/deck_spec_v75.example.json", "specs/deck_spec_v75.schema.json"],
-    "scientific_contracts": ["specs/figure_contracts_v76.json", "specs/figure_spec_v76.schema.json", "specs/c01_expected_topology_v76.json", "specs/c01_standalone_expected_topology_v76.json", "specs/iris_charts_v76.json", "specs/wine_charts_v76.json", "specs/chart_spec_v76.schema.json", "specs/research_figure_benchmark_v76.json", "specs/output_profiles_v76.json"],
-    "source_data": ["data/README.md", "data/iris_uci.csv", "data/wine_uci.data", "data/cell_scikit_image_v026.png"]
+    "planning_specs": [
+      "specs/deck_spec_v75.example.json",
+      "specs/deck_spec_v75.schema.json"
+    ],
+    "scientific_contracts": [
+      "specs/figure_contracts_v76.json",
+      "specs/figure_spec_v76.schema.json",
+      "specs/c01_expected_topology_v76.json",
+      "specs/c01_standalone_expected_topology_v76.json",
+      "specs/iris_charts_v76.json",
+      "specs/wine_charts_v76.json",
+      "specs/chart_spec_v76.schema.json",
+      "specs/research_figure_benchmark_v76.json",
+      "specs/output_profiles_v76.json"
+    ],
+    "source_data": [
+      "data/README.md",
+      "data/iris_uci.csv",
+      "data/wine_uci.data",
+      "data/cell_scikit_image_v026.png"
+    ]
   },
   "source_policy": "Do not redistribute the publisher's original graphical abstract; keep only source links and editable derivative redraws."
 }

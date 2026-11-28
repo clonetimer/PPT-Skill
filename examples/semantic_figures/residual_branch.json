@@ -1,0 +1,208 @@
+{
+  "schema_version": "1.0",
+  "id": "residual_branch",
+  "title": "Residual computation",
+  "claim": "The shortcut and transformed features meet at addition.",
+  "intent": "reconstruct",
+  "medium": "figure",
+  "canvas": {
+    "width_in": 13.8,
+    "height_in": 5
+  },
+  "style": {
+    "font": "Noto Sans CJK SC",
+    "font_size": 11
+  },
+  "evidence": [
+    {
+      "id": "source",
+      "path": "synthetic_source.md",
+      "sha256": "fceeaa55131893d3b44174ac8227a57fd2069dcb625de45ce731f615693a0370",
+      "locator": "Residual branch section",
+      "kind": "synthetic"
+    }
+  ],
+  "unknowns": [
+    "Convolution kernel size and weights are unavailable."
+  ],
+  "disclosure": "Synthetic specification; no empirical weights or graph adjacency are asserted.",
+  "nodes": [
+    {
+      "id": "x",
+      "kind": "tensor",
+      "label": "Input",
+      "box": [
+        0.4,
+        1.8,
+        1.7,
+        2
+      ],
+      "params": {
+        "shape": [
+          "N",
+          16
+        ]
+      },
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "conv",
+      "kind": "conv1d",
+      "label": "Temporal convolution",
+      "box": [
+        2.8,
+        1.8,
+        2.4,
+        2
+      ],
+      "params": {},
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "main",
+      "kind": "tensor",
+      "label": "Main branch",
+      "box": [
+        5.9,
+        1.8,
+        1.9,
+        2
+      ],
+      "params": {
+        "shape": [
+          "N",
+          16
+        ]
+      },
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "sum",
+      "kind": "add",
+      "label": "Add",
+      "box": [
+        8.8,
+        1.8,
+        1.4,
+        2
+      ],
+      "params": {},
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "y",
+      "kind": "tensor",
+      "label": "Output",
+      "box": [
+        11.1,
+        1.8,
+        2,
+        2
+      ],
+      "params": {
+        "shape": [
+          "N",
+          16
+        ]
+      },
+      "evidence": [
+        "source"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "x_conv",
+      "source": "x",
+      "target": "conv",
+      "kind": "data",
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "conv_main",
+      "source": "conv",
+      "target": "main",
+      "kind": "data",
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "main_sum",
+      "source": "main",
+      "target": "sum",
+      "kind": "data",
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "sum_y",
+      "source": "sum",
+      "target": "y",
+      "kind": "data",
+      "evidence": [
+        "source"
+      ]
+    },
+    {
+      "id": "shortcut",
+      "source": "x",
+      "target": "sum",
+      "kind": "residual",
+      "evidence": [
+        "source"
+      ],
+      "source_port": "left",
+      "target_port": "top",
+      "via": [
+        [
+          0.2,
+          2.8
+        ],
+        [
+          0.2,
+          1.1
+        ],
+        [
+          8.5,
+          1.1
+        ],
+        [
+          8.5,
+          2.4
+        ],
+        [
+          9.5,
+          2.4
+        ]
+      ]
+    }
+  ],
+  "critical_edges": [
+    "x_conv",
+    "conv_main",
+    "main_sum",
+    "sum_y",
+    "shortcut"
+  ],
+  "panels": [
+    {
+      "label": "Residual branch with a traceable shortcut",
+      "x": 0.4,
+      "y": 0.25,
+      "w": 12,
+      "h": 0.3
+    }
+  ]
+}

@@ -1,0 +1,2966 @@
+{
+  "id": "GAT_single_page",
+  "canvas": {
+    "width_in": 13.333,
+    "height_in": 7.5
+  },
+  "style": {
+    "font": "Noto Sans CJK SC"
+  },
+  "title": "GAT：在邻域内学习加权聚合",
+  "claim": "Neighborhood-normalized attention weights aggregate projected neighbor features; independent heads concatenate in a hidden layer.",
+  "input_completeness": "paper_figure_equations_and_author_code",
+  "sources": [
+    {
+      "url": "https://arxiv.org/pdf/1710.10903v3",
+      "locator": "Section 2.1, Figure 1, Equations (1)-(6)"
+    },
+    {
+      "url": "https://github.com/PetarV-/GAT/blob/5af87e7fce2b90ae1cbd621cd58059036a3c7436/utils/layers.py",
+      "locator": "Lines 6-34: shared transform, additive score, masked softmax, aggregation"
+    },
+    {
+      "url": "https://github.com/PetarV-/GAT/blob/5af87e7fce2b90ae1cbd621cd58059036a3c7436/utils/process.py",
+      "locator": "Lines 8-25: adjacency mask and self loops"
+    },
+    {
+      "url": "https://github.com/PetarV-/GAT/blob/5af87e7fce2b90ae1cbd621cd58059036a3c7436/models/gat.py",
+      "locator": "Lines 8-31: independent heads, concatenation, final averaging"
+    }
+  ],
+  "notes": "Authored mechanism explanation, not a pixel-matched reproduction or a measured attention map. The a/b panels expand one head and suppress the head superscript. u_i denotes the activated output of that one head; the c panel repeats the computation independently with separate W and a. Three heads and six nodes are illustrative. Vector cell counts do not imply a dimension. Per-edge colors highlight one example message; head colors in c identify independent outputs. For the final layer, average the unactivated head aggregates before the final activation (paper Eq. 6). The author Cora implementation averages identity-activation output heads into logits; this slide follows the paper's general formulation. Dropout, bias, training losses and all experiment-specific settings are omitted. Unicode mathematical labels are editable text, not Office Math equation objects.",
+  "regions": [
+    {
+      "id": "header",
+      "role": "claim",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 13.333,
+        "h": 1.65
+      },
+      "spec": {
+        "canvas": {
+          "width_in": 13.333,
+          "height_in": 1.65
+        },
+        "elements": [
+          {
+            "type": "text",
+            "id": "series",
+            "text": "GRAPH ATTENTION NETWORKS  /  ICLR 2018",
+            "x": 0.55,
+            "y": 0.24,
+            "w": 11.9,
+            "h": 0.23,
+            "size": 10.5,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "text": "GAT：在邻域内学习“谁的信息更重要”",
+            "x": 0.55,
+            "y": 0.57,
+            "w": 12.2,
+            "h": 0.5,
+            "size": 28,
+            "color": "#202D3A",
+            "bold": true,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          },
+          {
+            "type": "text",
+            "id": "claim",
+            "text": "共享特征变换，按邻域归一化，再加权聚合与多头融合。",
+            "x": 0.57,
+            "y": 1.12,
+            "w": 12.0,
+            "h": 0.3,
+            "size": 16,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          },
+          {
+            "type": "line",
+            "id": "rule",
+            "x1": 0.55,
+            "y1": 1.58,
+            "x2": 12.78,
+            "y2": 1.58,
+            "color": "#A0AAB4",
+            "sw": 0.7,
+            "arrow": false,
+            "arrow_size": 0.075
+          }
+        ]
+      }
+    },
+    {
+      "id": "neighborhood",
+      "role": "scientific_figure",
+      "bounds": {
+        "x": 0.55,
+        "y": 1.82,
+        "w": 5.55,
+        "h": 3.8
+      },
+      "spec": {
+        "canvas": {
+          "width_in": 5.55,
+          "height_in": 3.8
+        },
+        "elements": [
+          {
+            "type": "text",
+            "id": "heading",
+            "text": "a  单个注意力头：邻居向目标节点传递消息",
+            "x": 0,
+            "y": 0,
+            "w": 5.55,
+            "h": 0.34,
+            "size": 15,
+            "color": "#202D3A",
+            "bold": true,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          },
+          {
+            "type": "line",
+            "id": "message_j_i",
+            "x1": 0.875,
+            "y1": 1.9,
+            "x2": 2.6,
+            "y2": 1.9,
+            "color": "#245C9F",
+            "sw": 1.6,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "ellipse",
+            "id": "node_j",
+            "x": 0.385,
+            "y": 1.6549999999999998,
+            "w": 0.49,
+            "h": 0.49,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.3
+          },
+          {
+            "type": "text",
+            "id": "label_j",
+            "text": "hⱼ",
+            "x": 0.39,
+            "y": 1.7,
+            "w": 0.48,
+            "h": 0.4,
+            "size": 20,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "message_k_i",
+            "x1": 1.8331152830774966,
+            "y1": 0.9427691405133304,
+            "x2": 2.6783031112080655,
+            "y2": 1.6940472099627248,
+            "color": "#A0AAB4",
+            "sw": 1.6,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "ellipse",
+            "id": "node_k",
+            "x": 1.4049999999999998,
+            "y": 0.535,
+            "w": 0.49,
+            "h": 0.49,
+            "fill": "#FFFFFF",
+            "stroke": "#A0AAB4",
+            "sw": 1.3
+          },
+          {
+            "type": "text",
+            "id": "label_k",
+            "text": "hₖ",
+            "x": 1.41,
+            "y": 0.5800000000000001,
+            "w": 0.48,
+            "h": 0.4,
+            "size": 20,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "message_l_i",
+            "x1": 1.718880176008386,
+            "y1": 2.7569207366846142,
+            "x2": 2.6583556956628587,
+            "y2": 2.081039067868447,
+            "color": "#A0AAB4",
+            "sw": 1.6,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "ellipse",
+            "id": "node_l",
+            "x": 1.275,
+            "y": 2.655,
+            "w": 0.49,
+            "h": 0.49,
+            "fill": "#FFFFFF",
+            "stroke": "#A0AAB4",
+            "sw": 1.3
+          },
+          {
+            "type": "text",
+            "id": "label_l",
+            "text": "hₗ",
+            "x": 1.28,
+            "y": 2.6999999999999997,
+            "w": 0.48,
+            "h": 0.4,
+            "size": 20,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "message_m_i",
+            "x1": 2.8223645676483136,
+            "y1": 2.8560228983820326,
+            "x2": 2.8817019756286646,
+            "y2": 2.208705720414571,
+            "color": "#A0AAB4",
+            "sw": 1.6,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "ellipse",
+            "id": "node_m",
+            "x": 2.5549999999999997,
+            "y": 2.855,
+            "w": 0.49,
+            "h": 0.49,
+            "fill": "#FFFFFF",
+            "stroke": "#A0AAB4",
+            "sw": 1.3
+          },
+          {
+            "type": "text",
+            "id": "label_m",
+            "text": "hₘ",
+            "x": 2.5599999999999996,
+            "y": 2.9,
+            "w": 0.48,
+            "h": 0.4,
+            "size": 20,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "message_n_i",
+            "x1": 3.912433362420268,
+            "y1": 2.742380976823755,
+            "x2": 3.147329214896803,
+            "y2": 2.0994363150393305,
+            "color": "#A0AAB4",
+            "sw": 1.6,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "ellipse",
+            "id": "node_n",
+            "x": 3.8549999999999995,
+            "y": 2.655,
+            "w": 0.49,
+            "h": 0.49,
+            "fill": "#FFFFFF",
+            "stroke": "#A0AAB4",
+            "sw": 1.3
+          },
+          {
+            "type": "text",
+            "id": "label_n",
+            "text": "hₙ",
+            "x": 3.8599999999999994,
+            "y": 2.6999999999999997,
+            "w": 0.48,
+            "h": 0.4,
+            "size": 20,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "ellipse",
+            "id": "target_i",
+            "x": 2.6,
+            "y": 1.5899999999999999,
+            "w": 0.62,
+            "h": 0.62,
+            "fill": "#245C9F",
+            "stroke": "#245C9F",
+            "sw": 1.3
+          },
+          {
+            "type": "text",
+            "id": "target_label",
+            "text": "hᵢ",
+            "x": 2.64,
+            "y": 1.68,
+            "w": 0.54,
+            "h": 0.44,
+            "size": 23,
+            "color": "#FFFFFF",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "message_label",
+            "text": "αᵢⱼWhⱼ",
+            "x": 1.13,
+            "y": 1.48,
+            "w": 1.45,
+            "h": 0.32,
+            "size": 19,
+            "color": "#245C9F",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "rect",
+            "id": "feature_j_0",
+            "x": 0.25,
+            "y": 2.26,
+            "w": 0.19,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "feature_j_1",
+            "x": 0.44,
+            "y": 2.26,
+            "w": 0.19,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "feature_j_2",
+            "x": 0.63,
+            "y": 2.26,
+            "w": 0.19,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "feature_j_3",
+            "x": 0.8200000000000001,
+            "y": 2.26,
+            "w": 0.19,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "polyline",
+            "id": "self_loop",
+            "points": [
+              [
+                2.79,
+                1.62
+              ],
+              [
+                2.763622685185186,
+                1.504906684027778
+              ],
+              [
+                2.7556481481481483,
+                1.4019618055555556
+              ],
+              [
+                2.7640625,
+                1.31091796875
+              ],
+              [
+                2.786851851851852,
+                1.2315277777777778
+              ],
+              [
+                2.8220023148148146,
+                1.1635438368055553
+              ],
+              [
+                2.8674999999999997,
+                1.10671875
+              ],
+              [
+                2.921331018518518,
+                1.0608051215277776
+              ],
+              [
+                2.981481481481482,
+                1.0255555555555558
+              ],
+              [
+                3.0459375,
+                1.00072265625
+              ],
+              [
+                3.1126851851851844,
+                0.9860590277777777
+              ],
+              [
+                3.1797106481481485,
+                0.9813172743055558
+              ],
+              [
+                3.2449999999999997,
+                0.98625
+              ],
+              [
+                3.3065393518518515,
+                1.0006098090277777
+              ],
+              [
+                3.362314814814815,
+                1.0241493055555555
+              ],
+              [
+                3.4103125,
+                1.05662109375
+              ],
+              [
+                3.4485185185185183,
+                1.0977777777777775
+              ],
+              [
+                3.4749189814814816,
+                1.1473719618055556
+              ],
+              [
+                3.4875,
+                1.20515625
+              ],
+              [
+                3.4842476851851854,
+                1.2708832465277777
+              ],
+              [
+                3.4631481481481483,
+                1.3443055555555556
+              ],
+              [
+                3.4221875,
+                1.4251757812499999
+              ],
+              [
+                3.3593518518518524,
+                1.5132465277777776
+              ],
+              [
+                3.272627314814815,
+                1.6082703993055556
+              ],
+              [
+                3.16,
+                1.71
+              ]
+            ],
+            "color": "#A0AAB4",
+            "sw": 1.6
+          },
+          {
+            "type": "line",
+            "id": "self_loop_tip",
+            "x1": 3.272627314814815,
+            "y1": 1.6082703993055556,
+            "x2": 3.16,
+            "y2": 1.71,
+            "color": "#A0AAB4",
+            "sw": 1.6,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "text",
+            "id": "self_weight",
+            "text": "αᵢᵢ",
+            "x": 3.46,
+            "y": 1.1,
+            "w": 0.66,
+            "h": 0.3,
+            "size": 17,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "update",
+            "x1": 3.27,
+            "y1": 1.9,
+            "x2": 4.64,
+            "y2": 1.9,
+            "color": "#202D3A",
+            "sw": 1.5,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "text",
+            "id": "sum_activation",
+            "text": "Σ, σ",
+            "x": 3.64,
+            "y": 1.55,
+            "w": 0.72,
+            "h": 0.29,
+            "size": 18,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "ellipse",
+            "id": "updated_i",
+            "x": 4.68,
+            "y": 1.6099999999999999,
+            "w": 0.58,
+            "h": 0.58,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.6
+          },
+          {
+            "type": "text",
+            "id": "updated_label",
+            "text": "uᵢ",
+            "x": 4.71,
+            "y": 1.68,
+            "w": 0.52,
+            "h": 0.44,
+            "size": 22,
+            "color": "#245C9F",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "neighbor_note",
+            "text": "邻域 Nᵢ 含自身；箭头沿消息流向。",
+            "x": 0.02,
+            "y": 3.43,
+            "w": 5.35,
+            "h": 0.3,
+            "size": 14,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          }
+        ]
+      }
+    },
+    {
+      "id": "attention",
+      "role": "edge_calculation",
+      "bounds": {
+        "x": 6.45,
+        "y": 1.82,
+        "w": 6.33,
+        "h": 2.67
+      },
+      "spec": {
+        "canvas": {
+          "width_in": 6.33,
+          "height_in": 2.67
+        },
+        "elements": [
+          {
+            "type": "text",
+            "id": "heading",
+            "text": "b  同一目标节点的邻居共同决定边权",
+            "x": 0,
+            "y": 0,
+            "w": 6.28,
+            "h": 0.34,
+            "size": 15,
+            "color": "#202D3A",
+            "bold": true,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          },
+          {
+            "type": "rect",
+            "id": "target_feature_0",
+            "x": 0.12,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#202D3A",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "target_feature_1",
+            "x": 0.375,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#202D3A",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "target_feature_2",
+            "x": 0.63,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#202D3A",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "target_feature_3",
+            "x": 0.885,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#202D3A",
+            "sw": 1.2
+          },
+          {
+            "type": "text",
+            "id": "concat",
+            "text": "∥",
+            "x": 1.17,
+            "y": 0.66,
+            "w": 0.22,
+            "h": 0.3,
+            "size": 20,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "rect",
+            "id": "neighbor_feature_0",
+            "x": 1.42,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "neighbor_feature_1",
+            "x": 1.6749999999999998,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "neighbor_feature_2",
+            "x": 1.93,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "neighbor_feature_3",
+            "x": 2.185,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "text",
+            "id": "target_feature_label",
+            "text": "Whᵢ",
+            "x": 0.12,
+            "y": 1.03,
+            "w": 1.02,
+            "h": 0.3,
+            "size": 17,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "neighbor_feature_label",
+            "text": "Whⱼ",
+            "x": 1.42,
+            "y": 1.03,
+            "w": 1.02,
+            "h": 0.3,
+            "size": 17,
+            "color": "#245C9F",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "pair_to_score",
+            "x1": 2.52,
+            "y1": 0.81,
+            "x2": 2.98,
+            "y2": 0.81,
+            "color": "#202D3A",
+            "sw": 1.2,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "ellipse",
+            "id": "attention",
+            "x": 3.07,
+            "y": 0.54,
+            "w": 0.54,
+            "h": 0.54,
+            "fill": "#FFFFFF",
+            "stroke": "#202D3A",
+            "sw": 1.3
+          },
+          {
+            "type": "text",
+            "id": "attention_label",
+            "text": "aᵀ",
+            "x": 3.08,
+            "y": 0.61,
+            "w": 0.52,
+            "h": 0.4,
+            "size": 18,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "score_nonlinearity",
+            "x1": 3.66,
+            "y1": 0.81,
+            "x2": 5.14,
+            "y2": 0.81,
+            "color": "#202D3A",
+            "sw": 1.2,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "text",
+            "id": "leaky_relu",
+            "text": "LeakyReLU",
+            "x": 3.75,
+            "y": 0.39,
+            "w": 1.43,
+            "h": 0.28,
+            "size": 12.5,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "raw_score",
+            "text": "eᵢⱼ",
+            "x": 5.3,
+            "y": 0.56,
+            "w": 0.75,
+            "h": 0.47,
+            "size": 23,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "alpha",
+            "text": "αᵢⱼ =",
+            "x": 0.12,
+            "y": 1.74,
+            "w": 1.1,
+            "h": 0.46,
+            "size": 24,
+            "color": "#245C9F",
+            "bold": false,
+            "align": "left",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "numerator",
+            "text": "exp(eᵢⱼ)",
+            "x": 1.3,
+            "y": 1.54,
+            "w": 2.55,
+            "h": 0.39,
+            "size": 21,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "fraction",
+            "x1": 1.24,
+            "y1": 1.98,
+            "x2": 3.98,
+            "y2": 1.98,
+            "color": "#202D3A",
+            "sw": 1.1,
+            "arrow": false,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "text",
+            "id": "normalization_scope",
+            "text": "固定目标 i\n仅在 Nᵢ 内归一化",
+            "x": 4.3,
+            "y": 1.71,
+            "w": 1.95,
+            "h": 0.63,
+            "size": 14.5,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          },
+          {
+            "type": "text",
+            "id": "denominator_sum",
+            "text": "∑",
+            "x": 1.34,
+            "y": 2.03,
+            "w": 0.42,
+            "h": 0.42,
+            "size": 25,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "denominator_limit",
+            "text": "ℓ ∈ Nᵢ",
+            "x": 1.17,
+            "y": 2.44,
+            "w": 0.8,
+            "h": 0.22,
+            "size": 12,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "denominator_terms",
+            "text": "exp(eᵢₗ)",
+            "x": 1.94,
+            "y": 2.04,
+            "w": 1.91,
+            "h": 0.39,
+            "size": 21,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          }
+        ]
+      }
+    },
+    {
+      "id": "aggregation",
+      "role": "equation",
+      "bounds": {
+        "x": 0.55,
+        "y": 5.72,
+        "w": 5.55,
+        "h": 1.18
+      },
+      "spec": {
+        "canvas": {
+          "width_in": 5.55,
+          "height_in": 1.18
+        },
+        "elements": [
+          {
+            "type": "text",
+            "id": "equation_prefix",
+            "text": "uᵢ = σ(",
+            "x": 0.02,
+            "y": 0.05,
+            "w": 1.53,
+            "h": 0.45,
+            "size": 22,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "left",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "equation_sum",
+            "text": "∑",
+            "x": 1.56,
+            "y": 0.05,
+            "w": 0.5,
+            "h": 0.5,
+            "size": 30,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "equation_limit",
+            "text": "j ∈ Nᵢ",
+            "x": 1.32,
+            "y": 0.55,
+            "w": 0.98,
+            "h": 0.24,
+            "size": 12,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "equation_tail",
+            "text": "αᵢⱼWhⱼ)",
+            "x": 2.16,
+            "y": 0.05,
+            "w": 3.3,
+            "h": 0.45,
+            "size": 22,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "left",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "shared",
+            "text": "同一头内：共享 W 与 a。",
+            "x": 0.02,
+            "y": 0.79,
+            "w": 5.5,
+            "h": 0.35,
+            "size": 15,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          }
+        ]
+      }
+    },
+    {
+      "id": "heads",
+      "role": "parallel_heads",
+      "bounds": {
+        "x": 6.45,
+        "y": 4.77,
+        "w": 6.33,
+        "h": 2.12
+      },
+      "spec": {
+        "canvas": {
+          "width_in": 6.33,
+          "height_in": 2.12
+        },
+        "elements": [
+          {
+            "type": "text",
+            "id": "heading",
+            "text": "c  隐藏层：各头独立计算，输出沿特征维拼接",
+            "x": 0,
+            "y": 0,
+            "w": 6.3,
+            "h": 0.34,
+            "size": 15,
+            "color": "#202D3A",
+            "bold": true,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          },
+          {
+            "type": "rect",
+            "id": "head_1_0",
+            "x": 0.395,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_1_1",
+            "x": 0.72,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_1_2",
+            "x": 1.045,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_1_3",
+            "x": 1.37,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "text",
+            "id": "head_label_1",
+            "text": "uᵢ⁽¹⁾",
+            "x": 0.395,
+            "y": 0.65,
+            "w": 1.3,
+            "h": 0.29,
+            "size": 16,
+            "color": "#245C9F",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "head_to_concat_1",
+            "x1": 1.045,
+            "y1": 1.2,
+            "x2": 1.045,
+            "y2": 1.34,
+            "color": "#245C9F",
+            "sw": 1.05,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_1_0",
+            "x": 0.12,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_1_1",
+            "x": 0.5825,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_1_2",
+            "x": 1.045,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_1_3",
+            "x": 1.5075000000000003,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_2_0",
+            "x": 2.245,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#187B72",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_2_1",
+            "x": 2.5700000000000003,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#187B72",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_2_2",
+            "x": 2.895,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#187B72",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_2_3",
+            "x": 3.22,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#187B72",
+            "sw": 1.2
+          },
+          {
+            "type": "text",
+            "id": "head_label_2",
+            "text": "uᵢ⁽²⁾",
+            "x": 2.245,
+            "y": 0.65,
+            "w": 1.3,
+            "h": 0.29,
+            "size": 16,
+            "color": "#187B72",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "head_to_concat_2",
+            "x1": 2.895,
+            "y1": 1.2,
+            "x2": 2.895,
+            "y2": 1.34,
+            "color": "#187B72",
+            "sw": 1.05,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_2_0",
+            "x": 1.9700000000000002,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#187B72",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_2_1",
+            "x": 2.4325,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#187B72",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_2_2",
+            "x": 2.8950000000000005,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#187B72",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_2_3",
+            "x": 3.3575000000000004,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#187B72",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_3_0",
+            "x": 4.095000000000001,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#AE6B2D",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_3_1",
+            "x": 4.420000000000001,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#AE6B2D",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_3_2",
+            "x": 4.745000000000001,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#AE6B2D",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "head_3_3",
+            "x": 5.07,
+            "y": 0.98,
+            "w": 0.325,
+            "h": 0.16,
+            "fill": "#FFFFFF",
+            "stroke": "#AE6B2D",
+            "sw": 1.2
+          },
+          {
+            "type": "text",
+            "id": "head_label_3",
+            "text": "uᵢ⁽³⁾",
+            "x": 4.095000000000001,
+            "y": 0.65,
+            "w": 1.3,
+            "h": 0.29,
+            "size": 16,
+            "color": "#AE6B2D",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "head_to_concat_3",
+            "x1": 4.745,
+            "y1": 1.2,
+            "x2": 4.745,
+            "y2": 1.34,
+            "color": "#AE6B2D",
+            "sw": 1.05,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_3_0",
+            "x": 3.8200000000000003,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#AE6B2D",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_3_1",
+            "x": 4.282500000000001,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#AE6B2D",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_3_2",
+            "x": 4.745,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#AE6B2D",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "concat_segment_3_3",
+            "x": 5.2075000000000005,
+            "y": 1.41,
+            "w": 0.4625,
+            "h": 0.18,
+            "fill": "#FFFFFF",
+            "stroke": "#AE6B2D",
+            "sw": 1.2
+          },
+          {
+            "type": "text",
+            "id": "concat_label",
+            "text": "h′ᵢ",
+            "x": 5.73,
+            "y": 1.26,
+            "w": 0.57,
+            "h": 0.42,
+            "size": 20,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "head_scope",
+            "text": "各头分别学习 W⁽ᵏ⁾ 与 a⁽ᵏ⁾",
+            "x": 0.02,
+            "y": 0.36,
+            "w": 6.2,
+            "h": 0.26,
+            "size": 13.5,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          },
+          {
+            "type": "text",
+            "id": "final_layer",
+            "text": "预测层：先平均未激活的聚合值，再激活（式 6）。",
+            "x": 0.02,
+            "y": 1.74,
+            "w": 6.28,
+            "h": 0.37,
+            "size": 14,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          }
+        ]
+      }
+    },
+    {
+      "id": "footer",
+      "role": "source",
+      "bounds": {
+        "x": 0,
+        "y": 6.91,
+        "w": 13.333,
+        "h": 0.59
+      },
+      "spec": {
+        "canvas": {
+          "width_in": 13.333,
+          "height_in": 0.59
+        },
+        "elements": [
+          {
+            "type": "line",
+            "id": "rule",
+            "x1": 0.55,
+            "y1": 0.02,
+            "x2": 12.78,
+            "y2": 0.02,
+            "color": "#A0AAB4",
+            "sw": 0.7,
+            "arrow": false,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "text",
+            "id": "citation",
+            "text": "Veličković et al.  Graph Attention Networks.  ICLR 2018 · Fig. 1 / Eqs. 1–6 · arXiv:1710.10903",
+            "x": 0.55,
+            "y": 0.1,
+            "w": 12.2,
+            "h": 0.23,
+            "size": 9.7,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "schematic",
+            "text": "根据论文与作者代码改绘；六节点、三头及向量格数均为示意，不表示实验配置或实测权重。",
+            "x": 0.55,
+            "y": 0.35,
+            "w": 12.2,
+            "h": 0.23,
+            "size": 10.2,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          }
+        ]
+      }
+    }
+  ],
+  "elements": [
+    {
+      "type": "text",
+      "id": "header/series",
+      "text": "GRAPH ATTENTION NETWORKS  /  ICLR 2018",
+      "x": 0.55,
+      "y": 0.24,
+      "w": 11.9,
+      "h": 0.23,
+      "size": 10.5,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "left",
+      "font": "DejaVu Sans",
+      "region_id": "header"
+    },
+    {
+      "type": "text",
+      "id": "header/title",
+      "text": "GAT：在邻域内学习“谁的信息更重要”",
+      "x": 0.55,
+      "y": 0.57,
+      "w": 12.2,
+      "h": 0.5,
+      "size": 28.0,
+      "color": "#202D3A",
+      "bold": true,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "header"
+    },
+    {
+      "type": "text",
+      "id": "header/claim",
+      "text": "共享特征变换，按邻域归一化，再加权聚合与多头融合。",
+      "x": 0.57,
+      "y": 1.12,
+      "w": 12.0,
+      "h": 0.3,
+      "size": 16.0,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "header"
+    },
+    {
+      "type": "line",
+      "id": "header/rule",
+      "x1": 0.55,
+      "y1": 1.58,
+      "x2": 12.78,
+      "y2": 1.58,
+      "color": "#A0AAB4",
+      "sw": 0.7,
+      "arrow": false,
+      "arrow_size": 0.075,
+      "region_id": "header"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/heading",
+      "text": "a  单个注意力头：邻居向目标节点传递消息",
+      "x": 0.55,
+      "y": 1.82,
+      "w": 5.55,
+      "h": 0.34,
+      "size": 15.0,
+      "color": "#202D3A",
+      "bold": true,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "line",
+      "id": "neighborhood/message_j_i",
+      "x1": 1.425,
+      "y1": 3.7199999999999998,
+      "x2": 3.1500000000000004,
+      "y2": 3.7199999999999998,
+      "color": "#245C9F",
+      "sw": 1.6,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "ellipse",
+      "id": "neighborhood/node_j",
+      "x": 0.935,
+      "y": 3.4749999999999996,
+      "w": 0.49,
+      "h": 0.49,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.3,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/label_j",
+      "text": "hⱼ",
+      "x": 0.9400000000000001,
+      "y": 3.52,
+      "w": 0.48,
+      "h": 0.4,
+      "size": 20.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "line",
+      "id": "neighborhood/message_k_i",
+      "x1": 2.3831152830774966,
+      "y1": 2.7627691405133303,
+      "x2": 3.2283031112080653,
+      "y2": 3.514047209962725,
+      "color": "#A0AAB4",
+      "sw": 1.6,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "ellipse",
+      "id": "neighborhood/node_k",
+      "x": 1.9549999999999998,
+      "y": 2.355,
+      "w": 0.49,
+      "h": 0.49,
+      "fill": "#FFFFFF",
+      "stroke": "#A0AAB4",
+      "sw": 1.3,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/label_k",
+      "text": "hₖ",
+      "x": 1.96,
+      "y": 2.4000000000000004,
+      "w": 0.48,
+      "h": 0.4,
+      "size": 20.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "line",
+      "id": "neighborhood/message_l_i",
+      "x1": 2.268880176008386,
+      "y1": 4.576920736684614,
+      "x2": 3.208355695662859,
+      "y2": 3.901039067868447,
+      "color": "#A0AAB4",
+      "sw": 1.6,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "ellipse",
+      "id": "neighborhood/node_l",
+      "x": 1.825,
+      "y": 4.475,
+      "w": 0.49,
+      "h": 0.49,
+      "fill": "#FFFFFF",
+      "stroke": "#A0AAB4",
+      "sw": 1.3,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/label_l",
+      "text": "hₗ",
+      "x": 1.83,
+      "y": 4.52,
+      "w": 0.48,
+      "h": 0.4,
+      "size": 20.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "line",
+      "id": "neighborhood/message_m_i",
+      "x1": 3.3723645676483134,
+      "y1": 4.6760228983820324,
+      "x2": 3.4317019756286644,
+      "y2": 4.028705720414571,
+      "color": "#A0AAB4",
+      "sw": 1.6,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "ellipse",
+      "id": "neighborhood/node_m",
+      "x": 3.1049999999999995,
+      "y": 4.675,
+      "w": 0.49,
+      "h": 0.49,
+      "fill": "#FFFFFF",
+      "stroke": "#A0AAB4",
+      "sw": 1.3,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/label_m",
+      "text": "hₘ",
+      "x": 3.1099999999999994,
+      "y": 4.72,
+      "w": 0.48,
+      "h": 0.4,
+      "size": 20.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "line",
+      "id": "neighborhood/message_n_i",
+      "x1": 4.462433362420268,
+      "y1": 4.562380976823755,
+      "x2": 3.6973292148968033,
+      "y2": 3.9194363150393308,
+      "color": "#A0AAB4",
+      "sw": 1.6,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "ellipse",
+      "id": "neighborhood/node_n",
+      "x": 4.404999999999999,
+      "y": 4.475,
+      "w": 0.49,
+      "h": 0.49,
+      "fill": "#FFFFFF",
+      "stroke": "#A0AAB4",
+      "sw": 1.3,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/label_n",
+      "text": "hₙ",
+      "x": 4.409999999999999,
+      "y": 4.52,
+      "w": 0.48,
+      "h": 0.4,
+      "size": 20.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "ellipse",
+      "id": "neighborhood/target_i",
+      "x": 3.1500000000000004,
+      "y": 3.41,
+      "w": 0.62,
+      "h": 0.62,
+      "fill": "#245C9F",
+      "stroke": "#245C9F",
+      "sw": 1.3,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/target_label",
+      "text": "hᵢ",
+      "x": 3.1900000000000004,
+      "y": 3.5,
+      "w": 0.54,
+      "h": 0.44,
+      "size": 23.0,
+      "color": "#FFFFFF",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/message_label",
+      "text": "αᵢⱼWhⱼ",
+      "x": 1.68,
+      "y": 3.3,
+      "w": 1.45,
+      "h": 0.32,
+      "size": 19.0,
+      "color": "#245C9F",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "rect",
+      "id": "neighborhood/feature_j_0",
+      "x": 0.8,
+      "y": 4.08,
+      "w": 0.19,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "rect",
+      "id": "neighborhood/feature_j_1",
+      "x": 0.99,
+      "y": 4.08,
+      "w": 0.19,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "rect",
+      "id": "neighborhood/feature_j_2",
+      "x": 1.1800000000000002,
+      "y": 4.08,
+      "w": 0.19,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "rect",
+      "id": "neighborhood/feature_j_3",
+      "x": 1.37,
+      "y": 4.08,
+      "w": 0.19,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "polyline",
+      "id": "neighborhood/self_loop",
+      "points": [
+        [
+          3.34,
+          3.4400000000000004
+        ],
+        [
+          3.3136226851851864,
+          3.324906684027778
+        ],
+        [
+          3.3056481481481486,
+          3.221961805555556
+        ],
+        [
+          3.3140625000000004,
+          3.1309179687500004
+        ],
+        [
+          3.3368518518518524,
+          3.051527777777778
+        ],
+        [
+          3.3720023148148144,
+          2.9835438368055556
+        ],
+        [
+          3.4174999999999995,
+          2.92671875
+        ],
+        [
+          3.4713310185185184,
+          2.8808051215277777
+        ],
+        [
+          3.5314814814814817,
+          2.845555555555556
+        ],
+        [
+          3.5959375,
+          2.82072265625
+        ],
+        [
+          3.6626851851851843,
+          2.8060590277777777
+        ],
+        [
+          3.7297106481481483,
+          2.801317274305556
+        ],
+        [
+          3.795,
+          2.80625
+        ],
+        [
+          3.8565393518518514,
+          2.820609809027778
+        ],
+        [
+          3.912314814814815,
+          2.844149305555556
+        ],
+        [
+          3.9603124999999997,
+          2.87662109375
+        ],
+        [
+          3.9985185185185186,
+          2.9177777777777774
+        ],
+        [
+          4.024918981481481,
+          2.9673719618055556
+        ],
+        [
+          4.0375,
+          3.02515625
+        ],
+        [
+          4.034247685185186,
+          3.0908832465277776
+        ],
+        [
+          4.013148148148148,
+          3.164305555555556
+        ],
+        [
+          3.9721875000000004,
+          3.24517578125
+        ],
+        [
+          3.909351851851852,
+          3.333246527777778
+        ],
+        [
+          3.822627314814815,
+          3.4282703993055557
+        ],
+        [
+          3.71,
+          3.5300000000000002
+        ]
+      ],
+      "color": "#A0AAB4",
+      "sw": 1.6,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "line",
+      "id": "neighborhood/self_loop_tip",
+      "x1": 3.822627314814815,
+      "y1": 3.4282703993055557,
+      "x2": 3.71,
+      "y2": 3.5300000000000002,
+      "color": "#A0AAB4",
+      "sw": 1.6,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/self_weight",
+      "text": "αᵢᵢ",
+      "x": 4.01,
+      "y": 2.92,
+      "w": 0.66,
+      "h": 0.3,
+      "size": 17.0,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "line",
+      "id": "neighborhood/update",
+      "x1": 3.8200000000000003,
+      "y1": 3.7199999999999998,
+      "x2": 5.1899999999999995,
+      "y2": 3.7199999999999998,
+      "color": "#202D3A",
+      "sw": 1.5,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/sum_activation",
+      "text": "Σ, σ",
+      "x": 4.19,
+      "y": 3.37,
+      "w": 0.72,
+      "h": 0.29,
+      "size": 18.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "ellipse",
+      "id": "neighborhood/updated_i",
+      "x": 5.2299999999999995,
+      "y": 3.4299999999999997,
+      "w": 0.58,
+      "h": 0.58,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.6,
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/updated_label",
+      "text": "uᵢ",
+      "x": 5.26,
+      "y": 3.5,
+      "w": 0.52,
+      "h": 0.44,
+      "size": 22.0,
+      "color": "#245C9F",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "neighborhood/neighbor_note",
+      "text": "邻域 Nᵢ 含自身；箭头沿消息流向。",
+      "x": 0.5700000000000001,
+      "y": 5.25,
+      "w": 5.35,
+      "h": 0.3,
+      "size": 14.0,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "neighborhood"
+    },
+    {
+      "type": "text",
+      "id": "attention/heading",
+      "text": "b  同一目标节点的邻居共同决定边权",
+      "x": 6.45,
+      "y": 1.82,
+      "w": 6.28,
+      "h": 0.34,
+      "size": 15.0,
+      "color": "#202D3A",
+      "bold": true,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "attention"
+    },
+    {
+      "type": "rect",
+      "id": "attention/target_feature_0",
+      "x": 6.57,
+      "y": 2.5,
+      "w": 0.255,
+      "h": 0.26,
+      "fill": "#FFFFFF",
+      "stroke": "#202D3A",
+      "sw": 1.2,
+      "region_id": "attention"
+    },
+    {
+      "type": "rect",
+      "id": "attention/target_feature_1",
+      "x": 6.825,
+      "y": 2.5,
+      "w": 0.255,
+      "h": 0.26,
+      "fill": "#FFFFFF",
+      "stroke": "#202D3A",
+      "sw": 1.2,
+      "region_id": "attention"
+    },
+    {
+      "type": "rect",
+      "id": "attention/target_feature_2",
+      "x": 7.08,
+      "y": 2.5,
+      "w": 0.255,
+      "h": 0.26,
+      "fill": "#FFFFFF",
+      "stroke": "#202D3A",
+      "sw": 1.2,
+      "region_id": "attention"
+    },
+    {
+      "type": "rect",
+      "id": "attention/target_feature_3",
+      "x": 7.335,
+      "y": 2.5,
+      "w": 0.255,
+      "h": 0.26,
+      "fill": "#FFFFFF",
+      "stroke": "#202D3A",
+      "sw": 1.2,
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/concat",
+      "text": "∥",
+      "x": 7.62,
+      "y": 2.48,
+      "w": 0.22,
+      "h": 0.3,
+      "size": 20.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "rect",
+      "id": "attention/neighbor_feature_0",
+      "x": 7.87,
+      "y": 2.5,
+      "w": 0.255,
+      "h": 0.26,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "attention"
+    },
+    {
+      "type": "rect",
+      "id": "attention/neighbor_feature_1",
+      "x": 8.125,
+      "y": 2.5,
+      "w": 0.255,
+      "h": 0.26,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "attention"
+    },
+    {
+      "type": "rect",
+      "id": "attention/neighbor_feature_2",
+      "x": 8.38,
+      "y": 2.5,
+      "w": 0.255,
+      "h": 0.26,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "attention"
+    },
+    {
+      "type": "rect",
+      "id": "attention/neighbor_feature_3",
+      "x": 8.635,
+      "y": 2.5,
+      "w": 0.255,
+      "h": 0.26,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/target_feature_label",
+      "text": "Whᵢ",
+      "x": 6.57,
+      "y": 2.85,
+      "w": 1.02,
+      "h": 0.3,
+      "size": 17.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/neighbor_feature_label",
+      "text": "Whⱼ",
+      "x": 7.87,
+      "y": 2.85,
+      "w": 1.02,
+      "h": 0.3,
+      "size": 17.0,
+      "color": "#245C9F",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "line",
+      "id": "attention/pair_to_score",
+      "x1": 8.97,
+      "y1": 2.63,
+      "x2": 9.43,
+      "y2": 2.63,
+      "color": "#202D3A",
+      "sw": 1.2,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "attention"
+    },
+    {
+      "type": "ellipse",
+      "id": "attention/attention",
+      "x": 9.52,
+      "y": 2.3600000000000003,
+      "w": 0.54,
+      "h": 0.54,
+      "fill": "#FFFFFF",
+      "stroke": "#202D3A",
+      "sw": 1.3,
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/attention_label",
+      "text": "aᵀ",
+      "x": 9.530000000000001,
+      "y": 2.43,
+      "w": 0.52,
+      "h": 0.4,
+      "size": 18.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "line",
+      "id": "attention/score_nonlinearity",
+      "x1": 10.11,
+      "y1": 2.63,
+      "x2": 11.59,
+      "y2": 2.63,
+      "color": "#202D3A",
+      "sw": 1.2,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/leaky_relu",
+      "text": "LeakyReLU",
+      "x": 10.2,
+      "y": 2.21,
+      "w": 1.43,
+      "h": 0.28,
+      "size": 12.5,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/raw_score",
+      "text": "eᵢⱼ",
+      "x": 11.75,
+      "y": 2.38,
+      "w": 0.75,
+      "h": 0.47,
+      "size": 23.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/alpha",
+      "text": "αᵢⱼ =",
+      "x": 6.57,
+      "y": 3.56,
+      "w": 1.1,
+      "h": 0.46,
+      "size": 24.0,
+      "color": "#245C9F",
+      "bold": false,
+      "align": "left",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/numerator",
+      "text": "exp(eᵢⱼ)",
+      "x": 7.75,
+      "y": 3.3600000000000003,
+      "w": 2.55,
+      "h": 0.39,
+      "size": 21.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "line",
+      "id": "attention/fraction",
+      "x1": 7.69,
+      "y1": 3.8,
+      "x2": 10.43,
+      "y2": 3.8,
+      "color": "#202D3A",
+      "sw": 1.1,
+      "arrow": false,
+      "arrow_size": 0.075,
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/normalization_scope",
+      "text": "固定目标 i\n仅在 Nᵢ 内归一化",
+      "x": 10.75,
+      "y": 3.5300000000000002,
+      "w": 1.95,
+      "h": 0.63,
+      "size": 14.5,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/denominator_sum",
+      "text": "∑",
+      "x": 7.79,
+      "y": 3.8499999999999996,
+      "w": 0.42,
+      "h": 0.42,
+      "size": 25.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/denominator_limit",
+      "text": "ℓ ∈ Nᵢ",
+      "x": 7.62,
+      "y": 4.26,
+      "w": 0.8,
+      "h": 0.22,
+      "size": 12.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "attention/denominator_terms",
+      "text": "exp(eᵢₗ)",
+      "x": 8.39,
+      "y": 3.8600000000000003,
+      "w": 1.91,
+      "h": 0.39,
+      "size": 21.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "attention"
+    },
+    {
+      "type": "text",
+      "id": "aggregation/equation_prefix",
+      "text": "uᵢ = σ(",
+      "x": 0.5700000000000001,
+      "y": 5.77,
+      "w": 1.53,
+      "h": 0.45,
+      "size": 22.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "left",
+      "font": "DejaVu Sans",
+      "region_id": "aggregation"
+    },
+    {
+      "type": "text",
+      "id": "aggregation/equation_sum",
+      "text": "∑",
+      "x": 2.1100000000000003,
+      "y": 5.77,
+      "w": 0.5,
+      "h": 0.5,
+      "size": 30.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "aggregation"
+    },
+    {
+      "type": "text",
+      "id": "aggregation/equation_limit",
+      "text": "j ∈ Nᵢ",
+      "x": 1.87,
+      "y": 6.27,
+      "w": 0.98,
+      "h": 0.24,
+      "size": 12.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "aggregation"
+    },
+    {
+      "type": "text",
+      "id": "aggregation/equation_tail",
+      "text": "αᵢⱼWhⱼ)",
+      "x": 2.71,
+      "y": 5.77,
+      "w": 3.3,
+      "h": 0.45,
+      "size": 22.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "left",
+      "font": "DejaVu Sans",
+      "region_id": "aggregation"
+    },
+    {
+      "type": "text",
+      "id": "aggregation/shared",
+      "text": "同一头内：共享 W 与 a。",
+      "x": 0.5700000000000001,
+      "y": 6.51,
+      "w": 5.5,
+      "h": 0.35,
+      "size": 15.0,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "aggregation"
+    },
+    {
+      "type": "text",
+      "id": "heads/heading",
+      "text": "c  隐藏层：各头独立计算，输出沿特征维拼接",
+      "x": 6.45,
+      "y": 4.77,
+      "w": 6.3,
+      "h": 0.34,
+      "size": 15.0,
+      "color": "#202D3A",
+      "bold": true,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_1_0",
+      "x": 6.845000000000001,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_1_1",
+      "x": 7.17,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_1_2",
+      "x": 7.495,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_1_3",
+      "x": 7.82,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "text",
+      "id": "heads/head_label_1",
+      "text": "uᵢ⁽¹⁾",
+      "x": 6.845000000000001,
+      "y": 5.42,
+      "w": 1.3,
+      "h": 0.29,
+      "size": 16.0,
+      "color": "#245C9F",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "heads"
+    },
+    {
+      "type": "line",
+      "id": "heads/head_to_concat_1",
+      "x1": 7.495,
+      "y1": 5.97,
+      "x2": 7.495,
+      "y2": 6.109999999999999,
+      "color": "#245C9F",
+      "sw": 1.05,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_1_0",
+      "x": 6.57,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_1_1",
+      "x": 7.032500000000001,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_1_2",
+      "x": 7.495,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_1_3",
+      "x": 7.9575000000000005,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#245C9F",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_2_0",
+      "x": 8.695,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#187B72",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_2_1",
+      "x": 9.02,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#187B72",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_2_2",
+      "x": 9.345,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#187B72",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_2_3",
+      "x": 9.67,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#187B72",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "text",
+      "id": "heads/head_label_2",
+      "text": "uᵢ⁽²⁾",
+      "x": 8.695,
+      "y": 5.42,
+      "w": 1.3,
+      "h": 0.29,
+      "size": 16.0,
+      "color": "#187B72",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "heads"
+    },
+    {
+      "type": "line",
+      "id": "heads/head_to_concat_2",
+      "x1": 9.345,
+      "y1": 5.97,
+      "x2": 9.345,
+      "y2": 6.109999999999999,
+      "color": "#187B72",
+      "sw": 1.05,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_2_0",
+      "x": 8.42,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#187B72",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_2_1",
+      "x": 8.8825,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#187B72",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_2_2",
+      "x": 9.345,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#187B72",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_2_3",
+      "x": 9.807500000000001,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#187B72",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_3_0",
+      "x": 10.545000000000002,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#AE6B2D",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_3_1",
+      "x": 10.870000000000001,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#AE6B2D",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_3_2",
+      "x": 11.195,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#AE6B2D",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/head_3_3",
+      "x": 11.52,
+      "y": 5.75,
+      "w": 0.325,
+      "h": 0.16,
+      "fill": "#FFFFFF",
+      "stroke": "#AE6B2D",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "text",
+      "id": "heads/head_label_3",
+      "text": "uᵢ⁽³⁾",
+      "x": 10.545000000000002,
+      "y": 5.42,
+      "w": 1.3,
+      "h": 0.29,
+      "size": 16.0,
+      "color": "#AE6B2D",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "heads"
+    },
+    {
+      "type": "line",
+      "id": "heads/head_to_concat_3",
+      "x1": 11.195,
+      "y1": 5.97,
+      "x2": 11.195,
+      "y2": 6.109999999999999,
+      "color": "#AE6B2D",
+      "sw": 1.05,
+      "arrow": true,
+      "arrow_size": 0.075,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_3_0",
+      "x": 10.27,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#AE6B2D",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_3_1",
+      "x": 10.732500000000002,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#AE6B2D",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_3_2",
+      "x": 11.195,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#AE6B2D",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "rect",
+      "id": "heads/concat_segment_3_3",
+      "x": 11.6575,
+      "y": 6.18,
+      "w": 0.4625,
+      "h": 0.18,
+      "fill": "#FFFFFF",
+      "stroke": "#AE6B2D",
+      "sw": 1.2,
+      "region_id": "heads"
+    },
+    {
+      "type": "text",
+      "id": "heads/concat_label",
+      "text": "h′ᵢ",
+      "x": 12.18,
+      "y": 6.029999999999999,
+      "w": 0.57,
+      "h": 0.42,
+      "size": 20.0,
+      "color": "#202D3A",
+      "bold": false,
+      "align": "center",
+      "font": "DejaVu Sans",
+      "region_id": "heads"
+    },
+    {
+      "type": "text",
+      "id": "heads/head_scope",
+      "text": "各头分别学习 W⁽ᵏ⁾ 与 a⁽ᵏ⁾",
+      "x": 6.47,
+      "y": 5.13,
+      "w": 6.2,
+      "h": 0.26,
+      "size": 13.5,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "heads"
+    },
+    {
+      "type": "text",
+      "id": "heads/final_layer",
+      "text": "预测层：先平均未激活的聚合值，再激活（式 6）。",
+      "x": 6.47,
+      "y": 6.51,
+      "w": 6.28,
+      "h": 0.37,
+      "size": 14.0,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "heads"
+    },
+    {
+      "type": "line",
+      "id": "footer/rule",
+      "x1": 0.55,
+      "y1": 6.93,
+      "x2": 12.78,
+      "y2": 6.93,
+      "color": "#A0AAB4",
+      "sw": 0.7,
+      "arrow": false,
+      "arrow_size": 0.075,
+      "region_id": "footer"
+    },
+    {
+      "type": "text",
+      "id": "footer/citation",
+      "text": "Veličković et al.  Graph Attention Networks.  ICLR 2018 · Fig. 1 / Eqs. 1–6 · arXiv:1710.10903",
+      "x": 0.55,
+      "y": 7.01,
+      "w": 12.2,
+      "h": 0.23,
+      "size": 9.7,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "left",
+      "font": "DejaVu Sans",
+      "region_id": "footer"
+    },
+    {
+      "type": "text",
+      "id": "footer/schematic",
+      "text": "根据论文与作者代码改绘；六节点、三头及向量格数均为示意，不表示实验配置或实测权重。",
+      "x": 0.55,
+      "y": 7.26,
+      "w": 12.2,
+      "h": 0.23,
+      "size": 10.2,
+      "color": "#5D6975",
+      "bold": false,
+      "align": "left",
+      "font": "Noto Sans CJK SC",
+      "region_id": "footer"
+    }
+  ]
+}

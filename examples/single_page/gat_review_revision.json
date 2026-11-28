@@ -1,0 +1,669 @@
+{
+  "reviewed_input": "dist/single_page/gat_initial/GAT_single_page.png",
+  "render_host": "LibreOfficeDev 26.8.0.0.alpha0; PDF rasterized with Poppler",
+  "observed_issues": [
+    {
+      "region": "heads",
+      "issue": "Three differently colored arrows converge at one point, visually suggesting addition rather than feature concatenation.",
+      "change": "Lay out heads in parallel and route each arrow to its own colored output-vector segment."
+    },
+    {
+      "region": "attention",
+      "issue": "The sum limit is part of an inline Unicode string and reads at the operator baseline.",
+      "change": "Use separate native text objects for the summation operator, its limit, and its terms."
+    },
+    {
+      "region": "aggregation",
+      "issue": "Inline sum limits reduce formula readability; the shared-parameter note sits too close to the footer.",
+      "change": "Separate sum limits and keep the note inside the region bounds."
+    },
+    {
+      "region": "supporting_text",
+      "issue": "Independent review found 11.5–14 pt supporting statements too small for projection.",
+      "change": "Shorten the sharing and final-layer notes, enlarge supporting text to 14–15 pt, and keep source notes small."
+    }
+  ],
+  "scientific_content_change": false,
+  "frozen_regions": [
+    "header",
+    "footer"
+  ],
+  "region_updates": {
+    "heads": {
+      "head_1_0": {
+        "x": 0.395,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_1_0": {
+        "x": 0.12,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_1_1": {
+        "x": 0.72,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_1_1": {
+        "x": 0.5825,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_1_2": {
+        "x": 1.045,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_1_2": {
+        "x": 1.045,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_1_3": {
+        "x": 1.37,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_1_3": {
+        "x": 1.5075000000000003,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_label_1": {
+        "x": 0.395,
+        "y": 0.65,
+        "w": 1.3,
+        "h": 0.29,
+        "align": "center",
+        "size": 16
+      },
+      "head_to_concat_1": {
+        "x1": 1.045,
+        "y1": 1.2,
+        "x2": 1.045,
+        "y2": 1.34
+      },
+      "head_2_0": {
+        "x": 2.245,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_2_0": {
+        "x": 1.9700000000000002,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_2_1": {
+        "x": 2.5700000000000003,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_2_1": {
+        "x": 2.4325,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_2_2": {
+        "x": 2.895,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_2_2": {
+        "x": 2.8950000000000005,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_2_3": {
+        "x": 3.22,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_2_3": {
+        "x": 3.3575000000000004,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_label_2": {
+        "x": 2.245,
+        "y": 0.65,
+        "w": 1.3,
+        "h": 0.29,
+        "align": "center",
+        "size": 16
+      },
+      "head_to_concat_2": {
+        "x1": 2.895,
+        "y1": 1.2,
+        "x2": 2.895,
+        "y2": 1.34
+      },
+      "head_3_0": {
+        "x": 4.095000000000001,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_3_0": {
+        "x": 3.8200000000000003,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_3_1": {
+        "x": 4.420000000000001,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_3_1": {
+        "x": 4.282500000000001,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_3_2": {
+        "x": 4.745000000000001,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_3_2": {
+        "x": 4.745,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_3_3": {
+        "x": 5.07,
+        "y": 0.98,
+        "w": 0.325,
+        "h": 0.16
+      },
+      "concat_segment_3_3": {
+        "x": 5.2075000000000005,
+        "y": 1.41,
+        "w": 0.4625,
+        "h": 0.18
+      },
+      "head_label_3": {
+        "x": 4.095000000000001,
+        "y": 0.65,
+        "w": 1.3,
+        "h": 0.29,
+        "align": "center",
+        "size": 16
+      },
+      "head_to_concat_3": {
+        "x1": 4.745,
+        "y1": 1.2,
+        "x2": 4.745,
+        "y2": 1.34
+      },
+      "concat_label": {
+        "text": "h′ᵢ",
+        "x": 5.73,
+        "y": 1.26,
+        "w": 0.57,
+        "h": 0.42,
+        "size": 20,
+        "align": "center"
+      },
+      "head_scope": {
+        "text": "各头分别学习 W⁽ᵏ⁾ 与 a⁽ᵏ⁾",
+        "x": 0.02,
+        "y": 0.36,
+        "w": 6.2,
+        "h": 0.26,
+        "size": 13.5,
+        "align": "left",
+        "font": "Noto Sans CJK SC"
+      },
+      "final_layer": {
+        "y": 1.74,
+        "h": 0.37,
+        "text": "预测层：先平均未激活的聚合值，再激活（式 6）。",
+        "size": 14
+      },
+      "heading": {
+        "size": 15,
+        "text": "c  隐藏层：各头独立计算，输出沿特征维拼接"
+      }
+    },
+    "neighborhood": {
+      "heading": {
+        "size": 15,
+        "text": "a  单个注意力头：邻居向目标节点传递消息"
+      },
+      "neighbor_note": {
+        "size": 14,
+        "text": "邻域 Nᵢ 含自身；箭头沿消息流向。"
+      }
+    }
+  },
+  "region_replacements": {
+    "attention": {
+      "spec": {
+        "canvas": {
+          "width_in": 6.33,
+          "height_in": 2.67
+        },
+        "elements": [
+          {
+            "type": "text",
+            "id": "heading",
+            "text": "b  同一目标节点的邻居共同决定边权",
+            "x": 0,
+            "y": 0,
+            "w": 6.28,
+            "h": 0.34,
+            "size": 15,
+            "color": "#202D3A",
+            "bold": true,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          },
+          {
+            "type": "rect",
+            "id": "target_feature_0",
+            "x": 0.12,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#202D3A",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "target_feature_1",
+            "x": 0.375,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#202D3A",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "target_feature_2",
+            "x": 0.63,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#202D3A",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "target_feature_3",
+            "x": 0.885,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#202D3A",
+            "sw": 1.2
+          },
+          {
+            "type": "text",
+            "id": "concat",
+            "text": "∥",
+            "x": 1.17,
+            "y": 0.66,
+            "w": 0.22,
+            "h": 0.3,
+            "size": 20,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "rect",
+            "id": "neighbor_feature_0",
+            "x": 1.42,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "neighbor_feature_1",
+            "x": 1.6749999999999998,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "neighbor_feature_2",
+            "x": 1.93,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "rect",
+            "id": "neighbor_feature_3",
+            "x": 2.185,
+            "y": 0.68,
+            "w": 0.255,
+            "h": 0.26,
+            "fill": "#FFFFFF",
+            "stroke": "#245C9F",
+            "sw": 1.2
+          },
+          {
+            "type": "text",
+            "id": "target_feature_label",
+            "text": "Whᵢ",
+            "x": 0.12,
+            "y": 1.03,
+            "w": 1.02,
+            "h": 0.3,
+            "size": 17,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "neighbor_feature_label",
+            "text": "Whⱼ",
+            "x": 1.42,
+            "y": 1.03,
+            "w": 1.02,
+            "h": 0.3,
+            "size": 17,
+            "color": "#245C9F",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "pair_to_score",
+            "x1": 2.52,
+            "y1": 0.81,
+            "x2": 2.98,
+            "y2": 0.81,
+            "color": "#202D3A",
+            "sw": 1.2,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "ellipse",
+            "id": "attention",
+            "x": 3.07,
+            "y": 0.54,
+            "w": 0.54,
+            "h": 0.54,
+            "fill": "#FFFFFF",
+            "stroke": "#202D3A",
+            "sw": 1.3
+          },
+          {
+            "type": "text",
+            "id": "attention_label",
+            "text": "aᵀ",
+            "x": 3.08,
+            "y": 0.61,
+            "w": 0.52,
+            "h": 0.4,
+            "size": 18,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "score_nonlinearity",
+            "x1": 3.66,
+            "y1": 0.81,
+            "x2": 5.14,
+            "y2": 0.81,
+            "color": "#202D3A",
+            "sw": 1.2,
+            "arrow": true,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "text",
+            "id": "leaky_relu",
+            "text": "LeakyReLU",
+            "x": 3.75,
+            "y": 0.39,
+            "w": 1.43,
+            "h": 0.28,
+            "size": 12.5,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "raw_score",
+            "text": "eᵢⱼ",
+            "x": 5.3,
+            "y": 0.56,
+            "w": 0.75,
+            "h": 0.47,
+            "size": 23,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "alpha",
+            "text": "αᵢⱼ =",
+            "x": 0.12,
+            "y": 1.74,
+            "w": 1.1,
+            "h": 0.46,
+            "size": 24,
+            "color": "#245C9F",
+            "bold": false,
+            "align": "left",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "numerator",
+            "text": "exp(eᵢⱼ)",
+            "x": 1.3,
+            "y": 1.54,
+            "w": 2.55,
+            "h": 0.39,
+            "size": 21,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "line",
+            "id": "fraction",
+            "x1": 1.24,
+            "y1": 1.98,
+            "x2": 3.98,
+            "y2": 1.98,
+            "color": "#202D3A",
+            "sw": 1.1,
+            "arrow": false,
+            "arrow_size": 0.075
+          },
+          {
+            "type": "text",
+            "id": "normalization_scope",
+            "text": "固定目标 i\n仅在 Nᵢ 内归一化",
+            "x": 4.3,
+            "y": 1.71,
+            "w": 1.95,
+            "h": 0.63,
+            "size": 14.5,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          },
+          {
+            "type": "text",
+            "id": "denominator_sum",
+            "text": "∑",
+            "x": 1.34,
+            "y": 2.03,
+            "w": 0.42,
+            "h": 0.42,
+            "size": 25,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "denominator_limit",
+            "text": "ℓ ∈ Nᵢ",
+            "x": 1.17,
+            "y": 2.44,
+            "w": 0.8,
+            "h": 0.22,
+            "size": 12,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "denominator_terms",
+            "text": "exp(eᵢₗ)",
+            "x": 1.94,
+            "y": 2.04,
+            "w": 1.91,
+            "h": 0.39,
+            "size": 21,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          }
+        ]
+      }
+    },
+    "aggregation": {
+      "spec": {
+        "canvas": {
+          "width_in": 5.55,
+          "height_in": 1.18
+        },
+        "elements": [
+          {
+            "type": "text",
+            "id": "equation_prefix",
+            "text": "uᵢ = σ(",
+            "x": 0.02,
+            "y": 0.05,
+            "w": 1.53,
+            "h": 0.45,
+            "size": 22,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "left",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "equation_sum",
+            "text": "∑",
+            "x": 1.56,
+            "y": 0.05,
+            "w": 0.5,
+            "h": 0.5,
+            "size": 30,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "equation_limit",
+            "text": "j ∈ Nᵢ",
+            "x": 1.32,
+            "y": 0.55,
+            "w": 0.98,
+            "h": 0.24,
+            "size": 12,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "center",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "equation_tail",
+            "text": "αᵢⱼWhⱼ)",
+            "x": 2.16,
+            "y": 0.05,
+            "w": 3.3,
+            "h": 0.45,
+            "size": 22,
+            "color": "#202D3A",
+            "bold": false,
+            "align": "left",
+            "font": "DejaVu Sans"
+          },
+          {
+            "type": "text",
+            "id": "shared",
+            "text": "同一头内：共享 W 与 a。",
+            "x": 0.02,
+            "y": 0.79,
+            "w": 5.5,
+            "h": 0.35,
+            "size": 15,
+            "color": "#5D6975",
+            "bold": false,
+            "align": "left",
+            "font": "Noto Sans CJK SC"
+          }
+        ]
+      }
+    }
+  }
+}

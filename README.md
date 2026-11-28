@@ -1,5 +1,28 @@
 # Academic Defense PPT Skill
 
+## V7.7 development — Scientific objects before style
+
+The `7.7.0-dev` path connects an evidence-linked FigurePlan to semantic glyphs and the existing SVG/native PowerPoint renderer. An agent or researcher reads the paper, code or reference image and authors the brief. The planner chooses a route for source redraws, method reconstruction, conceptual artwork, quantitative charts or workflows; it does not automatically parse arbitrary programs.
+
+```bash
+python tools/build_scientific_figure.py examples/semantic_figures/graph_attention.json --output-dir dist/semantic_demo
+```
+
+See [Scientific Figure Planning](docs/SCIENTIFIC_FIGURE_PLANNING.md) for the input schema, a complete synthetic example and the planner-only command. Native output includes the plan, compiled spec, SVG, editable PPTX and a review record whose scientific and visual review remain pending. Public examples use synthetic evidence. Existing component and chart pipelines are retained below; this development path does not establish a stable release or independent scientific/Office-host approval.
+
+## Single-page academic slides
+
+One-page requests now have a direct composition and local-revision entry. The regions are invisible layout boundaries; scientific objects and relations determine the marks. The new GAT example uses the original paper and author code, preserves the first render, and fixes an observed concatenation ambiguity in a scoped revision. It borrows implementation methods from AutoPresent / SlideCoder without downloading or claiming to run their weights.
+
+```bash
+python tools/build_gat_single_page.py --output-dir dist/single_page/gat \
+  --review examples/single_page/gat_review_revision.json
+```
+
+![GAT single page, rendered from its PPTX](examples/single_page/GAT_single_page.png)
+
+See [single-page usage, source links and limitations](docs/SINGLE_PAGE_ACADEMIC.md). The exact same primitives still export to SVG and an editable, single-slide PPTX.
+
 ## V7.6 development — Evidence-linked scientific figures
 
 The current workflow links FigureSpec elements to evidence, checks C01's critical drawn arrows against its declared relationships, and builds six Iris charts, Wine scatter and distribution plots, and one image-and-quantification panel from public source assets. The chart contract declares axis domains, zero policy and reasons for truncated ranges. SVG and editable PPTX come from the same FigureSpec; PowerPoint-exported PDFs are included as inspected previews. See [the research-figure upgrade plan](docs/SCIENTIFIC_FIGURE_GAP_AND_UPGRADE_PLAN_2026.md) for scope and remaining gates.

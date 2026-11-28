@@ -1,0 +1,87 @@
+{
+  "example": "GAT_single_page",
+  "date": "2026-11-23",
+  "status": "bounded_development_example",
+  "source_paper": "https://arxiv.org/pdf/1710.10903v3",
+  "source_code_commit": "5af87e7fce2b90ae1cbd621cd58059036a3c7436",
+  "render_host": "LibreOfficeDev 26.8.0.0.alpha0 (2c87e51eeaa2b413ff4ae097b2705eea1995d8e5)",
+  "preview_method": "Actual PPTX -> LibreOffice PDF -> Poppler PNG, scale-to 2200",
+  "visual_review": "Root inspected initial and final full-page images; independent agent reviewed initial and final candidate against original paper figure, equations and author code. No blocking issue found in this example. Final sum-limit font increase to 12 pt was inspected by root.",
+  "scope": "Mechanism explanation for one GAT page. No inference of user-specific architecture; no model weights loaded; no performance benchmark or external domain approval.",
+  "unchanged_regions": [
+    "header",
+    "footer"
+  ],
+  "revised_regions": [
+    "neighborhood",
+    "attention",
+    "aggregation",
+    "heads"
+  ],
+  "scientific_content_change": false,
+  "revision_file": "gat_review_revision.json",
+  "audit": {
+    "file": "GAT_single_page.pptx",
+    "slide_count": 1,
+    "theme_first_effect_has_shadow": false,
+    "slides": [
+      {
+        "slide": 1,
+        "recursive_shape_count": 137,
+        "shape_types": {
+          "TEXT_BOX (17)": 42,
+          "LINE (9)": 39,
+          "AUTO_SHAPE (1)": 56
+        },
+        "picture_objects": 0,
+        "svg_picture_objects": 0,
+        "non_svg_picture_objects": 0,
+        "out_of_bounds": 0,
+        "text_box_overlaps": 0,
+        "min_font_pt": 9.7,
+        "max_font_pt": 30.0,
+        "fonts": {
+          "DejaVu Sans": 31,
+          "Noto Sans CJK SC": 12
+        }
+      }
+    ]
+  },
+  "tests": {
+    "single_page_composer": {
+      "passed": 10
+    },
+    "existing_tools_discovery": {
+      "passed": 172
+    },
+    "independent_compiled_revision_regression": {
+      "passed": 1
+    }
+  },
+  "files": {
+    "examples/single_page/gat.json": {
+      "sha256": "d62fbacb77345f8b8686fd6eac679757f3dc3f2b40cf0c2a067af33120e75f01",
+      "bytes": 70571
+    },
+    "examples/single_page/gat_review_revision.json": {
+      "sha256": "1a768da1e4ee4dfa4dceae0b659844e3c2e6070a9908f8e3f3ab9ed12979a591",
+      "bytes": 16306
+    },
+    "examples/single_page/GAT_single_page.png": {
+      "sha256": "ff79f25ce90f23d529d2263f370d819e992e232051385fbda1895d9dc77fe3f4",
+      "bytes": 272379
+    },
+    "examples/single_page/GAT_single_page_initial.png": {
+      "sha256": "c1c156f178f00e2ea28d4b780188305fc6476dc4e5e9cc61dd15d37ab0be82a1",
+      "bytes": 269764
+    },
+    "dist/single_page/gat_final/GAT_single_page.pptx": {
+      "sha256": "a6754aa5914ef15aeef3772c5063be0fdd75bebbe28498f53f3aa398feb71248",
+      "bytes": 39572
+    },
+    "dist/single_page/gat_final/GAT_single_page.pdf": {
+      "sha256": "89a1999c22d3f519721705a1df51426072bf2254a5ca5bd38057466fb8988431",
+      "bytes": 177368
+    }
+  }
+}
